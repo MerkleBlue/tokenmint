@@ -10,20 +10,34 @@ import cc from 'cryptocompare';
 const Web3 = require('web3');
 let web3js;
 
+function getFee() {
+    return new Promise((accept, reject) => {
+        cc.price('ETH', 'USD').then(prices => {
+            console.log("Eth price is: " + prices.USD);
+            console.log("Service fee is $100 which is: " + 1/prices.USD + "ETH");
+            accept(1/prices.USD);
+            return;
+        }).catch(e => {
+            console.error(e);
+            reject();
+            return;
+        });
+    });
+}
 
-cc.price('ETH', 'USD').then(prices => {
-  console.log("Eth price is: " + prices.USD);
-}).catch(e => {
-  console.error(e);
+getFee().then(fee => {
+    console.log(fee);
 });
 
-window.addEventListener('load', function() {
 
+
+
+window.addEventListener('load', function() {
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
   if (typeof window.web3 !== 'undefined') {
     // Use Mist/MetaMask's provider
     web3js = new Web3(window.web3.currentProvider);
-    console.log('Found web3');
+    console.log('Found web3 injected by the browser');
   } else {
     console.log('No web3? You should consider trying MetaMask!');
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
