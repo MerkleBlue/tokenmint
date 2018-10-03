@@ -2,6 +2,14 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import cc from 'cryptocompare';
+
+cc.price('ETH', 'USD').then(prices => {
+  console.log("Eth price is: " + prices.USD);
+}).catch(e => {
+  console.error(e);
+});
+
 class App extends Component {
   render() {
     return (
