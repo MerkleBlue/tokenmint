@@ -3,12 +3,12 @@ import { TextField } from '@material-ui/core';
 
 const TokenOwner = () => {
   return (
-    <form>
+    <form className="main_form">
       <TextField
         required
         id="outlined-required"
         label="Token owner"
-        //className={classes.textField}
+        className="text_field"
         margin="normal"
         variant="outlined"
       />

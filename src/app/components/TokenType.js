@@ -1,5 +1,6 @@
 import React from 'react';
 import { FormControl, FormLabel, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
+import './css/TokenType.css'
 
 class TokenType extends React.Component {
 
@@ -17,8 +18,7 @@ class TokenType extends React.Component {
 
   render() {
     return (
-      <FormControl component="fieldset">
-        <FormLabel component="legend">Token Type</FormLabel>
+      <form className="main_form">
         <RadioGroup
           aria-label="tokenType"
           name="tokenType"
@@ -39,7 +39,7 @@ class TokenType extends React.Component {
             labelPlacement="start"
           />
         </RadioGroup>
-      </FormControl>
+      </form>
     );
   }
 }
