@@ -12,12 +12,12 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title">Work in progress!</h1>
         </header>
-        <body>
+        <div>
           <TokenInfo />
           <TokenType />
           <TokenOwner />
           <MintTokens />
-        </body>
+        </div>
       </div>
     );
   }
