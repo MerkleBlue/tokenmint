@@ -1,5 +1,6 @@
 import React from 'react';
 import { TextField, Grid, Typography } from '@material-ui/core';
+import './css/TokenOwner.css';
 
 const TokenOwner = () => {
   return (
@@ -22,7 +23,7 @@ const TokenOwner = () => {
             variant="caption"
             className="typography"
           >
-            ETH address (not exchange address). This address will be owner of the token (after sale end date). Double check the address (and access to it) before submission
+            ETH address (not exchange address). This address will be owner of the token (after sale end date). <strong>Double check the address (and access to it) before submission!</strong>
           </Typography>
         </Grid>
       </Grid>
