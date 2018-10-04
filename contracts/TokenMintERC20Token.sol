@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-import '/openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
+import 'openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
 
 
 /**
@@ -15,11 +15,13 @@ contract TokenMintERC20Token is StandardToken {
     string public symbol;
     uint8 public decimals;
 
-    constructor(string _name, string _symbol, uint8 _decimals, uint256 _totalSupply) public {
+    constructor(string _name, string _symbol, uint8 _decimals, uint256 _initialAmount) public {
       name = _name;
       symbol = _symbol;
       decimals = _decimals;
-      totalSupply_ = _totalSupply;
+      totalSupply_ = _initialAmount;
+
+      balances[msg.sender] = _initialAmount;
     }
 
     // optional functions from ERC20 stardard
