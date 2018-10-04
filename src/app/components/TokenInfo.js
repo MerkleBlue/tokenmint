@@ -1,11 +1,34 @@
 import React from 'react';
-import { FormGroup } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 
 const TokenInfo = () => {
   return (
-    <FormGroup>
-      <p>This is a placeholder for TokenInfo</p>
-    </FormGroup>
+    <form>
+      <TextField
+        required
+        id="outlined-required"
+        label="Token name"
+        //className={classes.textField}
+        margin="normal"
+        variant="outlined"
+      />
+      <TextField
+        required
+        id="outlined-required"
+        label="Token symbol"
+        //className={classes.textField}
+        margin="normal"
+        variant="outlined"
+      />
+      <TextField
+        required
+        id="outlined-required"
+        label="Decimals"
+        //className={classes.textField}
+        margin="normal"
+        variant="outlined"
+      />
+    </form>
   );
 };
 
