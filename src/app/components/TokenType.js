@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControl, FormLabel, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
+import { Grid, Typography, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
 import './css/TokenType.css'
 
 class TokenType extends React.Component {
@@ -45,3 +45,23 @@ class TokenType extends React.Component {
 }
 
 export default TokenType;
+
+// <Grid item xs>
+// <Typography
+//   align="left"
+//   color="textSecondary"
+//   variant="caption"
+// >
+//   ERC-20 is recommended option. Accepted by the most exchanges.
+// </Typography>
+// </Grid>
+
+// </Grid>
+//             <Grid item xs>
+//               <Typography
+//                 align="left"
+//                 color="textSecondary"
+//                 variant="caption"
+//               >
+//                 ERC-223 is almost the same as ERC-20. Provides extra safety during token transfers.
+//               </Typography>
