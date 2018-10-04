@@ -1,11 +1,18 @@
 import React from 'react';
-import { FormGroup } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 
 const TokenOwner = () => {
   return (
-    <FormGroup>
-      <p>This is a placeholder for TokenOwner</p>
-    </FormGroup>
+    <form>
+      <TextField
+        required
+        id="outlined-required"
+        label="Token owner"
+        //className={classes.textField}
+        margin="normal"
+        variant="outlined"
+      />
+    </form>
   );
 };
 
