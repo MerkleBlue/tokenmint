@@ -6,6 +6,9 @@ import ethereum from '../img/ethereum.png';
 const TokenInfo = () => {
   return (
     <form className="main_form">
+      <div className="token_info_header">
+        <img className="ethereum_symbol" src={ethereum} alt="" />
+      </div>
       <Grid container wrap="nowrap" spacing={8}>
         <Grid item xs>
           <TextField
