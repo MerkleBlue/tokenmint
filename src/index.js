@@ -54,21 +54,20 @@ function setupContracts() {
 }
 
 function instantiateERC20Contract(name, symbol, decimals, totalSupply, account) {
-    // try to instantiate new contract
-    ERC20TokenContract.new(name, symbol, decimals, totalSupply, {
-        from: account,
-        gas: 4712388,
-        gasPrice: 100000000000
-        }).then(function (instance) {
-        let contractInstance = instance;
-        //console.log(contractInstance);
-        contractInstance.name().then((name) => {
-            console.log(name);
+    return new Promise((accept, reject) => {
+        ERC20TokenContract.new(name, symbol, decimals, totalSupply, {
+            from: account,
+            gas: 4712388,
+            gasPrice: 100000000000
+        }).then((instance) => {
+            let contractInstance = instance;
+            accept(contractInstance);
+            return;
         }).catch((e) => {
             console.error(e);
+            reject(e);
+            return;
         });
-    }).catch((e) => {
-        console.error(e);
     });
 }
 
@@ -86,7 +85,14 @@ window.addEventListener('load', function() {
         web3.eth.getAccounts().then(allAccounts => {
             accounts = allAccounts;
             setupContracts();
-            instantiateERC20Contract("My new token", "MNT", 18, 1000, accounts[0]);
+            instantiateERC20Contract("My new token", "MNT", 18, 1000, accounts[0]).then((contractInstance) => {
+                console.log("Contract deployed at: " + contractInstance.address);
+                contractInstance.name().then((name) => {
+                    console.log("Contract name: " + name);
+                }).catch((e) => {
+                    console.error(e);
+                });
+            });
         });
     }
 });
