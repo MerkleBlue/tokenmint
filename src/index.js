@@ -1,22 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  Provider
-} from 'react-redux';
+import { Provider } from 'react-redux';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import configureStore from './app/store/configureStore';
-
 import cc from 'cryptocompare';
 import ERC20TokenJSON from './contracts/TokenMintERC20Token.json';
 import TruffleContract from 'truffle-contract';
+import Web3 from 'web3';
 
-let ERC20TokenContract, accounts;
-
-
-const Web3 = require('web3');
-let web3;
+let web3, ERC20TokenContract, accounts;
 
 function getFee() {
   return new Promise((accept, reject) => {
@@ -24,9 +18,8 @@ function getFee() {
       console.log("Service fee is $100 which is: " + 1 / prices.USD + "ETH");
       accept(1 / prices.USD);
       return;
-    }).catch(e => {
-      console.error(e);
-      reject();
+    }).catch((e) => {
+      reject(e);
       return;
     });
   });
@@ -35,7 +28,6 @@ function getFee() {
 getFee().then(fee => {
   console.log(fee);
 });
-
 
 function setupContracts() {
   // instantiate it with truffle-contract
