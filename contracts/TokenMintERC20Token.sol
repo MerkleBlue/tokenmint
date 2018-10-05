@@ -29,21 +29,21 @@ contract TokenMintERC20Token is StandardToken {
     /**
     * @dev Name of the ERC20 token
     */
-    function name() view returns (string) {
+    function name() public view returns (string) {
       return name;
     }
 
     /**
     * @dev Symbol of the ERC20 token
     */
-    function symbol() view returns (string) {
+    function symbol() public view returns (string) {
       return symbol;
     }
 
     /**
     * @dev Number of decimals of the ERC20 token
     */
-    function decimals() view returns (uint8) {
+    function decimals() public view returns (uint8) {
       return decimals;
     }
 }
