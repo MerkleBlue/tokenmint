@@ -5,21 +5,18 @@ import TokenType from './app/components/TokenType';
 import TokenOwner from './app/components/TokenOwner';
 import MintTokens from './app/components/MintTokens';
 import Footer from './app/components/Footer';
+import Header from './app/components/Header';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Work in progress!</h1>
-        </header>
-        <div>
-          <TokenInfo />
-          <TokenType />
-          <TokenOwner />
-          <MintTokens />
-          <Footer />
-        </div>
+        <Header />
+        <TokenInfo />
+        <TokenType />
+        <TokenOwner />
+        <MintTokens />
+        <Footer />
       </div>
     );
   }

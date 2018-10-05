@@ -1,6 +1,7 @@
 import React from 'react';
 import { TextField, Typography, Grid } from '@material-ui/core';
 import './css/TokenInfo.css';
+import ethereum from '../img/ethereum.png';
 
 const TokenInfo = () => {
   return (
@@ -79,3 +80,13 @@ const TokenInfo = () => {
 };
 
 export default TokenInfo;
+
+// <img className="ethereum_symbol" src={ethereum} alt="" />
+// <Typography
+//   align="left"
+//   color="textSecondary"
+//   variant="caption"
+//   className="typography"
+// >
+//   Create your own Ethereum tokens!
+// </Typography>
