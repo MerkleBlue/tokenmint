@@ -3,5 +3,6 @@ export default {
   tokenSymbol: "",
   decimals: "",
   tokenOwner: "",
-  tokenType: "erc20"
+  tokenType: "erc20",
+  totalSupply: ""
 };

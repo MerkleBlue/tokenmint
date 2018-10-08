@@ -78,6 +78,29 @@ const TokenInfo = () => {
           </Typography>
         </Grid>
       </Grid>
+      <Grid container wrap="nowrap" spacing={8}>
+        <Grid item xs>
+          <TextField
+            required
+            id="outlined-required"
+            label="Total supply"
+            className="text_field"
+            margin="normal"
+            variant="outlined"
+            inputProps={{ maxLength: 10, style: { textAlign: "center" } }}
+          />
+        </Grid>
+        <Grid item xs>
+          <Typography
+            align="left"
+            color="textSecondary"
+            variant="caption"
+            className="typography"
+          >
+            Total amount of tokens to be generated. Minimum value is 1, and maximum 9 999 999 999
+          </Typography>
+        </Grid>
+      </Grid>
     </form>
   );
 };
