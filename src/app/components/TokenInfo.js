@@ -83,13 +83,3 @@ const TokenInfo = () => {
 };
 
 export default TokenInfo;
-
-// <img className="ethereum_symbol" src={ethereum} alt="" />
-// <Typography
-//   align="left"
-//   color="textSecondary"
-//   variant="caption"
-//   className="typography"
-// >
-//   Create your own Ethereum tokens!
-// </Typography>
