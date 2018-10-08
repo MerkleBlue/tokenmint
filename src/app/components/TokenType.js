@@ -11,13 +11,10 @@ class TokenType extends React.Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
-    this.state = {
-      value: "erc20"
-    };
   }
 
   handleChange(event) {
-    this.setState({ value: event.target.value });
+    this.props.tokenTypeActions.setTokenType(event.target.value);
   }
 
   render() {
@@ -29,7 +26,7 @@ class TokenType extends React.Component {
               aria-label="tokenType"
               name="tokenType"
               className="radio_token_type"
-              value={this.state.value}
+              value={this.props.tokenType}
               onChange={this.handleChange}
             >
               <FormControlLabel
@@ -63,7 +60,8 @@ class TokenType extends React.Component {
 }
 
 TokenType.propTypes = {
-  tokenType: PropTypes.string.isRequired
+  tokenType: PropTypes.string.isRequired,
+  tokenTypeActions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
