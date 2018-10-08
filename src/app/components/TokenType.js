@@ -1,19 +1,20 @@
 import React from 'react';
 import { Grid, Typography, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
 import './css/TokenType.css';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as tokenTypeActions from '../actions/tokenTypeActions';
+import PropTypes from 'prop-types';
 
 class TokenType extends React.Component {
 
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
-    this.state = {
-      value: "erc20"
-    };
   }
 
   handleChange(event) {
-    this.setState({ value: event.target.value });
+    this.props.tokenTypeActions.setTokenType(event.target.value);
   }
 
   render() {
@@ -25,7 +26,7 @@ class TokenType extends React.Component {
               aria-label="tokenType"
               name="tokenType"
               className="radio_token_type"
-              value={this.state.value}
+              value={this.props.tokenType}
               onChange={this.handleChange}
             >
               <FormControlLabel
@@ -58,24 +59,21 @@ class TokenType extends React.Component {
   }
 }
 
-export default TokenType;
+TokenType.propTypes = {
+  tokenType: PropTypes.string.isRequired,
+  tokenTypeActions: PropTypes.object.isRequired
+};
 
-// <Grid item xs>
-// <Typography
-//   align="left"
-//   color="textSecondary"
-//   variant="caption"
-// >
-//   ERC-20 is recommended option. Accepted by the most exchanges.
-// </Typography>
-// </Grid>
+function mapStateToProps(state) {
+  return {
+    tokenType: state.tokenType
+  };
+}
 
-// </Grid>
-//             <Grid item xs>
-//               <Typography
-//                 align="left"
-//                 color="textSecondary"
-//                 variant="caption"
-//               >
-//                 ERC-223 is almost the same as ERC-20. Provides extra safety during token transfers.
-//               </Typography>
+function mapDispatchToProps(dispatch) {
+  return {
+    tokenTypeActions: bindActionCreators(tokenTypeActions, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TokenType);
