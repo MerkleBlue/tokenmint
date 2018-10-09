@@ -11,29 +11,25 @@ import TruffleContract from 'truffle-contract';
 import Web3 from 'web3';
 
 let web3, ERC20TokenContract, accounts;
+let feeInUsd = 100;
 
 function getFee() {
   return new Promise((accept, reject) => {
     cc.price('ETH', 'USD').then(prices => {
-      console.log("Service fee is $100 which is: " + 1 / prices.USD + "ETH");
-      accept(1 / prices.USD);
+      accept(feeInUsd / prices.USD);
       return;
-    }).catch((e) => {
+    }).catch(e => {
       reject(e);
       return;
     });
   });
 }
 
-getFee().then(fee => {
-  console.log(fee);
-});
-
 function setupContracts() {
   // instantiate it with truffle-contract
   ERC20TokenContract = TruffleContract(ERC20TokenJSON);
 
-  // Set the provider for our contracts
+  // set the provider for our contracts
   ERC20TokenContract.setProvider(web3.currentProvider);
 
   // TODO: there's a bug with web3 1.0.
@@ -53,11 +49,40 @@ function instantiateERC20Contract(name, symbol, decimals, totalSupply, account) 
       from: account,
       gas: 4712388,
       gasPrice: 100000000000
-    }).then((instance) => {
+    }).then(instance => {
       let contractInstance = instance;
       accept(contractInstance);
       return;
     }).catch((e) => {
+      reject(e);
+      return;
+    });
+  });
+}
+
+function sendServiceFee(senderAccount, receiverAccount, fee) {
+  return new Promise((accept, reject) => {
+    web3.eth.sendTransaction({
+      from: senderAccount,
+      to: receiverAccount,
+      value: web3.utils.toWei(fee.toString(), 'ether')
+    }).then(receipt => {
+        accept(receipt);
+        return;
+    }).catch(e => {
+      reject(e);
+      return;
+    });
+  });
+}
+
+function getBalance(account) {
+  return new Promise((accept, reject) => {
+    web3.eth.getBalance(account).then(wei => {
+      let balance = web3.utils.fromWei(wei, 'ether');
+      accept(parseFloat(balance));
+      return;
+    }).catch(e => {
       reject(e);
       return;
     });
@@ -78,12 +103,21 @@ window.addEventListener('load', function () {
     web3.eth.getAccounts().then(allAccounts => {
       accounts = allAccounts;
       setupContracts();
-      instantiateERC20Contract("My new token", "MNT", 18, 1000, accounts[0]).then((contractInstance) => {
+
+      instantiateERC20Contract("My new token", "MNT", 18, 1000, accounts[0]).then(contractInstance => {
         console.log("Contract deployed at: " + contractInstance.address);
-        contractInstance.name().then((name) => {
-          console.log("Contract name: " + name);
+
+        getFee().then(fee => {
+          sendServiceFee(accounts[0], accounts[9], fee).then(() => {
+            console.log('Service fee ' + fee.toFixed(4) + ' paid.');
+            getBalance(accounts[9]).then(balance => {
+              console.log(balance.toFixed(4) + " ETH in TokenMint account after customer.");
+            });
+          }).catch((e) => {
+            console.error('Could not send service fee.')
+          });
         }).catch((e) => {
-          console.error(e);
+          console.error('Could not get eth price from CryptoCompare api.')
         });
       });
     });
