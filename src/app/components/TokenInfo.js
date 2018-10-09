@@ -2,26 +2,23 @@ import React from 'react';
 import { TextField, Typography, Grid } from '@material-ui/core';
 import './css/TokenInfo.css';
 import ethereum from '../img/ethereum.png';
-import initialState from '../reducers/initialState';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as decimalsActions from '../actions/decimalsActions';
 import * as tokenNameActions from '../actions/tokenNameActions';
 import * as tokenSymbolActions from '../actions/tokenSymbolActions';
 import * as totalSupplyActions from '../actions/totalSupplyActions';
+import PropTypes from 'prop-types';
+import InputValidator from '../../tools/InputValidator';
 
 class TokenInfo extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      tokenName: initialState.tokenName,
       isTokenNameValid: true,
-      tokenSymbol: initialState.tokenSymbol,
       isTokenSymbolValid: true,
-      decimals: initialState.decimals,
       isDecimalsValid: true,
-      totalSupply: initialState.totalSupply,
       isTotalSupplyValid: true
     };
     this.handleTokenNameChange = this.handleTokenNameChange.bind(this);
@@ -34,78 +31,48 @@ class TokenInfo extends React.Component {
     this.isTotalSupplyValid = this.isTotalSupplyValid.bind(this);
   }
 
-  isTokenNameValid(val) {
-    if (val === "") {
-      return true;
-    }
-    return /^[a-z0-9]+$/i.test(val) && val.length >= 3;
+  isTokenNameValid(tokenName) {
+    return InputValidator.isTokenNameValid(tokenName);
   }
 
   handleTokenNameChange(e) {
-    let isTokenNameValid = this.isTokenNameValid(e.target.value);
     this.setState({
-      tokenName: e.target.value,
-      isTokenNameValid: isTokenNameValid
+      isTokenNameValid: this.isTokenNameValid(e.target.value)
     });
-    if (isTokenNameValid) {
-      tokenNameActions.setTokenName(this.state.tokenName);
-    }
+    this.props.tokenNameActions.setTokenName(e.target.value);
   }
 
-  isTokenSymbolValid(val) {
-    if (val === "") {
-      return true;
-    }
-    return /^[a-z0-9]+$/i.test(val) && val.length >= 3;
+  isTokenSymbolValid(tokenSymbol) {
+    return InputValidator.isTokenSymbolValid(tokenSymbol);
   }
 
   handleTokenSymbolChange(e) {
-    let isTokenSymbolValid = this.isTokenSymbolValid(e.target.value);
     this.setState({
-      tokenSymbol: e.target.value,
-      isTokenSymbolValid: isTokenSymbolValid
+      isTokenSymbolValid: this.isTokenSymbolValid(e.target.value)
     });
-    if (isTokenSymbolValid) {
-      tokenSymbolActions.setTokenSymbol(this.state.tokenSymbol);
-    }
+    this.props.tokenSymbolActions.setTokenSymbol(e.target.value);
   }
 
-  isDecimalsValid(val) {
-    if (val === "") {
-      return true;
-    }
-    let n = Math.floor(Number(val));
-    return n !== Infinity && String(n) === val && n > 0 && n <= 50;
+  isDecimalsValid(decimals) {
+    return InputValidator.isDecimalsValid(decimals);
   }
 
   handleDecimalsChange(e) {
-    let isDecimalsValid = this.isDecimalsValid(e.target.value);
     this.setState({
-      decimals: e.target.value,
-      isDecimalsValid: isDecimalsValid
+      isDecimalsValid: this.isDecimalsValid(e.target.value)
     });
-    if (isDecimalsValid) {
-      decimalsActions.setDecimals(this.state.decimals);
-    }
+    this.props.decimalsActions.setDecimals(e.target.value);
   }
 
-  isTotalSupplyValid(val) {
-    if (val === "") {
-      return true;
-    }
-    let n = Math.floor(Number(val));
-    return n !== Infinity && String(n) === val && n > 0 && n <= 9999999999;
+  isTotalSupplyValid(totalSupply) {
+    return InputValidator.isTotalSupplyValid(totalSupply);
   }
 
   handleTotalSupplyChange(e) {
-    let isTotalSupplyValid = this.isTotalSupplyValid(e.target.value);
     this.setState({
-      totalSupply: e.target.value,
-      isTotalSupplyValid: isTotalSupplyValid
+      isTotalSupplyValid: this.isTotalSupplyValid(e.target.value)
     });
-    if (isTotalSupplyValid) {
-      totalSupplyActions.setTotalSupply(this.state.totalSupply);
-    }
+    this.props.totalSupplyActions.setTotalSupply(e.target.value);
   }
 
   render() {
@@ -124,8 +91,8 @@ class TokenInfo extends React.Component {
               margin="normal"
               variant="outlined"
               inputProps={{ maxLength: 25 }}
-              value={this.state.tokenName}
-              error={!this.state.isTokenNameValid}
+              value={this.props.tokenName}
+              error={!InputValidator.isTokenNameValid(this.props.tokenName)}
               onChange={this.handleTokenNameChange}
             />
           </Grid>
@@ -150,8 +117,8 @@ class TokenInfo extends React.Component {
               margin="normal"
               variant="outlined"
               inputProps={{ maxLength: 4 }}
-              value={this.state.tokenSymbol}
-              error={!this.state.isTokenSymbolValid}
+              value={this.props.tokenSymbol}
+              error={!InputValidator.isTokenSymbolValid(this.props.tokenSymbol)}
               onChange={this.handleTokenSymbolChange}
             />
           </Grid>
@@ -176,9 +143,9 @@ class TokenInfo extends React.Component {
               margin="normal"
               variant="outlined"
               inputProps={{ maxLength: 2, style: { textAlign: "center" } }}
-              value={this.state.decimals}
+              value={this.props.decimals}
               onChange={this.handleDecimalsChange}
-              error={!this.state.isDecimalsValid}
+              error={!InputValidator.isDecimalsValid(this.props.decimals)}
             />
           </Grid>
           <Grid item xs>
@@ -202,9 +169,9 @@ class TokenInfo extends React.Component {
               margin="normal"
               variant="outlined"
               inputProps={{ maxLength: 10, style: { textAlign: "center" } }}
-              value={this.state.totalSupply}
+              value={this.props.totalSupply}
               onChange={this.handleTotalSupplyChange}
-              error={!this.state.isTotalSupplyValid}
+              error={!InputValidator.isTotalSupplyValid(this.props.totalSupply)}
             />
           </Grid>
           <Grid item xs>
@@ -223,6 +190,26 @@ class TokenInfo extends React.Component {
   }
 }
 
+TokenInfo.propTypes = {
+  decimalsActions: PropTypes.object.isRequired,
+  tokenNameActions: PropTypes.object.isRequired,
+  tokenSymbolActions: PropTypes.object.isRequired,
+  totalSupplyActions: PropTypes.object.isRequired,
+  tokenName: PropTypes.string.isRequired,
+  tokenSymbol: PropTypes.string.isRequired,
+  decimals: PropTypes.string.isRequired,
+  totalSupply: PropTypes.string.isRequired,
+};
+
+function mapStateToProps(state) {
+  return {
+    tokenName: state.tokenName,
+    tokenSymbol: state.tokenSymbol,
+    decimals: state.decimals,
+    totalSupply: state.totalSupply
+  };
+}
+
 function mapDispatchToProps(dispatch) {
   return {
     decimalsActions: bindActionCreators(decimalsActions, dispatch),
@@ -232,4 +219,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(() => {}, mapDispatchToProps)(TokenInfo);
+export default connect(mapStateToProps, mapDispatchToProps)(TokenInfo);
