@@ -129,7 +129,7 @@ class TokenInfo extends React.Component {
               variant="caption"
               className="typography"
             >
-              3-4 letters (example ETH, BTC, BAT, etc.)
+              3-4 letters (example ETH, BTC, BAT, etc.). No spaces. Only alphanumerical characters.
           </Typography>
           </Grid>
         </Grid>

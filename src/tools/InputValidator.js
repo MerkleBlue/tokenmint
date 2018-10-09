@@ -19,7 +19,7 @@ export default class InputValidator {
       return true;
     }
     let n = Math.floor(Number(decimals));
-    return n !== Infinity && String(n) === decimals && n > 0 && n <= 50;
+    return n !== Infinity && String(n) === decimals && n >= 0 && n <= 50;
   }
 
   static isTotalSupplyValid(totalSupply) {
