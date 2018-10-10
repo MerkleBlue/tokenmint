@@ -5,6 +5,7 @@ import 'openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
 
 /**
  * @title Standard ERC20 token with optional functions implemented
+ * @author TokenMint.io
  *
  * @dev Implementation of the basic standard token. For full specification see:
  * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md
