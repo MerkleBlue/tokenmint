@@ -181,7 +181,7 @@ class TokenInfo extends React.Component {
               variant="caption"
               className="typography"
             >
-              Total amount of tokens to be generated. Minimum value is 1, and maximum 1 000 000 000 000 000
+              Total amount of tokens to be generated. Minimum value is 1, and maximum 1000000000000000
           </Typography>
           </Grid>
         </Grid>
