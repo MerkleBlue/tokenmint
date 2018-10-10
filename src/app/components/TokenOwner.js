@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as tokenOwnerActions from '../actions/tokenOwnerActions';
 import { bindActionCreators } from 'redux';
+import initialState from '../reducers/initialState';
 
 class TokenOwner extends React.Component {
 
@@ -14,11 +15,22 @@ class TokenOwner extends React.Component {
   }
 
   handleChange(e) {
-    this.props.tokenOwnerActions.setTokenOwner(this.props.accounts[0]);
+    this.props.tokenOwnerActions.setTokenOwner(e.target.value);
   }
 
   render() {
-    let menuItems = this.props.accounts.map((account) => <MenuItem key={account} value={account}>{account}</MenuItem>);
+    let menuItems;
+    let descriptionText;
+    let typographyColor;
+    if (this.props.accounts.length > 0) {
+      menuItems = this.props.accounts.map((account) => <MenuItem key={account} value={account}>{account}</MenuItem>);
+      descriptionText = "ETH address (not exchange address). This address will be owner of the token (after sale end date).";
+      typographyColor = "textSecondary";
+    } else {
+      menuItems = <MenuItem value={initialState.tokenOwner}>No available accounts</MenuItem>;
+      descriptionText = "There are no available accounts. Please make sure that you provide at least one account using MetaMask or any available Ethereum wallet.";
+      typographyColor = "error";
+    }
     return (
       <form className="main_form">
         <Grid container wrap="nowrap" spacing={8}>
@@ -26,10 +38,14 @@ class TokenOwner extends React.Component {
             <FormControl variant="outlined">
               <InputLabel>Accounts</InputLabel>
               <Select
+                error={this.props.accounts.length === 0}
                 value={this.props.tokenOwner}
                 onChange={this.handleChange}
                 input={
-                  <OutlinedInput className="select_field" />
+                  <OutlinedInput
+                    labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
+                    className="select_field"
+                  />
                 }
               >
                 {menuItems}
@@ -39,11 +55,11 @@ class TokenOwner extends React.Component {
           <Grid item xs>
             <Typography
               align="left"
-              color="textSecondary"
+              color={typographyColor}
               variant="caption"
               className="typography"
             >
-              ETH address (not exchange address). This address will be owner of the token (after sale end date).
+              {descriptionText}
             </Typography>
           </Grid>
         </Grid>
