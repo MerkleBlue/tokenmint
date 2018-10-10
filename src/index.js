@@ -68,8 +68,8 @@ function sendServiceFee(senderAccount, receiverAccount, fee) {
       to: receiverAccount,
       value: web3.utils.toWei(fee.toString(), 'ether')
     }).then(receipt => {
-        accept(receipt);
-        return;
+      accept(receipt);
+      return;
     }).catch(e => {
       reject(e);
       return;
@@ -100,30 +100,29 @@ window.addEventListener('load', function () {
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
     console.log('Using http://localhost:7545 as web3 provider. Version: ' + web3.version);
+  }
+  web3.eth.getAccounts().then(allAccounts => {
+    accounts = allAccounts;
+    store.dispatch(setAccounts(accounts));
+    setupContracts();
 
-    web3.eth.getAccounts().then(allAccounts => {
-      accounts = allAccounts;
-      store.dispatch(setAccounts(accounts));
-      setupContracts();
+    instantiateERC20Contract("My new token", "MNT", 18, 1000, accounts[0]).then(contractInstance => {
+      console.log("Contract deployed at: " + contractInstance.address);
 
-      instantiateERC20Contract("My new token", "MNT", 18, 1000, accounts[0]).then(contractInstance => {
-        console.log("Contract deployed at: " + contractInstance.address);
-
-        getFee().then(fee => {
-          sendServiceFee(accounts[0], accounts[9], fee).then(() => {
-            console.log('Service fee ' + fee.toFixed(4) + ' paid.');
-            getBalance(accounts[9]).then(balance => {
-              console.log(balance.toFixed(4) + " ETH in TokenMint account after customer.");
-            });
-          }).catch((e) => {
-            console.error('Could not send service fee.')
+      getFee().then(fee => {
+        sendServiceFee(accounts[0], accounts[9], fee).then(() => {
+          console.log('Service fee ' + fee.toFixed(4) + ' paid.');
+          getBalance(accounts[9]).then(balance => {
+            console.log(balance.toFixed(4) + " ETH in TokenMint account after customer.");
           });
         }).catch((e) => {
-          console.error('Could not get eth price from CryptoCompare api.')
+          console.error('Could not send service fee.')
         });
+      }).catch((e) => {
+        console.error('Could not get eth price from CryptoCompare api.')
       });
     });
-  }
+  });
 });
 
 

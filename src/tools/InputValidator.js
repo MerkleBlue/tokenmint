@@ -27,13 +27,14 @@ export default class InputValidator {
       return true;
     }
     let n = Math.floor(Number(totalSupply));
-    return n !== Infinity && String(n) === totalSupply && n > 0 && n <= 9999999999;
+    return n !== Infinity && String(n) === totalSupply && n > 0 && n <= 1000000000000000;
   }
 
-  static isInputValid(tokenName, tokenSymbol, decimals, totalSupply) {
+  static isInputValid(tokenName, tokenSymbol, decimals, totalSupply, tokenOwner) {
     return this.isTokenNameValid(tokenName) && tokenName !== "" &&
       this.isTokenSymbolValid(tokenSymbol) && tokenSymbol !== "" &&
       this.isDecimalsValid(decimals) && decimals !== "" &&
-      this.isTotalSupplyValid(totalSupply) && totalSupply !== "";
+      this.isTotalSupplyValid(totalSupply) && totalSupply !== "" &&
+      tokenOwner !== "";
   }
 }

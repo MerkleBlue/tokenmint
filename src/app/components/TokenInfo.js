@@ -168,7 +168,7 @@ class TokenInfo extends React.Component {
               className="text_field"
               margin="normal"
               variant="outlined"
-              inputProps={{ maxLength: 10, style: { textAlign: "center" } }}
+              inputProps={{ maxLength: 16, style: { textAlign: "center" } }}
               value={this.props.totalSupply}
               onChange={this.handleTotalSupplyChange}
               error={!InputValidator.isTotalSupplyValid(this.props.totalSupply)}
@@ -181,7 +181,7 @@ class TokenInfo extends React.Component {
               variant="caption"
               className="typography"
             >
-              Total amount of tokens to be generated. Minimum value is 1, and maximum 9 999 999 999
+              Total amount of tokens to be generated. Minimum value is 1, and maximum 1 000 000 000 000 000
           </Typography>
           </Grid>
         </Grid>
