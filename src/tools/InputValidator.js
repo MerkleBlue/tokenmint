@@ -1,4 +1,4 @@
-import cc from 'cryptocompare';
+import cc from 'cryptocurrencies';
 
 export default class InputValidator {
 
@@ -13,7 +13,7 @@ export default class InputValidator {
     if (tokenSymbol === "") {
       return true;
     }
-    return /^[a-z0-9]+$/i.test(tokenSymbol) && tokenSymbol.length >= 3;
+    return /^[a-z0-9]+$/i.test(tokenSymbol) && tokenSymbol.length >= 3 && this.isTokenSymbolUnique(tokenSymbol);
   }
 
   static isDecimalsValid(decimals) {
@@ -41,22 +41,7 @@ export default class InputValidator {
   }
 
   static isTokenSymbolUnique(tokenSymbol) {
-    return new Promise((accept, reject) => {
-      cc.coinList().then(coinList => {
-        let coins = coinList.Data;
-        for (let key in coins) {
-          if (coins[key].Symbol === tokenSymbol) {
-            accept(false);
-            return;
-          }
-        }
-        accept(true);
-        return;
-      }).catch(e => {
-        reject(e);
-        return;
-      });
-    });
+    return (cc.symbols().find(symbol => symbol === tokenSymbol) === undefined);
   }
 }
 

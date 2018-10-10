@@ -58,6 +58,9 @@ class TokenInfo extends React.Component {
   }
 
   render() {
+    let tokenSymbolDescriptionText = InputValidator.isTokenSymbolUnique(this.props.tokenSymbol) ?
+    "3-4 letters (example ETH, BTC, BAT, etc.). No spaces. Only alphanumerical characters." :
+    "This token symbol is already in use. Please choose a unique symbol.";
     return (
       <form className="main_form">
         <div className="token_info_header">
@@ -81,7 +84,7 @@ class TokenInfo extends React.Component {
           <Grid item xs>
             <Typography
               align="left"
-              color="textSecondary"
+              color={InputValidator.isTokenNameValid(this.props.tokenName) ? "textSecondary" : "error"}
               variant="caption"
               className="typography"
             >
@@ -107,11 +110,11 @@ class TokenInfo extends React.Component {
           <Grid item xs>
             <Typography
               align="left"
-              color="textSecondary"
+              color={InputValidator.isTokenSymbolValid(this.props.tokenSymbol) ? "textSecondary" : "error"}
               variant="caption"
               className="typography"
             >
-              3-4 letters (example ETH, BTC, BAT, etc.). No spaces. Only alphanumerical characters.
+              {tokenSymbolDescriptionText}
           </Typography>
           </Grid>
         </Grid>
@@ -133,7 +136,7 @@ class TokenInfo extends React.Component {
           <Grid item xs>
             <Typography
               align="left"
-              color="textSecondary"
+              color={InputValidator.isDecimalsValid(this.props.decimals) ? "textSecondary" : "error"}
               variant="caption"
               className="typography"
             >
@@ -159,7 +162,7 @@ class TokenInfo extends React.Component {
           <Grid item xs>
             <Typography
               align="left"
-              color="textSecondary"
+              color={InputValidator.isTotalSupplyValid(this.props.totalSupply) ? "textSecondary" : "error"}
               variant="caption"
               className="typography"
             >
