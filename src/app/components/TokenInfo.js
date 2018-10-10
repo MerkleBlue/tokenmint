@@ -15,12 +15,6 @@ class TokenInfo extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      isTokenNameValid: true,
-      isTokenSymbolValid: true,
-      isDecimalsValid: true,
-      isTotalSupplyValid: true
-    };
     this.handleTokenNameChange = this.handleTokenNameChange.bind(this);
     this.isTokenNameValid = this.isTokenNameValid.bind(this);
     this.handleTokenSymbolChange = this.handleTokenSymbolChange.bind(this);
@@ -36,9 +30,6 @@ class TokenInfo extends React.Component {
   }
 
   handleTokenNameChange(e) {
-    this.setState({
-      isTokenNameValid: this.isTokenNameValid(e.target.value)
-    });
     this.props.tokenNameActions.setTokenName(e.target.value);
   }
 
@@ -47,9 +38,6 @@ class TokenInfo extends React.Component {
   }
 
   handleTokenSymbolChange(e) {
-    this.setState({
-      isTokenSymbolValid: this.isTokenSymbolValid(e.target.value)
-    });
     this.props.tokenSymbolActions.setTokenSymbol(e.target.value);
   }
 
@@ -58,9 +46,6 @@ class TokenInfo extends React.Component {
   }
 
   handleDecimalsChange(e) {
-    this.setState({
-      isDecimalsValid: this.isDecimalsValid(e.target.value)
-    });
     this.props.decimalsActions.setDecimals(e.target.value);
   }
 
@@ -69,9 +54,6 @@ class TokenInfo extends React.Component {
   }
 
   handleTotalSupplyChange(e) {
-    this.setState({
-      isTotalSupplyValid: this.isTotalSupplyValid(e.target.value)
-    });
     this.props.totalSupplyActions.setTotalSupply(e.target.value);
   }
 
