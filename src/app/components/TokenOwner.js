@@ -24,7 +24,7 @@ class TokenOwner extends React.Component {
     let typographyColor;
     if (this.props.accounts.length > 0) {
       menuItems = this.props.accounts.map((account) => <MenuItem key={account} value={account}>{account}</MenuItem>);
-      descriptionText = "ETH address (not exchange address). This address will be owner of the token (after sale end date).";
+      descriptionText = "ETH address (not exchange address). This address will be owner of the token. Please make sure that the selected address is main-net Ethereum address!";
       typographyColor = "textSecondary";
     } else {
       menuItems = <MenuItem value={initialState.tokenOwner}>No available accounts</MenuItem>;
