@@ -47,9 +47,9 @@ function setupContracts() {
   }
 }
 
-function instantiateERC20Contract(name, symbol, decimals, totalSupply, account) {
+function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, account) {
   return new Promise((accept, reject) => {
-    ERC20TokenContract.new(name, symbol, decimals, totalSupply, {
+    tokenContract.new(name, symbol, decimals, totalSupply, {
       from: account,
       gas: 4712388,
       gasPrice: 100000000000
@@ -57,24 +57,7 @@ function instantiateERC20Contract(name, symbol, decimals, totalSupply, account) 
       let contractInstance = instance;
       accept(contractInstance);
       return;
-    }).catch((e) => {
-      reject(e);
-      return;
-    });
-  });
-}
-
-function instantiateERC223Contract(name, symbol, decimals, totalSupply, account) {
-  return new Promise((accept, reject) => {
-    ERC223TokenContract.new(name, symbol, decimals, totalSupply, {
-      from: account,
-      gas: 4712388,
-      gasPrice: 100000000000
-    }).then(instance => {
-      let contractInstance = instance;
-      accept(contractInstance);
-      return;
-    }).catch((e) => {
+    }).catch(e => {
       reject(e);
       return;
     });
@@ -110,6 +93,20 @@ function getBalance(account) {
   });
 }
 
+function hasFunds(account, fee) {
+  return new Promise((accept, reject) => {
+    web3.eth.getBalance(account).then(wei => {
+      let balance = web3.utils.fromWei(wei, 'ether');
+      // TODO: 0.01 ETH is just an estimation of gas costs for deloying a contract and paying a fee
+      accept((balance - fee - 0.01) > 0);
+      return;
+    }).catch(e => {
+      reject(e);
+      return;
+    });
+  });
+}
+
 window.addEventListener('load', function () {
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
   if (typeof window.web3 !== 'undefined') {
@@ -124,40 +121,34 @@ window.addEventListener('load', function () {
   web3.eth.getAccounts().then(allAccounts => {
     accounts = allAccounts;
     store.dispatch(setAccounts(accounts));
+
+    let userAccount = accounts[0];
+
     setupContracts();
 
-    instantiateERC20Contract("Token Mint ERC20 token", "TM20", 18, 1000, accounts[0]).then(contractInstance => {
-      console.log("ERC20 contract deployed at: " + contractInstance.address);
+    getFee().then(fee => {
+      hasFunds(userAccount, fee).then(hasFunds => {
+        if(hasFunds) {
+          instantiateContract(ERC223TokenContract, "Token Mint ERC20 token", "TM20", 18, 1000, userAccount).then(contractInstance => {
+            console.log("Contract deployed at: " + contractInstance.address);
 
-      getFee().then(fee => {
-        sendServiceFee(accounts[0], accounts[9], fee).then(() => {
-          console.log('Service fee ' + fee.toFixed(4) + ' paid.');
-          getBalance(accounts[9]).then(balance => {
-            console.log(balance.toFixed(4) + " ETH in TokenMint account after a purchase.");
+            sendServiceFee(userAccount, accounts[9], fee).then(() => {
+              console.log('Service fee ' + fee.toFixed(4) + ' paid.');
+              getBalance(accounts[9]).then(balance => {
+                console.log(balance.toFixed(4) + " ETH in TokenMint account after a purchase.");
+              });
+            }).catch((e) => {
+              console.error('Could not send service fee.')
+            });
           });
-        }).catch((e) => {
-          console.error('Could not send service fee.')
-        });
+        } else {
+          console.error('Account: ' + userAccount + ' doesn\'t have enough funds to pay for service.');
+        }
       }).catch((e) => {
-        console.error('Could not get eth price from CryptoCompare api.')
+        console.error('Could not get balance.');
       });
-    });
-
-    instantiateERC223Contract("Token Mint ERC223 token", "TM223", 18, 1000, accounts[0]).then(contractInstance => {
-      console.log("ERC223 contract deployed at: " + contractInstance.address);
-
-      getFee().then(fee => {
-        sendServiceFee(accounts[0], accounts[9], fee).then(() => {
-          console.log('Service fee ' + fee.toFixed(4) + ' paid.');
-          getBalance(accounts[9]).then(balance => {
-            console.log(balance.toFixed(4) + " ETH in TokenMint account after a purchase.");
-          });
-        }).catch((e) => {
-          console.error('Could not send service fee.')
-        });
-      }).catch((e) => {
-        console.error('Could not get eth price from CryptoCompare api.')
-      });
+    }).catch((e) => {
+      console.error('Could not get eth price from CryptoCompare api.')
     });
   });
 });
