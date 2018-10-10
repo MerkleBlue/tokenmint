@@ -1,3 +1,5 @@
+import cc from 'cryptocompare';
+
 export default class InputValidator {
 
   static isTokenNameValid(tokenName) {
@@ -37,4 +39,25 @@ export default class InputValidator {
       this.isTotalSupplyValid(totalSupply) && totalSupply !== "" &&
       tokenOwner !== "";
   }
+
+  static isTokenSymbolUnique(tokenSymbol) {
+    return new Promise((accept, reject) => {
+      cc.coinList().then(coinList => {
+        let coins = coinList.Data;
+        for (let key in coins) {
+          if (coins[key].Symbol === tokenSymbol) {
+            accept(false);
+            return;
+          }
+        }
+        accept(true);
+        return;
+      }).catch(e => {
+        reject(e);
+        return;
+      });
+    });
+  }
 }
+
+
