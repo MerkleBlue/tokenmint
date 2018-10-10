@@ -7,11 +7,12 @@ import registerServiceWorker from './registerServiceWorker';
 import configureStore from './app/store/configureStore';
 import cc from 'cryptocompare';
 import ERC20TokenJSON from './contracts/TokenMintERC20Token.json';
+import ERC223TokenJSON from './contracts/TokenMintERC223Token.json';
 import TruffleContract from 'truffle-contract';
 import Web3 from 'web3';
 import { setAccounts } from './app/actions/accountsActions';
 
-let web3, ERC20TokenContract, accounts;
+let web3, ERC20TokenContract, ERC223TokenContract, accounts;
 let feeInUsd = 100;
 
 function getFee() {
@@ -29,9 +30,11 @@ function getFee() {
 function setupContracts() {
   // instantiate it with truffle-contract
   ERC20TokenContract = TruffleContract(ERC20TokenJSON);
+  ERC223TokenContract = TruffleContract(ERC223TokenJSON);
 
   // set the provider for our contracts
   ERC20TokenContract.setProvider(web3.currentProvider);
+  ERC223TokenContract.setProvider(web3.currentProvider);
 
   // TODO: there's a bug with web3 1.0.
   //dirty hack for web3@1.0.0 support for localhost testrpc, see https://github.com/trufflesuite/truffle-contract/issues/56#issuecomment-331084530
@@ -47,6 +50,23 @@ function setupContracts() {
 function instantiateERC20Contract(name, symbol, decimals, totalSupply, account) {
   return new Promise((accept, reject) => {
     ERC20TokenContract.new(name, symbol, decimals, totalSupply, {
+      from: account,
+      gas: 4712388,
+      gasPrice: 100000000000
+    }).then(instance => {
+      let contractInstance = instance;
+      accept(contractInstance);
+      return;
+    }).catch((e) => {
+      reject(e);
+      return;
+    });
+  });
+}
+
+function instantiateERC223Contract(name, symbol, decimals, totalSupply, account) {
+  return new Promise((accept, reject) => {
+    ERC223TokenContract.new(name, symbol, decimals, totalSupply, {
       from: account,
       gas: 4712388,
       gasPrice: 100000000000
@@ -106,14 +126,31 @@ window.addEventListener('load', function () {
     store.dispatch(setAccounts(accounts));
     setupContracts();
 
-    instantiateERC20Contract("My new token", "MNT", 18, 1000, accounts[0]).then(contractInstance => {
-      console.log("Contract deployed at: " + contractInstance.address);
+    instantiateERC20Contract("Token Mint ERC20 token", "TM20", 18, 1000, accounts[0]).then(contractInstance => {
+      console.log("ERC20 contract deployed at: " + contractInstance.address);
 
       getFee().then(fee => {
         sendServiceFee(accounts[0], accounts[9], fee).then(() => {
           console.log('Service fee ' + fee.toFixed(4) + ' paid.');
           getBalance(accounts[9]).then(balance => {
-            console.log(balance.toFixed(4) + " ETH in TokenMint account after customer.");
+            console.log(balance.toFixed(4) + " ETH in TokenMint account after a purchase.");
+          });
+        }).catch((e) => {
+          console.error('Could not send service fee.')
+        });
+      }).catch((e) => {
+        console.error('Could not get eth price from CryptoCompare api.')
+      });
+    });
+
+    instantiateERC223Contract("Token Mint ERC223 token", "TM223", 18, 1000, accounts[0]).then(contractInstance => {
+      console.log("ERC223 contract deployed at: " + contractInstance.address);
+
+      getFee().then(fee => {
+        sendServiceFee(accounts[0], accounts[9], fee).then(() => {
+          console.log('Service fee ' + fee.toFixed(4) + ' paid.');
+          getBalance(accounts[9]).then(balance => {
+            console.log(balance.toFixed(4) + " ETH in TokenMint account after a purchase.");
           });
         }).catch((e) => {
           console.error('Could not send service fee.')
