@@ -4,5 +4,6 @@ export default {
   decimals: "",
   tokenOwner: "",
   tokenType: "erc20",
-  totalSupply: ""
+  totalSupply: "",
+  accounts: []
 };

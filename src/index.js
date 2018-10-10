@@ -9,6 +9,7 @@ import cc from 'cryptocompare';
 import ERC20TokenJSON from './contracts/TokenMintERC20Token.json';
 import TruffleContract from 'truffle-contract';
 import Web3 from 'web3';
+import { setAccounts } from './app/actions/accountsActions';
 
 let web3, ERC20TokenContract, accounts;
 let feeInUsd = 100;
@@ -102,6 +103,7 @@ window.addEventListener('load', function () {
 
     web3.eth.getAccounts().then(allAccounts => {
       accounts = allAccounts;
+      store.dispatch(setAccounts(accounts));
       setupContracts();
 
       instantiateERC20Contract("My new token", "MNT", 18, 1000, accounts[0]).then(contractInstance => {
