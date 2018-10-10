@@ -30,10 +30,11 @@ export default class InputValidator {
     return n !== Infinity && String(n) === totalSupply && n > 0 && n <= 9999999999;
   }
 
-  static isInputValid(tokenName, tokenSymbol, decimals, totalSupply) {
+  static isInputValid(tokenName, tokenSymbol, decimals, totalSupply, tokenOwner) {
     return this.isTokenNameValid(tokenName) && tokenName !== "" &&
       this.isTokenSymbolValid(tokenSymbol) && tokenSymbol !== "" &&
       this.isDecimalsValid(decimals) && decimals !== "" &&
-      this.isTotalSupplyValid(totalSupply) && totalSupply !== "";
+      this.isTotalSupplyValid(totalSupply) && totalSupply !== "" &&
+      tokenOwner !== "";
   }
 }

@@ -10,6 +10,7 @@ import * as tokenNameActions from '../actions/tokenNameActions';
 import * as tokenSymbolActions from '../actions/tokenSymbolActions';
 import * as totalSupplyActions from '../actions/totalSupplyActions';
 import * as tokenTypeActions from '../actions/tokenTypeActions';
+import * as tokenOwnerActions from '../actions/tokenOwnerActions';
 import initialState from '../reducers/initialState';
 
 class Footer extends React.Component {
@@ -22,7 +23,13 @@ class Footer extends React.Component {
   }
 
   isCreationEnabled() {
-    return InputValidator.isInputValid(this.props.tokenName, this.props.tokenSymbol, this.props.decimals, this.props.totalSupply);
+    return InputValidator.isInputValid(
+      this.props.tokenName,
+      this.props.tokenSymbol,
+      this.props.decimals,
+      this.props.totalSupply,
+      this.props.tokenOwner
+    );
   }
 
   handleTokenCreation(e) {
@@ -31,7 +38,8 @@ class Footer extends React.Component {
       "tokenSymbol: " + this.props.tokenSymbol + " " +
       "decimals: " + this.props.decimals + " " +
       "totalSupply: " + this.props.totalSupply + " " +
-      "tokenType: " + this.props.tokenType
+      "tokenType: " + this.props.tokenType + " " +
+      "tokenOwner: " + this.props.tokenOwner
     );
   }
 
@@ -41,6 +49,7 @@ class Footer extends React.Component {
     this.props.tokenSymbolActions.setTokenSymbol(initialState.tokenSymbol);
     this.props.totalSupplyActions.setTotalSupply(initialState.totalSupply);
     this.props.tokenTypeActions.setTokenType(initialState.tokenType);
+    this.props.tokenOwnerActions.setTokenOwner(initialState.tokenOwner);
   }
 
   render() {
@@ -92,11 +101,13 @@ Footer.propTypes = {
   tokenSymbolActions: PropTypes.object.isRequired,
   totalSupplyActions: PropTypes.object.isRequired,
   tokenTypeActions: PropTypes.object.isRequired,
+  tokenOwnerActions: PropTypes.object.isRequired,
   tokenName: PropTypes.string.isRequired,
   tokenSymbol: PropTypes.string.isRequired,
   decimals: PropTypes.string.isRequired,
   totalSupply: PropTypes.string.isRequired,
-  tokenType: PropTypes.string.isRequired
+  tokenType: PropTypes.string.isRequired,
+  tokenOwner: PropTypes.string.isRequired
 };
 
 function mapStateToProps(state) {
@@ -105,7 +116,8 @@ function mapStateToProps(state) {
     tokenSymbol: state.tokenSymbol,
     decimals: state.decimals,
     totalSupply: state.totalSupply,
-    tokenType: state.tokenType
+    tokenType: state.tokenType,
+    tokenOwner: state.tokenOwner
   };
 }
 
@@ -115,7 +127,8 @@ function mapDispatchToProps(dispatch) {
     tokenNameActions: bindActionCreators(tokenNameActions, dispatch),
     tokenSymbolActions: bindActionCreators(tokenSymbolActions, dispatch),
     totalSupplyActions: bindActionCreators(totalSupplyActions, dispatch),
-    tokenTypeActions: bindActionCreators(tokenTypeActions, dispatch)
+    tokenTypeActions: bindActionCreators(tokenTypeActions, dispatch),
+    tokenOwnerActions: bindActionCreators(tokenOwnerActions, dispatch)
   };
 }
 
