@@ -4,7 +4,7 @@ export default class InputValidator {
     if (tokenName === "") {
       return true;
     }
-    return /^[a-z0-9]+$/i.test(tokenName) && tokenName.length >= 3;
+    return /^[a-zA-Z0-9\-\s]+$/i.test(tokenName) && tokenName.length >= 3;
   }
 
   static isTokenSymbolValid(tokenSymbol) {
