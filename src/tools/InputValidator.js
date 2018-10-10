@@ -13,7 +13,7 @@ export default class InputValidator {
     if (tokenSymbol === "") {
       return true;
     }
-    return /^[a-z0-9]+$/i.test(tokenSymbol) && tokenSymbol.length >= 3 && this.isTokenSymbolUnique(tokenSymbol);
+    return /^[a-z0-9]+$/i.test(tokenSymbol) && tokenSymbol.length >= 3;
   }
 
   static isDecimalsValid(decimals) {

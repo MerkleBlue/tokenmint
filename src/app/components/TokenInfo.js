@@ -60,7 +60,7 @@ class TokenInfo extends React.Component {
   render() {
     let tokenSymbolDescriptionText = InputValidator.isTokenSymbolUnique(this.props.tokenSymbol) ?
     "3-4 letters (example ETH, BTC, BAT, etc.). No spaces. Only alphanumerical characters." :
-    "This token symbol is already in use. Please choose a unique symbol.";
+    "This token symbol is already in use. We advise using another symbol.";
     return (
       <form className="main_form">
         <div className="token_info_header">
