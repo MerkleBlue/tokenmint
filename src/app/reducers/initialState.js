@@ -1,3 +1,5 @@
+import appStates from './appStates';
+
 export default {
   tokenName: "",
   tokenSymbol: "",
@@ -5,5 +7,6 @@ export default {
   tokenOwner: "",
   tokenType: "erc20",
   totalSupply: "",
-  accounts: []
+  accounts: [],
+  appState: appStates.INIT
 };

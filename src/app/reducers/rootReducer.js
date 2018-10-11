@@ -6,6 +6,7 @@ import tokenOwner from './tokenOwnerReducer';
 import tokenType from './tokenTypeReducer';
 import totalSupply from './totalSupplyReducer';
 import accounts from './accountsReducer';
+import appState from './appStateReducer';
 
 const rootReducer = combineReducers({
   tokenName: tokenName,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   tokenOwner: tokenOwner,
   tokenType: tokenType,
   totalSupply: totalSupply,
-  accounts: accounts
+  accounts: accounts,
+  appState: appState
 });
 
 export default rootReducer;

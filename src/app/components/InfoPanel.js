@@ -1,10 +1,10 @@
 import React from 'react';
-import './css/Footer.css';
-import { Grid } from '@material-ui/core';
+import './css/InfoPanel.css';
+import { Typography, LinearProgress } from '@material-ui/core';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import InputValidator from '../../tools/InputValidator';
 import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
+import appStates from '../reducers/appStates';
 import * as decimalsActions from '../actions/decimalsActions';
 import * as tokenNameActions from '../actions/tokenNameActions';
 import * as tokenSymbolActions from '../actions/tokenSymbolActions';
@@ -15,37 +15,14 @@ import * as createTokensActions from '../actions/createTokensActions';
 import * as appStateActions from '../actions/appStateActions';
 import initialState from '../reducers/initialState';
 
-class Footer extends React.Component {
+class InfoPanel extends React.Component {
 
   constructor(props) {
     super(props);
-    this.handleTokenCreation = this.handleTokenCreation.bind(this);
-    this.isCreationEnabled = this.isCreationEnabled.bind(this);
-    this.handleClean = this.handleClean.bind(this);
+    this.handleBackClick = this.handleBackClick.bind(this);
   }
 
-  isCreationEnabled() {
-    return InputValidator.isInputValid(
-      this.props.tokenName,
-      this.props.tokenSymbol,
-      this.props.decimals,
-      this.props.totalSupply,
-      this.props.tokenOwner
-    );
-  }
-
-  handleTokenCreation(e) {
-    this.props.createTokensActions.createTokens(
-      this.props.tokenName,
-      this.props.tokenSymbol,
-      this.props.decimals,
-      this.props.totalSupply,
-      this.props.tokenType,
-      this.props.tokenOwner
-    );
-  }
-
-  handleClean(e) {
+  handleBackClick(e) {
     this.props.decimalsActions.setDecimals(initialState.decimals);
     this.props.tokenNameActions.setTokenName(initialState.tokenName);
     this.props.tokenSymbolActions.setTokenSymbol(initialState.tokenSymbol);
@@ -56,49 +33,46 @@ class Footer extends React.Component {
   }
 
   render() {
-    let createBtn = this.isCreationEnabled() ?
-      (
+    let infoMessage;
+    let footer;
+    if (this.props.appState === appStates.MINING_IN_PROGRESS) {
+      infoMessage = "Your tokens are being mined. This might take a few minutes.";
+      footer = <LinearProgress className="linear_progress" />;
+    } else if (this.props.appState === appStates.MINING_FINISHED) {
+      infoMessage = "Your tokens have been successfully mined, and are ready to be used. Thank You for using TokenMint!";
+      footer = (
         <span
-          className="btn btn-common wow fadeInUp"
+          className="btn-basic btn-back wow fadeInUp"
           data-wow-duration="1000ms"
           data-wow-delay="400ms"
-          onClick={this.handleTokenCreation}
+          onClick={this.handleBackClick}
         >
-          Create
-        </span>
-      ) : (
-        <span
-          className="btn btn-disabled wow fadeInUp"
-          data-wow-duration="1000ms"
-          data-wow-delay="400ms"
-        >
-          Create
+          Back
         </span>
       );
+    } else {
+      infoMessage = "";
+      footer = "";
+    }
 
     return (
-      <form className="footer_main_form">
-        <Grid container wrap="nowrap" spacing={8}>
-          <Grid item xs>
-            {createBtn}
-          </Grid>
-          <Grid item xs>
-            <span
-              className="btn btn-clean wow fadeInUp"
-              data-wow-duration="1000ms"
-              data-wow-delay="400ms"
-              onClick={this.handleClean}
-            >
-              Clean
-            </span>
-          </Grid>
-        </Grid>
+      <form className="main_form">
+        <Typography
+          align="center"
+          color="default"
+          variant="headline"
+          className="typography"
+        >
+          {infoMessage}
+        </Typography>
+        {footer}
       </form>
     );
   }
 }
 
-Footer.propTypes = {
+InfoPanel.propTypes = {
+  appState: PropTypes.number.isRequired,
   decimalsActions: PropTypes.object.isRequired,
   tokenNameActions: PropTypes.object.isRequired,
   tokenSymbolActions: PropTypes.object.isRequired,
@@ -107,22 +81,11 @@ Footer.propTypes = {
   tokenOwnerActions: PropTypes.object.isRequired,
   createTokensActions: PropTypes.object.isRequired,
   appStateActions: PropTypes.object.isRequired,
-  tokenName: PropTypes.string.isRequired,
-  tokenSymbol: PropTypes.string.isRequired,
-  decimals: PropTypes.string.isRequired,
-  totalSupply: PropTypes.string.isRequired,
-  tokenType: PropTypes.string.isRequired,
-  tokenOwner: PropTypes.string.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    tokenName: state.tokenName,
-    tokenSymbol: state.tokenSymbol,
-    decimals: state.decimals,
-    totalSupply: state.totalSupply,
-    tokenType: state.tokenType,
-    tokenOwner: state.tokenOwner
+    appState: state.appState
   };
 }
 
@@ -139,5 +102,5 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Footer);
+export default connect(mapStateToProps, mapDispatchToProps)(InfoPanel);
 

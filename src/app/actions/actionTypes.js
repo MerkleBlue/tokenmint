@@ -5,3 +5,5 @@ export const SET_TOKEN_OWNER = "SET_TOKEN_OWNER";
 export const SET_TOKEN_TYPE = "SET_TOKEN_TYPE";
 export const SET_TOTAL_SUPPLY = "SET_TOTAL_SUPPLY";
 export const SET_ACCOUNTS = "SET_ACCOUNTS";
+export const SET_APP_STATE = "SET_APP_STATE";
+
