@@ -88,7 +88,7 @@ class TokenInfo extends React.Component {
               variant="caption"
               className="typography"
             >
-              The name of the project. No spaces, 3-25 symbols. Only alphanumerical characters.
+              The name of the token. 3-25 symbols. Alphanumerical characters, space, and hyphen are accepted.
           </Typography>
           </Grid>
         </Grid>
