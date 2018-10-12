@@ -123,7 +123,7 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
           let tokenContract = tokenType === "erc20" ? ERC20TokenContract : ERC223TokenContract;
           instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner).then(contractInstance => {
             let infoMessage = (
-              "Your tokens have been successfully mined, and are ready to be used. Contract is deployed at: " +
+              "Your tokens have been successfully mined, and are ready to be used. Contract is deployed at address: " +
               contractInstance.address +
               ". Thank You for using TokenMint!"
             );
