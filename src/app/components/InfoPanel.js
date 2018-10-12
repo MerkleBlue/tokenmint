@@ -13,6 +13,7 @@ import * as tokenTypeActions from '../actions/tokenTypeActions';
 import * as tokenOwnerActions from '../actions/tokenOwnerActions';
 import * as createTokensActions from '../actions/createTokensActions';
 import * as appStateActions from '../actions/appStateActions';
+import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
 import initialState from '../reducers/initialState';
 
 class InfoPanel extends React.Component {
@@ -30,6 +31,8 @@ class InfoPanel extends React.Component {
     this.props.tokenTypeActions.setTokenType(initialState.tokenType);
     this.props.tokenOwnerActions.setTokenOwner(initialState.tokenOwner);
     this.props.appStateActions.setAppState(initialState.appState);
+    this.props.tokenOwnerFundsActions.setCheckingTokenOwnerFunds(initialState.checkingTokenOwnerFunds);
+    this.props.tokenOwnerFundsActions.setTokenOwnerHasEnoughFunds(initialState.tokenOwnerHasEnoughFunds);
   }
 
   render() {
@@ -81,6 +84,7 @@ InfoPanel.propTypes = {
   tokenOwnerActions: PropTypes.object.isRequired,
   createTokensActions: PropTypes.object.isRequired,
   appStateActions: PropTypes.object.isRequired,
+  tokenOwnerFundsActions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
@@ -98,7 +102,8 @@ function mapDispatchToProps(dispatch) {
     tokenTypeActions: bindActionCreators(tokenTypeActions, dispatch),
     tokenOwnerActions: bindActionCreators(tokenOwnerActions, dispatch),
     createTokensActions: bindActionCreators(createTokensActions, dispatch),
-    appStateActions: bindActionCreators(appStateActions, dispatch)
+    appStateActions: bindActionCreators(appStateActions, dispatch),
+    tokenOwnerFundsActions: bindActionCreators(tokenOwnerFundsActions, dispatch)
   };
 }
 

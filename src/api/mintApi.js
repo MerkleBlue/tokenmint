@@ -109,6 +109,23 @@ function instantiateContract(tokenContract, name, symbol, decimals, totalSupply,
   });
 }
 
+export function checkTokenOwnerFunds(tokenOwner) {
+  initWeb3();
+  return new Promise((accept, reject) => {
+    getFee().then(fee => {
+      hasFunds(tokenOwner, fee).then(hasFunds => {
+        accept(hasFunds);
+      }).catch((e) => {
+        reject(e);
+        return;
+      });
+    }).catch((e) => {
+      reject(e);
+      return;
+    });
+  });
+}
+
 export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenType, tokenOwner) {
   initWeb3();
   setupContracts();
