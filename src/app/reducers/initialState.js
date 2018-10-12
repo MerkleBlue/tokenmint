@@ -8,5 +8,7 @@ export default {
   tokenType: "erc20",
   totalSupply: "",
   accounts: [],
-  appState: appStates.INIT
+  appState: appStates.INIT,
+  checkingTokenOwnerFunds: false,
+  tokenOwnerHasEnoughFunds: true
 };

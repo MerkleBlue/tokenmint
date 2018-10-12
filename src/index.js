@@ -16,13 +16,10 @@ window.addEventListener('load', function () {
   if (typeof window.web3 !== 'undefined') {
     // Use Mist/MetaMask's provider
     web3 = new Web3(window.web3.currentProvider);
-    console.log('Found web3 injected by the browser. Version: ' + web3.version);
   } else {
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
-    console.log('Using http://localhost:7545 as web3 provider. Version: ' + web3.version);
   }
-  console.log(web3);
   web3.eth.getAccounts().then(allAccounts => {
     store.dispatch(setAccounts(allAccounts));
   });
