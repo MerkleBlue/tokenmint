@@ -65,19 +65,6 @@ function sendServiceFee(senderAccount, receiverAccount, fee) {
   });
 }
 
-function getBalance(account) {
-  return new Promise((accept, reject) => {
-    web3.eth.getBalance(account).then(wei => {
-      let balance = web3.utils.fromWei(wei, 'ether');
-      accept(parseFloat(balance));
-      return;
-    }).catch(e => {
-      reject(e);
-      return;
-    });
-  });
-}
-
 function hasFunds(account, fee) {
   return new Promise((accept, reject) => {
     web3.eth.getBalance(account).then(wei => {
@@ -135,34 +122,24 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
         if (hasFunds) {
           let tokenContract = tokenType === "erc20" ? ERC20TokenContract : ERC223TokenContract;
           instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner).then(contractInstance => {
-            console.log("Contract deployed at: " + contractInstance.address);
-
             sendServiceFee(tokenOwner, "0x5AEDA56215b167893e80B4fE645BA6d5Bab767DE", fee).then(() => {
-              console.log('Service fee ' + fee.toFixed(4) + ' paid.');
-              getBalance("0x5AEDA56215b167893e80B4fE645BA6d5Bab767DE").then(balance => {
-                console.log(balance.toFixed(4) + " ETH in TokenMint account after a purchase.");
-                accept();
-                return;
-              });
+              accept(contractInstance.address);
+              return;
             }).catch((e) => {
-              console.error('Could not send service fee.');
-              reject(e);
+              reject("Could not send service fee.");
               return;
             });
           });
         } else {
-          console.error('Account: ' + tokenOwner + ' doesn\'t have enough funds to pay for service.');
-          reject();
+          reject("Account: " + tokenOwner + " doesn't have enough funds to pay for service.");
           return;
         }
       }).catch((e) => {
-        console.error('Could not get balance.');
-        reject(e);
+        reject("Could not get balance.");
         return;
       });
     }).catch((e) => {
-      console.error('Could not get eth price from CryptoCompare api.');
-      reject(e);
+      reject("Could not get eth price from CryptoCompare api.");
       return;
     });
   });

@@ -14,6 +14,7 @@ import * as tokenOwnerActions from '../actions/tokenOwnerActions';
 import * as createTokensActions from '../actions/createTokensActions';
 import * as appStateActions from '../actions/appStateActions';
 import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
+import * as infoMessageActions from '../actions/infoMessageActions';
 import initialState from '../reducers/initialState';
 
 class Footer extends React.Component {
@@ -56,6 +57,7 @@ class Footer extends React.Component {
     this.props.appStateActions.setAppState(initialState.appState);
     this.props.tokenOwnerFundsActions.setCheckingTokenOwnerFunds(initialState.checkingTokenOwnerFunds);
     this.props.tokenOwnerFundsActions.setTokenOwnerHasEnoughFunds(initialState.tokenOwnerHasEnoughFunds);
+    this.props.infoMessageActions.setInfoMessage(initialState.infoMessage);
   }
 
   render() {
@@ -111,6 +113,7 @@ Footer.propTypes = {
   createTokensActions: PropTypes.object.isRequired,
   appStateActions: PropTypes.object.isRequired,
   tokenOwnerFundsActions: PropTypes.object.isRequired,
+  infoMessageActions: PropTypes.object.isRequired,
   tokenName: PropTypes.string.isRequired,
   tokenSymbol: PropTypes.string.isRequired,
   decimals: PropTypes.string.isRequired,
@@ -144,7 +147,8 @@ function mapDispatchToProps(dispatch) {
     tokenOwnerActions: bindActionCreators(tokenOwnerActions, dispatch),
     createTokensActions: bindActionCreators(createTokensActions, dispatch),
     appStateActions: bindActionCreators(appStateActions, dispatch),
-    tokenOwnerFundsActions: bindActionCreators(tokenOwnerFundsActions, dispatch)
+    tokenOwnerFundsActions: bindActionCreators(tokenOwnerFundsActions, dispatch),
+    infoMessageActions: bindActionCreators(infoMessageActions, dispatch)
   };
 }
 
