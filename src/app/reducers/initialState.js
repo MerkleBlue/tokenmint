@@ -10,5 +10,6 @@ export default {
   accounts: [],
   appState: appStates.INIT,
   checkingTokenOwnerFunds: false,
-  tokenOwnerHasEnoughFunds: true
+  tokenOwnerHasEnoughFunds: true,
+  infoMessage: ""
 };

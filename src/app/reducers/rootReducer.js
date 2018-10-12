@@ -9,6 +9,7 @@ import accounts from './accountsReducer';
 import appState from './appStateReducer';
 import checkingTokenOwnerFunds from './checkingTokenOwnerFundsReducer';
 import tokenOwnerHasEnoughFunds from './tokenOwnerHasEnoughFundsReducer';
+import infoMessage from './infoMessageReducer';
 
 const rootReducer = combineReducers({
   tokenName: tokenName,
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
   accounts: accounts,
   appState: appState,
   checkingTokenOwnerFunds: checkingTokenOwnerFunds,
-  tokenOwnerHasEnoughFunds: tokenOwnerHasEnoughFunds
+  tokenOwnerHasEnoughFunds: tokenOwnerHasEnoughFunds,
+  infoMessage: infoMessage
 });
 
 export default rootReducer;
