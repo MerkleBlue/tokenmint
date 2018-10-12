@@ -4,7 +4,7 @@ import ERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
 import TruffleContract from 'truffle-contract';
 import Web3 from 'web3';
 
-const feeInUsd = 100;
+const feeInUsd = 99.99;
 let web3, ERC20TokenContract, ERC223TokenContract;
 
 function initWeb3() {
