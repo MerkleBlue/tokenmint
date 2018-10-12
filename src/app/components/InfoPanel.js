@@ -38,11 +38,57 @@ class InfoPanel extends React.Component {
   }
 
   render() {
+    let info;
     let footer;
-    let typographyColor = "default";
     if (this.props.appState === appStates.MINING_IN_PROGRESS) {
+      info = (
+        <Typography
+          align="center"
+          color="default"
+          variant="headline"
+          className="typography"
+        >
+          {this.props.infoMessage}
+        </Typography>
+      );
       footer = <LinearProgress className="linear_progress" />;
     } else if (this.props.appState === appStates.MINING_FINISHED) {
+      info = (
+        <div>
+          <Typography
+            align="center"
+            color="default"
+            variant="headline"
+            className="typography"
+          >
+            Your tokens have been successfully mined, and are ready to be used.
+          </Typography>
+          <Typography
+            align="center"
+            color="default"
+            variant="headline"
+            className="typography"
+          >
+            Contract is deployed at address:
+          </Typography>
+          <Typography
+            align="center"
+            color="default"
+            variant="headline"
+            className="typography"
+          >
+            {this.props.infoMessage}
+          </Typography>
+          <Typography
+            align="center"
+            color="default"
+            variant="headline"
+            className="typography"
+          >
+            Thank You for using TokenMint!
+          </Typography>
+        </div>
+      );
       footer = (
         <span
           className="btn-basic btn-back wow fadeInUp"
@@ -54,7 +100,26 @@ class InfoPanel extends React.Component {
         </span>
       );
     } else if (this.props.appState === appStates.MINING_FAILED) {
-      typographyColor = "error";
+      info =  info = (
+        <div>
+          <Typography
+            align="center"
+            color="error"
+            variant="headline"
+            className="typography"
+          >
+            Oops, something went wrong!
+          </Typography>
+          <Typography
+            align="center"
+            color="error"
+            variant="headline"
+            className="typography"
+          >
+            {this.props.infoMessage}
+          </Typography>
+        </div>
+      );
       footer = (
         <span
           className="btn-basic btn-back wow fadeInUp"
@@ -66,19 +131,13 @@ class InfoPanel extends React.Component {
         </span>
       );
     } else {
+      info = "";
       footer = "";
     }
 
     return (
       <form className="main_form">
-        <Typography
-          align="center"
-          color={typographyColor}
-          variant="headline"
-          className="typography"
-        >
-          {this.props.infoMessage}
-        </Typography>
+        {info}
         {footer}
       </form>
     );

@@ -122,29 +122,24 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
         if (hasFunds) {
           let tokenContract = tokenType === "erc20" ? ERC20TokenContract : ERC223TokenContract;
           instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner).then(contractInstance => {
-            let infoMessage = (
-              "Your tokens have been successfully mined, and are ready to be used. Contract is deployed at address: [" +
-              contractInstance.address +
-              "]. Thank You for using TokenMint!"
-            );
             sendServiceFee(tokenOwner, "0x5AEDA56215b167893e80B4fE645BA6d5Bab767DE", fee).then(() => {
-              accept(infoMessage);
+              accept(contractInstance.address);
               return;
             }).catch((e) => {
-              reject("Oops, something went wrong. Could not send service fee.");
+              reject("Could not send service fee.");
               return;
             });
           });
         } else {
-          reject("Oops, something went wrong. Account: [" + tokenOwner + "] doesn't have enough funds to pay for service.");
+          reject("Account: " + tokenOwner + " doesn't have enough funds to pay for service.");
           return;
         }
       }).catch((e) => {
-        reject("Oops, something went wrong. Could not get balance.");
+        reject("Could not get balance.");
         return;
       });
     }).catch((e) => {
-      reject("Oops, something went wrong. Could not get eth price from CryptoCompare api.");
+      reject("Could not get eth price from CryptoCompare api.");
       return;
     });
   });
