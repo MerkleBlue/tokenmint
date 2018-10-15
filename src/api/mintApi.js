@@ -144,3 +144,16 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
     });
   });
 }
+
+export function loadAccounts() {
+  initWeb3();
+  return new Promise((accept, reject) => {
+    web3.eth.getAccounts().then(allAccounts => {
+      accept(allAccounts);
+      return;
+    }).catch((e) => {
+      reject();
+      return;
+    });
+  });
+}

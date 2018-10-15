@@ -7,6 +7,7 @@ import * as tokenOwnerActions from '../actions/tokenOwnerActions';
 import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
 import { bindActionCreators } from 'redux';
 import initialState from '../reducers/initialState';
+import ethereum from '../img/ethereum.png';
 
 class TokenOwner extends React.Component {
 
@@ -27,7 +28,11 @@ class TokenOwner extends React.Component {
     let menuItems;
     let descriptionText;
     let typographyColor;
-    if (this.props.accounts.length > 0) {
+    if (this.props.loadingAccounts) {
+      menuItems = <MenuItem value={initialState.tokenOwner}>Loading accounts...</MenuItem>;
+      descriptionText = "ETH address (not exchange address). This address will be owner of the token. Please make sure that the selected address is main-net Ethereum address!";
+      typographyColor = "textSecondary";
+    } else if (this.props.accounts.length > 0) {
       menuItems = this.props.accounts.map((account) => <MenuItem key={account} value={account}>{account}</MenuItem>);
       if (this.props.tokenOwnerHasEnoughFunds) {
         descriptionText = "ETH address (not exchange address). This address will be owner of the token. Please make sure that the selected address is main-net Ethereum address!";
@@ -43,12 +48,15 @@ class TokenOwner extends React.Component {
     }
     return (
       <form className="main_form">
+        <div className="token_info_header">
+          <img className="ethereum_symbol" src={ethereum} alt="" />
+        </div>
         <Grid container wrap="nowrap" spacing={8}>
           <Grid item xs>
             <FormControl variant="outlined">
-              <InputLabel>Accounts</InputLabel>
+              <InputLabel>Token Owner</InputLabel>
               <Select
-                error={this.props.accounts.length === 0 || !this.props.tokenOwnerHasEnoughFunds}
+                error={(this.props.accounts.length === 0 || !this.props.tokenOwnerHasEnoughFunds) && !this.props.loadingAccounts}
                 value={this.props.tokenOwner}
                 onChange={this.handleChange}
                 input={
@@ -82,6 +90,7 @@ TokenOwner.propTypes = {
   accounts: PropTypes.array.isRequired,
   tokenOwner: PropTypes.string.isRequired,
   tokenOwnerHasEnoughFunds: PropTypes.bool.isRequired,
+  loadingAccounts: PropTypes.bool.isRequired,
   tokenOwnerActions: PropTypes.object.isRequired,
   tokenOwnerFundsActions: PropTypes.object.isRequired
 };
@@ -89,6 +98,7 @@ TokenOwner.propTypes = {
 function mapStateToProps(state) {
   return {
     accounts: state.accounts,
+    loadingAccounts: state.loadingAccounts,
     tokenOwner: state.tokenOwner,
     tokenOwnerHasEnoughFunds: state.tokenOwnerHasEnoughFunds
   };

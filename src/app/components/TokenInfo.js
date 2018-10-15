@@ -1,7 +1,6 @@
 import React from 'react';
 import { TextField, Typography, Grid } from '@material-ui/core';
 import './css/TokenInfo.css';
-import ethereum from '../img/ethereum.png';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as decimalsActions from '../actions/decimalsActions';
@@ -63,9 +62,6 @@ class TokenInfo extends React.Component {
     "This token symbol is already in use. We advise using another symbol.";
     return (
       <form className="main_form">
-        <div className="token_info_header">
-          <img className="ethereum_symbol" src={ethereum} alt="" />
-        </div>
         <Grid container wrap="nowrap" spacing={8}>
           <Grid item xs>
             <TextField

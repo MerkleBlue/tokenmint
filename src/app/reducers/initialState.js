@@ -11,5 +11,6 @@ export default {
   appState: appStates.INIT,
   checkingTokenOwnerFunds: false,
   tokenOwnerHasEnoughFunds: true,
-  infoMessage: ""
+  infoMessage: "",
+  loadingAccounts: false
 };

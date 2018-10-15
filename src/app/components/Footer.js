@@ -15,6 +15,7 @@ import * as createTokensActions from '../actions/createTokensActions';
 import * as appStateActions from '../actions/appStateActions';
 import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
 import * as infoMessageActions from '../actions/infoMessageActions';
+import * as accountsActions from '../actions/accountsActions';
 import initialState from '../reducers/initialState';
 
 class Footer extends React.Component {
@@ -33,7 +34,9 @@ class Footer extends React.Component {
       this.props.decimals,
       this.props.totalSupply,
       this.props.tokenOwner
-    ) && !this.props.checkingTokenOwnerFunds && this.props.tokenOwnerHasEnoughFunds;
+    ) && !this.props.checkingTokenOwnerFunds
+    && this.props.tokenOwnerHasEnoughFunds
+    && !this.props.loadingAccounts;
   }
 
   handleTokenCreation(e) {
@@ -58,6 +61,7 @@ class Footer extends React.Component {
     this.props.tokenOwnerFundsActions.setCheckingTokenOwnerFunds(initialState.checkingTokenOwnerFunds);
     this.props.tokenOwnerFundsActions.setTokenOwnerHasEnoughFunds(initialState.tokenOwnerHasEnoughFunds);
     this.props.infoMessageActions.setInfoMessage(initialState.infoMessage);
+    this.props.accountsActions.loadAllAccounts();
   }
 
   render() {
@@ -114,6 +118,7 @@ Footer.propTypes = {
   appStateActions: PropTypes.object.isRequired,
   tokenOwnerFundsActions: PropTypes.object.isRequired,
   infoMessageActions: PropTypes.object.isRequired,
+  accountsActions: PropTypes.object.isRequired,
   tokenName: PropTypes.string.isRequired,
   tokenSymbol: PropTypes.string.isRequired,
   decimals: PropTypes.string.isRequired,
@@ -121,7 +126,8 @@ Footer.propTypes = {
   tokenType: PropTypes.string.isRequired,
   tokenOwner: PropTypes.string.isRequired,
   checkingTokenOwnerFunds: PropTypes.bool.isRequired,
-  tokenOwnerHasEnoughFunds: PropTypes.bool.isRequired
+  tokenOwnerHasEnoughFunds: PropTypes.bool.isRequired,
+  loadingAccounts: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state) {
@@ -133,7 +139,8 @@ function mapStateToProps(state) {
     tokenType: state.tokenType,
     tokenOwner: state.tokenOwner,
     checkingTokenOwnerFunds: state.checkingTokenOwnerFunds,
-    tokenOwnerHasEnoughFunds: state.tokenOwnerHasEnoughFunds
+    tokenOwnerHasEnoughFunds: state.tokenOwnerHasEnoughFunds,
+    loadingAccounts: state.loadingAccounts
   };
 }
 
@@ -148,7 +155,8 @@ function mapDispatchToProps(dispatch) {
     createTokensActions: bindActionCreators(createTokensActions, dispatch),
     appStateActions: bindActionCreators(appStateActions, dispatch),
     tokenOwnerFundsActions: bindActionCreators(tokenOwnerFundsActions, dispatch),
-    infoMessageActions: bindActionCreators(infoMessageActions, dispatch)
+    infoMessageActions: bindActionCreators(infoMessageActions, dispatch),
+    accountsActions: bindActionCreators(accountsActions, dispatch)
   };
 }
 

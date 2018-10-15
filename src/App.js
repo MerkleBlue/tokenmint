@@ -16,9 +16,9 @@ class App extends Component {
     let content = this.props.appState === appStates.INIT ?
       (
         <div>
+          <TokenOwner />
           <TokenInfo />
           <TokenType />
-          <TokenOwner />
           <Footer />
         </div>
       ) : (
