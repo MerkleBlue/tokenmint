@@ -58,10 +58,11 @@ class TokenInfo extends React.Component {
 
   render() {
     let tokenSymbolDescriptionText = InputValidator.isTokenSymbolUnique(this.props.tokenSymbol) ?
-    "3-4 letters (example ETH, BTC, BAT, etc.). No spaces. Only alphanumerical characters." :
+    "3-4 characters (example ETH, BTC, BAT, etc.). No spaces. Only alphanumerical characters." :
     "This token symbol is already in use. We advise using another symbol.";
     return (
       <form className="main_form">
+        <h2>Token attributes</h2>
         <Grid container wrap="nowrap" spacing={8}>
           <Grid item xs>
             <TextField
@@ -136,7 +137,7 @@ class TokenInfo extends React.Component {
               variant="caption"
               className="typography"
             >
-              Defines the number of decimals for the token. 0-50 numerals are accepted. 18 as common practice
+              Defines the number of decimals for the token. 0-50 numerals are accepted. 18 is common practice.
           </Typography>
           </Grid>
         </Grid>
@@ -162,7 +163,7 @@ class TokenInfo extends React.Component {
               variant="caption"
               className="typography"
             >
-              Total amount of tokens to be generated. Minimum value is 1, and maximum 1000000000000000
+              Total amount of tokens to be generated. Minimum value is 1, and maximum 1000000000000000.
           </Typography>
           </Grid>
         </Grid>

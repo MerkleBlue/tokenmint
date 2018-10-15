@@ -20,6 +20,7 @@ class TokenType extends React.Component {
   render() {
     return (
       <form className="main_form">
+        <h2>Token type</h2>
         <Grid container wrap="nowrap" spacing={8}>
           <Grid item xs>
             <RadioGroup
@@ -50,7 +51,7 @@ class TokenType extends React.Component {
               variant="caption"
               className="typography_token_type"
             >
-              ERC-20 is recommended option, accepted by the most exchanges. ERC-223 is similar to ERC-20, but it provides extra safety during token transfers.
+              ERC-20 is recommended option, accepted by most exchanges. <br/><br/>ERC-223 is similar to ERC-20, but it provides extra safety during token transfers.
             </Typography>
           </Grid>
         </Grid>
