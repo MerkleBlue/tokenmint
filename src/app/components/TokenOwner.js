@@ -51,7 +51,7 @@ class TokenOwner extends React.Component {
       }
     } else {
       menuItems = <MenuItem value={initialState.tokenOwner}>No available accounts</MenuItem>;
-      descriptionText = "There are no available accounts. Please make sure that you provide at least one account using MetaMask or any available Ethereum wallet.";
+      descriptionText = "There are no available accounts. Please make sure that you provide at least one account using MetaMask or any available Ethereum wallet, and refresh the page.";
       typographyColor = "error";
     }
     return (
