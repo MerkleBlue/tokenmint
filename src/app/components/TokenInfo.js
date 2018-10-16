@@ -1,5 +1,7 @@
 import React from 'react';
 import { TextField, Typography, Grid } from '@material-ui/core';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import blueGrey from '@material-ui/core/colors/blueGrey';
 import './css/TokenInfo.css';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -57,25 +59,33 @@ class TokenInfo extends React.Component {
   }
 
   render() {
+    const theme = createMuiTheme({
+      palette: {
+        primary: blueGrey,
+      },
+    });
+
     let tokenSymbolDescriptionText = InputValidator.isTokenSymbolUnique(this.props.tokenSymbol) ?
-    "3-4 letters (example ETH, BTC, BAT, etc.). No spaces. Only alphanumerical characters." :
-    "This token symbol is already in use. We advise using another symbol.";
+      "3-4 letters (example ETH, BTC, BAT, etc.). No spaces. Only alphanumerical characters." :
+      "This token symbol is already in use. We advise using another symbol.";
     return (
       <form className="main_form">
         <Grid container wrap="nowrap" spacing={8}>
           <Grid item xs>
-            <TextField
-              required
-              id="outlined-required"
-              label="Token name"
-              className="text_field"
-              margin="normal"
-              variant="outlined"
-              inputProps={{ maxLength: 25 }}
-              value={this.props.tokenName}
-              error={!InputValidator.isTokenNameValid(this.props.tokenName)}
-              onChange={this.handleTokenNameChange}
-            />
+            <MuiThemeProvider theme={theme}>
+              <TextField
+                required
+                id="outlined-required"
+                label="Token name"
+                className="text_field"
+                margin="normal"
+                variant="outlined"
+                inputProps={{ maxLength: 25 }}
+                value={this.props.tokenName}
+                error={!InputValidator.isTokenNameValid(this.props.tokenName)}
+                onChange={this.handleTokenNameChange}
+              />
+            </MuiThemeProvider>
           </Grid>
           <Grid item xs>
             <Typography
@@ -90,18 +100,20 @@ class TokenInfo extends React.Component {
         </Grid>
         <Grid container wrap="nowrap" spacing={8}>
           <Grid item xs>
-            <TextField
-              required
-              id="outlined-required"
-              label="Token symbol"
-              className="text_field"
-              margin="normal"
-              variant="outlined"
-              inputProps={{ maxLength: 4 }}
-              value={this.props.tokenSymbol}
-              error={!InputValidator.isTokenSymbolValid(this.props.tokenSymbol)}
-              onChange={this.handleTokenSymbolChange}
-            />
+            <MuiThemeProvider theme={theme}>
+              <TextField
+                required
+                id="outlined-required"
+                label="Token symbol"
+                className="text_field"
+                margin="normal"
+                variant="outlined"
+                inputProps={{ maxLength: 4 }}
+                value={this.props.tokenSymbol}
+                error={!InputValidator.isTokenSymbolValid(this.props.tokenSymbol)}
+                onChange={this.handleTokenSymbolChange}
+              />
+            </MuiThemeProvider>
           </Grid>
           <Grid item xs>
             <Typography
@@ -111,23 +123,25 @@ class TokenInfo extends React.Component {
               className="typography"
             >
               {tokenSymbolDescriptionText}
-          </Typography>
+            </Typography>
           </Grid>
         </Grid>
         <Grid container wrap="nowrap" spacing={8}>
           <Grid item xs>
-            <TextField
-              required
-              id="outlined-required"
-              label="Decimals"
-              className="text_field_decimals"
-              margin="normal"
-              variant="outlined"
-              inputProps={{ maxLength: 2, style: { textAlign: "center" } }}
-              value={this.props.decimals}
-              onChange={this.handleDecimalsChange}
-              error={!InputValidator.isDecimalsValid(this.props.decimals)}
-            />
+            <MuiThemeProvider theme={theme}>
+              <TextField
+                required
+                id="outlined-required"
+                label="Decimals"
+                className="text_field_decimals"
+                margin="normal"
+                variant="outlined"
+                inputProps={{ maxLength: 2, style: { textAlign: "center" } }}
+                value={this.props.decimals}
+                onChange={this.handleDecimalsChange}
+                error={!InputValidator.isDecimalsValid(this.props.decimals)}
+              />
+            </MuiThemeProvider>
           </Grid>
           <Grid item xs>
             <Typography
@@ -142,18 +156,20 @@ class TokenInfo extends React.Component {
         </Grid>
         <Grid container wrap="nowrap" spacing={8}>
           <Grid item xs>
-            <TextField
-              required
-              id="outlined-required"
-              label="Total supply"
-              className="text_field"
-              margin="normal"
-              variant="outlined"
-              inputProps={{ maxLength: 16, style: { textAlign: "center" } }}
-              value={this.props.totalSupply}
-              onChange={this.handleTotalSupplyChange}
-              error={!InputValidator.isTotalSupplyValid(this.props.totalSupply)}
-            />
+            <MuiThemeProvider theme={theme}>
+              <TextField
+                required
+                id="outlined-required"
+                label="Total supply"
+                className="text_field"
+                margin="normal"
+                variant="outlined"
+                inputProps={{ maxLength: 16, style: { textAlign: "center" } }}
+                value={this.props.totalSupply}
+                onChange={this.handleTotalSupplyChange}
+                error={!InputValidator.isTotalSupplyValid(this.props.totalSupply)}
+              />
+            </MuiThemeProvider>
           </Grid>
           <Grid item xs>
             <Typography

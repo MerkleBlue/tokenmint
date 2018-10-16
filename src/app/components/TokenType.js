@@ -31,13 +31,13 @@ class TokenType extends React.Component {
             >
               <FormControlLabel
                 value="erc20"
-                control={<Radio color="primary" />}
+                control={<Radio color="default" />}
                 label="ERC20"
                 labelPlacement="start"
               />
               <FormControlLabel
                 value="erc223"
-                control={<Radio color="primary" />}
+                control={<Radio color="default" />}
                 label="ERC223"
                 labelPlacement="start"
               />
