@@ -1,6 +1,6 @@
 import React from 'react';
 import './css/InfoPanel.css';
-import { Typography, LinearProgress, Divider } from '@material-ui/core';
+import { Typography, LinearProgress, Divider, Tooltip } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -42,8 +42,17 @@ class InfoPanel extends React.Component {
     this.props.accountsActions.loadAllAccounts();
   }
 
+  // a hack that creates an element outside the screen and uses it to copy its content to clipboard
   handleCopyToClipboard(e) {
-    alert(this.props.infoMessage);
+    const el = document.createElement('textarea');
+    el.value = this.props.infoMessage;
+    el.setAttribute('readonly', '');
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
   }
 
   render() {
@@ -106,7 +115,10 @@ class InfoPanel extends React.Component {
             variant="subheading"
             className="typography"
           >
-            [{this.props.infoMessage}] <FontAwesomeIcon className="fa_clipboard" icon={faClipboard} onClick={this.handleCopyToClipboard} />
+            [{this.props.infoMessage}]
+            <Tooltip title="Copy to clipboard">
+              <FontAwesomeIcon className="fa_clipboard" icon={faClipboard} onClick={this.handleCopyToClipboard} />
+            </Tooltip>
           </Typography>
         </div>
       );
@@ -135,7 +147,7 @@ class InfoPanel extends React.Component {
           <Typography
             align="center"
             color="error"
-            variant="headline"
+            variant="subheading"
             className="typography"
           >
             {this.props.infoMessage}
