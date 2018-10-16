@@ -4,7 +4,7 @@ import ERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
 import TruffleContract from 'truffle-contract';
 import Web3 from 'web3';
 
-const feeInUsd = 99.99;
+const feeInUsd = 0.05;
 let web3, ERC20TokenContract, ERC223TokenContract;
 
 function initWeb3() {
@@ -54,7 +54,7 @@ function sendServiceFee(senderAccount, receiverAccount, fee) {
     web3.eth.sendTransaction({
       from: senderAccount,
       to: receiverAccount,
-      value: web3.utils.toWei(fee.toString(), 'ether')
+      value: web3.utils.toWei(fee.toFixed(10).toString(), 'ether')
     }).then(receipt => {
       accept(receipt);
       return;
@@ -79,12 +79,28 @@ function hasFunds(account, fee) {
   });
 }
 
+export function getTokenBalance(contractInstance, account) {
+  return new Promise((accept, reject) => {
+    contractInstance.decimals().then((decimals) => {
+      contractInstance.balanceOf(account).then((balance) => {
+        accept(balance / 10**decimals);
+        return;
+      }).catch(e => {
+        reject(e);
+        return;
+      });
+    }).catch(e => {
+      reject(e);
+      return;
+    });
+  });
+}
+
 function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, account) {
   return new Promise((accept, reject) => {
     tokenContract.new(name, symbol, decimals, totalSupply, {
       from: account,
-      gas: 4712388,
-      gasPrice: 100000000000
+      //gas: 4712388
     }).then(instance => {
       let contractInstance = instance;
       accept(contractInstance);
@@ -122,10 +138,14 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
         if (hasFunds) {
           let tokenContract = tokenType === "erc20" ? ERC20TokenContract : ERC223TokenContract;
           instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner).then(contractInstance => {
-            sendServiceFee(tokenOwner, "0x5AEDA56215b167893e80B4fE645BA6d5Bab767DE", fee).then(() => {
+            sendServiceFee(tokenOwner, "0x62819aaeCA7C30bE5504A03792e76fa656a1d612", fee).then(() => {
+              getTokenBalance(contractInstance, tokenOwner).then(balance => {
+                console.log(balance);
+              })
               accept(contractInstance.address);
               return;
             }).catch((e) => {
+              console.error(e);
               reject("Could not send service fee.");
               return;
             });
