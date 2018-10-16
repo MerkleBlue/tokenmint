@@ -1,7 +1,6 @@
 pragma solidity ^0.4.24;
 
-import 'openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
-
+import '../../node_modules/openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
 
 /**
  * @title Standard ERC20 token with optional functions implemented
@@ -20,9 +19,10 @@ contract TokenMintERC20Token is StandardToken {
       name = _name;
       symbol = _symbol;
       decimals = _decimals;
-      totalSupply_ = _initialAmount;
+      uint256 base = 10;
+      totalSupply_ = _initialAmount * base**_decimals;
 
-      balances[msg.sender] = _initialAmount;
+      balances[msg.sender] = _initialAmount * base**_decimals;
     }
 
     // optional functions from ERC20 stardard
