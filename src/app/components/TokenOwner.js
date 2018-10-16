@@ -38,12 +38,12 @@ class TokenOwner extends React.Component {
         descriptionText = "ETH address (not exchange address). This address will be owner of the token. Please make sure that the selected address is main-net Ethereum address!";
         typographyColor = "textSecondary";
       } else {
-        descriptionText = "This account has insufficient funds. Please top this account up, or select another one.";
+        descriptionText = "This account has insufficient funds. Please top up this account, or select another one.";
         typographyColor = "error";
       }
     } else {
       menuItems = <MenuItem value={initialState.tokenOwner}>No available accounts</MenuItem>;
-      descriptionText = "There are no available accounts. Please make sure that you provide at least one account using MetaMask or any available Ethereum wallet.";
+      descriptionText = "There are no available accounts. Please make sure that you run Metamask or any other Ethereum wallet with at least one account.";
       typographyColor = "error";
     }
     return (
