@@ -1,8 +1,10 @@
 import React from 'react';
 import './css/InfoPanel.css';
-import { Typography, LinearProgress } from '@material-ui/core';
+import { Typography, LinearProgress, Divider, Tooltip } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimesCircle, faCheckCircle, faClipboard } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import appStates from '../reducers/appStates';
 import * as decimalsActions from '../actions/decimalsActions';
@@ -23,6 +25,7 @@ class InfoPanel extends React.Component {
   constructor(props) {
     super(props);
     this.handleBackClick = this.handleBackClick.bind(this);
+    this.handleCopyToClipboard = this.handleCopyToClipboard.bind(this);
   }
 
   handleBackClick(e) {
@@ -39,19 +42,43 @@ class InfoPanel extends React.Component {
     this.props.accountsActions.loadAllAccounts();
   }
 
+  // a hack that creates an element outside the screen and uses it to copy its content to clipboard
+  handleCopyToClipboard(e) {
+    const el = document.createElement('textarea');
+    el.value = this.props.infoMessage;
+    el.setAttribute('readonly', '');
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+  }
+
   render() {
     let info;
     let footer;
     if (this.props.appState === appStates.MINING_IN_PROGRESS) {
       info = (
-        <Typography
-          align="center"
-          color="default"
-          variant="headline"
-          className="typography"
-        >
-          {this.props.infoMessage}
-        </Typography>
+        <div>
+          <Typography
+            align="center"
+            color="default"
+            variant="headline"
+            className="typography_header"
+          >
+            {this.props.infoMessage}
+          </Typography>
+          <Divider />
+          <Typography
+            align="center"
+            color="default"
+            variant="subheading"
+            className="typography"
+          >
+            Please do not leave this page...
+          </Typography>
+        </div>
       );
       footer = <LinearProgress className="linear_progress" />;
     } else if (this.props.appState === appStates.MINING_FINISHED) {
@@ -61,6 +88,15 @@ class InfoPanel extends React.Component {
             align="center"
             color="default"
             variant="headline"
+            className="typography_header"
+          >
+            <FontAwesomeIcon icon={faCheckCircle} size="lg" color="green" /> Thank You for using TokenMint!
+          </Typography>
+          <Divider />
+          <Typography
+            align="center"
+            color="default"
+            variant="subheading"
             className="typography"
           >
             Your tokens have been successfully mined, and are ready to be used.
@@ -68,7 +104,7 @@ class InfoPanel extends React.Component {
           <Typography
             align="center"
             color="default"
-            variant="headline"
+            variant="subheading"
             className="typography"
           >
             Contract is deployed at address:
@@ -76,18 +112,13 @@ class InfoPanel extends React.Component {
           <Typography
             align="center"
             color="default"
-            variant="headline"
+            variant="subheading"
             className="typography"
           >
-            {this.props.infoMessage}
-          </Typography>
-          <Typography
-            align="center"
-            color="default"
-            variant="headline"
-            className="typography"
-          >
-            Thank You for using TokenMint!
+            [{this.props.infoMessage}]
+            <Tooltip title="Copy to clipboard">
+              <FontAwesomeIcon className="fa_clipboard" icon={faClipboard} onClick={this.handleCopyToClipboard} />
+            </Tooltip>
           </Typography>
         </div>
       );
@@ -102,20 +133,21 @@ class InfoPanel extends React.Component {
         </span>
       );
     } else if (this.props.appState === appStates.MINING_FAILED) {
-      info =  info = (
+      info = info = (
         <div>
           <Typography
             align="center"
             color="error"
             variant="headline"
-            className="typography"
+            className="typography_header"
           >
-            Oops, something went wrong!
+            <FontAwesomeIcon icon={faTimesCircle} size="lg" /> Oops, something went wrong!
           </Typography>
+          <Divider />
           <Typography
             align="center"
             color="error"
-            variant="headline"
+            variant="subheading"
             className="typography"
           >
             {this.props.infoMessage}

@@ -1,5 +1,7 @@
 import React from 'react';
 import { FormControl, InputLabel, Select, MenuItem, Grid, Typography, OutlinedInput } from '@material-ui/core';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import blueGrey from '@material-ui/core/colors/blueGrey';
 import './css/TokenOwner.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -25,6 +27,12 @@ class TokenOwner extends React.Component {
   }
 
   render() {
+    const theme = createMuiTheme({
+      palette: {
+        primary: blueGrey,
+      },
+    });
+
     let menuItems;
     let descriptionText;
     let typographyColor;
@@ -43,7 +51,7 @@ class TokenOwner extends React.Component {
       }
     } else {
       menuItems = <MenuItem value={initialState.tokenOwner}>No available accounts</MenuItem>;
-      descriptionText = "There are no available accounts. Please make sure that you run Metamask or any other Ethereum wallet with at least one account.";
+      descriptionText = "There are no available accounts. Please make sure that you run Metamask or any other Ethereum wallet with at least one account, and refresh the page.";
       typographyColor = "error";
     }
     return (
@@ -53,22 +61,24 @@ class TokenOwner extends React.Component {
         </div>
         <Grid container wrap="nowrap" spacing={8}>
           <Grid item xs>
-            <FormControl variant="outlined">
-              <InputLabel>Token Owner</InputLabel>
-              <Select
-                error={(this.props.accounts.length === 0 || !this.props.tokenOwnerHasEnoughFunds) && !this.props.loadingAccounts}
-                value={this.props.tokenOwner}
-                onChange={this.handleChange}
-                input={
-                  <OutlinedInput
-                    labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
-                    className="select_field"
-                  />
-                }
-              >
-                {menuItems}
-              </Select>
-            </FormControl>
+            <MuiThemeProvider theme={theme}>
+              <FormControl variant="outlined">
+                <InputLabel>Token Owner</InputLabel>
+                <Select
+                  error={(this.props.accounts.length === 0 || !this.props.tokenOwnerHasEnoughFunds) && !this.props.loadingAccounts}
+                  value={this.props.tokenOwner}
+                  onChange={this.handleChange}
+                  input={
+                    <OutlinedInput
+                      labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
+                      className="select_field"
+                    />
+                  }
+                >
+                  {menuItems}
+                </Select>
+              </FormControl>
+            </MuiThemeProvider>
           </Grid>
           <Grid item xs>
             <Typography

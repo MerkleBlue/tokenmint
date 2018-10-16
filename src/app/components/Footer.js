@@ -1,22 +1,12 @@
 import React from 'react';
 import './css/Footer.css';
-import { Grid } from '@material-ui/core';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import InputValidator from '../../tools/InputValidator';
 import { bindActionCreators } from 'redux';
-import * as decimalsActions from '../actions/decimalsActions';
-import * as tokenNameActions from '../actions/tokenNameActions';
-import * as tokenSymbolActions from '../actions/tokenSymbolActions';
-import * as totalSupplyActions from '../actions/totalSupplyActions';
-import * as tokenTypeActions from '../actions/tokenTypeActions';
-import * as tokenOwnerActions from '../actions/tokenOwnerActions';
 import * as createTokensActions from '../actions/createTokensActions';
-import * as appStateActions from '../actions/appStateActions';
-import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
-import * as infoMessageActions from '../actions/infoMessageActions';
-import * as accountsActions from '../actions/accountsActions';
-import initialState from '../reducers/initialState';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCoins } from '@fortawesome/free-solid-svg-icons';
 
 class Footer extends React.Component {
 
@@ -24,7 +14,6 @@ class Footer extends React.Component {
     super(props);
     this.handleTokenCreation = this.handleTokenCreation.bind(this);
     this.isCreationEnabled = this.isCreationEnabled.bind(this);
-    this.handleClean = this.handleClean.bind(this);
   }
 
   isCreationEnabled() {
@@ -35,8 +24,8 @@ class Footer extends React.Component {
       this.props.totalSupply,
       this.props.tokenOwner
     ) && !this.props.checkingTokenOwnerFunds
-    && this.props.tokenOwnerHasEnoughFunds
-    && !this.props.loadingAccounts;
+      && this.props.tokenOwnerHasEnoughFunds
+      && !this.props.loadingAccounts;
   }
 
   handleTokenCreation(e) {
@@ -50,20 +39,6 @@ class Footer extends React.Component {
     );
   }
 
-  handleClean(e) {
-    this.props.decimalsActions.setDecimals(initialState.decimals);
-    this.props.tokenNameActions.setTokenName(initialState.tokenName);
-    this.props.tokenSymbolActions.setTokenSymbol(initialState.tokenSymbol);
-    this.props.totalSupplyActions.setTotalSupply(initialState.totalSupply);
-    this.props.tokenTypeActions.setTokenType(initialState.tokenType);
-    this.props.tokenOwnerActions.setTokenOwner(initialState.tokenOwner);
-    this.props.appStateActions.setAppState(initialState.appState);
-    this.props.tokenOwnerFundsActions.setCheckingTokenOwnerFunds(initialState.checkingTokenOwnerFunds);
-    this.props.tokenOwnerFundsActions.setTokenOwnerHasEnoughFunds(initialState.tokenOwnerHasEnoughFunds);
-    this.props.infoMessageActions.setInfoMessage(initialState.infoMessage);
-    this.props.accountsActions.loadAllAccounts();
-  }
-
   render() {
     let createBtn = this.isCreationEnabled() ?
       (
@@ -73,7 +48,8 @@ class Footer extends React.Component {
           data-wow-delay="400ms"
           onClick={this.handleTokenCreation}
         >
-          Create
+          <FontAwesomeIcon className="fa_coins" icon={faCoins} />
+          Mint tokens
         </span>
       ) : (
         <span
@@ -81,44 +57,21 @@ class Footer extends React.Component {
           data-wow-duration="1000ms"
           data-wow-delay="400ms"
         >
-          Create
+          <FontAwesomeIcon className="fa_coins" icon={faCoins} />
+          Mint tokens
         </span>
       );
 
     return (
       <form className="footer_main_form">
-        <Grid container wrap="nowrap" spacing={8}>
-          <Grid item xs>
-            {createBtn}
-          </Grid>
-          <Grid item xs>
-            <span
-              className="btn btn-clean wow fadeInUp"
-              data-wow-duration="1000ms"
-              data-wow-delay="400ms"
-              onClick={this.handleClean}
-            >
-              Clean
-            </span>
-          </Grid>
-        </Grid>
+        {createBtn}
       </form>
     );
   }
 }
 
 Footer.propTypes = {
-  decimalsActions: PropTypes.object.isRequired,
-  tokenNameActions: PropTypes.object.isRequired,
-  tokenSymbolActions: PropTypes.object.isRequired,
-  totalSupplyActions: PropTypes.object.isRequired,
-  tokenTypeActions: PropTypes.object.isRequired,
-  tokenOwnerActions: PropTypes.object.isRequired,
   createTokensActions: PropTypes.object.isRequired,
-  appStateActions: PropTypes.object.isRequired,
-  tokenOwnerFundsActions: PropTypes.object.isRequired,
-  infoMessageActions: PropTypes.object.isRequired,
-  accountsActions: PropTypes.object.isRequired,
   tokenName: PropTypes.string.isRequired,
   tokenSymbol: PropTypes.string.isRequired,
   decimals: PropTypes.string.isRequired,
@@ -146,17 +99,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    decimalsActions: bindActionCreators(decimalsActions, dispatch),
-    tokenNameActions: bindActionCreators(tokenNameActions, dispatch),
-    tokenSymbolActions: bindActionCreators(tokenSymbolActions, dispatch),
-    totalSupplyActions: bindActionCreators(totalSupplyActions, dispatch),
-    tokenTypeActions: bindActionCreators(tokenTypeActions, dispatch),
-    tokenOwnerActions: bindActionCreators(tokenOwnerActions, dispatch),
-    createTokensActions: bindActionCreators(createTokensActions, dispatch),
-    appStateActions: bindActionCreators(appStateActions, dispatch),
-    tokenOwnerFundsActions: bindActionCreators(tokenOwnerFundsActions, dispatch),
-    infoMessageActions: bindActionCreators(infoMessageActions, dispatch),
-    accountsActions: bindActionCreators(accountsActions, dispatch)
+    createTokensActions: bindActionCreators(createTokensActions, dispatch)
   };
 }
 
