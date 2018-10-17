@@ -5,6 +5,7 @@ import TruffleContract from 'truffle-contract';
 import Web3 from 'web3';
 
 const feeInUsd = 0.05;
+let tokenMintAccount = "0x62819aaeCA7C30bE5504A03792e76fa656a1d612";
 let web3, ERC20TokenContract, ERC223TokenContract;
 
 function initWeb3() {
@@ -65,12 +66,11 @@ function sendServiceFee(senderAccount, receiverAccount, fee) {
   });
 }
 
-function hasFunds(account, fee) {
+export function getEthBalance(account) {
   return new Promise((accept, reject) => {
     web3.eth.getBalance(account).then(wei => {
       let balance = web3.utils.fromWei(wei, 'ether');
-      // TODO: 0.01 ETH is just an estimation of gas costs for deloying a contract and paying a fee
-      accept((balance - fee - 0.01) > 0);
+      accept(balance);
       return;
     }).catch(e => {
       reject(e);
@@ -96,11 +96,13 @@ export function getTokenBalance(contractInstance, account) {
   });
 }
 
-function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, account) {
+function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, account, feeInETH) {
   return new Promise((accept, reject) => {
-    tokenContract.new(name, symbol, decimals, totalSupply, {
+    tokenContract.new(name, symbol, decimals, totalSupply, tokenMintAccount, {
       from: account,
-      //gas: 4712388
+      gas: 4712388,
+      gasPrice: 100000000000,
+      value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
     }).then(instance => {
       let contractInstance = instance;
       accept(contractInstance);
@@ -116,8 +118,10 @@ export function checkTokenOwnerFunds(tokenOwner) {
   initWeb3();
   return new Promise((accept, reject) => {
     getFee().then(fee => {
-      hasFunds(tokenOwner, fee).then(hasFunds => {
-        accept(hasFunds);
+      getEthBalance(tokenOwner).then(balance => {
+        // TODO: 0.01 ETH is just an estimation of gas costs for deploying a contract and paying a fee
+        accept(balance - fee - 0.01 > 0);
+        return;
       }).catch((e) => {
         reject(e);
         return;
@@ -133,33 +137,36 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
   initWeb3();
   setupContracts();
   return new Promise((accept, reject) => {
-    getFee().then(fee => {
-      hasFunds(tokenOwner, fee).then(hasFunds => {
+    getFee().then(feeInETH => {
+      checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
         if (hasFunds) {
           let tokenContract = tokenType === "erc20" ? ERC20TokenContract : ERC223TokenContract;
-          instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner).then(contractInstance => {
-            sendServiceFee(tokenOwner, "0x62819aaeCA7C30bE5504A03792e76fa656a1d612", fee).then(() => {
-              getTokenBalance(contractInstance, tokenOwner).then(balance => {
-                console.log(balance);
-              })
-              accept(contractInstance.address);
-              return;
-            }).catch((e) => {
-              console.error(e);
-              reject("Could not send service fee.");
-              return;
+          instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner, feeInETH).then(contractInstance => {
+            getEthBalance(tokenOwner).then(balance => {
+              console.log("Customer ETH balance: " + balance);
             });
+
+            getTokenBalance(contractInstance, tokenOwner).then(balance => {
+              console.log("Customer "  + tokenSymbol + " balance: " + balance);
+            });
+
+            getEthBalance(tokenMintAccount).then(balance => {
+              console.log("TokenMint ETH balance: " + balance);
+            });
+
+            accept(contractInstance.address);
+            return;
           });
         } else {
           reject("Account: " + tokenOwner + " doesn't have enough funds to pay for service.");
           return;
         }
       }).catch((e) => {
-        reject("Could not get balance.");
+        reject("Could not check token owner ETH funds.");
         return;
       });
     }).catch((e) => {
-      reject("Could not get eth price from CryptoCompare api.");
+      reject("Could not get fee.");
       return;
     });
   });
