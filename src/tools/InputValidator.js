@@ -2,11 +2,17 @@ import cc from 'cryptocurrencies';
 
 export default class InputValidator {
 
+  static startsWithWhiteSpaces(value) {
+    return /^\s/.test(value);
+  }
+
   static isTokenNameValid(tokenName) {
     if (tokenName === "") {
       return true;
     }
-    return /^[a-zA-Z0-9\-\s]+$/i.test(tokenName) && tokenName.length >= 3;
+    return /^[a-zA-Z0-9\-\s]+$/i.test(tokenName)
+      && tokenName.length >= 3
+      && !this.startsWithWhiteSpaces(tokenName);
   }
 
   static isTokenSymbolValid(tokenSymbol) {

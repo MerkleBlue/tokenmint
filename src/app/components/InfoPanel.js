@@ -90,17 +90,9 @@ class InfoPanel extends React.Component {
             variant="headline"
             className="typography_header"
           >
-            <FontAwesomeIcon icon={faCheckCircle} size="lg" color="green" /> Thank You for using TokenMint!
+            <FontAwesomeIcon icon={faCheckCircle} size="lg" color="green" /> Your tokens have been successfully created!
           </Typography>
           <Divider />
-          <Typography
-            align="center"
-            color="default"
-            variant="subheading"
-            className="typography"
-          >
-            Your tokens have been successfully mined, and are ready to be used.
-          </Typography>
           <Typography
             align="center"
             color="default"
@@ -120,6 +112,14 @@ class InfoPanel extends React.Component {
               <FontAwesomeIcon className="fa_clipboard" icon={faClipboard} onClick={this.handleCopyToClipboard} />
             </Tooltip>
           </Typography>
+          <Typography
+            align="center"
+            color="default"
+            variant="subheading"
+            className="typography"
+          >
+            Thank You for using TokenMint!
+          </Typography>
         </div>
       );
       footer = (
@@ -129,7 +129,7 @@ class InfoPanel extends React.Component {
           data-wow-delay="400ms"
           onClick={this.handleBackClick}
         >
-          Back
+          Create new token
         </span>
       );
     } else if (this.props.appState === appStates.MINING_FAILED) {

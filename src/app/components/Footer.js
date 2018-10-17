@@ -30,7 +30,7 @@ class Footer extends React.Component {
 
   handleTokenCreation(e) {
     this.props.createTokensActions.createTokens(
-      this.props.tokenName,
+      this.props.tokenName.trim(),
       this.props.tokenSymbol,
       this.props.decimals,
       this.props.totalSupply,
