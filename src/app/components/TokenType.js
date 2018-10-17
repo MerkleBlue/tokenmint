@@ -50,7 +50,7 @@ export class TokenType extends React.Component {
               variant="caption"
               className="typography_token_type"
             >
-              ERC-20 is recommended option, accepted by most exchanges. <br/><br/>ERC-223 is similar to ERC-20, but it provides extra safety during token transfers.
+              ERC-20 is recommended option, accepted by most exchanges. <br/><br/><br/>ERC-223 is similar to ERC-20, but it provides extra safety during token transfers.
             </Typography>
           </Grid>
         </Grid>

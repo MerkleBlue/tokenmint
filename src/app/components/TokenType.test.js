@@ -33,7 +33,8 @@ describe("<TokenType /> tests", () => {
 
   it("renders TokenType with erc20 option", () => {
     const wrapper = setup("erc20", {});
-    expect(wrapper.props().tokenType).to.equal("erc20");
+    expect(wrapper.props().tokenType).to.eq("erc20");
     expect(wrapper.props().tokenActions).to.be.empty;
+    expect(wrapper.find("Grid").length).to.eq(3);
   });
 });
