@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import * as tokenTypeActions from '../actions/tokenTypeActions';
 import PropTypes from 'prop-types';
 
-class TokenType extends React.Component {
+export class TokenType extends React.Component {
 
   constructor(props) {
     super(props);
