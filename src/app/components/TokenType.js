@@ -20,7 +20,6 @@ class TokenType extends React.Component {
   render() {
     return (
       <form className="main_form">
-        <h2>Token type</h2>
         <Grid container wrap="nowrap" spacing={8}>
           <Grid item xs>
             <RadioGroup

@@ -70,7 +70,6 @@ class TokenInfo extends React.Component {
     "This token symbol is already in use. We advise using another symbol.";
     return (
       <form className="main_form">
-        <h2>Token attributes</h2>
         <Grid container wrap="nowrap" spacing={8}>
           <Grid item xs>
             <MuiThemeProvider theme={theme}>
