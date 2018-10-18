@@ -10,8 +10,8 @@ export function createTokens(tokenName, tokenSymbol, decimals, totalSupply, toke
     return mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenType, tokenOwner).then(infoMessage => {
       dispatch(setInfoMessage(infoMessage));
       dispatch(setAppState(appStates.MINING_FINISHED));
-    }).catch(errorMessage => {
-      dispatch(setInfoMessage(errorMessage));
+    }).catch(e => {
+      dispatch(setInfoMessage(e.message));
       dispatch(setAppState(appStates.MINING_FAILED));
     });
   };

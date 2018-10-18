@@ -162,11 +162,11 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
           return;
         }
       }).catch((e) => {
-        reject("Could not check token owner ETH funds.");
+        reject(new Error("Could not check token owner ETH funds."));
         return;
       });
     }).catch((e) => {
-      reject("Could not get fee.");
+      reject(new Error("Could not get fee."));
       return;
     });
   });
