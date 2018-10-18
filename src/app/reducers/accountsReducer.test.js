@@ -1,10 +1,10 @@
-import {expect} from 'chai';
+import { expect } from 'chai';
 import accountsReducer from './accountsReducer';
 import * as actions from '../actions/accountsActions';
 
 function generateAccounts(accountsCount) {
   const accounts = [];
-  for(let i = 0; i < accountsCount; i++) {
+  for (let i = 0; i < accountsCount; i++) {
     accounts.push("Account" + i);
   }
   return accounts;
