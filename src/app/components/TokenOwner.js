@@ -1,5 +1,16 @@
 import React from 'react';
-import { FormControl, InputLabel, Select, MenuItem, Grid, Typography, OutlinedInput } from '@material-ui/core';
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Grid,
+  Typography,
+  OutlinedInput,
+  Card,
+  CardHeader,
+  CardContent
+} from '@material-ui/core';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blueGrey from '@material-ui/core/colors/blueGrey';
 import './css/TokenOwner.css';
@@ -9,7 +20,6 @@ import * as tokenOwnerActions from '../actions/tokenOwnerActions';
 import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
 import { bindActionCreators } from 'redux';
 import initialState from '../reducers/initialState';
-import ethereum from '../img/ethereum.png';
 
 class TokenOwner extends React.Component {
 
@@ -29,7 +39,7 @@ class TokenOwner extends React.Component {
   render() {
     const theme = createMuiTheme({
       palette: {
-        primary: blueGrey,
+        primary: { 500: "#31bfdf" }
       },
     });
 
@@ -37,11 +47,28 @@ class TokenOwner extends React.Component {
     let descriptionText;
     let typographyColor;
     if (this.props.loadingAccounts) {
-      menuItems = <MenuItem value={initialState.tokenOwner}>Loading accounts...</MenuItem>;
+      menuItems = (
+        <MenuItem
+          value={initialState.tokenOwner}
+          onMouseEnter={(e) => e.target.style.backgroundColor = '#31bfdf'}
+          onMouseLeave={(e) => e.target.style.backgroundColor = '#ffffff'}
+        >
+          Loading accounts...
+        </MenuItem>
+      );
       descriptionText = "ETH address (not exchange address). This address will be owner of the token. Please make sure that the selected address is main-net Ethereum address!";
       typographyColor = "textSecondary";
     } else if (this.props.accounts.length > 0) {
-      menuItems = this.props.accounts.map((account) => <MenuItem key={account} value={account}>{account}</MenuItem>);
+      menuItems = this.props.accounts.map((account) => (
+        <MenuItem
+          key={account}
+          value={account}
+          onMouseEnter={(e) => e.target.style.backgroundColor = '#31bfdf'}
+          onMouseLeave={(e) => e.target.style.backgroundColor = '#ffffff'}
+        >
+          {account}
+        </MenuItem>
+      ));
       if (this.props.tokenOwnerHasEnoughFunds) {
         descriptionText = "ETH address (not exchange address). This address will be owner of the token. Please make sure that the selected address is main-net Ethereum address!";
         typographyColor = "textSecondary";
@@ -50,48 +77,68 @@ class TokenOwner extends React.Component {
         typographyColor = "error";
       }
     } else {
-      menuItems = <MenuItem value={initialState.tokenOwner}>No available accounts</MenuItem>;
+      menuItems = (
+        <MenuItem
+          value={initialState.tokenOwner}
+          onMouseEnter={(e) => e.target.style.backgroundColor = '#31bfdf'}
+          onMouseLeave={(e) => e.target.style.backgroundColor = '#ffffff'}
+        >
+          No available accounts
+        </MenuItem>
+      );
       descriptionText = "There are no available accounts. Please make sure that you run Metamask or any other Ethereum wallet with at least one account, and refresh the page.";
       typographyColor = "error";
     }
     return (
-      <form className="main_form">
-        <div className="token_info_header">
-          <img className="ethereum_symbol" src={ethereum} alt="" />
-        </div>
-        <Grid container wrap="nowrap" spacing={8}>
-          <Grid item xs>
-            <MuiThemeProvider theme={theme}>
-              <FormControl variant="outlined">
-                <InputLabel>Token Owner</InputLabel>
-                <Select
-                  error={(this.props.accounts.length === 0 || !this.props.tokenOwnerHasEnoughFunds) && !this.props.loadingAccounts}
-                  value={this.props.tokenOwner}
-                  onChange={this.handleChange}
-                  input={
-                    <OutlinedInput
-                      labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
-                      className="select_field"
-                    />
-                  }
-                >
-                  {menuItems}
-                </Select>
-              </FormControl>
-            </MuiThemeProvider>
+      <Card
+        className="card"
+      >
+        <CardHeader
+          title="Token Owner"
+          classes={{
+            root: "card_header",
+            title: "card_header_text"
+          }}
+        />
+        <CardContent
+          classes={{
+            root: "card_content"
+          }}
+        >
+          <Grid container wrap="nowrap" spacing={8}>
+            <Grid item xs>
+              <MuiThemeProvider theme={theme}>
+                <FormControl variant="outlined">
+                  <InputLabel>Account</InputLabel>
+                  <Select
+                    error={(this.props.accounts.length === 0 || !this.props.tokenOwnerHasEnoughFunds) && !this.props.loadingAccounts}
+                    value={this.props.tokenOwner}
+                    onChange={this.handleChange}
+                    input={
+                      <OutlinedInput
+                        labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
+                        className="select_field"
+                      />
+                    }
+                  >
+                    {menuItems}
+                  </Select>
+                </FormControl>
+              </MuiThemeProvider>
+            </Grid>
+            <Grid item xs>
+              <Typography
+                align="left"
+                color={typographyColor}
+                variant="caption"
+                className="typography"
+              >
+                {descriptionText}
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid item xs>
-            <Typography
-              align="left"
-              color={typographyColor}
-              variant="caption"
-              className="typography"
-            >
-              {descriptionText}
-            </Typography>
-          </Grid>
-        </Grid>
-      </form>
+        </CardContent>
+      </Card>
     );
   }
 }

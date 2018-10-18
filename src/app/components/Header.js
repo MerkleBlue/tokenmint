@@ -2,6 +2,7 @@ import React from 'react';
 import './css/Header.css';
 import logo from '../img/logo.png';
 import { Typography } from '@material-ui/core';
+import ethereum from '../img/ethereum.png';
 
 const Header = () => {
   return (
@@ -14,7 +15,7 @@ const Header = () => {
           gutterBottom
           className="typography_header"
         >
-          Generate your own Ethereum Token!
+          Your own Token powered by<img className="ethereum_symbol" src={ethereum} alt="" />
         </Typography>
       </div>
   );
