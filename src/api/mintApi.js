@@ -158,7 +158,7 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
             return;
           });
         } else {
-          reject("Account: " + tokenOwner + " doesn't have enough funds to pay for service.");
+          reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
           return;
         }
       }).catch((e) => {
