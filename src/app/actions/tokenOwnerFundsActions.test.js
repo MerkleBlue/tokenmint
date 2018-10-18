@@ -9,14 +9,6 @@ import * as tokenOwnerFundsActions from './tokenOwnerFundsActions';
 const middleware = [thunk];
 const mockStore = configureMockStore(middleware);
 
-// const miningMessage = "Your tokens are being mined. This might take a few minutes. Confirm transaction in your wallet.";
-// const rejectMessage = "Could not check token owner ETH funds.";
-// const contractInstanceAddress = "0x627306090abaB3A6e1400e9345bC60c78a8BEf57";
-// const tokenName = "The First Amendment";
-// const tokenSymbol = "TFA";
-// const decimals = "18";
-// const totalSupply = "1000";
-// const tokenType = "erc20";
 const tokenOwner = "0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef";
 
 describe("tokenOwnerFundsActions tests", () => {
