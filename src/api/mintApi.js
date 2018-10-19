@@ -101,7 +101,7 @@ function instantiateContract(tokenContract, name, symbol, decimals, totalSupply,
     tokenContract.new(name, symbol, decimals, totalSupply * 10**decimals, tokenMintAccount, {
       from: account,
       gas: 4712388,
-      gasPrice: 100000000000,
+      //gasPrice: 1000000000, // 1 Gwei, wallet estimates gasPrice and sets it
       value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
     }).then(instance => {
       let contractInstance = instance;
@@ -109,6 +109,29 @@ function instantiateContract(tokenContract, name, symbol, decimals, totalSupply,
       return;
     }).catch(e => {
       reject(e);
+      return;
+    });
+  });
+}
+
+// NOTE: mining fees are estimated in a wallet based on gasPrice. This function can corectly
+// estimate mining fees if gas price is set here.
+function estimateMiningFee(tokenContract, name, symbol, decimals, totalSupply, tokenOwner) {
+  return new Promise((accept, reject) => {
+    // create new contract instance using web3, not truffle contract
+    var myContract = new web3.eth.Contract(tokenContract.abi, {
+      from: tokenOwner,
+      //gasPrice: '1000000000',  // default gas price in wei
+      data: tokenContract.bytecode
+    });
+
+    // estimate gas
+    myContract.deploy({
+      data: tokenContract.bytecode,
+      arguments: [name, symbol, decimals, totalSupply /** 10**decimals*/, tokenOwner]
+    }).estimateGas(function(err, gas){
+      console.log("Estimated mining fee: " + gas * 1000000000 / 10**18);
+      accept(gas * 1000000000 / 10**18);
       return;
     });
   });
