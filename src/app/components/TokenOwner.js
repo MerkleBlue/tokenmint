@@ -39,7 +39,7 @@ class TokenOwner extends React.Component {
     const theme = createMuiTheme({
       palette: {
         primary: { 500: "#31bfdf" }
-      },
+      }
     });
 
     let menuItems;
