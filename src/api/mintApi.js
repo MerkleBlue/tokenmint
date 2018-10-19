@@ -98,6 +98,18 @@ function instantiateContract(tokenContract, name, symbol, decimals, totalSupply,
   });
 }
 
+function getNetwork() {
+  return new Promise((accept, reject) => {
+    web3.eth.net.getNetworkType().then(networkType => {
+      accept(networkType);
+      return;
+    }).catch((e) => {
+      reject(e);
+      return;
+    });
+  });
+}
+
 // NOTE: mining fees are estimated in a wallet based on gasPrice. This function can corectly
 // estimate mining fees if gas price is set here.
 function estimateMiningFee(tokenContract, name, symbol, decimals, totalSupply, tokenOwner) {
