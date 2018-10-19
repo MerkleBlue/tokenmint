@@ -50,22 +50,6 @@ function setupContracts() {
   }
 }
 
-function sendServiceFee(senderAccount, receiverAccount, fee) {
-  return new Promise((accept, reject) => {
-    web3.eth.sendTransaction({
-      from: senderAccount,
-      to: receiverAccount,
-      value: web3.utils.toWei(fee.toFixed(10).toString(), 'ether')
-    }).then(receipt => {
-      accept(receipt);
-      return;
-    }).catch(e => {
-      reject(e);
-      return;
-    });
-  });
-}
-
 export function getEthBalance(account) {
   return new Promise((accept, reject) => {
     web3.eth.getBalance(account).then(wei => {
@@ -108,6 +92,18 @@ function instantiateContract(tokenContract, name, symbol, decimals, totalSupply,
       accept(contractInstance);
       return;
     }).catch(e => {
+      reject(e);
+      return;
+    });
+  });
+}
+
+function getNetwork() {
+  return new Promise((accept, reject) => {
+    web3.eth.net.getNetworkType().then(networkType => {
+      accept(networkType);
+      return;
+    }).catch((e) => {
       reject(e);
       return;
     });
@@ -178,6 +174,9 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
             });
 
             accept(contractInstance.address);
+            return;
+          }).catch((e) => {
+            reject(new Error("Could not create contract."));
             return;
           });
         } else {
