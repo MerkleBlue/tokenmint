@@ -163,6 +163,9 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
 
             accept(contractInstance.address);
             return;
+          }).catch((e) => {
+            reject(new Error("Could not create contract."));
+            return;
           });
         } else {
           reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
