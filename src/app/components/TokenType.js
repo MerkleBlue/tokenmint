@@ -14,7 +14,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as tokenTypeActions from '../actions/tokenTypeActions';
 import PropTypes from 'prop-types';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 export class TokenType extends React.Component {
 
@@ -28,12 +27,6 @@ export class TokenType extends React.Component {
   }
 
   render() {
-    const theme = createMuiTheme({
-      palette: {
-        primary: { 500: "#31bfdf" }
-      }
-    });
-
     return (
       <Card className="card">
         <CardHeader

@@ -56,9 +56,7 @@ describe("<TokenType /> tests", () => {
     expect(wrapper.find("FormControlLabel").at(1).props().label).to.eq("ERC223");
     expect(wrapper.find("FormControlLabel").at(1).props().labelPlacement).to.eq("start");
     expect(wrapper.find("Radio").length).to.eq(2);
-    expect(wrapper.find("Radio").at(0).props().color).to.eq("default");
     expect(wrapper.find("Radio").at(0).props().checked).to.be.true;
-    expect(wrapper.find("Radio").at(1).props().color).to.eq("default");
     expect(wrapper.find("Radio").at(1).props().checked).to.be.false;
   });
 
@@ -78,9 +76,7 @@ describe("<TokenType /> tests", () => {
     expect(wrapper.find("FormControlLabel").at(1).props().label).to.eq("ERC223");
     expect(wrapper.find("FormControlLabel").at(1).props().labelPlacement).to.eq("start");
     expect(wrapper.find("Radio").length).to.eq(2);
-    expect(wrapper.find("Radio").at(0).props().color).to.eq("default");
     expect(wrapper.find("Radio").at(0).props().checked).to.be.false;
-    expect(wrapper.find("Radio").at(1).props().color).to.eq("default");
     expect(wrapper.find("Radio").at(1).props().checked).to.be.true;
   });
 
