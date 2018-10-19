@@ -15,15 +15,15 @@ contract TokenMintERC20Token is StandardToken {
     string public symbol;
     uint8 public decimals;
 
-    constructor(string _name, string _symbol, uint8 _decimals, uint256 _initialAmount, address feeReceiver) public payable {
+    constructor(string _name, string _symbol, uint8 _decimals, uint256 _totalSupply, address feeReceiver) public payable {
       name = _name;
       symbol = _symbol;
       decimals = _decimals;
-      uint256 base = 10;
-      totalSupply_ = _initialAmount * base**decimals;
+      totalSupply_ = _totalSupply;
 
       // set sender as owner of all tokens
       balances[msg.sender] = totalSupply_;
+      emit Transfer(address(0), msg.sender, totalSupply_);
 
       // pay for service fee for contract deployment
       feeReceiver.transfer(msg.value);
