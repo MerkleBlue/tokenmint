@@ -81,9 +81,17 @@ export class TokenType extends React.Component {
                 align="left"
                 color="textSecondary"
                 variant="caption"
-                className="typography_token_type"
+                className="typography_token_type_erc20"
               >
-                ERC-20 is recommended option, accepted by most exchanges. <br /><br />ERC-223 is similar to ERC-20, but it provides extra safety during token transfers.
+                ERC-20 is recommended option, accepted by most exchanges.
+              </Typography>
+              <Typography
+                align="left"
+                color="textSecondary"
+                variant="caption"
+                className="typography_token_type_erc223"
+              >
+                ERC-223 is similar to ERC-20, but it provides extra safety during token transfers.
               </Typography>
             </Grid>
           </Grid>
