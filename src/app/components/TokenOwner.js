@@ -12,7 +12,6 @@ import {
   CardContent
 } from '@material-ui/core';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import blueGrey from '@material-ui/core/colors/blueGrey';
 import './css/TokenOwner.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
