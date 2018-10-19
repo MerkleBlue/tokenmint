@@ -41,10 +41,10 @@ class TokenOwner extends React.Component {
         primary: { 500: "#31bfdf" }
       }
     });
+    let error = (this.props.accounts.length === 0 || !this.props.tokenOwnerHasEnoughFunds) && !this.props.loadingAccounts;
 
     let menuItems;
     let descriptionText;
-    let typographyColor;
     if (this.props.loadingAccounts) {
       menuItems = (
         <MenuItem
@@ -56,7 +56,6 @@ class TokenOwner extends React.Component {
         </MenuItem>
       );
       descriptionText = "ETH address (not exchange address). This address will be owner of the token. Please make sure that the selected address is main-net Ethereum address!";
-      typographyColor = "textSecondary";
     } else if (this.props.accounts.length > 0) {
       menuItems = this.props.accounts.map((account) => (
         <MenuItem
@@ -70,10 +69,8 @@ class TokenOwner extends React.Component {
       ));
       if (this.props.tokenOwnerHasEnoughFunds) {
         descriptionText = "ETH address (not exchange address). This address will be owner of the token. Please make sure that the selected address is main-net Ethereum address!";
-        typographyColor = "textSecondary";
       } else {
         descriptionText = "This account has insufficient funds. Please top up this account, or select another one.";
-        typographyColor = "error";
       }
     } else {
       menuItems = (
@@ -86,7 +83,6 @@ class TokenOwner extends React.Component {
         </MenuItem>
       );
       descriptionText = "There are no available accounts. Please make sure that you run Metamask or any other Ethereum wallet with at least one account, and refresh the page.";
-      typographyColor = "error";
     }
     return (
       <Card
@@ -110,7 +106,7 @@ class TokenOwner extends React.Component {
                 <FormControl variant="outlined">
                   <InputLabel>Account</InputLabel>
                   <Select
-                    error={(this.props.accounts.length === 0 || !this.props.tokenOwnerHasEnoughFunds) && !this.props.loadingAccounts}
+                    error={error}
                     value={this.props.tokenOwner}
                     onChange={this.handleChange}
                     input={
@@ -128,9 +124,8 @@ class TokenOwner extends React.Component {
             <Grid item xs>
               <Typography
                 align="left"
-                color={typographyColor}
                 variant="caption"
-                className="typography"
+                className={error ? "typography_error" : "typography"}
               >
                 {descriptionText}
               </Typography>
