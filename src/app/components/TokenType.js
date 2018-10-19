@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as tokenTypeActions from '../actions/tokenTypeActions';
 import PropTypes from 'prop-types';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 export class TokenType extends React.Component {
 
@@ -27,6 +28,12 @@ export class TokenType extends React.Component {
   }
 
   render() {
+    const theme = createMuiTheme({
+      palette: {
+        primary: { 500: "#31bfdf" }
+      }
+    });
+
     return (
       <Card className="card">
         <CardHeader
@@ -46,19 +53,31 @@ export class TokenType extends React.Component {
               <RadioGroup
                 aria-label="tokenType"
                 name="tokenType"
-                className="radio_token_type"
+                className="radio_group_token_type"
                 value={this.props.tokenType}
                 onChange={this.handleChange}
               >
                 <FormControlLabel
                   value="erc20"
-                  control={<Radio color="default" />}
+                  control={
+                    <Radio
+                      classes={{
+                        checked:"radio_button"
+                      }}
+                    />
+                  }
                   label="ERC20"
                   labelPlacement="start"
                 />
                 <FormControlLabel
                   value="erc223"
-                  control={<Radio color="default" />}
+                  control={
+                    <Radio
+                      classes={{
+                        checked:"radio_button"
+                      }}
+                    />
+                  }
                   label="ERC223"
                   labelPlacement="start"
                 />
