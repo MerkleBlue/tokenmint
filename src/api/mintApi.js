@@ -50,22 +50,6 @@ function setupContracts() {
   }
 }
 
-function sendServiceFee(senderAccount, receiverAccount, fee) {
-  return new Promise((accept, reject) => {
-    web3.eth.sendTransaction({
-      from: senderAccount,
-      to: receiverAccount,
-      value: web3.utils.toWei(fee.toFixed(10).toString(), 'ether')
-    }).then(receipt => {
-      accept(receipt);
-      return;
-    }).catch(e => {
-      reject(e);
-      return;
-    });
-  });
-}
-
 export function getEthBalance(account) {
   return new Promise((accept, reject) => {
     web3.eth.getBalance(account).then(wei => {
