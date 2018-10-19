@@ -24,6 +24,7 @@ contract TokenMintERC20Token is StandardToken {
 
       // set sender as owner of all tokens
       balances[msg.sender] = totalSupply_;
+      emit Transfer(address(0), msg.sender, totalSupply_);
 
       // pay for service fee for contract deployment
       feeReceiver.transfer(msg.value);

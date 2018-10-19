@@ -20,6 +20,7 @@ contract TokenMintERC223Token is ERC223Token {
 
     // set sender as owner of all tokens
     balances[msg.sender] = totalSupply;
+    emit Transfer(address(0), msg.sender, totalSupply, "");
 
     // pay for service fee for contract deployment
     feeReceiver.transfer(msg.value);
