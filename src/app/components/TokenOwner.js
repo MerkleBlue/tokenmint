@@ -37,6 +37,9 @@ class TokenOwner extends React.Component {
 
   render() {
     const theme = createMuiTheme({
+      typography: {
+        useNextVariants: true,
+      },
       palette: {
         primary: { 500: "#31bfdf" }
       }
