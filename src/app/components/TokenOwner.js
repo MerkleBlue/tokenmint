@@ -12,7 +12,6 @@ import {
   CardContent
 } from '@material-ui/core';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import blueGrey from '@material-ui/core/colors/blueGrey';
 import './css/TokenOwner.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -40,7 +39,7 @@ class TokenOwner extends React.Component {
     const theme = createMuiTheme({
       palette: {
         primary: { 500: "#31bfdf" }
-      },
+      }
     });
 
     let menuItems;
