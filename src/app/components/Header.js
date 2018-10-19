@@ -17,7 +17,7 @@ const Header = () => {
         <div className="typography_div">
           <Typography
             color="textSecondary"
-            variant="headline"
+            variant="h5"
             gutterBottom
             className="typography_header"
           >
