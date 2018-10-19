@@ -3,7 +3,7 @@ import appStates from './appStates';
 export default {
   tokenName: "",
   tokenSymbol: "",
-  decimals: "",
+  decimals: "18",
   tokenOwner: "",
   tokenType: "erc20",
   totalSupply: "",
