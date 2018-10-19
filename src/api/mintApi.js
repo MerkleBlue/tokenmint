@@ -98,7 +98,7 @@ export function getTokenBalance(contractInstance, account) {
 
 function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, account, feeInETH) {
   return new Promise((accept, reject) => {
-    tokenContract.new(name, symbol, decimals, totalSupply, tokenMintAccount, {
+    tokenContract.new(name, symbol, decimals, totalSupply * 10**decimals, tokenMintAccount, {
       from: account,
       gas: 4712388,
       gasPrice: 100000000000,
