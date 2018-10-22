@@ -10,6 +10,7 @@ import ConfirmationPanel from './app/components/ConfirmationPanel';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import appStates from './app/reducers/appStates';
+import ErrorPanel from './app/components/ErrorPanel';
 
 class App extends Component {
 
@@ -26,6 +27,8 @@ class App extends Component {
       );
     } else if (this.props.appState === appStates.PENDING_CONFIRMATION) {
       content = (<ConfirmationPanel />);
+    } else if (this.props.appState === appStates.MINING_FAILED) {
+      content = (<ErrorPanel />);
     } else {
       content = (<InfoPanel />);
     }

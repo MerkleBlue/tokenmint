@@ -45,7 +45,6 @@ class ConfirmationPanel extends React.Component {
     //this.props.accountsActions.loadAllAccounts();
   }
 
-  // a hack that creates an element outside the screen and uses it to copy its content to clipboard
   handleConfirm(e) {
     this.props.createTokensActions.createTokens(
       this.props.tokenName.trim(),
@@ -62,7 +61,7 @@ class ConfirmationPanel extends React.Component {
       <div>
         <Card className="card">
           <CardHeader
-            title="Please Confirm Token Creation Parameters"
+            title="Please Confirm Token Creation Parameters!"
             classes={{
               root: "card_header",
               title: "card_header_text"
@@ -225,18 +224,18 @@ class ConfirmationPanel extends React.Component {
                 data-wow-delay="400ms"
                 onClick={this.handleCancel}
               >
-                <FontAwesomeIcon className="fa_icons" icon={faTimes} />
+                <FontAwesomeIcon className="fa_back_icon" icon={faTimes} />
                 Back
               </span>
             </Grid>
             <Grid item xs className="grid_cell">
               <span
-                className="btn btn-common wow fadeInUp"
+                className="btn btn-confirm wow fadeInUp"
                 data-wow-duration="1000ms"
                 data-wow-delay="400ms"
                 onClick={this.handleConfirm}
               >
-                <FontAwesomeIcon className="fa_icons" icon={faCheck} />
+                <FontAwesomeIcon className="fa_confirm_icon" icon={faCheck} />
                 Confirm
               </span>
             </Grid>
