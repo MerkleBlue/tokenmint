@@ -5,7 +5,6 @@ import TokenType from './app/components/TokenType'; //eslint-disable-line import
 import TokenOwner from './app/components/TokenOwner';
 import Footer from './app/components/Footer';
 import Header from './app/components/Header';
-import InfoPanel from './app/components/InfoPanel';
 import ConfirmationPanel from './app/components/ConfirmationPanel';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
