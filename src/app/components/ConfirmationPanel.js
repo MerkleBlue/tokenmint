@@ -10,7 +10,7 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimesCircle, faCheckCircle, faClipboard } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import * as createTokensActions from '../actions/createTokensActions';
 import * as appStateActions from '../actions/appStateActions';
@@ -59,162 +59,190 @@ class ConfirmationPanel extends React.Component {
 
   render() {
     return (
-      <Card className="card">
-        <CardHeader
-          title="Please Confirm Token Creation Parameters"
-          classes={{
-            root: "card_header",
-            title: "card_header_text"
-          }}
-        />
-        <CardContent
-          classes={{
-            root: "card_content"
-          }}
-        >
-          <Grid className="grid_container" container wrap="nowrap" spacing={8}>
-            <Grid item xs>
-              <Typography
-                align="left"
-                variant="subtitle1"
-                className="typography_left"
-              >
-                Token Owner:
+      <div>
+        <Card className="card">
+          <CardHeader
+            title="Please Confirm Token Creation Parameters"
+            classes={{
+              root: "card_header",
+              title: "card_header_text"
+            }}
+          />
+          <CardContent
+            classes={{
+              root: "card_content"
+            }}
+          >
+            <Grid className="grid_container" container wrap="nowrap" spacing={8}>
+              <Grid item xs>
+                <Typography
+                  align="left"
+                  variant="subtitle1"
+                  className="typography_left"
+                >
+                  Token Owner:
               </Typography>
+              </Grid>
+              <Grid item xs className="grid_cell">
+                <Typography
+                  align="left"
+                  variant="subtitle1"
+                  className="typography_right"
+                  gutterBottom
+                >
+                  {this.props.tokenOwner}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid className="grid_container" container wrap="nowrap" spacing={8}>
+              <Grid item xs>
+                <Typography
+                  align="left"
+                  variant="subtitle1"
+                  className="typography_left"
+                >
+                  Token Name:
+              </Typography>
+              </Grid>
+              <Grid item xs>
+                <Typography
+                  align="left"
+                  variant="subtitle1"
+                  className="typography_right"
+                >
+                  {this.props.tokenName}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid className="grid_container" container wrap="nowrap" spacing={8}>
+              <Grid item xs>
+                <Typography
+                  align="left"
+                  variant="subtitle1"
+                  className="typography_left"
+                >
+                  Token Symbol:
+              </Typography>
+              </Grid>
+              <Grid item xs>
+                <Typography
+                  align="left"
+                  variant="subtitle1"
+                  className="typography_right"
+                >
+                  {this.props.tokenSymbol}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid className="grid_container" container wrap="nowrap" spacing={8}>
+              <Grid item xs>
+                <Typography
+                  align="left"
+                  variant="subtitle1"
+                  className="typography_left"
+                >
+                  Decimals:
+              </Typography>
+              </Grid>
+              <Grid item xs>
+                <Typography
+                  align="left"
+                  variant="subtitle1"
+                  className="typography_right"
+                >
+                  {this.props.decimals}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid className="grid_container" container wrap="nowrap" spacing={8}>
+              <Grid item xs>
+                <Typography
+                  align="left"
+                  variant="subtitle1"
+                  className="typography_left"
+                >
+                  Total Supply:
+              </Typography>
+              </Grid>
+              <Grid item xs>
+                <Typography
+                  align="left"
+                  variant="subtitle1"
+                  className="typography_right"
+                >
+                  {this.props.totalSupply}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid className="grid_container" container wrap="nowrap" spacing={8}>
+              <Grid item xs>
+                <Typography
+                  align="left"
+                  variant="subtitle1"
+                  className="typography_left"
+                >
+                  Token Type:
+              </Typography>
+              </Grid>
+              <Grid item xs>
+                <Typography
+                  align="left"
+                  variant="subtitle1"
+                  className="typography_right"
+                >
+                  {this.props.tokenType}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid className="grid_container" container wrap="nowrap" spacing={8}>
+              <Grid item xs>
+                <Typography
+                  align="left"
+                  variant="subtitle1"
+                  className="typography_left"
+                >
+                  Service Fee:
+              </Typography>
+              </Grid>
+              <Grid item xs>
+                <Typography
+                  align="left"
+                  variant="subtitle1"
+                  className="typography_right"
+                >
+                  100$ (mining fee excluded)
+              </Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+        <form className="footer_main_form">
+          <Grid container wrap="nowrap" spacing={8}>
+            <Grid item xs className="grid_cell">
+              <span
+                className="btn btn-common wow fadeInUp"
+                data-wow-duration="1000ms"
+                data-wow-delay="400ms"
+                onClick={this.handleTokenCreation}
+              >
+                <FontAwesomeIcon className="fa_icons" icon={faCheck} />
+                Confirm
+              </span>
             </Grid>
             <Grid item xs className="grid_cell">
-              <Typography
-                align="left"
-                variant="subtitle1"
-                className="typography_right"
-                gutterBottom
+              <span
+                className="btn btn-cancel wow fadeInUp"
+                data-wow-duration="1000ms"
+                data-wow-delay="400ms"
+                onClick={this.handleTokenCreation}
               >
-                {this.props.tokenOwner}
-              </Typography>
+                <FontAwesomeIcon className="fa_icons" icon={faTimes} />
+                Cancel
+              </span>
             </Grid>
           </Grid>
-          <Grid className="grid_container" container wrap="nowrap" spacing={8}>
-            <Grid item xs>
-              <Typography
-                align="left"
-                variant="subtitle1"
-                className="typography_left"
-              >
-                Token Name:
-              </Typography>
-            </Grid>
-            <Grid item xs>
-              <Typography
-                align="left"
-                variant="subtitle1"
-                className="typography_right"
-              >
-                {this.props.tokenName}
-              </Typography>
-            </Grid>
-          </Grid>
-          <Grid className="grid_container" container wrap="nowrap" spacing={8}>
-            <Grid item xs>
-              <Typography
-                align="left"
-                variant="subtitle1"
-                className="typography_left"
-              >
-                Token Symbol:
-              </Typography>
-            </Grid>
-            <Grid item xs>
-              <Typography
-                align="left"
-                variant="subtitle1"
-                className="typography_right"
-              >
-                {this.props.tokenSymbol}
-              </Typography>
-            </Grid>
-          </Grid>
-          <Grid className="grid_container" container wrap="nowrap" spacing={8}>
-            <Grid item xs>
-              <Typography
-                align="left"
-                variant="subtitle1"
-                className="typography_left"
-              >
-                Decimals:
-              </Typography>
-            </Grid>
-            <Grid item xs>
-              <Typography
-                align="left"
-                variant="subtitle1"
-                className="typography_right"
-              >
-                {this.props.decimals}
-              </Typography>
-            </Grid>
-          </Grid>
-          <Grid className="grid_container" container wrap="nowrap" spacing={8}>
-            <Grid item xs>
-              <Typography
-                align="left"
-                variant="subtitle1"
-                className="typography_left"
-              >
-                Total Supply:
-              </Typography>
-            </Grid>
-            <Grid item xs>
-              <Typography
-                align="left"
-                variant="subtitle1"
-                className="typography_right"
-              >
-                {this.props.totalSupply}
-              </Typography>
-            </Grid>
-          </Grid>
-          <Grid className="grid_container" container wrap="nowrap" spacing={8}>
-            <Grid item xs>
-              <Typography
-                align="left"
-                variant="subtitle1"
-                className="typography_left"
-              >
-                Token Type:
-              </Typography>
-            </Grid>
-            <Grid item xs>
-              <Typography
-                align="left"
-                variant="subtitle1"
-                className="typography_right"
-              >
-                {this.props.tokenType}
-              </Typography>
-            </Grid>
-          </Grid>
-          <Grid className="grid_container" container wrap="nowrap" spacing={8}>
-            <Grid item xs>
-              <Typography
-                align="left"
-                variant="subtitle1"
-                className="typography_left"
-              >
-                Service Fee:
-              </Typography>
-            </Grid>
-            <Grid item xs>
-              <Typography
-                align="left"
-                variant="subtitle1"
-                className="typography_right"
-              >
-                100$ (mining fee excluded)
-              </Typography>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+        </form>
+      </div>
     );
   }
 }
