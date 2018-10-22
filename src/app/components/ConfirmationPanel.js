@@ -17,6 +17,7 @@ import * as appStateActions from '../actions/appStateActions';
 import * as infoMessageActions from '../actions/infoMessageActions';
 import initialState from '../reducers/initialState';
 import InputValidator from '../../tools/InputValidator';
+import ReactGA from 'react-ga';
 
 class ConfirmationPanel extends React.Component {
 
@@ -25,6 +26,12 @@ class ConfirmationPanel extends React.Component {
     this.handleCancel = this.handleCancel.bind(this);
     this.handleConfirm = this.handleConfirm.bind(this);
     this.isCreationEnabled = this.isCreationEnabled(this);
+  }
+
+  componentWillMount() {
+    // TODO: remove logging when ga works properly
+    console.log("Navigate to: /mint/confirm"); // eslint-disable-line no-console
+    ReactGA.pageview('/mint/confirm');
   }
 
   isCreationEnabled() {
