@@ -52,6 +52,6 @@ class MiningInProgressPanel extends React.Component {
       </div>
     );
   }
-};
+}
 
 export default MiningInProgressPanel;

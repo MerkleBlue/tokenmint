@@ -115,7 +115,7 @@ function getNetwork() {
 function estimateMiningFee(tokenContract, name, symbol, decimals, totalSupply, tokenOwner) {
   return new Promise((accept, reject) => {
     // create new contract instance using web3, not truffle contract
-    var myContract = new web3.eth.Contract(tokenContract.abi, {
+    let myContract = new web3.eth.Contract(tokenContract.abi, {
       from: tokenOwner,
       //gasPrice: '1000000000',  // default gas price in wei
       data: tokenContract.bytecode
