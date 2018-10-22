@@ -19,12 +19,19 @@ import * as tokenOwnerActions from '../actions/tokenOwnerActions';
 import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
 import { bindActionCreators } from 'redux';
 import initialState from '../reducers/initialState';
+import ReactGA from 'react-ga';
 
 class TokenOwner extends React.Component {
 
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentWillMount() {
+    // TODO: remove logging when ga works properly
+    console.log("Navigate to: /mint/"); // eslint-disable-line no-console
+    ReactGA.pageview('/mint/');
   }
 
   handleChange(e) {
