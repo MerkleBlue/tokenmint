@@ -106,12 +106,12 @@ class SuccessMessagePanel extends React.Component {
         </Card>
         <form className="footer_main_form">
           <span
-            className="btn-basic btn-success-back wow fadeInUp"
+            className="btn btn-success-back wow fadeInUp"
             data-wow-duration="1000ms"
             data-wow-delay="400ms"
             onClick={this.handleBackClick}
           >
-            Back
+            Create More Tokens
           </span>
         </form>
       </div>
