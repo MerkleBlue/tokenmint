@@ -10,7 +10,7 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faClipboard } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faClipboard, faCoins } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import * as decimalsActions from '../actions/decimalsActions';
 import * as tokenNameActions from '../actions/tokenNameActions';
@@ -111,6 +111,7 @@ class SuccessMessagePanel extends React.Component {
             data-wow-delay="400ms"
             onClick={this.handleBackClick}
           >
+            <FontAwesomeIcon className="fa_coins" icon={faCoins} />
             Create More Tokens
           </span>
         </form>
