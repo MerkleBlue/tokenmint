@@ -59,22 +59,23 @@ class ErrorPanel extends React.Component {
           >
             <Typography
               align="center"
-              color="error"
               variant="subtitle1"
-              className="typography"
+              className="typography_error_info_message"
             >
               {this.props.infoMessage}
             </Typography>
           </CardContent>
         </Card>
-        <span
-          className="btn-basic btn-err-back wow fadeInUp"
-          data-wow-duration="1000ms"
-          data-wow-delay="400ms"
-          onClick={this.handleBackClick}
-        >
-          Back
+        <form className="footer_main_form">
+          <span
+            className="btn-basic btn-err-back wow fadeInUp"
+            data-wow-duration="1000ms"
+            data-wow-delay="400ms"
+            onClick={this.handleBackClick}
+          >
+            Back
         </span>
+        </form>
       </div>
     );
   }
