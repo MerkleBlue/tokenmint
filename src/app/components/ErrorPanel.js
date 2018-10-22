@@ -75,7 +75,7 @@ class ErrorPanel extends React.Component {
         </Card>
         <form className="footer_main_form">
           <span
-            className="btn-basic btn-err-back wow fadeInUp"
+            className="btn btn-err-back wow fadeInUp"
             data-wow-duration="1000ms"
             data-wow-delay="400ms"
             onClick={this.handleBackClick}
