@@ -220,6 +220,17 @@ class ConfirmationPanel extends React.Component {
           <Grid container wrap="nowrap" spacing={8}>
             <Grid item xs className="grid_cell">
               <span
+                className="btn btn-cancel wow fadeInUp"
+                data-wow-duration="1000ms"
+                data-wow-delay="400ms"
+                onClick={this.handleCancel}
+              >
+                <FontAwesomeIcon className="fa_icons" icon={faTimes} />
+                Back
+              </span>
+            </Grid>
+            <Grid item xs className="grid_cell">
+              <span
                 className="btn btn-common wow fadeInUp"
                 data-wow-duration="1000ms"
                 data-wow-delay="400ms"
@@ -227,17 +238,6 @@ class ConfirmationPanel extends React.Component {
               >
                 <FontAwesomeIcon className="fa_icons" icon={faCheck} />
                 Confirm
-              </span>
-            </Grid>
-            <Grid item xs className="grid_cell">
-              <span
-                className="btn btn-cancel wow fadeInUp"
-                data-wow-duration="1000ms"
-                data-wow-delay="400ms"
-                onClick={this.handleCancel}
-              >
-                <FontAwesomeIcon className="fa_icons" icon={faTimes} />
-                Cancel
               </span>
             </Grid>
           </Grid>
