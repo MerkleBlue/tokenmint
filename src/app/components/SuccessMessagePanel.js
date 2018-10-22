@@ -24,6 +24,7 @@ import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
 import * as infoMessageActions from '../actions/infoMessageActions';
 import * as accountsActions from '../actions/accountsActions';
 import initialState from '../reducers/initialState';
+import ReactGA from 'react-ga';
 
 class SuccessMessagePanel extends React.Component {
 
@@ -31,6 +32,12 @@ class SuccessMessagePanel extends React.Component {
     super(props);
     this.handleBackClick = this.handleBackClick.bind(this);
     this.handleCopyToClipboard = this.handleCopyToClipboard.bind(this);
+  }
+
+  componentWillMount() {
+    // TODO: remove logging when ga works properly
+    console.log("Navigate to: /mint/success"); // eslint-disable-line no-console
+    ReactGA.pageview('/mint/success');
   }
 
   handleBackClick(e) {
