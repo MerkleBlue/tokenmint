@@ -8,7 +8,7 @@ const MiningInProgressPanel = () => {
     <div>
       <Card className="card">
         <CardHeader
-          title="Mining in progress..."
+          title="Mining In Progress..."
           classes={{
             root: "card_header",
             title: "card_header_text"

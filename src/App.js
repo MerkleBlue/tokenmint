@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import appStates from './app/reducers/appStates';
 import ErrorPanel from './app/components/ErrorPanel';
 import MiningInProgressPanel from './app/components/MiningInProgressPanel';
+import SuccessMessagePanel from './app/components/SuccessMessagePanel';
 
 class App extends Component {
 
@@ -23,6 +24,8 @@ class App extends Component {
       content = (<ErrorPanel />);
     } else if (this.props.appState === appStates.MINING_IN_PROGRESS) {
       content = (<MiningInProgressPanel />);
+    }else if (this.props.appState === appStates.MINING_FINISHED) {
+      content = (<SuccessMessagePanel />);
     } else {
       content = (
         <div>

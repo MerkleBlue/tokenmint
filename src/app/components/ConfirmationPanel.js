@@ -24,7 +24,6 @@ class ConfirmationPanel extends React.Component {
     super(props);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleConfirm = this.handleConfirm.bind(this);
-    this.isCreationEnabled = this.isCreationEnabled(this);
   }
 
   isCreationEnabled() {

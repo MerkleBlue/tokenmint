@@ -45,7 +45,7 @@ class ErrorPanel extends React.Component {
       <div>
         <Card className="card">
           <CardHeader
-            title="Oops, something went wrong!"
+            title="Oops, Something Went Wrong!"
             classes={{
               root: "card_header",
               title: "card_header_text"
