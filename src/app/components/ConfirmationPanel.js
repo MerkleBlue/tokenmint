@@ -22,7 +22,7 @@ class ConfirmationPanel extends React.Component {
 
   constructor(props) {
     super(props);
-    this.handleBackClick = this.handleBackClick.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
     this.handleConfirm = this.handleConfirm.bind(this);
     this.isCreationEnabled = this.isCreationEnabled(this);
   }
@@ -39,7 +39,7 @@ class ConfirmationPanel extends React.Component {
       && !this.props.loadingAccounts;
   }
 
-  handleBackClick(e) {
+  handleCancel(e) {
     this.props.appStateActions.setAppState(initialState.appState);
     this.props.infoMessageActions.setInfoMessage(initialState.infoMessage);
     //this.props.accountsActions.loadAllAccounts();
@@ -223,7 +223,7 @@ class ConfirmationPanel extends React.Component {
                 className="btn btn-common wow fadeInUp"
                 data-wow-duration="1000ms"
                 data-wow-delay="400ms"
-                onClick={this.handleTokenCreation}
+                onClick={this.handleConfirm}
               >
                 <FontAwesomeIcon className="fa_icons" icon={faCheck} />
                 Confirm
@@ -234,7 +234,7 @@ class ConfirmationPanel extends React.Component {
                 className="btn btn-cancel wow fadeInUp"
                 data-wow-duration="1000ms"
                 data-wow-delay="400ms"
-                onClick={this.handleTokenCreation}
+                onClick={this.handleCancel}
               >
                 <FontAwesomeIcon className="fa_icons" icon={faTimes} />
                 Cancel
