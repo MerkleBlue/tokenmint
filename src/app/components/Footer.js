@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import InputValidator from '../../tools/InputValidator';
 import { bindActionCreators } from 'redux';
-import * as createTokensActions from '../actions/createTokensActions';
+import * as appStateActions from '../actions/appStateActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoins } from '@fortawesome/free-solid-svg-icons';
+import appStates from '../reducers/appStates';
 
 class Footer extends React.Component {
 
@@ -29,14 +30,7 @@ class Footer extends React.Component {
   }
 
   handleTokenCreation(e) {
-    this.props.createTokensActions.createTokens(
-      this.props.tokenName.trim(),
-      this.props.tokenSymbol,
-      this.props.decimals,
-      this.props.totalSupply,
-      this.props.tokenType,
-      this.props.tokenOwner
-    );
+    this.props.appStateActions.setAppState(appStates.PENDING_CONFIRMATION);
   }
 
   render() {
@@ -71,7 +65,7 @@ class Footer extends React.Component {
 }
 
 Footer.propTypes = {
-  createTokensActions: PropTypes.object.isRequired,
+  appStateActions: PropTypes.object.isRequired,
   tokenName: PropTypes.string.isRequired,
   tokenSymbol: PropTypes.string.isRequired,
   decimals: PropTypes.string.isRequired,
@@ -99,7 +93,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    createTokensActions: bindActionCreators(createTokensActions, dispatch)
+    appStateActions: bindActionCreators(appStateActions, dispatch)
   };
 }
 

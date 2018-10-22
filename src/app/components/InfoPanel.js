@@ -64,7 +64,7 @@ class InfoPanel extends React.Component {
           <Typography
             align="center"
             color="default"
-            variant="headline"
+            variant="h6"
             className="typography_header"
           >
             {this.props.infoMessage}
@@ -73,7 +73,7 @@ class InfoPanel extends React.Component {
           <Typography
             align="center"
             color="default"
-            variant="subheading"
+            variant="subtitle1"
             className="typography"
           >
             Please do not leave this page...
@@ -87,7 +87,7 @@ class InfoPanel extends React.Component {
           <Typography
             align="center"
             color="default"
-            variant="headline"
+            variant="h6"
             className="typography_header"
           >
             <FontAwesomeIcon icon={faCheckCircle} size="lg" color="green" /> Your tokens have been successfully created!
@@ -96,7 +96,7 @@ class InfoPanel extends React.Component {
           <Typography
             align="center"
             color="default"
-            variant="subheading"
+            variant="subtitle1"
             className="typography"
           >
             Contract is deployed at address:
@@ -104,7 +104,7 @@ class InfoPanel extends React.Component {
           <Typography
             align="center"
             color="default"
-            variant="subheading"
+            variant="subtitle1"
             className="typography"
           >
             [{this.props.infoMessage}]
@@ -115,7 +115,7 @@ class InfoPanel extends React.Component {
           <Typography
             align="center"
             color="default"
-            variant="subheading"
+            variant="subtitle1"
             className="typography"
           >
             Thank You for using TokenMint!
@@ -138,7 +138,7 @@ class InfoPanel extends React.Component {
           <Typography
             align="center"
             color="error"
-            variant="headline"
+            variant="h6"
             className="typography_header"
           >
             <FontAwesomeIcon icon={faTimesCircle} size="lg" /> Oops, something went wrong!
@@ -147,7 +147,7 @@ class InfoPanel extends React.Component {
           <Typography
             align="center"
             color="error"
-            variant="subheading"
+            variant="subtitle1"
             className="typography"
           >
             {this.props.infoMessage}
