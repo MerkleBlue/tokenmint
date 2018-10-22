@@ -104,7 +104,7 @@ class SuccessMessagePanel extends React.Component {
             </Typography>
             <Typography
               align="center"
-              variant="subtitle1"
+              variant="h6"
               className="typography_success_info_message"
             >
               Thank You for using TokenMint!
