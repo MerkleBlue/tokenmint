@@ -11,12 +11,22 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import appStates from './app/reducers/appStates';
 import ErrorPanel from './app/components/ErrorPanel';
+import MiningInProgressPanel from './app/components/MiningInProgressPanel';
+import SuccessMessagePanel from './app/components/SuccessMessagePanel';
 
 class App extends Component {
 
   render() {
     let content;
-    if (this.props.appState === appStates.INIT) {
+    if (this.props.appState === appStates.PENDING_CONFIRMATION) {
+      content = (<ConfirmationPanel />);
+    } else if (this.props.appState === appStates.MINING_FAILED) {
+      content = (<ErrorPanel />);
+    } else if (this.props.appState === appStates.MINING_IN_PROGRESS) {
+      content = (<MiningInProgressPanel />);
+    }else if (this.props.appState === appStates.MINING_FINISHED) {
+      content = (<SuccessMessagePanel />);
+    } else {
       content = (
         <div>
           <TokenOwner />
@@ -25,12 +35,6 @@ class App extends Component {
           <Footer />
         </div>
       );
-    } else if (this.props.appState === appStates.PENDING_CONFIRMATION) {
-      content = (<ConfirmationPanel />);
-    } else if (this.props.appState === appStates.MINING_FAILED) {
-      content = (<ErrorPanel />);
-    } else {
-      content = (<InfoPanel />);
     }
 
     return (
