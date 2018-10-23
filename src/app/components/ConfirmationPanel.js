@@ -215,7 +215,7 @@ class ConfirmationPanel extends React.Component {
                   variant="subtitle1"
                   className="typography_right"
                 >
-                  100$ (mining fee excluded)
+                  99.99$. Mining fee excluded.
               </Typography>
               </Grid>
             </Grid>

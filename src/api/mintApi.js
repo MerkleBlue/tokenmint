@@ -18,7 +18,7 @@ function initWeb3() {
   }
 }
 
-function getFee() {
+export function getFee() {
   return new Promise((accept, reject) => {
     cc.price('ETH', 'USD').then(prices => {
       accept(feeInUsd / prices.USD);
@@ -98,10 +98,11 @@ function instantiateContract(tokenContract, name, symbol, decimals, totalSupply,
   });
 }
 
-function getNetwork() {
+function isMainNet() {
+  initWeb3();
   return new Promise((accept, reject) => {
     web3.eth.net.getNetworkType().then(networkType => {
-      accept(networkType);
+      accept(networkType === "main");
       return;
     }).catch((e) => {
       reject(e);

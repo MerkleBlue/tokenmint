@@ -11,6 +11,7 @@ import checkingTokenOwnerFunds from './checkingTokenOwnerFundsReducer';
 import tokenOwnerHasEnoughFunds from './tokenOwnerHasEnoughFundsReducer';
 import loadingAccounts from './loadingAccountsReducer';
 import infoMessage from './infoMessageReducer';
+import serviceFee from './serviceFeeReducer';
 
 const rootReducer = combineReducers({
   tokenName: tokenName,
@@ -24,7 +25,8 @@ const rootReducer = combineReducers({
   checkingTokenOwnerFunds: checkingTokenOwnerFunds,
   tokenOwnerHasEnoughFunds: tokenOwnerHasEnoughFunds,
   infoMessage: infoMessage,
-  loadingAccounts: loadingAccounts
+  loadingAccounts: loadingAccounts,
+  serviceFee: serviceFee
 });
 
 export default rootReducer;
