@@ -13,6 +13,5 @@ export default {
   tokenOwnerHasEnoughFunds: true,
   infoMessage: "",
   loadingAccounts: false,
-  serviceFee: "",
-  calculatingServiceFee: false
+  serviceFee: ""
 };
