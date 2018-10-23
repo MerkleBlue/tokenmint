@@ -127,7 +127,7 @@ function estimateMiningFee(tokenContract, name, symbol, decimals, totalSupply, t
       data: tokenContract.bytecode,
       arguments: [name, symbol, decimals, totalSupply /** 10**decimals*/, tokenOwner]
     }).estimateGas(function (err, gas) {
-      console.log("Estimated mining fee: " + gas * 1000000000 / 10 ** 18);
+      //console.log("Estimated mining fee: " + gas * 1000000000 / 10 ** 18);
       accept(gas * 1000000000 / 10 ** 18);
       return;
     });
@@ -161,17 +161,17 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
       if (hasFunds) {
         let tokenContract = tokenType === "erc20" ? ERC20TokenContract : ERC223TokenContract;
         instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner, serviceFee).then(contractInstance => {
-          getEthBalance(tokenOwner).then(balance => {
-            console.log("Customer ETH balance: " + balance);
-          });
+          // getEthBalance(tokenOwner).then(balance => {
+          //   console.log("Customer ETH balance: " + balance);
+          // });
 
-          getTokenBalance(contractInstance, tokenOwner).then(balance => {
-            console.log("Customer " + tokenSymbol + " balance: " + balance);
-          });
+          // getTokenBalance(contractInstance, tokenOwner).then(balance => {
+          //   console.log("Customer " + tokenSymbol + " balance: " + balance);
+          // });
 
-          getEthBalance(tokenMintAccount).then(balance => {
-            console.log("TokenMint ETH balance: " + balance);
-          });
+          // getEthBalance(tokenMintAccount).then(balance => {
+          //   console.log("TokenMint ETH balance: " + balance);
+          // });
 
           accept(contractInstance.address);
           return;

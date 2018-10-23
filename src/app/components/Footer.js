@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoins } from '@fortawesome/free-solid-svg-icons';
 import appStates from '../reducers/appStates';
 
-class Footer extends React.Component {
+export class Footer extends React.Component {
 
   constructor(props) {
     super(props);
