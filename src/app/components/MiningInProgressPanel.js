@@ -3,7 +3,7 @@ import './css/ErrorPanel.css';
 import { Typography, Card, CardHeader, CardContent, LinearProgress } from '@material-ui/core';
 import ReactGA from 'react-ga';
 
-class MiningInProgressPanel extends React.Component {
+export class MiningInProgressPanel extends React.Component {
 
   componentWillMount() {
     // TODO: remove logging when ga works properly
@@ -35,7 +35,7 @@ class MiningInProgressPanel extends React.Component {
             </Typography>
             <Typography
               align="center"
-              variant="subtitle1"
+              variant="h6"
             >
               Please do not leave this page!
             </Typography>

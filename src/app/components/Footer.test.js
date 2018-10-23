@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import React from 'react';
 import { Footer } from './Footer';
-import { createMount, createShallow } from '@material-ui/core/test-utils';
+import { createMount } from '@material-ui/core/test-utils';
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { JSDOM } from 'jsdom';
@@ -51,14 +51,6 @@ describe("<Footer /> tests", () => {
     };
     return mount(<Footer {...props} />);
   }
-
-  // function setupShallow(tokenType, setTokenType) {
-  //   const props = {
-  //     tokenType: tokenType,
-  //     tokenTypeActions: { setTokenType: setTokenType }
-  //   };
-  //   return createShallow()(<Footer {...props} />);
-  // }
 
   before(() => {
     const jsdom = new JSDOM('<!doctype html><html><body></body></html>');
