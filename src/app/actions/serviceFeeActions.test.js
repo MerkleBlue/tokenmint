@@ -11,9 +11,23 @@ const mockStore = configureMockStore(middleware);
 
 describe("serviceFeeActions tests", () => {
   it("calculates service fee successfully", (done) => {
-    const getFeeStub = sinon.stub(mintApi, "getFee").resolves("1");
+    const getFeeStub = sinon.stub(mintApi, "getFee").resolves(1);
     const expectedActions = [
-      { type: types.SET_SERVICE_FEE, serviceFee: "1" },
+      { type: types.SET_SERVICE_FEE, serviceFee: 1 },
+    ];
+    const store = mockStore({ serviceFee: "" }, expectedActions);
+    store.dispatch(serviceFeeActions.calculateServiceFee()).then(() => {
+      const actions = store.getActions();
+      expect(actions[0]).to.deep.equal(expectedActions[0]);
+      getFeeStub.restore();
+      done();
+    });
+  });
+
+  it("calculates service fee with exception", (done) => {
+    const getFeeStub = sinon.stub(mintApi, "getFee").rejects(new Error());
+    const expectedActions = [
+      { type: types.SET_SERVICE_FEE, serviceFee: -1 },
     ];
     const store = mockStore({ serviceFee: "" }, expectedActions);
     store.dispatch(serviceFeeActions.calculateServiceFee()).then(() => {

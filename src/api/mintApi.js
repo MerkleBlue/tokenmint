@@ -67,7 +67,7 @@ export function getTokenBalance(contractInstance, account) {
   return new Promise((accept, reject) => {
     contractInstance.decimals().then((decimals) => {
       contractInstance.balanceOf(account).then((balance) => {
-        accept(balance / 10**decimals);
+        accept(balance / 10 ** decimals);
         return;
       }).catch(e => {
         reject(e);
@@ -82,7 +82,7 @@ export function getTokenBalance(contractInstance, account) {
 
 function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, account, feeInETH) {
   return new Promise((accept, reject) => {
-    tokenContract.new(name, symbol, decimals, totalSupply * 10**decimals, tokenMintAccount, {
+    tokenContract.new(name, symbol, decimals, totalSupply * 10 ** decimals, tokenMintAccount, {
       from: account,
       gas: 4712388,
       //gasPrice: 1000000000, // 1 Gwei, wallet estimates gasPrice and sets it
@@ -126,9 +126,9 @@ function estimateMiningFee(tokenContract, name, symbol, decimals, totalSupply, t
     myContract.deploy({
       data: tokenContract.bytecode,
       arguments: [name, symbol, decimals, totalSupply /** 10**decimals*/, tokenOwner]
-    }).estimateGas(function(err, gas){
-      console.log("Estimated mining fee: " + gas * 1000000000 / 10**18);
-      accept(gas * 1000000000 / 10**18);
+    }).estimateGas(function (err, gas) {
+      console.log("Estimated mining fee: " + gas * 1000000000 / 10 ** 18);
+      accept(gas * 1000000000 / 10 ** 18);
       return;
     });
   });
@@ -153,43 +153,38 @@ export function checkTokenOwnerFunds(tokenOwner) {
   });
 }
 
-export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenType, tokenOwner) {
+export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenType, tokenOwner, serviceFee) {
   initWeb3();
   setupContracts();
   return new Promise((accept, reject) => {
-    getFee().then(feeInETH => {
-      checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
-        if (hasFunds) {
-          let tokenContract = tokenType === "erc20" ? ERC20TokenContract : ERC223TokenContract;
-          instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner, feeInETH).then(contractInstance => {
-            getEthBalance(tokenOwner).then(balance => {
-              console.log("Customer ETH balance: " + balance);
-            });
-
-            getTokenBalance(contractInstance, tokenOwner).then(balance => {
-              console.log("Customer "  + tokenSymbol + " balance: " + balance);
-            });
-
-            getEthBalance(tokenMintAccount).then(balance => {
-              console.log("TokenMint ETH balance: " + balance);
-            });
-
-            accept(contractInstance.address);
-            return;
-          }).catch((e) => {
-            reject(new Error("Could not create contract."));
-            return;
+    checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
+      if (hasFunds) {
+        let tokenContract = tokenType === "erc20" ? ERC20TokenContract : ERC223TokenContract;
+        instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner, serviceFee).then(contractInstance => {
+          getEthBalance(tokenOwner).then(balance => {
+            console.log("Customer ETH balance: " + balance);
           });
-        } else {
-          reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
+
+          getTokenBalance(contractInstance, tokenOwner).then(balance => {
+            console.log("Customer " + tokenSymbol + " balance: " + balance);
+          });
+
+          getEthBalance(tokenMintAccount).then(balance => {
+            console.log("TokenMint ETH balance: " + balance);
+          });
+
+          accept(contractInstance.address);
           return;
-        }
-      }).catch((e) => {
-        reject(new Error("Could not check token owner ETH funds."));
+        }).catch((e) => {
+          reject(new Error("Could not create contract."));
+          return;
+        });
+      } else {
+        reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
         return;
-      });
+      }
     }).catch((e) => {
-      reject(new Error("Could not get fee."));
+      reject(new Error("Could not check token owner ETH funds."));
       return;
     });
   });

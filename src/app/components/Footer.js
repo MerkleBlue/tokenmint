@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import InputValidator from '../../tools/InputValidator';
 import { bindActionCreators } from 'redux';
 import * as appStateActions from '../actions/appStateActions';
+import * as serviceFeeActions from '../actions/serviceFeeActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoins } from '@fortawesome/free-solid-svg-icons';
 import appStates from '../reducers/appStates';
@@ -30,6 +31,7 @@ class Footer extends React.Component {
   }
 
   handleTokenCreation(e) {
+    this.props.serviceFeeActions.calculateServiceFee();
     this.props.appStateActions.setAppState(appStates.PENDING_CONFIRMATION);
   }
 
@@ -66,6 +68,7 @@ class Footer extends React.Component {
 
 Footer.propTypes = {
   appStateActions: PropTypes.object.isRequired,
+  serviceFeeActions: PropTypes.object.isRequired,
   tokenName: PropTypes.string.isRequired,
   tokenSymbol: PropTypes.string.isRequired,
   decimals: PropTypes.string.isRequired,
@@ -93,7 +96,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    appStateActions: bindActionCreators(appStateActions, dispatch)
+    appStateActions: bindActionCreators(appStateActions, dispatch),
+    serviceFeeActions: bindActionCreators(serviceFeeActions, dispatch)
   };
 }
 

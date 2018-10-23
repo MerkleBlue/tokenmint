@@ -25,6 +25,7 @@ class ConfirmationPanel extends React.Component {
     super(props);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleConfirm = this.handleConfirm.bind(this);
+    this.isConfirmationEnabled = this.isConfirmationEnabled.bind(this);
   }
 
   componentWillMount() {
@@ -33,7 +34,7 @@ class ConfirmationPanel extends React.Component {
     ReactGA.pageview('/mint/confirm');
   }
 
-  isCreationEnabled() {
+  isConfirmationEnabled() {
     return InputValidator.isInputValid(
       this.props.tokenName,
       this.props.tokenSymbol,
@@ -42,13 +43,14 @@ class ConfirmationPanel extends React.Component {
       this.props.tokenOwner
     ) && !this.props.checkingTokenOwnerFunds
       && this.props.tokenOwnerHasEnoughFunds
-      && !this.props.loadingAccounts;
+      && !this.props.loadingAccounts
+      && this.props.serviceFee !== ""
+      && this.props.serviceFee !== "err";
   }
 
   handleCancel(e) {
     this.props.appStateActions.setAppState(initialState.appState);
     this.props.infoMessageActions.setInfoMessage(initialState.infoMessage);
-    //this.props.accountsActions.loadAllAccounts();
   }
 
   handleConfirm(e) {
@@ -58,11 +60,47 @@ class ConfirmationPanel extends React.Component {
       this.props.decimals,
       this.props.totalSupply,
       this.props.tokenType,
-      this.props.tokenOwner
+      this.props.tokenOwner,
+      this.props.serviceFee
     );
   }
 
   render() {
+    let confirmButton = this.isConfirmationEnabled() ?
+      (
+        <span
+          className="btn btn-confirm wow fadeInUp"
+          data-wow-duration="1000ms"
+          data-wow-delay="400ms"
+          onClick={this.handleConfirm}
+        >
+          <FontAwesomeIcon className="fa_confirm_icon" icon={faCheck} />
+          Confirm
+        </span>
+      ) : (
+        <span
+          className="btn btn-confirm-disabled wow fadeInUp"
+          data-wow-duration="1000ms"
+          data-wow-delay="400ms"
+        >
+          <FontAwesomeIcon className="fa_confirm_icon" icon={faCheck} />
+          Mint tokens
+        </span>
+      );
+
+    let serviceFeeText;
+    let serviceFeeTypographyClass;
+    if (this.props.serviceFee === 0) {
+      serviceFeeText = "Calculating...";
+      serviceFeeTypographyClass = "typography_right";
+    } else if (this.props.serviceFee === -1) {
+      serviceFeeText = "Unavailable. Please make sure you are connected to the wallet and refresh the page.";
+      serviceFeeTypographyClass = "typography_right_err";
+    } else {
+      serviceFeeText = "99.99$ (" + this.props.serviceFee + " ETH). Mining fee excluded.";
+      serviceFeeTypographyClass = "typography_right";
+    }
+
     return (
       <div>
         <Card className="card">
@@ -213,9 +251,9 @@ class ConfirmationPanel extends React.Component {
                 <Typography
                   align="left"
                   variant="subtitle1"
-                  className="typography_right"
+                  className={serviceFeeTypographyClass}
                 >
-                  99.99$. Mining fee excluded.
+                  {serviceFeeText}
               </Typography>
               </Grid>
             </Grid>
@@ -235,15 +273,7 @@ class ConfirmationPanel extends React.Component {
               </span>
             </Grid>
             <Grid item xs className="grid_cell">
-              <span
-                className="btn btn-confirm wow fadeInUp"
-                data-wow-duration="1000ms"
-                data-wow-delay="400ms"
-                onClick={this.handleConfirm}
-              >
-                <FontAwesomeIcon className="fa_confirm_icon" icon={faCheck} />
-                Confirm
-              </span>
+              {confirmButton}
             </Grid>
           </Grid>
         </form>
@@ -264,7 +294,8 @@ ConfirmationPanel.propTypes = {
   tokenOwner: PropTypes.string.isRequired,
   checkingTokenOwnerFunds: PropTypes.bool.isRequired,
   tokenOwnerHasEnoughFunds: PropTypes.bool.isRequired,
-  loadingAccounts: PropTypes.bool.isRequired
+  loadingAccounts: PropTypes.bool.isRequired,
+  serviceFee: PropTypes.number.isRequired
 };
 
 function mapStateToProps(state) {
@@ -277,7 +308,8 @@ function mapStateToProps(state) {
     tokenOwner: state.tokenOwner,
     checkingTokenOwnerFunds: state.checkingTokenOwnerFunds,
     tokenOwnerHasEnoughFunds: state.tokenOwnerHasEnoughFunds,
-    loadingAccounts: state.loadingAccounts
+    loadingAccounts: state.loadingAccounts,
+    serviceFee: state.serviceFee
   };
 }
 
