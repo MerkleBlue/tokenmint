@@ -12,7 +12,6 @@ import * as tokenSymbolActions from '../actions/tokenSymbolActions';
 import * as totalSupplyActions from '../actions/totalSupplyActions';
 import * as tokenTypeActions from '../actions/tokenTypeActions';
 import * as tokenOwnerActions from '../actions/tokenOwnerActions';
-import * as createTokensActions from '../actions/createTokensActions';
 import * as appStateActions from '../actions/appStateActions';
 import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
 import * as infoMessageActions from '../actions/infoMessageActions';
@@ -20,7 +19,7 @@ import * as accountsActions from '../actions/accountsActions';
 import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
 
-class ErrorPanel extends React.Component {
+export class ErrorPanel extends React.Component {
 
   constructor(props) {
     super(props);
@@ -89,7 +88,6 @@ class ErrorPanel extends React.Component {
 }
 
 ErrorPanel.propTypes = {
-  appState: PropTypes.number.isRequired,
   infoMessage: PropTypes.string.isRequired,
   decimalsActions: PropTypes.object.isRequired,
   tokenNameActions: PropTypes.object.isRequired,
@@ -97,7 +95,6 @@ ErrorPanel.propTypes = {
   totalSupplyActions: PropTypes.object.isRequired,
   tokenTypeActions: PropTypes.object.isRequired,
   tokenOwnerActions: PropTypes.object.isRequired,
-  createTokensActions: PropTypes.object.isRequired,
   appStateActions: PropTypes.object.isRequired,
   tokenOwnerFundsActions: PropTypes.object.isRequired,
   infoMessageActions: PropTypes.object.isRequired,
@@ -106,7 +103,6 @@ ErrorPanel.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    appState: state.appState,
     infoMessage: state.infoMessage
   };
 }
@@ -119,7 +115,6 @@ function mapDispatchToProps(dispatch) {
     totalSupplyActions: bindActionCreators(totalSupplyActions, dispatch),
     tokenTypeActions: bindActionCreators(tokenTypeActions, dispatch),
     tokenOwnerActions: bindActionCreators(tokenOwnerActions, dispatch),
-    createTokensActions: bindActionCreators(createTokensActions, dispatch),
     appStateActions: bindActionCreators(appStateActions, dispatch),
     tokenOwnerFundsActions: bindActionCreators(tokenOwnerFundsActions, dispatch),
     infoMessageActions: bindActionCreators(infoMessageActions, dispatch),

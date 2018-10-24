@@ -9,7 +9,7 @@ import ConfirmationPanel from './app/components/ConfirmationPanel'; //eslint-dis
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import appStates from './app/reducers/appStates';
-import ErrorPanel from './app/components/ErrorPanel';
+import ErrorPanel from './app/components/ErrorPanel'; //eslint-disable-line import/no-named-as-default
 import MiningInProgressPanel from './app/components/MiningInProgressPanel'; //eslint-disable-line import/no-named-as-default
 import SuccessMessagePanel from './app/components/SuccessMessagePanel';
 
