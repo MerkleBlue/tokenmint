@@ -18,6 +18,19 @@ export function initWeb3() {
   }
 }
 
+export function loadAccounts() {
+  initWeb3();
+  return new Promise((accept, reject) => {
+    web3.eth.getAccounts().then(allAccounts => {
+      accept(allAccounts);
+      return;
+    }).catch((e) => {
+      reject();
+      return;
+    });
+  });
+}
+
 export function getFee() {
   return new Promise((accept, reject) => {
     cc.price('ETH', 'USD').then(prices => {
@@ -185,19 +198,6 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
       }
     }).catch((e) => {
       reject(new Error("Could not check token owner ETH funds."));
-      return;
-    });
-  });
-}
-
-export function loadAccounts() {
-  initWeb3();
-  return new Promise((accept, reject) => {
-    web3.eth.getAccounts().then(allAccounts => {
-      accept(allAccounts);
-      return;
-    }).catch((e) => {
-      reject();
       return;
     });
   });
