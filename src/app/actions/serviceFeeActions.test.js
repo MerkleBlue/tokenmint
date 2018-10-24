@@ -15,7 +15,7 @@ describe("serviceFeeActions tests", () => {
     const expectedActions = [
       { type: types.SET_SERVICE_FEE, serviceFee: 1 },
     ];
-    const store = mockStore({ serviceFee: "" }, expectedActions);
+    const store = mockStore({ serviceFee: 0 }, expectedActions);
     store.dispatch(serviceFeeActions.calculateServiceFee()).then(() => {
       const actions = store.getActions();
       expect(actions[0]).to.deep.equal(expectedActions[0]);
@@ -29,7 +29,7 @@ describe("serviceFeeActions tests", () => {
     const expectedActions = [
       { type: types.SET_SERVICE_FEE, serviceFee: -1 },
     ];
-    const store = mockStore({ serviceFee: "" }, expectedActions);
+    const store = mockStore({ serviceFee: 0 }, expectedActions);
     store.dispatch(serviceFeeActions.calculateServiceFee()).then(() => {
       const actions = store.getActions();
       expect(actions[0]).to.deep.equal(expectedActions[0]);
