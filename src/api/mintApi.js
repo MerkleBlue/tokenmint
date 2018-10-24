@@ -4,18 +4,31 @@ import ERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
 import TruffleContract from 'truffle-contract';
 import Web3 from 'web3';
 
-const feeInUsd = 0.05;
+const feeInUsd = 99.99;
 let tokenMintAccount = "0x6603cb70464ca51481d4edBb3B927F66F53F4f42";
 let web3, ERC20TokenContract, ERC223TokenContract;
 
-function initWeb3() {
-  if (typeof window.web3 !== 'undefined') {
+export function initWeb3() {
+  if (typeof global.window !== 'undefined' && typeof global.window.web3 !== 'undefined') {
     // Use Mist/MetaMask's provider
     web3 = new Web3(window.web3.currentProvider);
   } else {
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
   }
+}
+
+export function loadAccounts() {
+  initWeb3();
+  return new Promise((accept, reject) => {
+    web3.eth.getAccounts().then(allAccounts => {
+      accept(allAccounts);
+      return;
+    }).catch((e) => {
+      reject();
+      return;
+    });
+  });
 }
 
 export function getFee() {
@@ -185,19 +198,6 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
       }
     }).catch((e) => {
       reject(new Error("Could not check token owner ETH funds."));
-      return;
-    });
-  });
-}
-
-export function loadAccounts() {
-  initWeb3();
-  return new Promise((accept, reject) => {
-    web3.eth.getAccounts().then(allAccounts => {
-      accept(allAccounts);
-      return;
-    }).catch((e) => {
-      reject();
       return;
     });
   });
