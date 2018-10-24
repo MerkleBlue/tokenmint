@@ -5,7 +5,7 @@ import TokenType from './app/components/TokenType'; //eslint-disable-line import
 import TokenOwner from './app/components/TokenOwner';
 import Footer from './app/components/Footer'; //eslint-disable-line import/no-named-as-default
 import Header from './app/components/Header';
-import ConfirmationPanel from './app/components/ConfirmationPanel';
+import ConfirmationPanel from './app/components/ConfirmationPanel'; //eslint-disable-line import/no-named-as-default
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import appStates from './app/reducers/appStates';

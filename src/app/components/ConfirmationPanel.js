@@ -19,7 +19,7 @@ import initialState from '../reducers/initialState';
 import InputValidator from '../../tools/InputValidator';
 import ReactGA from 'react-ga';
 
-class ConfirmationPanel extends React.Component {
+export class ConfirmationPanel extends React.Component {
 
   constructor(props) {
     super(props);
@@ -44,8 +44,7 @@ class ConfirmationPanel extends React.Component {
     ) && !this.props.checkingTokenOwnerFunds
       && this.props.tokenOwnerHasEnoughFunds
       && !this.props.loadingAccounts
-      && this.props.serviceFee !== ""
-      && this.props.serviceFee !== "err";
+      && this.props.serviceFee > 0;
   }
 
   handleCancel(e) {
