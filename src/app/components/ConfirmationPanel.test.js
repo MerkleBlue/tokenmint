@@ -37,7 +37,8 @@ describe("<ConfirmationPanel /> tests", () => {
     serviceFee,
     setAppState = () => { },
     setInfoMessage = () => { },
-    createTokens = () => { }
+    createTokens = () => { },
+    setServiceFee = () => { }
   ) {
     const props = {
       tokenName: tokenName,
@@ -52,7 +53,8 @@ describe("<ConfirmationPanel /> tests", () => {
       serviceFee: serviceFee,
       appStateActions: { setAppState: setAppState },
       infoMessageActions: { setInfoMessage: setInfoMessage },
-      createTokensActions: { createTokens: createTokens}
+      createTokensActions: { createTokens: createTokens },
+      serviceFeeActions: { setServiceFee: setServiceFee }
     };
     return mount(<ConfirmationPanel {...props} />);
   }
@@ -534,6 +536,8 @@ describe("<ConfirmationPanel /> tests", () => {
   it("simulates click on cancel button", () => {
     const setAppState = sinon.spy();
     const setInfoMessage = sinon.spy();
+    const createTokens = sinon.spy();
+    const setServiceFee = sinon.spy();
     const wrapper = setup(
       tokenName,
       tokenSymbol,
@@ -546,11 +550,14 @@ describe("<ConfirmationPanel /> tests", () => {
       loadingAccounts,
       serviceFee,
       setAppState,
-      setInfoMessage
+      setInfoMessage,
+      createTokens,
+      setServiceFee
     );
     wrapper.find("span").at(1).simulate("click");
     expect(setAppState.calledOnce).to.be.true;
     expect(setInfoMessage.calledOnce).to.be.true;
+    expect(setServiceFee.calledOnce).to.be.true;
   });
 
   it("simulates click on confirm button - invalid props", () => {

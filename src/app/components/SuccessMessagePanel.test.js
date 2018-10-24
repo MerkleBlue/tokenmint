@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import React from 'react';
-import { ErrorPanel } from './ErrorPanel';
+import { SuccessMessagePanel } from './SuccessMessagePanel';
 import { createMount } from '@material-ui/core/test-utils';
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -9,9 +9,9 @@ import sinon from 'sinon';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const infoMessage = "Some error happened!";
+const infoMessage = "0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef";
 
-describe("<ErrorPanel /> tests", () => {
+describe("<SuccessMessagePanel /> tests", () => {
   let mount;
 
   function setup(
@@ -46,7 +46,7 @@ describe("<ErrorPanel /> tests", () => {
       accountsActions: { loadAllAccounts: loadAllAccounts },
       serviceFeeActions: { setServiceFee: setServiceFee }
     };
-    return mount(<ErrorPanel {...props} />);
+    return mount(<SuccessMessagePanel {...props} />);
   }
 
   before(() => {
@@ -61,7 +61,7 @@ describe("<ErrorPanel /> tests", () => {
     mount.cleanUp();
   });
 
-  it("renders ErrorPanel", () => {
+  it("renders SuccessMessagePanel", () => {
     const wrapper = setup(infoMessage);
     expect(wrapper.props().infoMessage).to.eq(infoMessage);
     expect(wrapper.props().decimalsActions).to.exist;
@@ -76,16 +76,21 @@ describe("<ErrorPanel /> tests", () => {
     expect(wrapper.props().accountsActions).to.exist;
     expect(wrapper.find("Card").length).to.eq(1);
     expect(wrapper.find("CardHeader").length).to.eq(1);
-    expect(wrapper.find("CardHeader").props().title).to.eq("Oops, Something Went Wrong!");
+    expect(wrapper.find("CardHeader").props().title).to.eq("Your Tokens Have Been Successfully Created!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(2);
-    expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_error_info_message");
-    expect(wrapper.find("Typography").at(1).props().children).to.eq(infoMessage);
+    expect(wrapper.find("Typography").length).to.eq(4);
+    expect(wrapper.find("Typography").at(1).props().variant).to.eq("subtitle1");
+    expect(wrapper.find("Typography").at(1).props().children).to.eq("Contract is deployed at address:");
+    expect(wrapper.find("Typography").at(2).props().variant).to.eq("subtitle1");
+    expect(wrapper.find("Typography").at(2).props().children[1]).to.eq(infoMessage);
+    expect(wrapper.find("Typography").at(3).props().variant).to.eq("h6");
+    expect(wrapper.find("Typography").at(3).props().children).to.eq("Thank You for using TokenMint!");
+    expect(wrapper.find("Tooltip").length).to.eq(1);
+    expect(wrapper.find("Tooltip").props().title).to.eq("Copy to clipboard");
     expect(wrapper.find("span").length).to.eq(2);
-    expect(wrapper.find("span").at(1).props().className).to.eq("btn btn-err-back wow fadeInUp");
   });
 
-  it("simulates click on back button", () => {
+  it("simulates click on create more tokens button", () => {
     const setDecimals = sinon.spy();
     const setTokenName = sinon.spy();
     const setTokenSymbol = sinon.spy();

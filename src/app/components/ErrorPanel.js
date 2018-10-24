@@ -16,6 +16,7 @@ import * as appStateActions from '../actions/appStateActions';
 import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
 import * as infoMessageActions from '../actions/infoMessageActions';
 import * as accountsActions from '../actions/accountsActions';
+import * as serviceFeeActions from '../actions/serviceFeeActions';
 import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
 
@@ -44,6 +45,7 @@ export class ErrorPanel extends React.Component {
     this.props.tokenOwnerFundsActions.setTokenOwnerHasEnoughFunds(initialState.tokenOwnerHasEnoughFunds);
     this.props.infoMessageActions.setInfoMessage(initialState.infoMessage);
     this.props.accountsActions.loadAllAccounts();
+    this.props.serviceFeeActions.setServiceFee(initialState.serviceFee);
   }
 
   render() {
@@ -98,7 +100,8 @@ ErrorPanel.propTypes = {
   appStateActions: PropTypes.object.isRequired,
   tokenOwnerFundsActions: PropTypes.object.isRequired,
   infoMessageActions: PropTypes.object.isRequired,
-  accountsActions: PropTypes.object.isRequired
+  accountsActions: PropTypes.object.isRequired,
+  serviceFeeActions:PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
@@ -118,7 +121,8 @@ function mapDispatchToProps(dispatch) {
     appStateActions: bindActionCreators(appStateActions, dispatch),
     tokenOwnerFundsActions: bindActionCreators(tokenOwnerFundsActions, dispatch),
     infoMessageActions: bindActionCreators(infoMessageActions, dispatch),
-    accountsActions: bindActionCreators(accountsActions, dispatch)
+    accountsActions: bindActionCreators(accountsActions, dispatch),
+    serviceFeeActions: bindActionCreators(serviceFeeActions, dispatch)
   };
 }
 

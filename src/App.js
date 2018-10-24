@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import appStates from './app/reducers/appStates';
 import ErrorPanel from './app/components/ErrorPanel'; //eslint-disable-line import/no-named-as-default
 import MiningInProgressPanel from './app/components/MiningInProgressPanel'; //eslint-disable-line import/no-named-as-default
-import SuccessMessagePanel from './app/components/SuccessMessagePanel';
+import SuccessMessagePanel from './app/components/SuccessMessagePanel'; //eslint-disable-line import/no-named-as-default
 
 class App extends Component {
 

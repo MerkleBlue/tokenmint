@@ -15,6 +15,7 @@ import PropTypes from 'prop-types';
 import * as createTokensActions from '../actions/createTokensActions';
 import * as appStateActions from '../actions/appStateActions';
 import * as infoMessageActions from '../actions/infoMessageActions';
+import * as serviceFeeActions from '../actions/serviceFeeActions';
 import initialState from '../reducers/initialState';
 import InputValidator from '../../tools/InputValidator';
 import ReactGA from 'react-ga';
@@ -48,8 +49,9 @@ export class ConfirmationPanel extends React.Component {
   }
 
   handleCancel(e) {
-    this.props.appStateActions.setAppState(initialState.appState);
     this.props.infoMessageActions.setInfoMessage(initialState.infoMessage);
+    this.props.serviceFeeActions.setServiceFee(initialState.serviceFee);
+    this.props.appStateActions.setAppState(initialState.appState);
   }
 
   handleConfirm(e) {
@@ -285,6 +287,7 @@ ConfirmationPanel.propTypes = {
   createTokensActions: PropTypes.object.isRequired,
   appStateActions: PropTypes.object.isRequired,
   infoMessageActions: PropTypes.object.isRequired,
+  serviceFeeActions: PropTypes.object.isRequired,
   tokenName: PropTypes.string.isRequired,
   tokenSymbol: PropTypes.string.isRequired,
   decimals: PropTypes.string.isRequired,
@@ -316,7 +319,8 @@ function mapDispatchToProps(dispatch) {
   return {
     createTokensActions: bindActionCreators(createTokensActions, dispatch),
     appStateActions: bindActionCreators(appStateActions, dispatch),
-    infoMessageActions: bindActionCreators(infoMessageActions, dispatch)
+    infoMessageActions: bindActionCreators(infoMessageActions, dispatch),
+    serviceFeeActions: bindActionCreators(serviceFeeActions, dispatch)
   };
 }
 
