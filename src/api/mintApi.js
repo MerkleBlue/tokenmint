@@ -186,7 +186,7 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
           //   console.log("TokenMint ETH balance: " + balance);
           // });
 
-          accept(contractInstance.address);
+          accept(contractInstance);
           return;
         }).catch((e) => {
           reject(new Error("Could not create contract."));
