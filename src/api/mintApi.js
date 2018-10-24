@@ -4,12 +4,13 @@ import ERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
 import TruffleContract from 'truffle-contract';
 import Web3 from 'web3';
 
-const feeInUsd = 0.05;
+
+const feeInUsd = 99.99;
 let tokenMintAccount = "0x62819aaeCA7C30bE5504A03792e76fa656a1d612";
 let web3, ERC20TokenContract, ERC223TokenContract;
 
-function initWeb3() {
-  if (typeof window.web3 !== 'undefined') {
+export function initWeb3() {
+  if (typeof global.window !== 'undefined' && typeof global.window.web3 !== 'undefined') {
     // Use Mist/MetaMask's provider
     web3 = new Web3(window.web3.currentProvider);
   } else {
