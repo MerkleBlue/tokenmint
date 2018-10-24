@@ -28,6 +28,13 @@ describe('Tfa API integration tests', function () {
     done();
   });
 
+  it('Load accounts', (done) => {
+    mintApi.loadAccounts().then(actualAccounts => {
+      expect(actualAccounts).to.eql(accounts);
+      done();
+    });
+  });
+
   it('Get fee', (done) => {
     mintApi.getFee().then(fee => {
       expect(fee).to.be.greaterThan(0.3);
@@ -35,14 +42,29 @@ describe('Tfa API integration tests', function () {
     });
   });
 
-  it('Get ETH balance', (done2) => {
+  it('Get ETH balance with empty account', (done) => {
+    mintApi.getEthBalance('0x1000000000000000000000000000000000000000').then(actual => {
+      expect(web3.utils.fromWei(actual, 'ether')).to.be.eq('0');
+      done();
+    });
+  });
+
+  it('Get ETH balance with first account', (done) => {
     web3.eth.getBalance(accounts[0]).then(actual => {
       mintApi.getEthBalance(accounts[0]).then(expected => {
         expect(web3.utils.fromWei(actual, 'ether')).to.be.eq(expected);
-        done2();
+        done();
       });
     });
   });
 
+  it('Get token balance with empty contract', (done) => {
+    mintApi.getTokenBalance(null, accounts[0]).then(actual => {
+      done(new Error());
+    }).catch(e => {
+      expect(true).to.be.true;
+      done();
+    });
+  });
 
 });
