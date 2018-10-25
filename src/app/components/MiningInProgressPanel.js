@@ -2,6 +2,8 @@ import React from 'react';
 import './css/ErrorPanel.css';
 import { Typography, Card, CardHeader, CardContent, LinearProgress } from '@material-ui/core';
 import ReactGA from 'react-ga';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 export class MiningInProgressPanel extends React.Component {
 
@@ -12,6 +14,8 @@ export class MiningInProgressPanel extends React.Component {
   }
 
   render() {
+    const etherscanLink = "https://etherscan.io/address/" + this.props.tokenOwner;
+
     return (
       <div>
         <Card className="card">
@@ -35,6 +39,12 @@ export class MiningInProgressPanel extends React.Component {
             </Typography>
             <Typography
               align="center"
+              variant="subtitle1"
+            >
+              Your can check the progress of the transaction on <a href={etherscanLink} target="_blank">etherscan</a>.
+            </Typography>
+            <Typography
+              align="center"
               variant="h6"
             >
               Please do not leave this page!
@@ -54,4 +64,14 @@ export class MiningInProgressPanel extends React.Component {
   }
 }
 
-export default MiningInProgressPanel;
+MiningInProgressPanel.propTypes = {
+  tokenOwner: PropTypes.string.isRequired
+};
+
+function mapStateToProps(state) {
+  return {
+    tokenOwner: state.tokenOwner
+  };
+}
+
+export default connect(mapStateToProps)(MiningInProgressPanel);
