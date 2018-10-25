@@ -5,7 +5,7 @@ contract('TokenMintERC223Token', function ([_, owner, recipient, anotherAccount]
   const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
   beforeEach(async function () {
-    this.token = await TokenContract.new("My Test Token", "SYM", 18, 100, { from: owner });
+    this.token = await TokenContract.new("My Test Token", "SYM", 18, 100, ZERO_ADDRESS, { from: owner });
   });
 
   describe('token name', function () {
