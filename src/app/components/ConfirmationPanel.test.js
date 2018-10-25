@@ -103,14 +103,14 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(15);
+    expect(wrapper.find("Typography").length).to.eq(17);
     expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(4).props().children).to.eq(initialState.tokenName);
     expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq(tokenType);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.5 ETH). Mining fee excluded.");
+    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel non existing token symbol", () => {
@@ -145,14 +145,14 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(15);
+    expect(wrapper.find("Typography").length).to.eq(17);
     expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
     expect(wrapper.find("Typography").at(6).props().children).to.eq(initialState.tokenSymbol);
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq(tokenType);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.5 ETH). Mining fee excluded.");
+    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel non existing decimals", () => {
@@ -187,14 +187,14 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(15);
+    expect(wrapper.find("Typography").length).to.eq(17);
     expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
     expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
     expect(wrapper.find("Typography").at(8).props().children).to.eq("");
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq(tokenType);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.5 ETH). Mining fee excluded.");
+    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel non existing total supply", () => {
@@ -229,14 +229,14 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(15);
+    expect(wrapper.find("Typography").length).to.eq(17);
     expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
     expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(initialState.totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq(tokenType);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.5 ETH). Mining fee excluded.");
+    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel non existing token owner", () => {
@@ -271,14 +271,14 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(15);
+    expect(wrapper.find("Typography").length).to.eq(17);
     expect(wrapper.find("Typography").at(2).props().children).to.eq(initialState.tokenOwner);
     expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
     expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq("erc20");
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.5 ETH). Mining fee excluded.");
+    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel while checking token owner funds", () => {
@@ -313,14 +313,14 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(15);
+    expect(wrapper.find("Typography").length).to.eq(17);
     expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
     expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq("erc20");
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.5 ETH). Mining fee excluded.");
+    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel - token owner with insufficient funds", () => {
@@ -355,14 +355,14 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(15);
+    expect(wrapper.find("Typography").length).to.eq(17);
     expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
     expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq("erc20");
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.5 ETH). Mining fee excluded.");
+    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel while loading accounts", () => {
@@ -397,14 +397,14 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(15);
+    expect(wrapper.find("Typography").length).to.eq(17);
     expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
     expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq("erc20");
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.5 ETH). Mining fee excluded.");
+    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel while calculating service fee", () => {
@@ -439,7 +439,7 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(15);
+    expect(wrapper.find("Typography").length).to.eq(17);
     expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
     expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
@@ -481,7 +481,7 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(15);
+    expect(wrapper.find("Typography").length).to.eq(17);
     expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
     expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
@@ -523,14 +523,14 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(15);
+    expect(wrapper.find("Typography").length).to.eq(17);
     expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
     expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq("erc20");
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.5 ETH). Mining fee excluded.");
+    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.50000000 ETH)");
   });
 
   it("simulates click on cancel button", () => {
