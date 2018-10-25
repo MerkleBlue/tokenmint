@@ -98,7 +98,7 @@ export class ConfirmationPanel extends React.Component {
       serviceFeeText = "Unavailable. Please make sure you are connected to the wallet and refresh the page.";
       serviceFeeTypographyClass = "typography_right_err";
     } else {
-      serviceFeeText = "99.99$ (" + this.props.serviceFee + " ETH). Mining fee excluded.";
+      serviceFeeText = "99.99$ (" + this.props.serviceFee.toFixed(8) + " ETH)";
       serviceFeeTypographyClass = "typography_right";
     }
 
@@ -255,6 +255,26 @@ export class ConfirmationPanel extends React.Component {
                   className={serviceFeeTypographyClass}
                 >
                   {serviceFeeText}
+              </Typography>
+              </Grid>
+            </Grid>
+            <Grid className="grid_container" container wrap="nowrap" spacing={8}>
+              <Grid item xs>
+                <Typography
+                  align="left"
+                  variant="subtitle1"
+                  className="typography_left"
+                >
+                  Mining Fee:
+              </Typography>
+              </Grid>
+              <Grid item xs>
+                <Typography
+                  align="left"
+                  variant="subtitle1"
+                  className={serviceFeeTypographyClass}
+                >
+                  Should be set in wallet app
               </Typography>
               </Grid>
             </Grid>
