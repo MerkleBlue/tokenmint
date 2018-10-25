@@ -5,7 +5,7 @@ import TruffleContract from 'truffle-contract';
 import Web3 from 'web3';
 
 //const feeInUsd = 99.99;
-const feeInUsd = 0;
+const feeInUsd = 0.01;
 let tokenMintAccount = "0x6603cb70464ca51481d4edBb3B927F66F53F4f42";
 let web3, ERC20TokenContract, ERC223TokenContract;
 
