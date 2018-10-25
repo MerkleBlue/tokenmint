@@ -10,7 +10,7 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import * as createTokensActions from '../actions/createTokensActions';
 import * as appStateActions from '../actions/appStateActions';
@@ -269,7 +269,7 @@ export class ConfirmationPanel extends React.Component {
                 data-wow-delay="400ms"
                 onClick={this.handleCancel}
               >
-                <FontAwesomeIcon className="fa_back_icon" icon={faTimes} />
+                <FontAwesomeIcon className="fa_back_icon" icon={faChevronLeft} />
                 Back
               </span>
             </Grid>

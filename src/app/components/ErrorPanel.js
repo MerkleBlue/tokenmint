@@ -4,7 +4,7 @@ import { Typography, Card, CardHeader, CardContent } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faTimesCircle, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import * as decimalsActions from '../actions/decimalsActions';
 import * as tokenNameActions from '../actions/tokenNameActions';
@@ -81,6 +81,7 @@ export class ErrorPanel extends React.Component {
             data-wow-delay="400ms"
             onClick={this.handleBackClick}
           >
+            <FontAwesomeIcon className="fa_back_icon" icon={faChevronLeft} />
             Back
         </span>
         </form>
@@ -101,7 +102,7 @@ ErrorPanel.propTypes = {
   tokenOwnerFundsActions: PropTypes.object.isRequired,
   infoMessageActions: PropTypes.object.isRequired,
   accountsActions: PropTypes.object.isRequired,
-  serviceFeeActions:PropTypes.object.isRequired
+  serviceFeeActions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
