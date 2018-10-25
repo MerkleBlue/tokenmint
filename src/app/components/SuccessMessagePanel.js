@@ -69,6 +69,7 @@ export class SuccessMessagePanel extends React.Component {
   }
 
   render() {
+    const etherscanLink = "https://etherscan.io/address/" + this.props.tokenOwner;
 
     return (
       <div>
@@ -105,6 +106,13 @@ export class SuccessMessagePanel extends React.Component {
             </Typography>
             <Typography
               align="center"
+              variant="subtitle1"
+              className="typography_success_info_message"
+            >
+              Check your new assets on <a href={etherscanLink} target="_blank">etherscan</a>
+            </Typography>
+            <Typography
+              align="center"
               variant="h6"
               className="typography_success_info_message"
             >
@@ -130,6 +138,7 @@ export class SuccessMessagePanel extends React.Component {
 
 SuccessMessagePanel.propTypes = {
   infoMessage: PropTypes.string.isRequired,
+  tokenOwner: PropTypes.string.isRequired,
   decimalsActions: PropTypes.object.isRequired,
   tokenNameActions: PropTypes.object.isRequired,
   tokenSymbolActions: PropTypes.object.isRequired,
@@ -145,7 +154,8 @@ SuccessMessagePanel.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    infoMessage: state.infoMessage
+    infoMessage: state.infoMessage,
+    tokenOwner: state.tokenOwner
   };
 }
 
