@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import TokenInfo from './app/components/TokenInfo';
 import TokenType from './app/components/TokenType'; //eslint-disable-line import/no-named-as-default
-import TokenOwner from './app/components/TokenOwner';
+import TokenOwner from './app/components/TokenOwner'; //eslint-disable-line import/no-named-as-default
 import Footer from './app/components/Footer'; //eslint-disable-line import/no-named-as-default
 import Header from './app/components/Header';
 import ConfirmationPanel from './app/components/ConfirmationPanel'; //eslint-disable-line import/no-named-as-default

@@ -21,7 +21,7 @@ import { bindActionCreators } from 'redux';
 import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
 
-class TokenOwner extends React.Component {
+export class TokenOwner extends React.Component {
 
   constructor(props) {
     super(props);
