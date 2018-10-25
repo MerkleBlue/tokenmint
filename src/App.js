@@ -15,6 +15,10 @@ import SuccessMessagePanel from './app/components/SuccessMessagePanel'; //eslint
 
 class App extends Component {
 
+  componentWillMount(nextProps) {
+    document.title = "TokenMint - An ERC20 & ERC223 Token Generator";
+  }
+
   render() {
     let content;
     if (this.props.appState === appStates.PENDING_CONFIRMATION) {
