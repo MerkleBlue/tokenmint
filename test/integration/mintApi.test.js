@@ -130,11 +130,10 @@ describe('Tfa API integration tests', function () {
 
   it('Pay service fee', (done) => {
     let tokenType = 'erc223';
-    let serviceFee = 0.1;
+    let serviceFee = 0.01;
     mintApi.getEthBalance(tokenMintAccount).then(tokenMintBalanceBefore => {
       mintApi.mintTokens(token.name, token.symbol, token.decimals, token.totalSupply, tokenType, accounts[0], serviceFee).then(contractInstance => {
         mintApi.getEthBalance(tokenMintAccount).then(tokenMintBalanceAfter => {
-          //expect(new Number(tokenMintBalanceAfter).valueOf()).to.be.eq(new Number(tokenMintBalanceBefore).valueOf() + serviceFee);
           assert.closeTo(new Number(tokenMintBalanceAfter).valueOf(), new Number(tokenMintBalanceBefore).valueOf() + serviceFee, 0.000001)
           done();
         });
