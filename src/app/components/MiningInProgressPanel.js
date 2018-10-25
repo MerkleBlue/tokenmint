@@ -41,7 +41,7 @@ export class MiningInProgressPanel extends React.Component {
               align="center"
               variant="subtitle1"
             >
-              Your can check the progress of the transaction on <a href={etherscanLink} target="_blank">etherscan</a>.
+              You can check the mining progress on <a href={etherscanLink} target="_blank">etherscan</a>.
             </Typography>
             <Typography
               align="center"
