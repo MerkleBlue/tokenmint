@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import TokenInfo from './app/components/TokenInfo';
+import TokenInfo from './app/components/TokenInfo'; //eslint-disable-line import/no-named-as-default
 import TokenType from './app/components/TokenType'; //eslint-disable-line import/no-named-as-default
 import TokenOwner from './app/components/TokenOwner'; //eslint-disable-line import/no-named-as-default
 import Footer from './app/components/Footer'; //eslint-disable-line import/no-named-as-default
