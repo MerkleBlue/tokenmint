@@ -20,7 +20,7 @@ export class MiningInProgressPanel extends React.Component {
       <div>
         <Card className="card">
           <CardHeader
-            title="Mining In Progress..."
+            title="Approve"
             classes={{
               root: "card_header",
               title: "card_header_text"
@@ -35,7 +35,13 @@ export class MiningInProgressPanel extends React.Component {
               align="center"
               variant="subtitle1"
             >
-              Your tokens are being mined. This might take a few minutes.
+              Your transaction is about to be sent.
+            </Typography>
+            <Typography
+              align="center"
+              variant="subtitle1"
+            >
+              Please set the mining fee and confirm token creation in your wallet.
             </Typography>
             <Typography
               align="center"
@@ -43,19 +49,13 @@ export class MiningInProgressPanel extends React.Component {
             >
               You can check the mining progress on <a href={etherscanLink} target="_blank">etherscan</a>.
             </Typography>
-            <Typography
-              align="center"
-              variant="h6"
-            >
-              Please do not leave this page!
-            </Typography>
           </CardContent>
         </Card>
         <form className="footer_main_form">
           <LinearProgress
             className="linear_progress"
             classes={{
-              root:"linear_progress_root"
+              root: "linear_progress_root"
             }}
           />
         </form>

@@ -76,7 +76,7 @@ export class SuccessMessagePanel extends React.Component {
       <div>
         <Card className="card">
           <CardHeader
-            title="Your Tokens Have Been Successfully Created!"
+            title="Thank You For Using TokenMint!"
             classes={{
               root: "card_header",
               title: "card_header_text"
@@ -102,13 +102,6 @@ export class SuccessMessagePanel extends React.Component {
             >
               Check your new assets on <a href={etherscanLink} target="_blank">etherscan</a>
             </Typography>
-            <Typography
-              align="center"
-              variant="h6"
-              className="typography_success_info_message"
-            >
-              Thank You for using TokenMint!
-          </Typography>
           </CardContent>
         </Card>
         <form className="footer_main_form">

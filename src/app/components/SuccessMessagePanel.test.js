@@ -79,13 +79,11 @@ describe("<SuccessMessagePanel /> tests", () => {
     expect(wrapper.props().accountsActions).to.exist;
     expect(wrapper.find("Card").length).to.eq(1);
     expect(wrapper.find("CardHeader").length).to.eq(1);
-    expect(wrapper.find("CardHeader").props().title).to.eq("Your Tokens Have Been Successfully Created!");
+    expect(wrapper.find("CardHeader").props().title).to.eq("Thank You For Using TokenMint!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(4);
+    expect(wrapper.find("Typography").length).to.eq(3);
     expect(wrapper.find("Typography").at(1).props().variant).to.eq("subtitle1");
     expect(wrapper.find("Typography").at(2).props().variant).to.eq("subtitle1");
-    expect(wrapper.find("Typography").at(3).props().variant).to.eq("h6");
-    expect(wrapper.find("Typography").at(3).props().children).to.eq("Thank You for using TokenMint!");
     expect(wrapper.find("a").length).to.eq(2);
     expect(wrapper.find("a").at(0).props().href).to.eq("https://etherscan.io/tx/" + infoMessage);
     expect(wrapper.find("a").at(1).props().href).to.eq("https://etherscan.io/address/" + tokenOwner);
