@@ -4,7 +4,7 @@ import ERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
 import TruffleContract from 'truffle-contract';
 import Web3 from 'web3';
 
-const feeInUsd = 99.99;
+const feeInUsd = 0.01;
 let tokenMintAccount = "0x6603cb70464ca51481d4edBb3B927F66F53F4f42";
 let web3, ERC20TokenContract, ERC223TokenContract;
 
@@ -95,6 +95,51 @@ export function getTokenBalance(contractInstance, account) {
 
 function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, account, feeInETH) {
   return new Promise((accept, reject) => {
+    let myContract = new web3.eth.Contract(ERC20TokenJSON.abi, {
+      from: account
+    });
+    myContract.deploy({
+      data: ERC20TokenJSON.bytecode,
+      arguments: [name, symbol, decimals, totalSupply, tokenMintAccount],
+      value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
+    }).send({
+      from: account
+    }).on('error', (error) => {
+      console.log(error);
+      reject(error);
+      return;
+    }).on('transactionHash', (txHash) => {
+      console.log(txHash);
+      accept(txHash);
+      return;
+    });
+  });
+}
+
+/*function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, account, feeInETH) {
+  return new Promise((accept, reject) => {
+    tokenContract.new(name, symbol, decimals, totalSupply * 10 ** decimals, tokenMintAccount, {
+      from: account,
+      gas: 4712388,
+      //gasPrice: 1000000000, // 1 Gwei, wallet estimates gasPrice and sets it
+      value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
+    }).on("transactionHash", (txHash) => {
+      console.log(txHash);
+    }).then(instance => {
+      let contractInstance = instance;
+      accept(contractInstance);
+      return;
+    }).catch(e => {
+      console.log("reject2")
+      console.log(e);
+      reject(e);
+      return;
+    });
+  });
+}*/
+
+/*function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, account, feeInETH) {
+  return new Promise((accept, reject) => {
     tokenContract.new(name, symbol, decimals, totalSupply * 10 ** decimals, tokenMintAccount, {
       from: account,
       gas: 4712388,
@@ -109,7 +154,7 @@ function instantiateContract(tokenContract, name, symbol, decimals, totalSupply,
       return;
     });
   });
-}
+}*/
 
 function isMainNet() {
   initWeb3();
@@ -138,7 +183,7 @@ function estimateMiningFee(tokenContract, name, symbol, decimals, totalSupply, t
     // estimate gas
     myContract.deploy({
       data: tokenContract.bytecode,
-      arguments: [name, symbol, decimals, totalSupply /** 10**decimals*/, tokenOwner]
+      arguments: [name, symbol, decimals, totalSupply /** 10**decimals*/ , tokenOwner]
     }).estimateGas(function (err, gas) {
       //console.log("Estimated mining fee: " + gas * 1000000000 / 10 ** 18);
       accept(gas * 1000000000 / 10 ** 18);
@@ -156,10 +201,14 @@ export function checkTokenOwnerFunds(tokenOwner) {
         accept(balance - fee - 0.01 > 0);
         return;
       }).catch((e) => {
+        console.log("error111")
+        console.log(e)
         reject(e);
         return;
       });
     }).catch((e) => {
+      console.log("error222")
+      console.log(e)
       reject(e);
       return;
     });
@@ -197,6 +246,8 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
         return;
       }
     }).catch((e) => {
+      console.log("error333")
+      console.log(e)
       reject(new Error("Could not check token owner ETH funds."));
       return;
     });
