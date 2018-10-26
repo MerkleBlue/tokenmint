@@ -42,26 +42,6 @@ export function getFee() {
   });
 }
 
-// function setupContracts() {
-//   // instantiate it with truffle-contract
-//   ERC20TokenContract = TruffleContract(ERC20TokenJSON);
-//   ERC223TokenContract = TruffleContract(ERC223TokenJSON);
-
-//   // set the provider for our contracts
-//   ERC20TokenContract.setProvider(web3.currentProvider);
-//   ERC223TokenContract.setProvider(web3.currentProvider);
-
-//   // TODO: there's a bug with web3 1.0.
-//   //dirty hack for web3@1.0.0 support for localhost testrpc, see https://github.com/trufflesuite/truffle-contract/issues/56#issuecomment-331084530
-//   if (typeof ERC20TokenContract.currentProvider.sendAsync !== "function") {
-//     ERC20TokenContract.currentProvider.sendAsync = function () {
-//       return ERC20TokenContract.currentProvider.send.apply(
-//         ERC20TokenContract.currentProvider, arguments
-//       );
-//     };
-//   }
-// }
-
 export function getEthBalance(account) {
   return new Promise((accept, reject) => {
     web3.eth.getBalance(account).then(wei => {
@@ -114,46 +94,6 @@ function instantiateContract(tokenContract, name, symbol, decimals, totalSupply,
     });
   });
 }
-
-/*function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, account, feeInETH) {
-  return new Promise((accept, reject) => {
-    tokenContract.new(name, symbol, decimals, totalSupply * 10 ** decimals, tokenMintAccount, {
-      from: account,
-      gas: 4712388,
-      //gasPrice: 1000000000, // 1 Gwei, wallet estimates gasPrice and sets it
-      value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
-    }).on("transactionHash", (txHash) => {
-      console.log(txHash);
-    }).then(instance => {
-      let contractInstance = instance;
-      accept(contractInstance);
-      return;
-    }).catch(e => {
-      console.log("reject2")
-      console.log(e);
-      reject(e);
-      return;
-    });
-  });
-}*/
-
-/*function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, account, feeInETH) {
-  return new Promise((accept, reject) => {
-    tokenContract.new(name, symbol, decimals, totalSupply * 10 ** decimals, tokenMintAccount, {
-      from: account,
-      gas: 4712388,
-      //gasPrice: 1000000000, // 1 Gwei, wallet estimates gasPrice and sets it
-      value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
-    }).then(instance => {
-      let contractInstance = instance;
-      accept(contractInstance);
-      return;
-    }).catch(e => {
-      reject(e);
-      return;
-    });
-  });
-}*/
 
 function isMainNet() {
   initWeb3();
