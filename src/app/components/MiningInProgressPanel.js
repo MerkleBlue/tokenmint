@@ -43,12 +43,6 @@ export class MiningInProgressPanel extends React.Component {
             >
               Please set the mining fee and confirm token creation in your wallet.
             </Typography>
-            <Typography
-              align="center"
-              variant="subtitle1"
-            >
-              You can check the mining progress on <a href={etherscanLink} target="_blank">etherscan</a>.
-            </Typography>
           </CardContent>
         </Card>
         <form className="footer_main_form">

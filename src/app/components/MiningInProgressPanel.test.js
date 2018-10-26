@@ -32,15 +32,13 @@ describe("<MiningInProgressPanel /> tests", () => {
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Approve");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(4);
+    expect(wrapper.find("Typography").length).to.eq(3);
     expect(wrapper.find("Typography").at(1).props().align).to.eq("center");
     expect(wrapper.find("Typography").at(1).props().variant).to.eq("subtitle1");
     expect(wrapper.find("Typography").at(1).props().children).to.eq("Your transaction is about to be sent.");
     expect(wrapper.find("Typography").at(2).props().align).to.eq("center");
     expect(wrapper.find("Typography").at(2).props().variant).to.eq("subtitle1");
     expect(wrapper.find("Typography").at(2).props().children).to.eq("Please set the mining fee and confirm token creation in your wallet.");
-    expect(wrapper.find("a").length).to.eq(1);
-    expect(wrapper.find("a").props().href).to.eq("https://etherscan.io/address/" + tokenOwner);
     expect(wrapper.find("LinearProgress").length).to.eq(1);
     expect(wrapper.find("LinearProgress").props().variant).to.eq("indeterminate");
   });
