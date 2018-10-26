@@ -33,8 +33,8 @@ class App extends Component {
       content = (
         <div>
           <TokenOwner />
-          <TokenInfo />
           <TokenType />
+          <TokenInfo />
           <Footer />
         </div>
       );
