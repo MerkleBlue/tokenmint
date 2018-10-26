@@ -18,7 +18,7 @@ import * as totalSupplyActions from '../actions/totalSupplyActions';
 import PropTypes from 'prop-types';
 import InputValidator from '../../tools/InputValidator';
 
-class TokenInfo extends React.Component {
+export class TokenInfo extends React.Component {
 
   constructor(props) {
     super(props);

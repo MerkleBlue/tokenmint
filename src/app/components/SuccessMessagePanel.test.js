@@ -10,12 +10,14 @@ import sinon from 'sinon';
 Enzyme.configure({ adapter: new Adapter() });
 
 const infoMessage = "0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef";
+const tokenOwner = "0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fe1";
 
 describe("<SuccessMessagePanel /> tests", () => {
   let mount;
 
   function setup(
     infoMessage,
+    tokenOwner,
     setDecimals = () => { },
     setTokenName = () => { },
     setTokenSymbol = () => { },
@@ -31,6 +33,7 @@ describe("<SuccessMessagePanel /> tests", () => {
   ) {
     const props = {
       infoMessage: infoMessage,
+      tokenOwner: tokenOwner,
       decimalsActions: { setDecimals: setDecimals },
       tokenNameActions: { setTokenName: setTokenName },
       tokenSymbolActions: { setTokenSymbol: setTokenSymbol },
@@ -62,7 +65,7 @@ describe("<SuccessMessagePanel /> tests", () => {
   });
 
   it("renders SuccessMessagePanel", () => {
-    const wrapper = setup(infoMessage);
+    const wrapper = setup(infoMessage, tokenOwner);
     expect(wrapper.props().infoMessage).to.eq(infoMessage);
     expect(wrapper.props().decimalsActions).to.exist;
     expect(wrapper.props().tokenNameActions).to.exist;
@@ -78,13 +81,16 @@ describe("<SuccessMessagePanel /> tests", () => {
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Your Tokens Have Been Successfully Created!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(4);
+    expect(wrapper.find("Typography").length).to.eq(5);
     expect(wrapper.find("Typography").at(1).props().variant).to.eq("subtitle1");
     expect(wrapper.find("Typography").at(1).props().children).to.eq("Contract is deployed at address:");
     expect(wrapper.find("Typography").at(2).props().variant).to.eq("subtitle1");
     expect(wrapper.find("Typography").at(2).props().children[1]).to.eq(infoMessage);
-    expect(wrapper.find("Typography").at(3).props().variant).to.eq("h6");
-    expect(wrapper.find("Typography").at(3).props().children).to.eq("Thank You for using TokenMint!");
+    expect(wrapper.find("Typography").at(3).props().variant).to.eq("subtitle1");
+    expect(wrapper.find("a").length).to.eq(1);
+    expect(wrapper.find("a").props().href).to.eq("https://etherscan.io/address/" + tokenOwner);
+    expect(wrapper.find("Typography").at(4).props().variant).to.eq("h6");
+    expect(wrapper.find("Typography").at(4).props().children).to.eq("Thank You for using TokenMint!");
     expect(wrapper.find("Tooltip").length).to.eq(1);
     expect(wrapper.find("Tooltip").props().title).to.eq("Copy to clipboard");
     expect(wrapper.find("span").length).to.eq(2);
@@ -105,6 +111,7 @@ describe("<SuccessMessagePanel /> tests", () => {
     const setServiceFee = sinon.spy();
     const wrapper = setup(
       infoMessage,
+      tokenOwner,
       setDecimals,
       setTokenName,
       setTokenSymbol,
