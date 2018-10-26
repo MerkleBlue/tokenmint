@@ -1,12 +1,11 @@
 import cc from 'cryptocompare';
 import ERC20TokenJSON from '../contracts/TokenMintERC20Token.json';
 import ERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
-import TruffleContract from 'truffle-contract';
 import Web3 from 'web3';
 
 const feeInUsd = 0.01;
 let tokenMintAccount = "0x6603cb70464ca51481d4edBb3B927F66F53F4f42";
-let web3, ERC20TokenContract, ERC223TokenContract;
+let web3;
 
 export function initWeb3() {
   if (typeof global.window !== 'undefined' && typeof global.window.web3 !== 'undefined') {
@@ -43,25 +42,25 @@ export function getFee() {
   });
 }
 
-function setupContracts() {
-  // instantiate it with truffle-contract
-  ERC20TokenContract = TruffleContract(ERC20TokenJSON);
-  ERC223TokenContract = TruffleContract(ERC223TokenJSON);
+// function setupContracts() {
+//   // instantiate it with truffle-contract
+//   ERC20TokenContract = TruffleContract(ERC20TokenJSON);
+//   ERC223TokenContract = TruffleContract(ERC223TokenJSON);
 
-  // set the provider for our contracts
-  ERC20TokenContract.setProvider(web3.currentProvider);
-  ERC223TokenContract.setProvider(web3.currentProvider);
+//   // set the provider for our contracts
+//   ERC20TokenContract.setProvider(web3.currentProvider);
+//   ERC223TokenContract.setProvider(web3.currentProvider);
 
-  // TODO: there's a bug with web3 1.0.
-  //dirty hack for web3@1.0.0 support for localhost testrpc, see https://github.com/trufflesuite/truffle-contract/issues/56#issuecomment-331084530
-  if (typeof ERC20TokenContract.currentProvider.sendAsync !== "function") {
-    ERC20TokenContract.currentProvider.sendAsync = function () {
-      return ERC20TokenContract.currentProvider.send.apply(
-        ERC20TokenContract.currentProvider, arguments
-      );
-    };
-  }
-}
+//   // TODO: there's a bug with web3 1.0.
+//   //dirty hack for web3@1.0.0 support for localhost testrpc, see https://github.com/trufflesuite/truffle-contract/issues/56#issuecomment-331084530
+//   if (typeof ERC20TokenContract.currentProvider.sendAsync !== "function") {
+//     ERC20TokenContract.currentProvider.sendAsync = function () {
+//       return ERC20TokenContract.currentProvider.send.apply(
+//         ERC20TokenContract.currentProvider, arguments
+//       );
+//     };
+//   }
+// }
 
 export function getEthBalance(account) {
   return new Promise((accept, reject) => {
@@ -95,21 +94,19 @@ export function getTokenBalance(contractInstance, account) {
 
 function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, account, feeInETH) {
   return new Promise((accept, reject) => {
-    let myContract = new web3.eth.Contract(ERC20TokenJSON.abi, {
+    let myContract = new web3.eth.Contract(tokenContract.abi, {
       from: account
     });
     myContract.deploy({
-      data: ERC20TokenJSON.bytecode,
+      data: tokenContract.bytecode,
       arguments: [name, symbol, decimals, totalSupply, tokenMintAccount],
       value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
     }).send({
       from: account
     }).on('error', (error) => {
-      console.log(error);
       reject(error);
       return;
     }).on('transactionHash', (txHash) => {
-      console.log(txHash);
       accept(txHash);
       return;
     });
@@ -201,14 +198,10 @@ export function checkTokenOwnerFunds(tokenOwner) {
         accept(balance - fee - 0.01 > 0);
         return;
       }).catch((e) => {
-        console.log("error111")
-        console.log(e)
         reject(e);
         return;
       });
     }).catch((e) => {
-      console.log("error222")
-      console.log(e)
       reject(e);
       return;
     });
@@ -217,12 +210,11 @@ export function checkTokenOwnerFunds(tokenOwner) {
 
 export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenType, tokenOwner, serviceFee) {
   initWeb3();
-  setupContracts();
   return new Promise((accept, reject) => {
     checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
       if (hasFunds) {
-        let tokenContract = tokenType === "erc20" ? ERC20TokenContract : ERC223TokenContract;
-        instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner, serviceFee).then(contractInstance => {
+        let tokenContract = tokenType === "erc20" ? ERC20TokenJSON : ERC223TokenJSON;
+        instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner, serviceFee).then(txHash => {
           // getEthBalance(tokenOwner).then(balance => {
           //   console.log("Customer ETH balance: " + balance);
           // });
@@ -235,7 +227,7 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
           //   console.log("TokenMint ETH balance: " + balance);
           // });
 
-          accept(contractInstance);
+          accept(txHash);
           return;
         }).catch((e) => {
           reject(new Error("Could not create contract."));
@@ -246,8 +238,6 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
         return;
       }
     }).catch((e) => {
-      console.log("error333")
-      console.log(e)
       reject(new Error("Could not check token owner ETH funds."));
       return;
     });

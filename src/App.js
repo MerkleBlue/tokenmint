@@ -27,7 +27,7 @@ class App extends Component {
       content = (<ErrorPanel />);
     } else if (this.props.appState === appStates.MINING_IN_PROGRESS) {
       content = (<MiningInProgressPanel />);
-    }else if (this.props.appState === appStates.MINING_FINISHED) {
+    }else if (this.props.appState === appStates.MINING_CONFIRMED) {
       content = (<SuccessMessagePanel />);
     } else {
       content = (

@@ -7,9 +7,9 @@ export function createTokens(tokenName, tokenSymbol, decimals, totalSupply, toke
   return (dispatch) => {
     dispatch(setInfoMessage("Your tokens are being mined. This might take a few minutes. Confirm transaction in your wallet."));
     dispatch(setAppState(appStates.MINING_IN_PROGRESS));
-    return mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenType, tokenOwner, serviceFee).then(contractInstance => {
-      dispatch(setInfoMessage(contractInstance.address));
-      dispatch(setAppState(appStates.MINING_FINISHED));
+    return mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenType, tokenOwner, serviceFee).then(txHash => {
+      dispatch(setInfoMessage(txHash));
+      dispatch(setAppState(appStates.MINING_CONFIRMED));
     }).catch(e => {
       dispatch(setInfoMessage(e.message));
       dispatch(setAppState(appStates.MINING_FAILED));

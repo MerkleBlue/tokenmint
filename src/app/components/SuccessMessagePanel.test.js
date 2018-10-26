@@ -81,18 +81,14 @@ describe("<SuccessMessagePanel /> tests", () => {
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Your Tokens Have Been Successfully Created!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(5);
+    expect(wrapper.find("Typography").length).to.eq(4);
     expect(wrapper.find("Typography").at(1).props().variant).to.eq("subtitle1");
-    expect(wrapper.find("Typography").at(1).props().children).to.eq("Contract is deployed at address:");
     expect(wrapper.find("Typography").at(2).props().variant).to.eq("subtitle1");
-    expect(wrapper.find("Typography").at(2).props().children[1]).to.eq(infoMessage);
-    expect(wrapper.find("Typography").at(3).props().variant).to.eq("subtitle1");
-    expect(wrapper.find("a").length).to.eq(1);
-    expect(wrapper.find("a").props().href).to.eq("https://etherscan.io/address/" + tokenOwner);
-    expect(wrapper.find("Typography").at(4).props().variant).to.eq("h6");
-    expect(wrapper.find("Typography").at(4).props().children).to.eq("Thank You for using TokenMint!");
-    expect(wrapper.find("Tooltip").length).to.eq(1);
-    expect(wrapper.find("Tooltip").props().title).to.eq("Copy to clipboard");
+    expect(wrapper.find("Typography").at(3).props().variant).to.eq("h6");
+    expect(wrapper.find("Typography").at(3).props().children).to.eq("Thank You for using TokenMint!");
+    expect(wrapper.find("a").length).to.eq(2);
+    expect(wrapper.find("a").at(0).props().href).to.eq("https://etherscan.io/tx/" + infoMessage);
+    expect(wrapper.find("a").at(1).props().href).to.eq("https://etherscan.io/address/" + tokenOwner);
     expect(wrapper.find("span").length).to.eq(2);
   });
 

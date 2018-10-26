@@ -70,6 +70,7 @@ export class SuccessMessagePanel extends React.Component {
 
   render() {
     const etherscanLink = "https://etherscan.io/address/" + this.props.tokenOwner;
+    const transactionLink = "https://etherscan.io/tx/" + this.props.infoMessage;
 
     return (
       <div>
@@ -92,17 +93,7 @@ export class SuccessMessagePanel extends React.Component {
               variant="subtitle1"
               className="typography_success_info_message"
             >
-              Contract is deployed at address:
-            </Typography>
-            <Typography
-              align="center"
-              variant="subtitle1"
-              className="typography_success_info_message"
-            >
-              [{this.props.infoMessage}]
-              <Tooltip title="Copy to clipboard">
-                <FontAwesomeIcon className="fa_clipboard" icon={faClipboard} onClick={this.handleCopyToClipboard} />
-              </Tooltip>
+              Check the Token creation progress on <a href={transactionLink} target="_blank">etherscan</a>
             </Typography>
             <Typography
               align="center"

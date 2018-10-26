@@ -13,8 +13,7 @@ const mockStore = configureMockStore(middleware);
 
 const miningMessage = "Your tokens are being mined. This might take a few minutes. Confirm transaction in your wallet.";
 const rejectMessage = "Could not check token owner ETH funds.";
-const contractInstanceAddress = "0x627306090abaB3A6e1400e9345bC60c78a8BEf57";
-const contractInstance = { address: contractInstanceAddress };
+const txHash = "0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fe4";
 const tokenName = "The First Amendment";
 const tokenSymbol = "TFA";
 const decimals = "18";
@@ -24,12 +23,12 @@ const tokenOwner = "0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef";
 
 describe("createTokensActions tests", () => {
   it("creates tokens successfully", (done) => {
-    const createTokensStub = sinon.stub(mintApi, "mintTokens").resolves(contractInstance);
+    const createTokensStub = sinon.stub(mintApi, "mintTokens").resolves(txHash);
     const expectedActions = [
       { type: types.SET_INFO_MESSAGE, infoMessage: miningMessage },
       { type: types.SET_APP_STATE, appState: appStates.MINING_IN_PROGRESS },
-      { type: types.SET_INFO_MESSAGE, infoMessage: contractInstanceAddress },
-      { type: types.SET_APP_STATE, appState: appStates.MINING_FINISHED }
+      { type: types.SET_INFO_MESSAGE, infoMessage: txHash },
+      { type: types.SET_APP_STATE, appState: appStates.MINING_CONFIRMED }
     ];
     const store = mockStore({ infoMessage: "", appState: appStates.INIT }, expectedActions);
     store.dispatch(createTokensActions.createTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenType, tokenOwner)).then(() => {
