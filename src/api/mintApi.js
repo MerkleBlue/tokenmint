@@ -105,11 +105,10 @@ function instantiateContract(tokenContract, name, symbol, decimals, totalSupply,
       from: account,
       gas: 4712388,
     }).on('error', (error) => {
-      console.log(error)
+      console.log(error);
       reject(error);
       return;
     }).on('transactionHash', (txHash) => {
-      console.log(1)
       accept(txHash);
       return;
     });

@@ -5,12 +5,11 @@ import {
   Card,
   CardHeader,
   CardContent,
-  Tooltip
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faClipboard, faCoins } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faCoins } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import * as decimalsActions from '../actions/decimalsActions';
 import * as tokenNameActions from '../actions/tokenNameActions';
@@ -93,14 +92,14 @@ export class SuccessMessagePanel extends React.Component {
               variant="subtitle1"
               className="typography_success_info_message"
             >
-              Check the Token creation progress on <a href={transactionLink} target="_blank">etherscan</a>
+              Check the Token creation progress on <a href={transactionLink} rel="noopener noreferrer" target="_blank">etherscan</a>
             </Typography>
             <Typography
               align="center"
               variant="subtitle1"
               className="typography_success_info_message"
             >
-              Check your new assets on <a href={etherscanLink} target="_blank">etherscan</a>
+              Check your new assets on <a href={etherscanLink} rel="noopener noreferrer" target="_blank">etherscan</a>
             </Typography>
           </CardContent>
         </Card>
