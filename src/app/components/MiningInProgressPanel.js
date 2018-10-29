@@ -14,8 +14,6 @@ export class MiningInProgressPanel extends React.Component {
   }
 
   render() {
-    const etherscanLink = "https://etherscan.io/address/" + this.props.tokenOwner;
-
     return (
       <div>
         <Card className="card">
@@ -42,12 +40,6 @@ export class MiningInProgressPanel extends React.Component {
               variant="subtitle1"
             >
               Please set the mining fee and confirm token creation in your wallet.
-            </Typography>
-            <Typography
-              align="center"
-              variant="subtitle1"
-            >
-              You can check the mining progress on <a href={etherscanLink} target="_blank">etherscan</a>.
             </Typography>
           </CardContent>
         </Card>
