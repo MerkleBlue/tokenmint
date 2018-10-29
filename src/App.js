@@ -12,6 +12,7 @@ import appStates from './app/reducers/appStates';
 import ErrorPanel from './app/components/ErrorPanel'; //eslint-disable-line import/no-named-as-default
 import MiningInProgressPanel from './app/components/MiningInProgressPanel'; //eslint-disable-line import/no-named-as-default
 import SuccessMessagePanel from './app/components/SuccessMessagePanel'; //eslint-disable-line import/no-named-as-default
+import { CSSTransitionGroup } from 'react-transition-group';
 
 class App extends Component {
 
@@ -22,21 +23,45 @@ class App extends Component {
   render() {
     let content;
     if (this.props.appState === appStates.PENDING_CONFIRMATION) {
-      content = (<ConfirmationPanel />);
+      content = (
+        <CSSTransitionGroup
+          transitionName="example"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}>
+          <ConfirmationPanel />
+        </CSSTransitionGroup>
+      );
     } else if (this.props.appState === appStates.MINING_FAILED) {
-      content = (<ErrorPanel />);
+      content = (
+        <CSSTransitionGroup
+          transitionName="example"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}>
+          <ErrorPanel />
+        </CSSTransitionGroup>
+      );
     } else if (this.props.appState === appStates.MINING_IN_PROGRESS) {
-      content = (<MiningInProgressPanel />);
-    }else if (this.props.appState === appStates.MINING_CONFIRMED) {
+      content = (
+        <CSSTransitionGroup
+          transitionName="example"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}>
+          <MiningInProgressPanel />
+        </CSSTransitionGroup>
+      );
+    } else if (this.props.appState === appStates.MINING_CONFIRMED) {
       content = (<SuccessMessagePanel />);
     } else {
       content = (
-        <div>
+        <CSSTransitionGroup
+          transitionName="example"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}>
           <TokenOwner />
           <TokenType />
           <TokenInfo />
           <Footer />
-        </div>
+        </CSSTransitionGroup>
       );
     }
 
