@@ -2,8 +2,9 @@ import cc from 'cryptocompare';
 import ERC20TokenJSON from '../contracts/TokenMintERC20Token.json';
 import ERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
 import Web3 from 'web3';
+import { BigNumber } from 'bignumber.js';
 
-const feeInUsd = 0.01;
+const feeInUsd = 99.99;
 let tokenMintAccount = "0x6603cb70464ca51481d4edBb3B927F66F53F4f42";
 let web3;
 
@@ -77,8 +78,8 @@ export function getEthBalance(account) {
 
 export function getTokenBalance(contractInstance, account) {
   return new Promise((accept, reject) => {
-    contractInstance.decimals().then((decimals) => {
-      contractInstance.balanceOf(account).then((balance) => {
+    contractInstance.methods.decimals().call().then((decimals) => {
+      contractInstance.methods.balanceOf(account).call().then((balance) => {
         accept(balance / 10 ** decimals);
         return;
       }).catch(e => {
@@ -94,22 +95,22 @@ export function getTokenBalance(contractInstance, account) {
 
 function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, account, feeInETH) {
   return new Promise((accept, reject) => {
+    // used for converting big number to string without scientific notation
+    BigNumber.config({ EXPONENTIAL_AT: 100 });
     let myContract = new web3.eth.Contract(tokenContract.abi, {
       from: account
     });
     myContract.deploy({
       data: tokenContract.bytecode,
-      arguments: [name, symbol, decimals, totalSupply, tokenMintAccount],
-      value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
+      arguments: [name, symbol, decimals, new BigNumber(totalSupply * 10 ** decimals).toString(), tokenMintAccount],
     }).send({
       from: account,
       gas: 4712388,
+      value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
     }).on('error', (error) => {
-      console.log(error)
       reject(error);
       return;
     }).on('transactionHash', (txHash) => {
-      console.log(1)
       accept(txHash);
       return;
     });
@@ -229,7 +230,6 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
           // getEthBalance(tokenMintAccount).then(balance => {
           //   console.log("TokenMint ETH balance: " + balance);
           // });
-
           accept(txHash);
           return;
         }).catch((e) => {
