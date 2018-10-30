@@ -14,6 +14,7 @@ import MiningInProgressPanel from './app/components/MiningInProgressPanel'; //es
 import SuccessMessagePanel from './app/components/SuccessMessagePanel'; //eslint-disable-line import/no-named-as-default
 import { CSSTransitionGroup } from 'react-transition-group';
 import FullStory from 'react-fullstory';
+import pack from '../package.json';
 
 class App extends Component {
 
@@ -71,6 +72,7 @@ class App extends Component {
         <FullStory org="G18A4" />
         <Header />
         {content}
+        <div className="copyright">Copyright {new Date().getFullYear()} © TokenMint.io. All rights reserved. Version {pack.version}</div>
       </div>
     );
   }
