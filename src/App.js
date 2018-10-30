@@ -13,6 +13,7 @@ import ErrorPanel from './app/components/ErrorPanel'; //eslint-disable-line impo
 import MiningInProgressPanel from './app/components/MiningInProgressPanel'; //eslint-disable-line import/no-named-as-default
 import SuccessMessagePanel from './app/components/SuccessMessagePanel'; //eslint-disable-line import/no-named-as-default
 import { CSSTransitionGroup } from 'react-transition-group';
+import FullStory from 'react-fullstory';
 
 class App extends Component {
 
@@ -67,6 +68,7 @@ class App extends Component {
 
     return (
       <div className="App">
+        <FullStory org="G18A4" />
         <Header />
         {content}
       </div>
