@@ -25,6 +25,10 @@ import * as accountsActions from '../actions/accountsActions';
 import * as serviceFeeActions from '../actions/serviceFeeActions';
 import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
+import {
+  TwitterShareButton,
+  TwitterIcon
+} from 'react-share';
 
 export class SuccessMessagePanel extends React.Component {
 
@@ -71,6 +75,8 @@ export class SuccessMessagePanel extends React.Component {
   render() {
     const etherscanLink = "https://etherscan.io/address/" + this.props.tokenOwner;
     const transactionLink = "https://etherscan.io/tx/" + this.props.infoMessage;
+    const shareUrl = "https://tokenmint.io";
+    const twitterTitle = "Just created my own [" + this.props.tokenSymbol + "] Ethereum token using ";
 
     return (
       <div>
@@ -121,6 +127,17 @@ export class SuccessMessagePanel extends React.Component {
             >
               Once the mining is finished, you can check your new assets on <a href={etherscanLink} rel="noopener noreferrer" target="_blank">etherscan</a>
             </Typography>
+            <TwitterShareButton
+              className="twitter_share"
+              url={shareUrl}
+              title={twitterTitle}
+              via="MerkleBlue"
+            >
+              <TwitterIcon
+                size={32}
+                round
+              />
+            </TwitterShareButton>
           </CardContent>
         </Card>
         <form className="footer_main_form">
@@ -140,6 +157,7 @@ export class SuccessMessagePanel extends React.Component {
 }
 
 SuccessMessagePanel.propTypes = {
+  tokenSymbol: PropTypes.string.isRequired,
   infoMessage: PropTypes.string.isRequired,
   tokenOwner: PropTypes.string.isRequired,
   decimalsActions: PropTypes.object.isRequired,
@@ -157,6 +175,7 @@ SuccessMessagePanel.propTypes = {
 
 function mapStateToProps(state) {
   return {
+    tokenSymbol: state.tokenSymbol,
     infoMessage: state.infoMessage,
     tokenOwner: state.tokenOwner
   };
