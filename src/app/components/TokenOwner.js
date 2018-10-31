@@ -94,7 +94,7 @@ export class TokenOwner extends React.Component {
         </MenuItem>
       );
       descriptionText = "There are no available accounts. Please make sure that you run Metamask or any other Ethereum wallet with at least one account, and refresh the page. " +
-      "You can download metamask at";
+      "You can download Metamask at";
     }
     return (
       <Card
