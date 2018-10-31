@@ -63,7 +63,7 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("CardHeader").props().title).to.eq("Token Owner");
     expect(wrapper.find("CardContent").length).to.eq(1);
     expect(wrapper.find("InputLabel").length).to.eq(1);
-    expect(wrapper.find("InputLabel").props().children).to.eq("Account");
+    expect(wrapper.find("InputLabel").props().children).to.eq("Select account");
     expect(wrapper.find("Select").length).to.eq(1);
     expect(wrapper.find("Select").props().error).to.be.true;
     expect(wrapper.find("Select").props().value).to.be.empty;
@@ -84,7 +84,7 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("CardHeader").props().title).to.eq("Token Owner");
     expect(wrapper.find("CardContent").length).to.eq(1);
     expect(wrapper.find("InputLabel").length).to.eq(1);
-    expect(wrapper.find("InputLabel").props().children).to.eq("Account");
+    expect(wrapper.find("InputLabel").props().children).to.eq("Select account");
     expect(wrapper.find("Select").length).to.eq(1);
     expect(wrapper.find("Select").props().error).to.be.false;
     expect(wrapper.find("Select").props().value).to.be.empty;
@@ -105,7 +105,7 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("CardHeader").props().title).to.eq("Token Owner");
     expect(wrapper.find("CardContent").length).to.eq(1);
     expect(wrapper.find("InputLabel").length).to.eq(1);
-    expect(wrapper.find("InputLabel").props().children).to.eq("Account");
+    expect(wrapper.find("InputLabel").props().children).to.eq("Select account");
     expect(wrapper.find("Select").length).to.eq(1);
     expect(wrapper.find("Select").props().error).to.be.true;
     expect(wrapper.find("Select").props().value).to.eq(tokenOwner);
@@ -127,7 +127,7 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("CardHeader").props().title).to.eq("Token Owner");
     expect(wrapper.find("CardContent").length).to.eq(1);
     expect(wrapper.find("InputLabel").length).to.eq(1);
-    expect(wrapper.find("InputLabel").props().children).to.eq("Account");
+    expect(wrapper.find("InputLabel").props().children).to.eq("Select account");
     expect(wrapper.find("Select").length).to.eq(1);
     expect(wrapper.find("Select").props().error).to.be.false;
     expect(wrapper.find("Select").props().value).to.eq(accounts[0]);

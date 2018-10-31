@@ -8,7 +8,7 @@ export function loadAllAccounts() {
     return loadAccounts().then(accounts => {
       dispatch(setAccounts(accounts));
       dispatch(setLoadingAccounts(false));
-      if (accounts.length > 0) {
+      if (accounts.length === 1) {
         dispatch(setTokenOwner(accounts[0]));
       }
     }).catch(() => {

@@ -114,7 +114,7 @@ export class TokenOwner extends React.Component {
             <Grid item xs>
               <MuiThemeProvider theme={theme}>
                 <FormControl variant="outlined">
-                  <InputLabel>Account</InputLabel>
+                  <InputLabel>Select account</InputLabel>
                   <Select
                     error={error}
                     value={this.props.tokenOwner}

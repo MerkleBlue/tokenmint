@@ -20,7 +20,7 @@ function generateAccounts(accountsCount) {
 
 describe("accountsActions tests", () => {
   it("loads accounts successfully", (done) => {
-    const accounts = generateAccounts(3);
+    const accounts = generateAccounts(1);
     const loadAccountsStub = sinon.stub(mintApi, "loadAccounts").resolves(accounts);
     const expectedActions = [
       { type: types.SET_LOADING_ACCOUNTS, loadingAccounts: true },
