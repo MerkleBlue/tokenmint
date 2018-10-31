@@ -144,6 +144,13 @@ export class SuccessMessagePanel extends React.Component {
             >
               Once the mining is finished, you can check your new assets on <a href={etherscanLink} rel="noopener noreferrer" target="_blank">etherscan</a>
             </Typography>
+            <Typography
+              align="center"
+              variant="subtitle1"
+              className="typography_success_info_message"
+            >
+              Share with the world:
+            </Typography>
             <div className="share_div" >
               <TwitterShareButton
                 className="button_share"
