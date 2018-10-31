@@ -1,5 +1,6 @@
 import * as types from './actionTypes';
 import { loadAccounts } from '../../api/mintApi';
+import { setTokenOwner } from './tokenOwnerActions';
 
 export function loadAllAccounts() {
   return (dispatch) => {
@@ -7,6 +8,9 @@ export function loadAllAccounts() {
     return loadAccounts().then(accounts => {
       dispatch(setAccounts(accounts));
       dispatch(setLoadingAccounts(false));
+      if (accounts.length > 0) {
+        dispatch(setTokenOwner(accounts[0]));
+      }
     }).catch(() => {
       dispatch(setAccounts([]));
       dispatch(setLoadingAccounts(false));
