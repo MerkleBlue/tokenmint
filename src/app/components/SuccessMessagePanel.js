@@ -27,7 +27,17 @@ import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
 import {
   TwitterShareButton,
-  TwitterIcon
+  TwitterIcon,
+  LinkedinShareButton,
+  LinkedinIcon,
+  TelegramShareButton,
+  TelegramIcon,
+  EmailShareButton,
+  EmailIcon,
+  RedditShareButton,
+  RedditIcon,
+  WhatsappShareButton,
+  WhatsappIcon
 } from 'react-share';
 
 export class SuccessMessagePanel extends React.Component {
@@ -77,6 +87,13 @@ export class SuccessMessagePanel extends React.Component {
     const transactionLink = "https://etherscan.io/tx/" + this.props.infoMessage;
     const shareUrl = "https://tokenmint.io";
     const twitterTitle = "Just created my own [" + this.props.tokenSymbol + "] Ethereum token using ";
+    const telegramTitle = "Just created my own [" + this.props.tokenSymbol + "] Ethereum token!";
+    const redditTitle = "Just created my own [" + this.props.tokenSymbol + "] Ethereum token!";
+    const whatsappTitle = "Just created my own [" + this.props.tokenSymbol + "] Ethereum token!";
+    const linkedinTitle = "Just created my own [" + this.props.tokenSymbol + "] Ethereum token!";
+    const linkedinDescription = "You can create your own custom erc20 and erc223 tokens using TokenMint.";
+    const emailSubject = "create your own custom Ethereum tokens";
+    const emailBody = "I just created my own [" + this.props.tokenSymbol + "] Ethereum token, using TokenMint platform.";
 
     return (
       <div>
@@ -127,17 +144,81 @@ export class SuccessMessagePanel extends React.Component {
             >
               Once the mining is finished, you can check your new assets on <a href={etherscanLink} rel="noopener noreferrer" target="_blank">etherscan</a>
             </Typography>
-            <TwitterShareButton
-              className="twitter_share"
-              url={shareUrl}
-              title={twitterTitle}
-              via="MerkleBlue"
-            >
-              <TwitterIcon
-                size={32}
-                round
-              />
-            </TwitterShareButton>
+            <div className="share_div" >
+              <TwitterShareButton
+                className="button_share"
+                url={shareUrl}
+                title={twitterTitle}
+                via="MerkleBlue"
+              >
+                <TwitterIcon
+                  size={32}
+                  round
+                />
+              </TwitterShareButton>
+            </div>
+            <div className="share_div" >
+              <TelegramShareButton
+                className="button_share"
+                url={shareUrl}
+                title={telegramTitle}
+              >
+                <TelegramIcon
+                  size={32}
+                  round
+                />
+              </TelegramShareButton>
+            </div>
+            <div className="share_div" >
+              <RedditShareButton
+                className="button_share"
+                url={shareUrl}
+                title={redditTitle}
+              >
+                <RedditIcon
+                  size={32}
+                  round
+                />
+              </RedditShareButton>
+            </div>
+            <div className="share_div" >
+              <WhatsappShareButton
+                className="button_share"
+                url={shareUrl}
+                title={whatsappTitle}
+              >
+                <WhatsappIcon
+                  size={32}
+                  round
+                />
+              </WhatsappShareButton>
+            </div>
+            <div className="share_div" >
+              <LinkedinShareButton
+                className="button_share"
+                url={shareUrl}
+                title={linkedinTitle}
+                description={linkedinDescription}
+              >
+                <LinkedinIcon
+                  size={32}
+                  round
+                />
+              </LinkedinShareButton>
+            </div>
+            <div className="share_div" >
+              <EmailShareButton
+                className="button_share"
+                url={shareUrl}
+                subject={emailSubject}
+                body={emailBody}
+              >
+                <EmailIcon
+                  size={32}
+                  round
+                />
+              </EmailShareButton>
+            </div>
           </CardContent>
         </Card>
         <form className="footer_main_form">
