@@ -69,8 +69,10 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("Select").props().value).to.be.empty;
     expect(wrapper.find("Typography").length).to.eq(2);
     expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_error");
-    expect(wrapper.find("Typography").at(1).props().children).to.eq("There are no available accounts. " +
-      "Please make sure that you run Metamask or any other Ethereum wallet with at least one account, and refresh the page.");
+    expect(wrapper.find("Typography").at(1).props().children[0]).to.eq("There are no available accounts. " +
+      "Please make sure that you run Metamask or any other Ethereum wallet with at least one account, and refresh the page. You can download metamask at");
+    expect(wrapper.find("a").length).to.eq(1);
+    expect(wrapper.find("a").props().href).to.eq("https://metamask.io/");
   });
 
   it("renders TokenOwner while loading accounts", () => {
@@ -90,8 +92,9 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("Select").props().value).to.be.empty;
     expect(wrapper.find("Typography").length).to.eq(2);
     expect(wrapper.find("Typography").at(1).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(1).props().children).to.eq("ETH address (not exchange address). " +
+    expect(wrapper.find("Typography").at(1).props().children[0]).to.eq("ETH address (not exchange address). " +
       "This address will be owner of the token. Please make sure that the selected address is main-net Ethereum address!");
+    expect(wrapper.find("a").length).to.eq(0);
   });
 
   it("renders TokenOwner with insufficient funds", () => {
@@ -111,8 +114,9 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("Select").props().value).to.eq(tokenOwner);
     expect(wrapper.find("Typography").length).to.eq(2);
     expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_error");
-    expect(wrapper.find("Typography").at(1).props().children).to.eq("This account has insufficient funds. " +
+    expect(wrapper.find("Typography").at(1).props().children[0]).to.eq("This account has insufficient funds. " +
       "Please top up this account, or select another one.");
+    expect(wrapper.find("a").length).to.eq(0);
   });
 
   it("renders TokenOwner with multiple accounts", () => {
@@ -133,7 +137,8 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("Select").props().value).to.eq(accounts[0]);
     expect(wrapper.find("Typography").length).to.eq(2);
     expect(wrapper.find("Typography").at(1).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(1).props().children).to.eq("ETH address (not exchange address). " +
+    expect(wrapper.find("Typography").at(1).props().children[0]).to.eq("ETH address (not exchange address). " +
       "This address will be owner of the token. Please make sure that the selected address is main-net Ethereum address!");
+    expect(wrapper.find("a").length).to.eq(0);
   });
 });

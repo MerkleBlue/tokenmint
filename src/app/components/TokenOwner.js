@@ -52,6 +52,7 @@ export class TokenOwner extends React.Component {
       }
     });
     let error = (this.props.accounts.length === 0 || !this.props.tokenOwnerHasEnoughFunds) && !this.props.loadingAccounts;
+    const metamaskLink = (<a href="https://metamask.io/" rel="noopener noreferrer" target="_blank">metamask.io</a>);
 
     let menuItems;
     let descriptionText;
@@ -92,7 +93,8 @@ export class TokenOwner extends React.Component {
           No available accounts
         </MenuItem>
       );
-      descriptionText = "There are no available accounts. Please make sure that you run Metamask or any other Ethereum wallet with at least one account, and refresh the page.";
+      descriptionText = "There are no available accounts. Please make sure that you run Metamask or any other Ethereum wallet with at least one account, and refresh the page. " +
+      "You can download metamask at";
     }
     return (
       <Card
@@ -137,7 +139,7 @@ export class TokenOwner extends React.Component {
                 variant="caption"
                 className={error ? "typography_error" : "typography"}
               >
-                {descriptionText}
+                {descriptionText} {(this.props.accounts.length  === 0 && !this.props.loadingAccounts) && metamaskLink}
               </Typography>
             </Grid>
           </Grid>
