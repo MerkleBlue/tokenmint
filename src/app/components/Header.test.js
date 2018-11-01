@@ -26,7 +26,7 @@ describe("<Header /> tests", () => {
   it("renders Header", () => {
     const wrapper = mount(<Header />);
     expect(wrapper.find("a").length).to.eq(1);
-    expect(wrapper.find("a").props().href).to.eq("../index.html");
+    expect(wrapper.find("a").props().href).to.eq("../");
     expect(wrapper.find("img").length).to.eq(2);
     expect(wrapper.find("img").at(0).props().src).to.exist;
     expect(wrapper.find("img").at(1).props().src).to.exist;
