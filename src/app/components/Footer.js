@@ -9,6 +9,9 @@ import * as serviceFeeActions from '../actions/serviceFeeActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoins } from '@fortawesome/free-solid-svg-icons';
 import appStates from '../reducers/appStates';
+import {
+  Tooltip
+} from '@material-ui/core';
 
 export class Footer extends React.Component {
 
@@ -48,14 +51,21 @@ export class Footer extends React.Component {
           Mint tokens
         </span>
       ) : (
-        <span
-          className="btn btn-disabled wow fadeInUp"
-          data-wow-duration="1000ms"
-          data-wow-delay="400ms"
+        <Tooltip
+          classes={{
+            tooltip: "tooltip_disabled"
+          }}
+          title="Please fill in all the parameters above to enable token creation"
         >
-          <FontAwesomeIcon className="fa_coins" icon={faCoins} />
-          Mint tokens
-        </span>
+          <span
+            className="btn btn-disabled wow fadeInUp"
+            data-wow-duration="1000ms"
+            data-wow-delay="400ms"
+          >
+            <FontAwesomeIcon className="fa_coins" icon={faCoins} />
+            Mint tokens
+          </span>
+        </Tooltip>
       );
 
     return (
