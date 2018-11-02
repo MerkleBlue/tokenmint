@@ -110,7 +110,7 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq(tokenType);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.50000000 ETH)");
+    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel non existing token symbol", () => {
@@ -152,7 +152,7 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq(tokenType);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.50000000 ETH)");
+    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel non existing decimals", () => {
@@ -194,7 +194,7 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("Typography").at(8).props().children).to.eq("");
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq(tokenType);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.50000000 ETH)");
+    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel non existing total supply", () => {
@@ -236,7 +236,7 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(initialState.totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq(tokenType);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.50000000 ETH)");
+    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel non existing token owner", () => {
@@ -278,7 +278,7 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq("erc20");
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.50000000 ETH)");
+    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel while checking token owner funds", () => {
@@ -320,7 +320,7 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq("erc20");
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.50000000 ETH)");
+    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel - token owner with insufficient funds", () => {
@@ -362,7 +362,7 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq("erc20");
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.50000000 ETH)");
+    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel while loading accounts", () => {
@@ -404,7 +404,7 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq("erc20");
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.50000000 ETH)");
+    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel while calculating service fee", () => {
@@ -530,7 +530,7 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq("erc20");
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("99.99$ (0.50000000 ETH)");
+    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
   });
 
   it("simulates click on cancel button", () => {

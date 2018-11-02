@@ -98,7 +98,7 @@ export class ConfirmationPanel extends React.Component {
       serviceFeeText = "Unavailable. Please make sure you are connected to the wallet and refresh the page.";
       serviceFeeTypographyClass = "typography_right_err";
     } else {
-      serviceFeeText = "99.99$ (" + this.props.serviceFee.toFixed(8) + " ETH)";
+      serviceFeeText = "29.99$ (" + this.props.serviceFee.toFixed(8) + " ETH)";
       serviceFeeTypographyClass = "typography_right";
     }
 

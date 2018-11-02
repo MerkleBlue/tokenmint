@@ -4,7 +4,7 @@ import ERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
 import Web3 from 'web3';
 import { BigNumber } from 'bignumber.js';
 
-const feeInUsd = 99.99;
+const feeInUsd = 29.99;
 let tokenMintAccount = "0x6603cb70464ca51481d4edBb3B927F66F53F4f42";
 let web3;
 
