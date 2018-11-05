@@ -1,10 +1,10 @@
 import * as types from '../actions/actionTypes';
 import initialState from './initialState';
 
-export default function isMainNetReducer(state = initialState.isMainNet, action) {
+export default function networkReducer(state = initialState.network, action) {
   switch (action.type) {
-    case types.SET_IS_MAIN_NET:
-      return action.isMainNet;
+    case types.SET_NETWORK:
+      return action.network;
 
     default:
       return state;

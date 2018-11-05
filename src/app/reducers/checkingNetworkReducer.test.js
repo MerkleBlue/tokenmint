@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import checkingNetworkReducer from './checkingNetworkReducer';
-import * as actions from '../actions/checkNetworkActions';
+import * as actions from '../actions/networkActions';
 
 describe("checkingNetworkReducer test", () => {
   it("should set checkingNetwork when passed SET_CHECKING_NETWORK", () => {

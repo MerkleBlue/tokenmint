@@ -30,7 +30,7 @@ describe("<SuccessMessagePanel /> tests", () => {
     setInfoMessage = () => { },
     loadAllAccounts = () => { },
     setServiceFee = () => { },
-    checkNetwork = () => { }
+    getNetworkType = () => { }
   ) {
     const props = {
       infoMessage: infoMessage,
@@ -49,7 +49,7 @@ describe("<SuccessMessagePanel /> tests", () => {
       infoMessageActions: { setInfoMessage: setInfoMessage },
       accountsActions: { loadAllAccounts: loadAllAccounts },
       serviceFeeActions: { setServiceFee: setServiceFee },
-      checkNetworkActions: { checkNetwork: checkNetwork }
+      networkActions: { getNetworkType: getNetworkType }
     };
     return mount(<SuccessMessagePanel {...props} />);
   }
@@ -105,7 +105,7 @@ describe("<SuccessMessagePanel /> tests", () => {
     const setInfoMessage = sinon.spy();
     const loadAllAccounts = sinon.spy();
     const setServiceFee = sinon.spy();
-    const checkNetwork = sinon.spy();
+    const getNetworkType = sinon.spy();
     const wrapper = setup(
       infoMessage,
       tokenOwner,
@@ -121,7 +121,7 @@ describe("<SuccessMessagePanel /> tests", () => {
       setInfoMessage,
       loadAllAccounts,
       setServiceFee,
-      checkNetwork
+      getNetworkType
     );
     wrapper.find("span").at(1).simulate("click");
     expect(setDecimals.calledOnce).to.be.true;
@@ -136,6 +136,6 @@ describe("<SuccessMessagePanel /> tests", () => {
     expect(setInfoMessage.calledOnce).to.be.true;
     expect(loadAllAccounts.calledOnce).to.be.true;
     expect(setServiceFee.calledOnce).to.be.true;
-    expect(checkNetwork.calledOnce).to.be.true;
+    expect(getNetworkType.calledOnce).to.be.true;
   });
 });

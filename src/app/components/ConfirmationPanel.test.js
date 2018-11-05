@@ -39,7 +39,7 @@ describe("<ConfirmationPanel /> tests", () => {
     setInfoMessage = () => { },
     createTokens = () => { },
     setServiceFee = () => { },
-    checkNetwork = () => { }
+    getNetworkType = () => { }
   ) {
     const props = {
       tokenName: tokenName,
@@ -56,7 +56,7 @@ describe("<ConfirmationPanel /> tests", () => {
       infoMessageActions: { setInfoMessage: setInfoMessage },
       createTokensActions: { createTokens: createTokens },
       serviceFeeActions: { setServiceFee: setServiceFee },
-      checkNetworkActions: { checkNetwork: checkNetwork }
+      networkActions: { getNetworkType: getNetworkType }
     };
     return mount(<ConfirmationPanel {...props} />);
   }
@@ -540,7 +540,7 @@ describe("<ConfirmationPanel /> tests", () => {
     const setInfoMessage = sinon.spy();
     const createTokens = sinon.spy();
     const setServiceFee = sinon.spy();
-    const checkNetwork = sinon.spy();
+    const getNetworkType = sinon.spy();
     const wrapper = setup(
       tokenName,
       tokenSymbol,
@@ -556,13 +556,13 @@ describe("<ConfirmationPanel /> tests", () => {
       setInfoMessage,
       createTokens,
       setServiceFee,
-      checkNetwork
+      getNetworkType
     );
     wrapper.find("span").at(1).simulate("click");
     expect(setAppState.calledOnce).to.be.true;
     expect(setInfoMessage.calledOnce).to.be.true;
     expect(setServiceFee.calledOnce).to.be.true;
-    expect(checkNetwork.calledOnce).to.be.true;
+    expect(getNetworkType.calledOnce).to.be.true;
   });
 
   it("simulates click on confirm button - invalid props", () => {

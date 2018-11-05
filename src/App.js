@@ -15,6 +15,7 @@ import SuccessMessagePanel from './app/components/SuccessMessagePanel'; //eslint
 import { CSSTransitionGroup } from 'react-transition-group';
 import FullStory from 'react-fullstory';
 import pack from '../package.json';
+import NetworkWarning from './app/components/NetworkWarning';
 
 class App extends Component {
 
@@ -59,6 +60,7 @@ class App extends Component {
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
+          {(!this.props.checkingNetwork && this.props.network !== "main") && <NetworkWarning />}
           <TokenOwner />
           <TokenType />
           <TokenInfo />
@@ -79,12 +81,16 @@ class App extends Component {
 }
 
 App.propTypes = {
-  appState: PropTypes.number.isRequired
+  appState: PropTypes.number.isRequired,
+  network: PropTypes.string.isRequired,
+  checkingNetwork: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    appState: state.appState
+    appState: state.appState,
+    network: state.network,
+    checkingNetwork: state.checkingNetwork
   };
 }
 

@@ -8,6 +8,8 @@ const feeInUsd = 29.99;
 let tokenMintAccount = "0x6603cb70464ca51481d4edBb3B927F66F53F4f42";
 let web3;
 
+export const NO_NETWORK = "NO_NETWORK";
+
 export function initWeb3() {
   if (typeof global.window !== 'undefined' && typeof global.window.web3 !== 'undefined') {
     // Use Mist/MetaMask's provider
@@ -97,11 +99,11 @@ function instantiateContract(tokenContract, name, symbol, decimals, totalSupply,
   });
 }
 
-export function isMainNet() {
+export function getNetwork() {
   initWeb3();
   return new Promise((accept, reject) => {
     web3.eth.net.getNetworkType().then(networkType => {
-      accept(networkType === "main");
+      accept(networkType);
       return;
     }).catch((e) => {
       reject(e);

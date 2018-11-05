@@ -23,7 +23,7 @@ import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
 import * as infoMessageActions from '../actions/infoMessageActions';
 import * as accountsActions from '../actions/accountsActions';
 import * as serviceFeeActions from '../actions/serviceFeeActions';
-import * as checkNetworkActions from '../actions/checkNetworkActions';
+import * as networkActions from '../actions/networkActions';
 import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
 import {
@@ -68,7 +68,7 @@ export class SuccessMessagePanel extends React.Component {
     this.props.infoMessageActions.setInfoMessage(initialState.infoMessage);
     this.props.accountsActions.loadAllAccounts();
     this.props.serviceFeeActions.setServiceFee(initialState.serviceFee);
-    this.props.checkNetworkActions.checkNetwork();
+    this.props.networkActions.getNetworkType();
   }
 
   // a hack that creates an element outside the screen and uses it to copy its content to clipboard
@@ -261,7 +261,7 @@ SuccessMessagePanel.propTypes = {
   infoMessageActions: PropTypes.object.isRequired,
   accountsActions: PropTypes.object.isRequired,
   serviceFeeActions: PropTypes.object.isRequired,
-  checkNetworkActions: PropTypes.object.isRequired
+  networkActions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
@@ -285,7 +285,7 @@ function mapDispatchToProps(dispatch) {
     infoMessageActions: bindActionCreators(infoMessageActions, dispatch),
     accountsActions: bindActionCreators(accountsActions, dispatch),
     serviceFeeActions: bindActionCreators(serviceFeeActions, dispatch),
-    checkNetworkActions: bindActionCreators(checkNetworkActions, dispatch)
+    networkActions: bindActionCreators(networkActions, dispatch)
   };
 }
 

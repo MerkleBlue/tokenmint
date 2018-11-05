@@ -1,21 +1,21 @@
 import * as types from './actionTypes';
-import { isMainNet } from '../../api/mintApi';
+import { getNetwork, NO_NETWORK } from '../../api/mintApi';
 
-export function checkNetwork() {
+export function getNetworkType() {
   return (dispatch) => {
     dispatch(setCheckingNetwork(true));
-    return isMainNet().then(isMainNet => {
-      dispatch(setIsMainNet(isMainNet));
+    return getNetwork().then(network => {
+      dispatch(setNetwork(network));
       dispatch(setCheckingNetwork(false));
     }).catch(() => {
-      dispatch(setIsMainNet(false));
+      dispatch(setNetwork(NO_NETWORK));
       dispatch(setCheckingNetwork(false));
     });
   };
 }
 
-export function setIsMainNet(isMainNet) {
-  return { type: types.SET_IS_MAIN_NET, isMainNet: isMainNet };
+export function setNetwork(network) {
+  return { type: types.SET_NETWORK, network: network };
 }
 
 export function setCheckingNetwork(checkingNetwork) {

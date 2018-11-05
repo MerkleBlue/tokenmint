@@ -14,6 +14,6 @@ export default {
   infoMessage: "",
   loadingAccounts: false,
   serviceFee: 0,
-  isMainNet: true,
+  network: "",
   checkingNetwork: true
 };

@@ -12,7 +12,7 @@ import tokenOwnerHasEnoughFunds from './tokenOwnerHasEnoughFundsReducer';
 import loadingAccounts from './loadingAccountsReducer';
 import infoMessage from './infoMessageReducer';
 import serviceFee from './serviceFeeReducer';
-import isMainNet from './isMainNetReducer';
+import network from './networkReducer';
 import checkingNetwork from './checkingNetworkReducer';
 
 const rootReducer = combineReducers({
@@ -29,7 +29,7 @@ const rootReducer = combineReducers({
   infoMessage: infoMessage,
   loadingAccounts: loadingAccounts,
   serviceFee: serviceFee,
-  isMainNet: isMainNet,
+  network: network,
   checkingNetwork: checkingNetwork
 });
 

@@ -20,8 +20,6 @@ import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
 import { bindActionCreators } from 'redux';
 import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 export class TokenOwner extends React.Component {
 
@@ -68,7 +66,7 @@ export class TokenOwner extends React.Component {
           Loading accounts...
         </MenuItem>
       );
-      descriptionText = "ETH address (not exchange address). This address will be owner of the token. Please make sure that the selected address is main-net Ethereum address!";
+      descriptionText = "ETH address (not exchange address). This address will be owner of the token!";
     } else if (this.props.accounts.length > 0) {
       menuItems = this.props.accounts.map((account) => (
         <MenuItem
@@ -81,7 +79,7 @@ export class TokenOwner extends React.Component {
         </MenuItem>
       ));
       if (this.props.tokenOwnerHasEnoughFunds) {
-        descriptionText = "ETH address (not exchange address). This address will be owner of the token. Please make sure that the selected address is main-net Ethereum address!";
+        descriptionText = "ETH address (not exchange address). This address will be owner of the token!";
       } else {
         descriptionText = "This account has insufficient funds. Please top up this account, or select another one.";
       }
@@ -97,52 +95,6 @@ export class TokenOwner extends React.Component {
       );
       descriptionText = "There are no available accounts. Please make sure that you run Metamask or any other Ethereum wallet with at least one account, and refresh the page. " +
         "You can download Metamask at";
-    }
-
-    let networkMessage;
-    if (this.props.checkingNetwork) {
-      networkMessage = (
-        <Typography
-          align="center"
-          variant="subtitle1"
-          className="typography_network_message"
-        >
-          Network: checking...
-        </Typography>
-      );
-    } else if (this.props.isMainNet) {
-      networkMessage = (
-        <Typography
-          align="center"
-          variant="subtitle1"
-          className="typography_network_message"
-        >
-          <FontAwesomeIcon size="1x" className="fa_main_net_icon" icon={faCheck} /> Ethereum main network
-        </Typography>
-      );
-    } else {
-      networkMessage = (
-        <div>
-          <Typography
-            align="center"
-            variant="subtitle1"
-            className="typography_network_message"
-          >
-            <FontAwesomeIcon size="1x" className="fa_not_main_net_icon" icon={faTimes} /> Ethereum main network
-          </Typography>
-          <Typography
-            align="center"
-            variant="subtitle1"
-            className="typography_network_error_message"
-            classes={{
-              root: "typography_network_error_message_subtitle"
-            }}
-          >
-            We have detected that you are not on Ethereum main network. In order for our application to properly work, we strongly advise
-            switching to main network and refreshing the page!
-          </Typography>
-        </div>
-      );
     }
 
     return (
@@ -161,7 +113,6 @@ export class TokenOwner extends React.Component {
             root: "card_content"
           }}
         >
-          {networkMessage}
           <Grid container wrap="nowrap" spacing={8}>
             <Grid item xs>
               <MuiThemeProvider theme={theme}>
@@ -200,7 +151,6 @@ export class TokenOwner extends React.Component {
 }
 
 TokenOwner.propTypes = {
-  isMainNet: PropTypes.bool.isRequired,
   checkingNetwork: PropTypes.bool.isRequired,
   accounts: PropTypes.array.isRequired,
   tokenOwner: PropTypes.string.isRequired,
