@@ -85,8 +85,8 @@ export class SuccessMessagePanel extends React.Component {
   }
 
   render() {
-    const etherscanLink = "https://etherscan.io/address/" + this.props.tokenOwner;
-    const transactionLink = "https://etherscan.io/tx/" + this.props.infoMessage;
+    let etherscanLink;
+    let transactionLink;
     const shareUrl = "https://tokenmint.io";
     const twitterTitle = "Just created my own [" + this.props.tokenSymbol + "] Ethereum token using ";
     const telegramTitle = "Just created my own [" + this.props.tokenSymbol + "] Ethereum token!";
@@ -96,6 +96,14 @@ export class SuccessMessagePanel extends React.Component {
     const linkedinDescription = "You can create your own custom erc20 and erc223 tokens using TokenMint.";
     const emailSubject = "create your own custom Ethereum tokens";
     const emailBody = "I just created my own [" + this.props.tokenSymbol + "] Ethereum token, using TokenMint platform.";
+
+    if (this.props.network === "ropsten") {
+      etherscanLink = "https://ropsten.etherscan.io/address/" + this.props.tokenOwner;
+      transactionLink = "https://ropsten.etherscan.io/tx/" + this.props.infoMessage;
+    } else {
+      etherscanLink = "https://etherscan.io/address/" + this.props.tokenOwner;
+      transactionLink = "https://etherscan.io/tx/" + this.props.infoMessage;
+    }
 
     return (
       <div>
@@ -247,6 +255,7 @@ export class SuccessMessagePanel extends React.Component {
 }
 
 SuccessMessagePanel.propTypes = {
+  network: PropTypes.string.isRequired,
   tokenSymbol: PropTypes.string.isRequired,
   infoMessage: PropTypes.string.isRequired,
   tokenOwner: PropTypes.string.isRequired,
@@ -268,7 +277,8 @@ function mapStateToProps(state) {
   return {
     tokenSymbol: state.tokenSymbol,
     infoMessage: state.infoMessage,
-    tokenOwner: state.tokenOwner
+    tokenOwner: state.tokenOwner,
+    network: state.network
   };
 }
 

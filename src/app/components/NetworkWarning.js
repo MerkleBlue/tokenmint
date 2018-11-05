@@ -58,7 +58,7 @@ class NetworkWarning extends React.Component {
             {networkMessage}
           </Typography>
           <Typography
-            align="center"
+            align="left"
             variant="subtitle1"
           >
             {descriptionMessage}
