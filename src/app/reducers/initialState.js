@@ -13,5 +13,7 @@ export default {
   tokenOwnerHasEnoughFunds: true,
   infoMessage: "",
   loadingAccounts: false,
-  serviceFee: 0
+  serviceFee: 0,
+  isMainNet: true,
+  checkingNetwork: true
 };

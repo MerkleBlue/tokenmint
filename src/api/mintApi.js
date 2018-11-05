@@ -97,7 +97,7 @@ function instantiateContract(tokenContract, name, symbol, decimals, totalSupply,
   });
 }
 
-function isMainNet() {
+export function isMainNet() {
   initWeb3();
   return new Promise((accept, reject) => {
     web3.eth.net.getNetworkType().then(networkType => {

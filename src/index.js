@@ -7,10 +7,12 @@ import registerServiceWorker from './registerServiceWorker';
 import configureStore from './app/store/configureStore';
 import { loadAllAccounts } from './app/actions/accountsActions';
 import ReactGA from 'react-ga';
+import { checkNetwork } from './app/actions/checkNetworkActions';
 
 const store = configureStore();
 
 window.addEventListener('load', function () {
+  store.dispatch(checkNetwork());
   store.dispatch(loadAllAccounts());
 });
 
