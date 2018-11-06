@@ -7,7 +7,7 @@ import { faTimesCircle, faExclamationTriangle } from '@fortawesome/free-solid-sv
 import PropTypes from 'prop-types';
 import { NO_NETWORK } from '../../api/mintApi';
 
-class NetworkWarning extends React.Component {
+export class NetworkWarning extends React.Component {
 
   render() {
 

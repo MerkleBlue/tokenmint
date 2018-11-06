@@ -15,7 +15,7 @@ import SuccessMessagePanel from './app/components/SuccessMessagePanel'; //eslint
 import { CSSTransitionGroup } from 'react-transition-group';
 import FullStory from 'react-fullstory';
 import pack from '../package.json';
-import NetworkWarning from './app/components/NetworkWarning';
+import NetworkWarning from './app/components/NetworkWarning'; //eslint-disable-line import/no-named-as-default
 
 class App extends Component {
 
