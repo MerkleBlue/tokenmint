@@ -24,6 +24,7 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.props.network);
     let content;
     if (this.props.appState === appStates.PENDING_CONFIRMATION) {
       content = (
