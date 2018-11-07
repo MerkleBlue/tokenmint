@@ -112,7 +112,7 @@ export class TokenInfo extends React.Component {
               <Typography
                 align="left"
                 variant="body1"
-                className={InputValidator.isTokenNameValid(this.props.tokenName) ? "typography" : "typography_error"}
+                className={InputValidator.isTokenNameValid(this.props.tokenName) ? "typography_token_info" : "typography_token_info_error"}
               >
                 The name of the token. 3-25 symbols. Alphanumerical characters, space, and hyphen are accepted.
               </Typography>
@@ -139,7 +139,7 @@ export class TokenInfo extends React.Component {
               <Typography
                 align="left"
                 variant="body1"
-                className={InputValidator.isTokenSymbolValid(this.props.tokenSymbol) ? "typography" : "typography_error"}
+                className={InputValidator.isTokenSymbolValid(this.props.tokenSymbol) ? "typography_token_info" : "typography_token_info_error"}
               >
                 {tokenSymbolDescriptionText}
               </Typography>
@@ -166,7 +166,7 @@ export class TokenInfo extends React.Component {
               <Typography
                 align="left"
                 variant="body1"
-                className={InputValidator.isDecimalsValid(this.props.decimals) ? "typography" : "typography_error"}
+                className={InputValidator.isDecimalsValid(this.props.decimals) ? "typography_token_info" : "typography_token_info_error"}
               >
                 Defines the number of decimals for the token. 0-50 numerals are accepted. 18 is common practice.
               </Typography>
@@ -193,7 +193,7 @@ export class TokenInfo extends React.Component {
               <Typography
                 align="left"
                 variant="body1"
-                className={InputValidator.isTotalSupplyValid(this.props.totalSupply) ? "typography" : "typography_error"}
+                className={InputValidator.isTotalSupplyValid(this.props.totalSupply) ? "typography_token_info" : "typography_token_info_error"}
               >
                 Total amount of tokens to be generated. Minimum value is 1, and maximum 1000000000000000.
               </Typography>
