@@ -6,10 +6,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import { NO_NETWORK } from '../../api/mintApi';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 export class NetworkWarning extends React.Component {
 
   render() {
+    const theme = createMuiTheme({
+      typography: {
+        useNextVariants: true,
+      }
+    });
 
     let icon = "";
     let networkMessage = "";
@@ -51,35 +57,37 @@ export class NetworkWarning extends React.Component {
             root: "card_content"
           }}
         >
-          <Typography
-            align="center"
-            variant="h6"
-          >
-            {networkMessage}
-          </Typography>
-          <Typography
-            align="left"
-            variant="body1"
-          >
-            {descriptionMessage}
-          </Typography>
-          {this.props.network === NO_NETWORK &&
-            <div>
-              <Typography
-                align="left"
-                variant="body1"
-              >
-                You can download MetaMask at <a href="https://metamask.io/" rel="noopener noreferrer" target="_blank">metamask.io</a>
-              </Typography>
-              <Typography
-                align="left"
-                variant="body1"
-              >
-                You can download Ethereum wallet at <a href="https://geth.ethereum.org/downloads/" rel="noopener noreferrer" target="_blank">geth.ethereum.org/downloads/</a>
-                or at <a href="https://www.parity.io/ethereum/" rel="noopener noreferrer" target="_blank">www.parity.io/ethereum/</a>
-              </Typography>
-            </div>
-          }
+          <MuiThemeProvider theme={theme}>
+            <Typography
+              align="center"
+              variant="h6"
+            >
+              {networkMessage}
+            </Typography>
+            <Typography
+              align="left"
+              variant="body1"
+            >
+              {descriptionMessage}
+            </Typography>
+            {this.props.network === NO_NETWORK &&
+              <div>
+                <Typography
+                  align="left"
+                  variant="body1"
+                >
+                  You can download MetaMask at <a href="https://metamask.io/" rel="noopener noreferrer" target="_blank">metamask.io</a>
+                </Typography>
+                <Typography
+                  align="left"
+                  variant="body1"
+                >
+                  You can download Ethereum wallet at <a href="https://geth.ethereum.org/downloads/" rel="noopener noreferrer" target="_blank">geth.ethereum.org/downloads/</a>
+                  or at <a href="https://www.parity.io/ethereum/" rel="noopener noreferrer" target="_blank">www.parity.io/ethereum/</a>
+                </Typography>
+              </div>
+            }
+          </MuiThemeProvider>
         </CardContent>
       </Card>
     );

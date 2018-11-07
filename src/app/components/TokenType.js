@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as tokenTypeActions from '../actions/tokenTypeActions';
 import PropTypes from 'prop-types';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 export class TokenType extends React.Component {
 
@@ -27,6 +28,12 @@ export class TokenType extends React.Component {
   }
 
   render() {
+    const theme = createMuiTheme({
+      typography: {
+        useNextVariants: true,
+      }
+    });
+
     return (
       <Card className="card">
         <CardHeader
@@ -55,7 +62,7 @@ export class TokenType extends React.Component {
                   control={
                     <Radio
                       classes={{
-                        checked:"radio_button"
+                        checked: "radio_button"
                       }}
                     />
                   }
@@ -67,7 +74,7 @@ export class TokenType extends React.Component {
                   control={
                     <Radio
                       classes={{
-                        checked:"radio_button"
+                        checked: "radio_button"
                       }}
                     />
                   }
@@ -77,22 +84,24 @@ export class TokenType extends React.Component {
               </RadioGroup>
             </Grid>
             <Grid item xs>
-              <Typography
-                align="left"
-                color="textSecondary"
-                variant="body1"
-                className="typography_token_type_erc20"
-              >
-                ERC-20 is recommended option, accepted by most exchanges.
+              <MuiThemeProvider theme={theme}>
+                <Typography
+                  align="left"
+                  color="textSecondary"
+                  variant="body1"
+                  className="typography_token_type_erc20"
+                >
+                  ERC-20 is recommended option, accepted by most exchanges.
+                </Typography>
+                <Typography
+                  align="left"
+                  color="textSecondary"
+                  variant="body1"
+                  className="typography_token_type_erc223"
+                >
+                  ERC-223 is similar to ERC-20, but it provides extra safety during token transfers.
               </Typography>
-              <Typography
-                align="left"
-                color="textSecondary"
-                variant="body1"
-                className="typography_token_type_erc223"
-              >
-                ERC-223 is similar to ERC-20, but it provides extra safety during token transfers.
-              </Typography>
+              </MuiThemeProvider>
             </Grid>
           </Grid>
         </CardContent>

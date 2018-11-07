@@ -40,6 +40,7 @@ import {
   WhatsappShareButton,
   WhatsappIcon
 } from 'react-share';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 export class SuccessMessagePanel extends React.Component {
 
@@ -86,6 +87,12 @@ export class SuccessMessagePanel extends React.Component {
   }
 
   render() {
+    const theme = createMuiTheme({
+      typography: {
+        useNextVariants: true,
+      }
+    });
+
     let etherscanLink;
     let transactionLink;
     const shareUrl = "https://tokenmint.io";
@@ -122,121 +129,123 @@ export class SuccessMessagePanel extends React.Component {
               root: "card_content"
             }}
           >
-            <Typography
-              align="center"
-              variant="subtitle1"
-              className="typography_success_info_message"
-            >
-              Your transaction has been successfully submitted to Ethereum network.
-            </Typography>
-            <Typography
-              align="center"
-              variant="subtitle1"
-              className="typography_success_info_message"
-            >
-              Your token creation transaction hash is:
-            </Typography>
-            <Typography
-              align="center"
-              variant="subtitle1"
-              className="typography_success_info_message"
-            >
-              <a href={transactionLink} rel="noopener noreferrer" target="_blank">
-                {this.props.infoMessage}
-              </a>
-              <Tooltip title="Copy to clipboard">
-                <FontAwesomeIcon className="fa_clipboard" icon={faClipboard} onClick={this.handleCopyToClipboard} />
-              </Tooltip>
-            </Typography>
-            <Typography
-              align="center"
-              variant="subtitle1"
-              className="typography_success_info_message"
-            >
-              Once the mining is finished, you can check your new assets on <a href={etherscanLink} rel="noopener noreferrer" target="_blank">etherscan</a>
-            </Typography>
-            <Typography
-              align="center"
-              variant="subtitle1"
-              className="typography_success_info_message"
-            >
-              Share with the world:
-            </Typography>
-            <div className="share_div" >
-              <TwitterShareButton
-                className="button_share"
-                url={shareUrl}
-                title={twitterTitle}
-                via="MerkleBlue"
+            <MuiThemeProvider theme={theme}>
+              <Typography
+                align="center"
+                variant="subtitle1"
+                className="typography_success_info_message"
               >
-                <TwitterIcon
-                  size={32}
-                  round
-                />
-              </TwitterShareButton>
-            </div>
-            <div className="share_div" >
-              <TelegramShareButton
-                className="button_share"
-                url={shareUrl}
-                title={telegramTitle}
+                Your transaction has been successfully submitted to Ethereum network.
+              </Typography>
+              <Typography
+                align="center"
+                variant="subtitle1"
+                className="typography_success_info_message"
               >
-                <TelegramIcon
-                  size={32}
-                  round
-                />
-              </TelegramShareButton>
-            </div>
-            <div className="share_div" >
-              <RedditShareButton
-                className="button_share"
-                url={shareUrl}
-                title={redditTitle}
+                Your token creation transaction hash is:
+              </Typography>
+              <Typography
+                align="center"
+                variant="subtitle1"
+                className="typography_success_info_message"
               >
-                <RedditIcon
-                  size={32}
-                  round
-                />
-              </RedditShareButton>
-            </div>
-            <div className="share_div" >
-              <WhatsappShareButton
-                className="button_share"
-                url={shareUrl}
-                title={whatsappTitle}
+                <a href={transactionLink} rel="noopener noreferrer" target="_blank">
+                  {this.props.infoMessage}
+                </a>
+                <Tooltip title="Copy to clipboard">
+                  <FontAwesomeIcon className="fa_clipboard" icon={faClipboard} onClick={this.handleCopyToClipboard} />
+                </Tooltip>
+              </Typography>
+              <Typography
+                align="center"
+                variant="subtitle1"
+                className="typography_success_info_message"
               >
-                <WhatsappIcon
-                  size={32}
-                  round
-                />
-              </WhatsappShareButton>
-            </div>
-            <div className="share_div" >
-              <LinkedinShareButton
-                className="button_share"
-                url={shareUrl}
-                title={linkedinTitle}
-                description={linkedinDescription}
+                Once the mining is finished, you can check your new assets on <a href={etherscanLink} rel="noopener noreferrer" target="_blank">etherscan</a>
+              </Typography>
+              <Typography
+                align="center"
+                variant="subtitle1"
+                className="typography_success_info_message"
               >
-                <LinkedinIcon
-                  size={32}
-                  round
-                />
-              </LinkedinShareButton>
-            </div>
-            <div className="share_div" >
-              <EmailShareButton
-                className="button_share"
-                url={shareUrl}
-                subject={emailSubject}
-                body={emailBody}
-              >
-                <EmailIcon
-                  size={32}
-                  round
-                />
-              </EmailShareButton>
-            </div>
+                Share with the world:
+              </Typography>
+              <div className="share_div" >
+                <TwitterShareButton
+                  className="button_share"
+                  url={shareUrl}
+                  title={twitterTitle}
+                  via="MerkleBlue"
+                >
+                  <TwitterIcon
+                    size={32}
+                    round
+                  />
+                </TwitterShareButton>
+              </div>
+              <div className="share_div" >
+                <TelegramShareButton
+                  className="button_share"
+                  url={shareUrl}
+                  title={telegramTitle}
+                >
+                  <TelegramIcon
+                    size={32}
+                    round
+                  />
+                </TelegramShareButton>
+              </div>
+              <div className="share_div" >
+                <RedditShareButton
+                  className="button_share"
+                  url={shareUrl}
+                  title={redditTitle}
+                >
+                  <RedditIcon
+                    size={32}
+                    round
+                  />
+                </RedditShareButton>
+              </div>
+              <div className="share_div" >
+                <WhatsappShareButton
+                  className="button_share"
+                  url={shareUrl}
+                  title={whatsappTitle}
+                >
+                  <WhatsappIcon
+                    size={32}
+                    round
+                  />
+                </WhatsappShareButton>
+              </div>
+              <div className="share_div" >
+                <LinkedinShareButton
+                  className="button_share"
+                  url={shareUrl}
+                  title={linkedinTitle}
+                  description={linkedinDescription}
+                >
+                  <LinkedinIcon
+                    size={32}
+                    round
+                  />
+                </LinkedinShareButton>
+              </div>
+              <div className="share_div" >
+                <EmailShareButton
+                  className="button_share"
+                  url={shareUrl}
+                  subject={emailSubject}
+                  body={emailBody}
+                >
+                  <EmailIcon
+                    size={32}
+                    round
+                  />
+                </EmailShareButton>
+              </div>
+            </MuiThemeProvider>
           </CardContent>
         </Card>
         <form className="footer_main_form">

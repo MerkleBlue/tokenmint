@@ -19,6 +19,7 @@ import * as accountsActions from '../actions/accountsActions';
 import * as serviceFeeActions from '../actions/serviceFeeActions';
 import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 export class ErrorPanel extends React.Component {
 
@@ -49,6 +50,12 @@ export class ErrorPanel extends React.Component {
   }
 
   render() {
+    const theme = createMuiTheme({
+      typography: {
+        useNextVariants: true,
+      }
+    });
+
     return (
       <div>
         <Card className="card">
@@ -65,13 +72,15 @@ export class ErrorPanel extends React.Component {
               root: "card_content"
             }}
           >
-            <Typography
-              align="center"
-              variant="subtitle1"
-              className="typography_error_info_message"
-            >
-              {this.props.infoMessage}
-            </Typography>
+            <MuiThemeProvider theme={theme}>
+              <Typography
+                align="center"
+                variant="subtitle1"
+                className="typography_error_info_message"
+              >
+                {this.props.infoMessage}
+              </Typography>
+            </MuiThemeProvider>
           </CardContent>
         </Card>
         <form className="footer_main_form">
