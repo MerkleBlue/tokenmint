@@ -15,11 +15,12 @@ import PropTypes from 'prop-types';
 import * as createTokensActions from '../actions/createTokensActions';
 import * as appStateActions from '../actions/appStateActions';
 import * as infoMessageActions from '../actions/infoMessageActions';
-import * as serviceFeeActions from '../actions/serviceFeeActions';
 import * as networkActions from '../actions/networkActions';
+import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
 import initialState from '../reducers/initialState';
 import InputValidator from '../../tools/InputValidator';
 import ReactGA from 'react-ga';
+import { NO_NETWORK } from '../../api/mintApi';
 
 export class ConfirmationPanel extends React.Component {
 
@@ -44,16 +45,17 @@ export class ConfirmationPanel extends React.Component {
       this.props.totalSupply,
       this.props.tokenOwner
     ) && !this.props.checkingTokenOwnerFunds
-      && this.props.tokenOwnerHasEnoughFunds
+      && !this.props.tokenOwnerHasInsufficientFunds
       && !this.props.loadingAccounts
-      && this.props.serviceFee > 0;
+      && this.props.serviceFee > 0
+      && this.props.network !== NO_NETWORK;
   }
 
   handleCancel(e) {
     this.props.infoMessageActions.setInfoMessage(initialState.infoMessage);
-    this.props.serviceFeeActions.setServiceFee(initialState.serviceFee);
     this.props.appStateActions.setAppState(initialState.appState);
     this.props.networkActions.getNetworkType();
+    this.props.tokenOwnerFundsActions.checkFunds(this.props.tokenOwner);
   }
 
   handleConfirm(e) {
@@ -306,10 +308,10 @@ export class ConfirmationPanel extends React.Component {
 }
 
 ConfirmationPanel.propTypes = {
+  tokenOwnerFundsActions: PropTypes.object.isRequired,
   createTokensActions: PropTypes.object.isRequired,
   appStateActions: PropTypes.object.isRequired,
   infoMessageActions: PropTypes.object.isRequired,
-  serviceFeeActions: PropTypes.object.isRequired,
   networkActions: PropTypes.object.isRequired,
   tokenName: PropTypes.string.isRequired,
   tokenSymbol: PropTypes.string.isRequired,
@@ -318,9 +320,10 @@ ConfirmationPanel.propTypes = {
   tokenType: PropTypes.string.isRequired,
   tokenOwner: PropTypes.string.isRequired,
   checkingTokenOwnerFunds: PropTypes.bool.isRequired,
-  tokenOwnerHasEnoughFunds: PropTypes.bool.isRequired,
+  tokenOwnerHasInsufficientFunds: PropTypes.bool.isRequired,
   loadingAccounts: PropTypes.bool.isRequired,
-  serviceFee: PropTypes.number.isRequired
+  serviceFee: PropTypes.number.isRequired,
+  network: PropTypes.string.isRequired
 };
 
 function mapStateToProps(state) {
@@ -332,9 +335,10 @@ function mapStateToProps(state) {
     tokenType: state.tokenType,
     tokenOwner: state.tokenOwner,
     checkingTokenOwnerFunds: state.checkingTokenOwnerFunds,
-    tokenOwnerHasEnoughFunds: state.tokenOwnerHasEnoughFunds,
+    tokenOwnerHasInsufficientFunds: state.tokenOwnerHasInsufficientFunds,
     loadingAccounts: state.loadingAccounts,
-    serviceFee: state.serviceFee
+    serviceFee: state.serviceFee,
+    network: state.network
   };
 }
 
@@ -343,8 +347,8 @@ function mapDispatchToProps(dispatch) {
     createTokensActions: bindActionCreators(createTokensActions, dispatch),
     appStateActions: bindActionCreators(appStateActions, dispatch),
     infoMessageActions: bindActionCreators(infoMessageActions, dispatch),
-    serviceFeeActions: bindActionCreators(serviceFeeActions, dispatch),
     networkActions: bindActionCreators(networkActions, dispatch),
+    tokenOwnerFundsActions: bindActionCreators(tokenOwnerFundsActions, dispatch)
   };
 }
 

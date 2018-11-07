@@ -64,7 +64,8 @@ export class SuccessMessagePanel extends React.Component {
     this.props.tokenOwnerActions.setTokenOwner(initialState.tokenOwner);
     this.props.appStateActions.setAppState(initialState.appState);
     this.props.tokenOwnerFundsActions.setCheckingTokenOwnerFunds(initialState.checkingTokenOwnerFunds);
-    this.props.tokenOwnerFundsActions.setTokenOwnerHasEnoughFunds(initialState.tokenOwnerHasEnoughFunds);
+    this.props.tokenOwnerFundsActions.setTokenOwnerHasInsufficientFunds(initialState.tokenOwnerHasInsufficientFunds);
+    this.props.tokenOwnerFundsActions.setTokenOwnerBalance(initialState.tokenOwnerBalance);
     this.props.infoMessageActions.setInfoMessage(initialState.infoMessage);
     this.props.accountsActions.loadAllAccounts();
     this.props.serviceFeeActions.setServiceFee(initialState.serviceFee);

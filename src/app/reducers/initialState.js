@@ -10,10 +10,11 @@ export default {
   accounts: [],
   appState: appStates.INIT,
   checkingTokenOwnerFunds: false,
-  tokenOwnerHasEnoughFunds: true,
+  tokenOwnerBalance: 0,
   infoMessage: "",
   loadingAccounts: false,
   serviceFee: 0,
   network: "",
-  checkingNetwork: true
+  checkingNetwork: true,
+  tokenOwnerHasInsufficientFunds: false
 };

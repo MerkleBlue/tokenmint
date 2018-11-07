@@ -8,12 +8,13 @@ import totalSupply from './totalSupplyReducer';
 import accounts from './accountsReducer';
 import appState from './appStateReducer';
 import checkingTokenOwnerFunds from './checkingTokenOwnerFundsReducer';
-import tokenOwnerHasEnoughFunds from './tokenOwnerHasEnoughFundsReducer';
+import tokenOwnerBalance from './tokenOwnerBalanceReducer';
 import loadingAccounts from './loadingAccountsReducer';
 import infoMessage from './infoMessageReducer';
 import serviceFee from './serviceFeeReducer';
 import network from './networkReducer';
 import checkingNetwork from './checkingNetworkReducer';
+import tokenOwnerHasInsufficientFunds from './tokenOwnerHasInsufficientFundsReducer';
 
 const rootReducer = combineReducers({
   tokenName: tokenName,
@@ -25,12 +26,13 @@ const rootReducer = combineReducers({
   accounts: accounts,
   appState: appState,
   checkingTokenOwnerFunds: checkingTokenOwnerFunds,
-  tokenOwnerHasEnoughFunds: tokenOwnerHasEnoughFunds,
+  tokenOwnerBalance: tokenOwnerBalance,
   infoMessage: infoMessage,
   loadingAccounts: loadingAccounts,
   serviceFee: serviceFee,
   network: network,
-  checkingNetwork: checkingNetwork
+  checkingNetwork: checkingNetwork,
+  tokenOwnerHasInsufficientFunds: tokenOwnerHasInsufficientFunds
 });
 
 export default rootReducer;

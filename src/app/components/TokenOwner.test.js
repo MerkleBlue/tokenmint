@@ -7,7 +7,13 @@ import Adapter from 'enzyme-adapter-react-16';
 import { JSDOM } from 'jsdom';
 import initialState from '../reducers/initialState';
 
+const tokenOwnerHasInsufficientFunds = false;
+const checkingTokenOwnerFunds = false;
+const checkingNetwork = false;
+const loadingAccounts = false;
 const tokenOwner = "0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef";
+const tokenOwnerBalance = 0.5;
+const serviceFee = 0.25;
 function generateAccounts(accountsCount) {
   const accounts = [];
   for (let i = 0; i < accountsCount; i++) {
@@ -22,22 +28,26 @@ describe("<TokenOwner /> tests", () => {
   let mount;
 
   function setup(
-    isMainNet,
+    tokenOwnerHasInsufficientFunds,
+    checkingTokenOwnerFunds,
     checkingNetwork,
     accounts,
     tokenOwner,
-    tokenOwnerHasEnoughFunds,
     loadingAccounts,
+    tokenOwnerBalance,
+    serviceFee,
     setTokenOwner = () => { },
     checkFunds = () => { }
   ) {
     const props = {
-      isMainNet: isMainNet,
       checkingNetwork: checkingNetwork,
       accounts: accounts,
       tokenOwner: tokenOwner,
-      tokenOwnerHasEnoughFunds: tokenOwnerHasEnoughFunds,
+      tokenOwnerHasInsufficientFunds: tokenOwnerHasInsufficientFunds,
+      checkingTokenOwnerFunds: checkingTokenOwnerFunds,
       loadingAccounts: loadingAccounts,
+      tokenOwnerBalance: tokenOwnerBalance,
+      serviceFee: serviceFee,
       tokenOwnerActions: { setTokenOwner: setTokenOwner },
       tokenOwnerFundsActions: { checkFunds: checkFunds }
     };
@@ -57,11 +67,24 @@ describe("<TokenOwner /> tests", () => {
   });
 
   it("renders TokenOwner without accounts", () => {
-    const wrapper = setup(true, false, initialState.accounts, initialState.tokenOwner, true, false);
+    const wrapper = setup(
+      tokenOwnerHasInsufficientFunds,
+      checkingTokenOwnerFunds,
+      checkingNetwork,
+      initialState.accounts,
+      initialState.tokenOwner,
+      loadingAccounts,
+      tokenOwnerBalance,
+      serviceFee
+    );
+    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.be.false;
+    expect(wrapper.props().checkingTokenOwnerFunds).to.be.false;
+    expect(wrapper.props().checkingNetwork).to.be.false;
     expect(wrapper.props().accounts).to.be.empty;
     expect(wrapper.props().tokenOwner).to.be.empty;
-    expect(wrapper.props().tokenOwnerHasEnoughFunds).to.be.true;
     expect(wrapper.props().loadingAccounts).to.be.false;
+    expect(wrapper.props().tokenOwnerBalance).to.eq(tokenOwnerBalance);
+    expect(wrapper.props().serviceFee).to.eq(serviceFee);
     expect(wrapper.find("Card").length).to.eq(1);
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Token Owner");
@@ -80,11 +103,24 @@ describe("<TokenOwner /> tests", () => {
   });
 
   it("renders TokenOwner while loading accounts", () => {
-    const wrapper = setup(true, false, initialState.accounts, initialState.tokenOwner, true, true);
+    const wrapper = setup(
+      tokenOwnerHasInsufficientFunds,
+      checkingTokenOwnerFunds,
+      checkingNetwork,
+      initialState.accounts,
+      initialState.tokenOwner,
+      true,
+      tokenOwnerBalance,
+      serviceFee
+    );
+    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.be.false;
+    expect(wrapper.props().checkingTokenOwnerFunds).to.be.false;
+    expect(wrapper.props().checkingNetwork).to.be.false;
     expect(wrapper.props().accounts).to.be.empty;
     expect(wrapper.props().tokenOwner).to.be.empty;
-    expect(wrapper.props().tokenOwnerHasEnoughFunds).to.be.true;
     expect(wrapper.props().loadingAccounts).to.be.true;
+    expect(wrapper.props().tokenOwnerBalance).to.eq(tokenOwnerBalance);
+    expect(wrapper.props().serviceFee).to.eq(serviceFee);
     expect(wrapper.find("Card").length).to.eq(1);
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Token Owner");
@@ -102,11 +138,24 @@ describe("<TokenOwner /> tests", () => {
   });
 
   it("renders TokenOwner with insufficient funds", () => {
-    const wrapper = setup(true, false, [tokenOwner], tokenOwner, false, false);
-    expect(wrapper.props().accounts).to.not.be.empty;
+    const wrapper = setup(
+      true,
+      checkingTokenOwnerFunds,
+      checkingNetwork,
+      [tokenOwner],
+      tokenOwner,
+      loadingAccounts,
+      tokenOwnerBalance,
+      serviceFee
+    );
+    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.be.true;
+    expect(wrapper.props().checkingTokenOwnerFunds).to.be.false;
+    expect(wrapper.props().checkingNetwork).to.be.false;
+    expect(wrapper.props().accounts.length).to.eq(1);
     expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().tokenOwnerHasEnoughFunds).to.be.false;
     expect(wrapper.props().loadingAccounts).to.be.false;
+    expect(wrapper.props().tokenOwnerBalance).to.eq(tokenOwnerBalance);
+    expect(wrapper.props().serviceFee).to.eq(serviceFee);
     expect(wrapper.find("Card").length).to.eq(1);
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Token Owner");
@@ -116,20 +165,35 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("Select").length).to.eq(1);
     expect(wrapper.find("Select").props().error).to.be.true;
     expect(wrapper.find("Select").props().value).to.eq(tokenOwner);
-    expect(wrapper.find("Typography").length).to.eq(2);
+    expect(wrapper.find("Typography").length).to.eq(4);
     expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_error");
     expect(wrapper.find("Typography").at(1).props().children[0]).to.eq("This account has insufficient funds. " +
-      "Please top up this account, or select another one.");
+      "Please top up this account, or select another one, and refresh the page.");
+    expect(wrapper.find("Typography").at(2).props().children[2]).to.eq(tokenOwnerBalance);
+    expect(wrapper.find("Typography").at(3).props().children[2]).to.eq(serviceFee);
     expect(wrapper.find("a").length).to.eq(0);
   });
 
   it("renders TokenOwner with multiple accounts", () => {
     const accounts = generateAccounts(3);
-    const wrapper = setup(true, false, accounts, accounts[0], true, false);
-    expect(wrapper.props().accounts).to.not.be.empty;
+    const wrapper = setup(
+      tokenOwnerHasInsufficientFunds,
+      checkingTokenOwnerFunds,
+      checkingNetwork,
+      accounts,
+      accounts[0],
+      loadingAccounts,
+      tokenOwnerBalance,
+      serviceFee
+    );
+    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.be.false;
+    expect(wrapper.props().checkingTokenOwnerFunds).to.be.false;
+    expect(wrapper.props().checkingNetwork).to.be.false;
+    expect(wrapper.props().accounts.length).to.eq(3);
     expect(wrapper.props().tokenOwner).to.eq(accounts[0]);
-    expect(wrapper.props().tokenOwnerHasEnoughFunds).to.be.true;
     expect(wrapper.props().loadingAccounts).to.be.false;
+    expect(wrapper.props().tokenOwnerBalance).to.eq(tokenOwnerBalance);
+    expect(wrapper.props().serviceFee).to.eq(serviceFee);
     expect(wrapper.find("Card").length).to.eq(1);
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Token Owner");

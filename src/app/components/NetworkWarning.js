@@ -59,7 +59,7 @@ export class NetworkWarning extends React.Component {
           </Typography>
           <Typography
             align="left"
-            variant="subtitle1"
+            variant="body1"
           >
             {descriptionMessage}
           </Typography>
@@ -67,13 +67,13 @@ export class NetworkWarning extends React.Component {
             <div>
               <Typography
                 align="left"
-                variant="subtitle1"
+                variant="body1"
               >
                 You can download MetaMask at <a href="https://metamask.io/" rel="noopener noreferrer" target="_blank">metamask.io</a>
               </Typography>
               <Typography
                 align="left"
-                variant="subtitle1"
+                variant="body1"
               >
                 You can download Ethereum wallet at <a href="https://geth.ethereum.org/downloads/" rel="noopener noreferrer" target="_blank">geth.ethereum.org/downloads/</a>
                 or at <a href="https://www.parity.io/ethereum/" rel="noopener noreferrer" target="_blank">www.parity.io/ethereum/</a>

@@ -5,13 +5,12 @@ import PropTypes from 'prop-types';
 import InputValidator from '../../tools/InputValidator';
 import { bindActionCreators } from 'redux';
 import * as appStateActions from '../actions/appStateActions';
-import * as serviceFeeActions from '../actions/serviceFeeActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoins } from '@fortawesome/free-solid-svg-icons';
 import appStates from '../reducers/appStates';
-import {
-  Tooltip
-} from '@material-ui/core';
+import { Tooltip } from '@material-ui/core';
+import { NO_NETWORK } from '../../api/mintApi';
+
 
 export class Footer extends React.Component {
 
@@ -29,16 +28,20 @@ export class Footer extends React.Component {
       this.props.totalSupply,
       this.props.tokenOwner
     ) && !this.props.checkingTokenOwnerFunds
-      && this.props.tokenOwnerHasEnoughFunds
-      && !this.props.loadingAccounts;
+      && !this.props.tokenOwnerHasInsufficientFunds
+      && !this.props.loadingAccounts
+      && this.props.serviceFee > 0
+      && this.props.network !== NO_NETWORK;
   }
 
   handleTokenCreation(e) {
-    this.props.serviceFeeActions.calculateServiceFee();
     this.props.appStateActions.setAppState(appStates.PENDING_CONFIRMATION);
   }
 
   render() {
+    const tooltipTitle = this.props.tokenOwnerHasInsufficientFunds ?
+      "The selected account has insufficient funds" :
+      "Please fill in all the parameters above to enable token creation";
     let createBtn = this.isCreationEnabled() ?
       (
         <span
@@ -55,7 +58,7 @@ export class Footer extends React.Component {
           classes={{
             tooltip: "tooltip_disabled"
           }}
-          title="Please fill in all the parameters above to enable token creation"
+          title={tooltipTitle}
         >
           <span
             className="btn btn-disabled wow fadeInUp"
@@ -78,7 +81,6 @@ export class Footer extends React.Component {
 
 Footer.propTypes = {
   appStateActions: PropTypes.object.isRequired,
-  serviceFeeActions: PropTypes.object.isRequired,
   tokenName: PropTypes.string.isRequired,
   tokenSymbol: PropTypes.string.isRequired,
   decimals: PropTypes.string.isRequired,
@@ -86,8 +88,10 @@ Footer.propTypes = {
   tokenType: PropTypes.string.isRequired,
   tokenOwner: PropTypes.string.isRequired,
   checkingTokenOwnerFunds: PropTypes.bool.isRequired,
-  tokenOwnerHasEnoughFunds: PropTypes.bool.isRequired,
-  loadingAccounts: PropTypes.bool.isRequired
+  tokenOwnerHasInsufficientFunds: PropTypes.bool.isRequired,
+  loadingAccounts: PropTypes.bool.isRequired,
+  serviceFee: PropTypes.number.isRequired,
+  network: PropTypes.string.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -99,15 +103,16 @@ function mapStateToProps(state) {
     tokenType: state.tokenType,
     tokenOwner: state.tokenOwner,
     checkingTokenOwnerFunds: state.checkingTokenOwnerFunds,
-    tokenOwnerHasEnoughFunds: state.tokenOwnerHasEnoughFunds,
-    loadingAccounts: state.loadingAccounts
+    tokenOwnerHasInsufficientFunds: state.tokenOwnerHasInsufficientFunds,
+    loadingAccounts: state.loadingAccounts,
+    serviceFee: state.serviceFee,
+    network: state.network
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    appStateActions: bindActionCreators(appStateActions, dispatch),
-    serviceFeeActions: bindActionCreators(serviceFeeActions, dispatch)
+    appStateActions: bindActionCreators(appStateActions, dispatch)
   };
 }
 
