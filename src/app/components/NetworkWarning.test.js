@@ -93,12 +93,10 @@ describe("<NetworkWarning /> tests", () => {
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Network warning!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(5);
+    expect(wrapper.find("Typography").length).to.eq(4);
     expect(wrapper.find("Typography").at(1).props().children).to.eq("No network detected!");
-    expect(wrapper.find("Typography").at(2).props().children).to.eq("Please activate MetaMask or any Ethereum wallet!");
-    expect(wrapper.find("a").length).to.eq(3);
+    expect(wrapper.find("Typography").at(2).props().children).to.eq("Please activate MetaMask!");
+    expect(wrapper.find("a").length).to.eq(1);
     expect(wrapper.find("a").at(0).props().href).to.eq("https://metamask.io/");
-    expect(wrapper.find("a").at(1).props().href).to.eq("https://geth.ethereum.org/downloads/");
-    expect(wrapper.find("a").at(2).props().href).to.eq("https://www.parity.io/ethereum/");
   });
 });
