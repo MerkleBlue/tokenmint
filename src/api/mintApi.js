@@ -141,7 +141,11 @@ export function checkTokenOwnerFunds(tokenOwner) {
     getFee().then(fee => {
       getEthBalance(tokenOwner).then(balance => {
         // TODO: 0.01 ETH is just an estimation of gas costs for deploying a contract and paying a fee
-        accept(balance - fee - 0.01 > 0);
+        //accept(balance - fee - 0.01 > 0);
+        accept({
+          tokenOwnerBalance: balance,
+          serviceFee: fee
+        });
         return;
       }).catch((e) => {
         reject(e);

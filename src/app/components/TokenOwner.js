@@ -51,7 +51,8 @@ export class TokenOwner extends React.Component {
         primary: { 500: "#31bfdf" }
       }
     });
-    let error = (this.props.accounts.length === 0 || !this.props.tokenOwnerHasEnoughFunds) && !this.props.loadingAccounts;
+
+    let error = (this.props.accounts.length === 0 || this.props.tokenOwnerHasInsufficientFunds) && !this.props.loadingAccounts && !this.props.checkingTokenOwnerFunds;
     const metamaskLink = (<a href="https://metamask.io/" rel="noopener noreferrer" target="_blank">metamask.io</a>);
 
     let menuItems;
@@ -78,10 +79,10 @@ export class TokenOwner extends React.Component {
           {account}
         </MenuItem>
       ));
-      if (this.props.tokenOwnerHasEnoughFunds) {
-        descriptionText = "ETH address (not exchange address). This address will be owner of the token!";
+      if (this.props.tokenOwnerHasInsufficientFunds) {
+        descriptionText = "This account has insufficient funds. Please top up this account, or select another one, and refresh the page.";
       } else {
-        descriptionText = "This account has insufficient funds. Please top up this account, or select another one.";
+        descriptionText = "ETH address (not exchange address). This address will be owner of the token!";
       }
     } else {
       menuItems = (
@@ -137,11 +138,29 @@ export class TokenOwner extends React.Component {
             <Grid item xs>
               <Typography
                 align="left"
-                variant="caption"
+                variant="body1"
                 className={error ? "typography_error" : "typography"}
               >
                 {descriptionText} {(this.props.accounts.length === 0 && !this.props.loadingAccounts) && metamaskLink}
               </Typography>
+              {this.props.tokenOwnerHasInsufficientFunds &&
+                <div>
+                  <Typography
+                    align="left"
+                    variant="body1"
+                    className="typography_error_secondary"
+                  >
+                    <strong>Selected account balance:</strong> {this.props.tokenOwnerBalance} ETH
+                  </Typography>
+                  <Typography
+                    align="left"
+                    variant="body1"
+                    className="typography_error_secondary"
+                  >
+                  <strong>Minimum required balance:</strong> {this.props.serviceFee} ETH plus mining fee
+                  </Typography>
+                </div>
+              }
             </Grid>
           </Grid>
         </CardContent>
@@ -151,10 +170,13 @@ export class TokenOwner extends React.Component {
 }
 
 TokenOwner.propTypes = {
+  tokenOwnerHasInsufficientFunds: PropTypes.bool.isRequired,
+  checkingTokenOwnerFunds: PropTypes.bool.isRequired,
   checkingNetwork: PropTypes.bool.isRequired,
   accounts: PropTypes.array.isRequired,
   tokenOwner: PropTypes.string.isRequired,
-  tokenOwnerHasEnoughFunds: PropTypes.bool.isRequired,
+  tokenOwnerBalance: PropTypes.number.isRequired,
+  serviceFee: PropTypes.number.isRequired,
   loadingAccounts: PropTypes.bool.isRequired,
   tokenOwnerActions: PropTypes.object.isRequired,
   tokenOwnerFundsActions: PropTypes.object.isRequired
@@ -165,9 +187,11 @@ function mapStateToProps(state) {
     accounts: state.accounts,
     loadingAccounts: state.loadingAccounts,
     tokenOwner: state.tokenOwner,
-    tokenOwnerHasEnoughFunds: state.tokenOwnerHasEnoughFunds,
+    tokenOwnerBalance: state.tokenOwnerBalance,
+    serviceFee: state.serviceFee,
     checkingNetwork: state.checkingNetwork,
-    isMainNet: state.isMainNet
+    checkingTokenOwnerFunds: state.checkingTokenOwnerFunds,
+    tokenOwnerHasInsufficientFunds: state.tokenOwnerHasInsufficientFunds
   };
 }
 
