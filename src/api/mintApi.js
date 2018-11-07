@@ -143,7 +143,7 @@ export function checkTokenOwnerFunds(tokenOwner) {
         // TODO: 0.01 ETH is just an estimation of gas costs for deploying a contract and paying a fee
         //accept(balance - fee - 0.01 > 0);
         accept({
-          tokenOwnerBalance: balance,
+          tokenOwnerBalance: parseFloat(balance),
           serviceFee: fee
         });
         return;

@@ -4,6 +4,7 @@ import { Typography, Card, CardHeader, CardContent, LinearProgress } from '@mate
 import ReactGA from 'react-ga';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 export class MiningInProgressPanel extends React.Component {
 
@@ -14,6 +15,12 @@ export class MiningInProgressPanel extends React.Component {
   }
 
   render() {
+    const theme = createMuiTheme({
+      typography: {
+        useNextVariants: true,
+      }
+    });
+
     return (
       <div>
         <Card className="card">
@@ -29,18 +36,20 @@ export class MiningInProgressPanel extends React.Component {
               root: "card_content"
             }}
           >
-            <Typography
-              align="center"
-              variant="subtitle1"
-            >
-              Your transaction is about to be sent.
-            </Typography>
-            <Typography
-              align="center"
-              variant="subtitle1"
-            >
-              Please set the mining fee and confirm token creation in your wallet.
-            </Typography>
+            <MuiThemeProvider theme={theme}>
+              <Typography
+                align="center"
+                variant="subtitle1"
+              >
+                Your transaction is about to be sent.
+              </Typography>
+              <Typography
+                align="center"
+                variant="subtitle1"
+              >
+                Please set the mining fee and confirm token creation in your wallet.
+              </Typography>
+            </MuiThemeProvider>
           </CardContent>
         </Card>
         <form className="footer_main_form">

@@ -67,7 +67,7 @@ export class TokenOwner extends React.Component {
           Loading accounts...
         </MenuItem>
       );
-      descriptionText = "ETH address (not exchange address). This address will be owner of the token!";
+      descriptionText = "ETH account. This account will be owner of the token!";
     } else if (this.props.accounts.length > 0) {
       menuItems = this.props.accounts.map((account) => (
         <MenuItem
@@ -82,7 +82,7 @@ export class TokenOwner extends React.Component {
       if (this.props.tokenOwnerHasInsufficientFunds) {
         descriptionText = "This account has insufficient funds. Please top up this account, or select another one, and refresh the page.";
       } else {
-        descriptionText = "ETH address (not exchange address). This address will be owner of the token!";
+        descriptionText = "ETH account. This account will be owner of the token!";
       }
     } else {
       menuItems = (
@@ -94,7 +94,7 @@ export class TokenOwner extends React.Component {
           No available accounts
         </MenuItem>
       );
-      descriptionText = "There are no available accounts. Please make sure that you run Metamask or any other Ethereum wallet with at least one account, and refresh the page. " +
+      descriptionText = "There are no available accounts. Please make sure that you run Metamask or any other Ethereum wallet with at least one UNLOCKED account, and refresh the page. " +
         "You can download Metamask at";
     }
 

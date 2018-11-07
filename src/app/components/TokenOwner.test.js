@@ -97,7 +97,7 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("Typography").length).to.eq(2);
     expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_error");
     expect(wrapper.find("Typography").at(1).props().children[0]).to.eq("There are no available accounts. " +
-      "Please make sure that you run Metamask or any other Ethereum wallet with at least one account, and refresh the page. You can download Metamask at");
+      "Please make sure that you run Metamask or any other Ethereum wallet with at least one UNLOCKED account, and refresh the page. You can download Metamask at");
     expect(wrapper.find("a").length).to.eq(1);
     expect(wrapper.find("a").props().href).to.eq("https://metamask.io/");
   });
@@ -132,8 +132,8 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("Select").props().value).to.be.empty;
     expect(wrapper.find("Typography").length).to.eq(2);
     expect(wrapper.find("Typography").at(1).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(1).props().children[0]).to.eq("ETH address (not exchange address). " +
-      "This address will be owner of the token!");
+    expect(wrapper.find("Typography").at(1).props().children[0]).to.eq("ETH account. " +
+      "This account will be owner of the token!");
     expect(wrapper.find("a").length).to.eq(0);
   });
 
@@ -205,8 +205,8 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("Select").props().value).to.eq(accounts[0]);
     expect(wrapper.find("Typography").length).to.eq(2);
     expect(wrapper.find("Typography").at(1).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(1).props().children[0]).to.eq("ETH address (not exchange address). " +
-      "This address will be owner of the token!");
+    expect(wrapper.find("Typography").at(1).props().children[0]).to.eq("ETH account. " +
+      "This account will be owner of the token!");
     expect(wrapper.find("a").length).to.eq(0);
   });
 });

@@ -3,8 +3,15 @@ import './css/Header.css';
 import logo from '../img/logo.png';
 import { Typography } from '@material-ui/core';
 import ethereum from '../img/ethereum.png';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 const Header = () => {
+  const theme = createMuiTheme({
+    typography: {
+      useNextVariants: true,
+    }
+  });
+
   return (
     <div className="header_div">
       <div className="logo_div">
@@ -15,14 +22,16 @@ const Header = () => {
           <img src={ethereum} alt="" />
         </div>
         <div className="typography_div">
-          <Typography
-            color="textSecondary"
-            variant="h5"
-            gutterBottom
-            className="typography_header"
-          >
-            Your own Token powered by
-          </Typography>
+          <MuiThemeProvider theme={theme}>
+            <Typography
+              color="textSecondary"
+              variant="h5"
+              gutterBottom
+              className="typography_header"
+            >
+              Your own Token powered by
+            </Typography>
+          </MuiThemeProvider>
         </div>
       </div>
     </div>
