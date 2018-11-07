@@ -39,6 +39,9 @@ export class Footer extends React.Component {
   }
 
   render() {
+    const tooltipTitle = this.props.tokenOwnerHasInsufficientFunds ?
+      "The selected account has insufficient funds" :
+      "Please fill in all the parameters above to enable token creation";
     let createBtn = this.isCreationEnabled() ?
       (
         <span
@@ -55,7 +58,7 @@ export class Footer extends React.Component {
           classes={{
             tooltip: "tooltip_disabled"
           }}
-          title="Please fill in all the parameters above to enable token creation"
+          title={tooltipTitle}
         >
           <span
             className="btn btn-disabled wow fadeInUp"
