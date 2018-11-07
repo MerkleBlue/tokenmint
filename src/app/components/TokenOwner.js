@@ -150,14 +150,14 @@ export class TokenOwner extends React.Component {
                     variant="body1"
                     className="typography_error_secondary"
                   >
-                    <strong>Selected account balance:</strong> {this.props.tokenOwnerBalance} ETH
+                    <strong>Selected account balance:</strong> {this.props.tokenOwnerBalance.toFixed(6)} ETH
                   </Typography>
                   <Typography
                     align="left"
                     variant="body1"
                     className="typography_error_secondary"
                   >
-                  <strong>Minimum required balance:</strong> {this.props.serviceFee} ETH plus mining fee
+                  <strong>Minimum required balance:</strong> {this.props.serviceFee.toFixed(6)} ETH plus mining fee
                   </Typography>
                 </div>
               }
