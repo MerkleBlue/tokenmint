@@ -76,10 +76,10 @@ describe("<TokenInfo /> tests", () => {
     expect(wrapper.find("TextField").at(2).props().value).to.eq(decimals);
     expect(wrapper.find("TextField").at(3).props().value).to.eq(totalSupply);
     expect(wrapper.find("Typography").length).to.eq(5);
-    expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_error");
-    expect(wrapper.find("Typography").at(2).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(3).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(4).props().className).to.eq("typography");
+    expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_token_info_error");
+    expect(wrapper.find("Typography").at(2).props().className).to.eq("typography_token_info");
+    expect(wrapper.find("Typography").at(3).props().className).to.eq("typography_token_info");
+    expect(wrapper.find("Typography").at(4).props().className).to.eq("typography_token_info");
     expect(wrapper.find("Typography").at(1).props().children).to.eq("The name of the token. 3-25 symbols. " +
       "Alphanumerical characters, space, and hyphen are accepted.");
     expect(wrapper.find("Typography").at(2).props().children).to.eq("3-4 characters (example ETH, BTC, BAT, etc.). No spaces. Only alphanumerical characters.");
@@ -113,10 +113,10 @@ describe("<TokenInfo /> tests", () => {
     expect(wrapper.find("TextField").at(2).props().value).to.eq(decimals);
     expect(wrapper.find("TextField").at(3).props().value).to.eq(totalSupply);
     expect(wrapper.find("Typography").length).to.eq(5);
-    expect(wrapper.find("Typography").at(1).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(2).props().className).to.eq("typography_error");
-    expect(wrapper.find("Typography").at(3).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(4).props().className).to.eq("typography");
+    expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_token_info");
+    expect(wrapper.find("Typography").at(2).props().className).to.eq("typography_token_info_error");
+    expect(wrapper.find("Typography").at(3).props().className).to.eq("typography_token_info");
+    expect(wrapper.find("Typography").at(4).props().className).to.eq("typography_token_info");
     expect(wrapper.find("Typography").at(1).props().children).to.eq("The name of the token. 3-25 symbols. " +
       "Alphanumerical characters, space, and hyphen are accepted.");
     expect(wrapper.find("Typography").at(2).props().children).to.eq("3-4 characters (example ETH, BTC, BAT, etc.). No spaces. Only alphanumerical characters.");
@@ -150,10 +150,10 @@ describe("<TokenInfo /> tests", () => {
     expect(wrapper.find("TextField").at(2).props().value).to.eq(decimals);
     expect(wrapper.find("TextField").at(3).props().value).to.eq(totalSupply);
     expect(wrapper.find("Typography").length).to.eq(5);
-    expect(wrapper.find("Typography").at(1).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(2).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(3).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(4).props().className).to.eq("typography");
+    expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_token_info");
+    expect(wrapper.find("Typography").at(2).props().className).to.eq("typography_token_info");
+    expect(wrapper.find("Typography").at(3).props().className).to.eq("typography_token_info");
+    expect(wrapper.find("Typography").at(4).props().className).to.eq("typography_token_info");
     expect(wrapper.find("Typography").at(1).props().children).to.eq("The name of the token. 3-25 symbols. " +
       "Alphanumerical characters, space, and hyphen are accepted.");
     expect(wrapper.find("Typography").at(2).props().children).to.eq("This token symbol is already in use. We advise using another symbol.");
@@ -187,10 +187,10 @@ describe("<TokenInfo /> tests", () => {
     expect(wrapper.find("TextField").at(2).props().value).to.eq("51");
     expect(wrapper.find("TextField").at(3).props().value).to.eq(totalSupply);
     expect(wrapper.find("Typography").length).to.eq(5);
-    expect(wrapper.find("Typography").at(1).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(2).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(3).props().className).to.eq("typography_error");
-    expect(wrapper.find("Typography").at(4).props().className).to.eq("typography");
+    expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_token_info");
+    expect(wrapper.find("Typography").at(2).props().className).to.eq("typography_token_info");
+    expect(wrapper.find("Typography").at(3).props().className).to.eq("typography_token_info_error");
+    expect(wrapper.find("Typography").at(4).props().className).to.eq("typography_token_info");
     expect(wrapper.find("Typography").at(1).props().children).to.eq("The name of the token. 3-25 symbols. " +
       "Alphanumerical characters, space, and hyphen are accepted.");
     expect(wrapper.find("Typography").at(2).props().children).to.eq("3-4 characters (example ETH, BTC, BAT, etc.). No spaces. Only alphanumerical characters.");
@@ -224,10 +224,10 @@ describe("<TokenInfo /> tests", () => {
     expect(wrapper.find("TextField").at(2).props().value).to.eq(decimals);
     expect(wrapper.find("TextField").at(3).props().value).to.eq("0");
     expect(wrapper.find("Typography").length).to.eq(5);
-    expect(wrapper.find("Typography").at(1).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(2).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(3).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(4).props().className).to.eq("typography_error");
+    expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_token_info");
+    expect(wrapper.find("Typography").at(2).props().className).to.eq("typography_token_info");
+    expect(wrapper.find("Typography").at(3).props().className).to.eq("typography_token_info");
+    expect(wrapper.find("Typography").at(4).props().className).to.eq("typography_token_info_error");
     expect(wrapper.find("Typography").at(1).props().children).to.eq("The name of the token. 3-25 symbols. " +
       "Alphanumerical characters, space, and hyphen are accepted.");
     expect(wrapper.find("Typography").at(2).props().children).to.eq("3-4 characters (example ETH, BTC, BAT, etc.). No spaces. Only alphanumerical characters.");
@@ -261,10 +261,10 @@ describe("<TokenInfo /> tests", () => {
     expect(wrapper.find("TextField").at(2).props().value).to.eq(decimals);
     expect(wrapper.find("TextField").at(3).props().value).to.eq(totalSupply);
     expect(wrapper.find("Typography").length).to.eq(5);
-    expect(wrapper.find("Typography").at(1).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(2).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(3).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(4).props().className).to.eq("typography");
+    expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_token_info");
+    expect(wrapper.find("Typography").at(2).props().className).to.eq("typography_token_info");
+    expect(wrapper.find("Typography").at(3).props().className).to.eq("typography_token_info");
+    expect(wrapper.find("Typography").at(4).props().className).to.eq("typography_token_info");
     expect(wrapper.find("Typography").at(1).props().children).to.eq("The name of the token. 3-25 symbols. " +
       "Alphanumerical characters, space, and hyphen are accepted.");
     expect(wrapper.find("Typography").at(2).props().children).to.eq("3-4 characters (example ETH, BTC, BAT, etc.). No spaces. Only alphanumerical characters.");

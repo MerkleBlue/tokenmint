@@ -16,5 +16,6 @@ export default {
   serviceFee: 0,
   network: "",
   checkingNetwork: true,
-  tokenOwnerHasInsufficientFunds: false
+  tokenOwnerHasInsufficientFunds: false,
+  isMobileDevice: false
 };

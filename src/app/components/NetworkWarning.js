@@ -39,7 +39,7 @@ export class NetworkWarning extends React.Component {
     } else if (this.props.network === NO_NETWORK) {
       icon = <FontAwesomeIcon size="2x" className="fa_error_icon" icon={faTimesCircle} />;
       networkMessage = "No network detected!";
-      descriptionMessage = "Please activate MetaMask or any Ethereum wallet!";
+      descriptionMessage = "Please activate MetaMask!";
     }
 
     return (
@@ -71,21 +71,12 @@ export class NetworkWarning extends React.Component {
               {descriptionMessage}
             </Typography>
             {this.props.network === NO_NETWORK &&
-              <div>
-                <Typography
-                  align="left"
-                  variant="body1"
-                >
-                  You can download MetaMask at <a href="https://metamask.io/" rel="noopener noreferrer" target="_blank">metamask.io</a>
-                </Typography>
-                <Typography
-                  align="left"
-                  variant="body1"
-                >
-                  You can download Ethereum wallet at <a href="https://geth.ethereum.org/downloads/" rel="noopener noreferrer" target="_blank">geth.ethereum.org/downloads/</a>
-                  or at <a href="https://www.parity.io/ethereum/" rel="noopener noreferrer" target="_blank">www.parity.io/ethereum/</a>
-                </Typography>
-              </div>
+              <Typography
+                align="left"
+                variant="body1"
+              >
+                You can download MetaMask at <a href="https://metamask.io/" rel="noopener noreferrer" target="_blank">metamask.io</a>
+              </Typography>
             }
           </MuiThemeProvider>
         </CardContent>
