@@ -4,38 +4,56 @@ import logo from '../img/logo.png';
 import { Typography } from '@material-ui/core';
 import ethereum from '../img/ethereum.png';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-const Header = () => {
-  const theme = createMuiTheme({
-    typography: {
-      useNextVariants: true,
-    }
-  });
+export class Header extends React.Component {
 
-  return (
-    <div className="header_div">
-      <div className="logo_div">
-        <a href="../"><img className="logo_header" src={logo} alt="" /></a>
-      </div>
-      <div className="caption_div">
-        <div className="ethereum_div">
-          <img src={ethereum} alt="" />
+  render() {
+    const theme = createMuiTheme({
+      typography: {
+        useNextVariants: true,
+      }
+    });
+
+    return (
+      <div className="header_div">
+        <div className="logo_div">
+          <a href="../"><img className="logo_header" src={logo} alt="" /></a>
         </div>
-        <div className="typography_div">
-          <MuiThemeProvider theme={theme}>
-            <Typography
-              color="textSecondary"
-              variant="h5"
-              gutterBottom
-              className="typography_header"
-            >
-              Your own Token powered by
-            </Typography>
-          </MuiThemeProvider>
-        </div>
+        {!this.props.isMobileDevice &&
+          <div className="caption_div">
+            <div className="ethereum_div">
+              <img src={ethereum} alt="" />
+            </div>
+            <div className="typography_div">
+              <MuiThemeProvider theme={theme}>
+                <Typography
+                  color="textSecondary"
+                  variant="h5"
+                  gutterBottom
+                  className="typography_header"
+                >
+                  Your own Token powered by
+                </Typography>
+              </MuiThemeProvider>
+            </div>
+          </div>
+        }
       </div>
-    </div>
-  );
+    );
+  }
+}
+
+Header.propTypes = {
+  isMobileDevice: PropTypes.bool.isRequired
 };
 
-export default Header;
+function mapStateToProps(state) {
+  return {
+    isMobileDevice: state.isMobileDevice
+  };
+}
+
+export default connect(mapStateToProps)(Header);
+

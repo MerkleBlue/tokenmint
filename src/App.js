@@ -4,7 +4,7 @@ import TokenInfo from './app/components/TokenInfo'; //eslint-disable-line import
 import TokenType from './app/components/TokenType'; //eslint-disable-line import/no-named-as-default
 import TokenOwner from './app/components/TokenOwner'; //eslint-disable-line import/no-named-as-default
 import Footer from './app/components/Footer'; //eslint-disable-line import/no-named-as-default
-import Header from './app/components/Header';
+import Header from './app/components/Header'; //eslint-disable-line import/no-named-as-default
 import ConfirmationPanel from './app/components/ConfirmationPanel'; //eslint-disable-line import/no-named-as-default
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -53,7 +53,14 @@ class App extends Component {
         </CSSTransitionGroup>
       );
     } else if (this.props.appState === appStates.MINING_CONFIRMED) {
-      content = (<SuccessMessagePanel />);
+      content = (
+        <CSSTransitionGroup
+          transitionName="example"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}>
+          <SuccessMessagePanel />
+        </CSSTransitionGroup>
+      );
     } else {
       content = (
         <CSSTransitionGroup
@@ -74,7 +81,9 @@ class App extends Component {
         <FullStory org="G18A4" />
         <Header />
         {content}
-        <div className="copyright">Copyright {new Date().getFullYear()} © TokenMint.io. All rights reserved. Version {pack.version}</div>
+        {!this.props.isMobileDevice &&
+          <div className="copyright">Copyright {new Date().getFullYear()} © TokenMint.io. All rights reserved. Version {pack.version}</div>
+        }
       </div>
     );
   }
@@ -83,14 +92,16 @@ class App extends Component {
 App.propTypes = {
   appState: PropTypes.number.isRequired,
   network: PropTypes.string.isRequired,
-  checkingNetwork: PropTypes.bool.isRequired
+  checkingNetwork: PropTypes.bool.isRequired,
+  isMobileDevice: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state) {
   return {
     appState: state.appState,
     network: state.network,
-    checkingNetwork: state.checkingNetwork
+    checkingNetwork: state.checkingNetwork,
+    isMobileDevice: state.isMobileDevice
   };
 }
 

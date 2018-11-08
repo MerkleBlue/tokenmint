@@ -24,10 +24,12 @@ describe("<ErrorPanel /> tests", () => {
     setTokenOwner = () => { },
     setAppState = () => { },
     setCheckingTokenOwnerFunds = () => { },
-    setTokenOwnerHasEnoughFunds = () => { },
+    setTokenOwnerHasInsufficientFunds = () => { },
     setInfoMessage = () => { },
     loadAllAccounts = () => { },
-    setServiceFee = () => { }
+    setServiceFee = () => { },
+    setTokenOwnerBalance = () => { },
+    getNetworkType = () => { }
   ) {
     const props = {
       infoMessage: infoMessage,
@@ -40,11 +42,13 @@ describe("<ErrorPanel /> tests", () => {
       appStateActions: { setAppState: setAppState },
       tokenOwnerFundsActions: {
         setCheckingTokenOwnerFunds: setCheckingTokenOwnerFunds,
-        setTokenOwnerHasEnoughFunds: setTokenOwnerHasEnoughFunds
+        setTokenOwnerHasInsufficientFunds: setTokenOwnerHasInsufficientFunds,
+        setTokenOwnerBalance: setTokenOwnerBalance
       },
       infoMessageActions: { setInfoMessage: setInfoMessage },
       accountsActions: { loadAllAccounts: loadAllAccounts },
-      serviceFeeActions: { setServiceFee: setServiceFee }
+      serviceFeeActions: { setServiceFee: setServiceFee },
+      networkActions: { getNetworkType: getNetworkType }
     };
     return mount(<ErrorPanel {...props} />);
   }
@@ -94,10 +98,12 @@ describe("<ErrorPanel /> tests", () => {
     const setTokenOwner = sinon.spy();
     const setAppState = sinon.spy();
     const setCheckingTokenOwnerFunds = sinon.spy();
-    const setTokenOwnerHasEnoughFunds = sinon.spy();
+    const setTokenOwnerHasInsufficientFunds = sinon.spy();
     const setInfoMessage = sinon.spy();
     const loadAllAccounts = sinon.spy();
     const setServiceFee = sinon.spy();
+    const setTokenOwnerBalance = sinon.spy();
+    const getNetworkType = sinon.spy();
     const wrapper = setup(
       infoMessage,
       setDecimals,
@@ -108,10 +114,12 @@ describe("<ErrorPanel /> tests", () => {
       setTokenOwner,
       setAppState,
       setCheckingTokenOwnerFunds,
-      setTokenOwnerHasEnoughFunds,
+      setTokenOwnerHasInsufficientFunds,
       setInfoMessage,
       loadAllAccounts,
-      setServiceFee
+      setServiceFee,
+      setTokenOwnerBalance,
+      getNetworkType
     );
     wrapper.find("span").at(1).simulate("click");
     expect(setDecimals.calledOnce).to.be.true;
@@ -122,9 +130,11 @@ describe("<ErrorPanel /> tests", () => {
     expect(setTokenOwner.calledOnce).to.be.true;
     expect(setAppState.calledOnce).to.be.true;
     expect(setCheckingTokenOwnerFunds.calledOnce).to.be.true;
-    expect(setTokenOwnerHasEnoughFunds.calledOnce).to.be.true;
+    expect(setTokenOwnerHasInsufficientFunds.calledOnce).to.be.true;
     expect(setInfoMessage.calledOnce).to.be.true;
     expect(loadAllAccounts.calledOnce).to.be.true;
     expect(setServiceFee.calledOnce).to.be.true;
+    expect(setTokenOwnerBalance.calledOnce).to.be.true;
+    expect(getNetworkType.calledOnce).to.be.true;
   });
 });

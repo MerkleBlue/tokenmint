@@ -17,6 +17,7 @@ import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
 import * as infoMessageActions from '../actions/infoMessageActions';
 import * as accountsActions from '../actions/accountsActions';
 import * as serviceFeeActions from '../actions/serviceFeeActions';
+import * as networkActions from '../actions/networkActions';
 import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -43,10 +44,12 @@ export class ErrorPanel extends React.Component {
     this.props.tokenOwnerActions.setTokenOwner(initialState.tokenOwner);
     this.props.appStateActions.setAppState(initialState.appState);
     this.props.tokenOwnerFundsActions.setCheckingTokenOwnerFunds(initialState.checkingTokenOwnerFunds);
-    this.props.tokenOwnerFundsActions.setTokenOwnerHasEnoughFunds(initialState.tokenOwnerHasEnoughFunds);
+    this.props.tokenOwnerFundsActions.setTokenOwnerHasInsufficientFunds(initialState.tokenOwnerHasInsufficientFunds);
+    this.props.tokenOwnerFundsActions.setTokenOwnerBalance(initialState.tokenOwnerBalance);
     this.props.infoMessageActions.setInfoMessage(initialState.infoMessage);
     this.props.accountsActions.loadAllAccounts();
     this.props.serviceFeeActions.setServiceFee(initialState.serviceFee);
+    this.props.networkActions.getNetworkType();
   }
 
   render() {
@@ -56,11 +59,13 @@ export class ErrorPanel extends React.Component {
       }
     });
 
+    const cardHeaderTitle = this.props.isMobileDevice ? "Error!" : "Oops, Something Went Wrong!";
+
     return (
       <div>
         <Card className="card">
           <CardHeader
-            title="Oops, Something Went Wrong!"
+            title={cardHeaderTitle}
             classes={{
               root: "card_header",
               title: "card_header_text"
@@ -100,6 +105,7 @@ export class ErrorPanel extends React.Component {
 }
 
 ErrorPanel.propTypes = {
+  isMobileDevice: PropTypes.bool.isRequired,
   infoMessage: PropTypes.string.isRequired,
   decimalsActions: PropTypes.object.isRequired,
   tokenNameActions: PropTypes.object.isRequired,
@@ -111,12 +117,14 @@ ErrorPanel.propTypes = {
   tokenOwnerFundsActions: PropTypes.object.isRequired,
   infoMessageActions: PropTypes.object.isRequired,
   accountsActions: PropTypes.object.isRequired,
-  serviceFeeActions: PropTypes.object.isRequired
+  serviceFeeActions: PropTypes.object.isRequired,
+  networkActions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    infoMessage: state.infoMessage
+    infoMessage: state.infoMessage,
+    isMobileDevice: state.isMobileDevice
   };
 }
 
@@ -132,7 +140,8 @@ function mapDispatchToProps(dispatch) {
     tokenOwnerFundsActions: bindActionCreators(tokenOwnerFundsActions, dispatch),
     infoMessageActions: bindActionCreators(infoMessageActions, dispatch),
     accountsActions: bindActionCreators(accountsActions, dispatch),
-    serviceFeeActions: bindActionCreators(serviceFeeActions, dispatch)
+    serviceFeeActions: bindActionCreators(serviceFeeActions, dispatch),
+    networkActions: bindActionCreators(networkActions, dispatch)
   };
 }
 

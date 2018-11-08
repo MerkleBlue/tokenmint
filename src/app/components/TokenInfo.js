@@ -91,8 +91,8 @@ export class TokenInfo extends React.Component {
             root: "card_content"
           }}
         >
-          <Grid container wrap="nowrap" spacing={8}>
-            <Grid item xs>
+          <Grid container spacing={8}>
+            <Grid item xs={12} md={6}>
               <MuiThemeProvider theme={theme}>
                 <TextField
                   required
@@ -108,7 +108,7 @@ export class TokenInfo extends React.Component {
                 />
               </MuiThemeProvider>
             </Grid>
-            <Grid item xs>
+            <Grid item xs={12} md={6}>
               <Typography
                 align="left"
                 variant="body1"
@@ -118,8 +118,8 @@ export class TokenInfo extends React.Component {
               </Typography>
             </Grid>
           </Grid>
-          <Grid container wrap="nowrap" spacing={8}>
-            <Grid item xs>
+          <Grid container spacing={8}>
+            <Grid item xs={12} md={6}>
               <MuiThemeProvider theme={theme}>
                 <TextField
                   required
@@ -135,7 +135,7 @@ export class TokenInfo extends React.Component {
                 />
               </MuiThemeProvider>
             </Grid>
-            <Grid item xs>
+            <Grid item xs={12} md={6}>
               <Typography
                 align="left"
                 variant="body1"
@@ -145,8 +145,8 @@ export class TokenInfo extends React.Component {
               </Typography>
             </Grid>
           </Grid>
-          <Grid container wrap="nowrap" spacing={8}>
-            <Grid item xs>
+          <Grid container spacing={8}>
+            <Grid item xs={12} md={6}>
               <MuiThemeProvider theme={theme}>
                 <TextField
                   required
@@ -162,7 +162,7 @@ export class TokenInfo extends React.Component {
                 />
               </MuiThemeProvider>
             </Grid>
-            <Grid item xs>
+            <Grid item xs={12} md={6}>
               <Typography
                 align="left"
                 variant="body1"
@@ -172,8 +172,8 @@ export class TokenInfo extends React.Component {
               </Typography>
             </Grid>
           </Grid>
-          <Grid container wrap="nowrap" spacing={8}>
-            <Grid item xs>
+          <Grid container spacing={8}>
+            <Grid item xs={12} md={6}>
               <MuiThemeProvider theme={theme}>
                 <TextField
                   required
@@ -189,7 +189,7 @@ export class TokenInfo extends React.Component {
                 />
               </MuiThemeProvider>
             </Grid>
-            <Grid item xs>
+            <Grid item xs={12} md={6}>
               <Typography
                 align="left"
                 variant="body1"

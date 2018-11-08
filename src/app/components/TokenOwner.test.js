@@ -7,6 +7,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import { JSDOM } from 'jsdom';
 import initialState from '../reducers/initialState';
 
+const network = "main";
 const tokenOwnerHasInsufficientFunds = false;
 const checkingTokenOwnerFunds = false;
 const checkingNetwork = false;
@@ -28,6 +29,7 @@ describe("<TokenOwner /> tests", () => {
   let mount;
 
   function setup(
+    network,
     tokenOwnerHasInsufficientFunds,
     checkingTokenOwnerFunds,
     checkingNetwork,
@@ -40,6 +42,7 @@ describe("<TokenOwner /> tests", () => {
     checkFunds = () => { }
   ) {
     const props = {
+      network: network,
       checkingNetwork: checkingNetwork,
       accounts: accounts,
       tokenOwner: tokenOwner,
@@ -68,6 +71,7 @@ describe("<TokenOwner /> tests", () => {
 
   it("renders TokenOwner without accounts", () => {
     const wrapper = setup(
+      network,
       tokenOwnerHasInsufficientFunds,
       checkingTokenOwnerFunds,
       checkingNetwork,
@@ -96,14 +100,13 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("Select").props().value).to.be.empty;
     expect(wrapper.find("Typography").length).to.eq(2);
     expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_error");
-    expect(wrapper.find("Typography").at(1).props().children[0]).to.eq("There are no available accounts. " +
-      "Please make sure that you run Metamask or any other Ethereum wallet with at least one UNLOCKED account, and refresh the page. You can download Metamask at");
-    expect(wrapper.find("a").length).to.eq(1);
-    expect(wrapper.find("a").props().href).to.eq("https://metamask.io/");
+    expect(wrapper.find("Typography").at(1).props().children).to.eq("Ethereum wallet is detected, but there are no accounts available. You should UNLOCK " +
+      "your wallet or CREATE an account in your wallet.");
   });
 
   it("renders TokenOwner while loading accounts", () => {
     const wrapper = setup(
+      network,
       tokenOwnerHasInsufficientFunds,
       checkingTokenOwnerFunds,
       checkingNetwork,
@@ -132,13 +135,13 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("Select").props().value).to.be.empty;
     expect(wrapper.find("Typography").length).to.eq(2);
     expect(wrapper.find("Typography").at(1).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(1).props().children[0]).to.eq("ETH account. " +
+    expect(wrapper.find("Typography").at(1).props().children).to.eq("ETH account. " +
       "This account will be owner of the token!");
-    expect(wrapper.find("a").length).to.eq(0);
   });
 
   it("renders TokenOwner with insufficient funds", () => {
     const wrapper = setup(
+      network,
       true,
       checkingTokenOwnerFunds,
       checkingNetwork,
@@ -167,7 +170,7 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("Select").props().value).to.eq(tokenOwner);
     expect(wrapper.find("Typography").length).to.eq(4);
     expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_error");
-    expect(wrapper.find("Typography").at(1).props().children[0]).to.eq("This account has insufficient funds. " +
+    expect(wrapper.find("Typography").at(1).props().children).to.eq("This account has insufficient funds. " +
       "Please top up this account, or select another one, and refresh the page.");
     expect(wrapper.find("Typography").at(2).props().children[2]).to.eq("0.500000");
     expect(wrapper.find("Typography").at(3).props().children[2]).to.eq("0.250000");
@@ -177,6 +180,7 @@ describe("<TokenOwner /> tests", () => {
   it("renders TokenOwner with multiple accounts", () => {
     const accounts = generateAccounts(3);
     const wrapper = setup(
+      network,
       tokenOwnerHasInsufficientFunds,
       checkingTokenOwnerFunds,
       checkingNetwork,
@@ -205,7 +209,7 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("Select").props().value).to.eq(accounts[0]);
     expect(wrapper.find("Typography").length).to.eq(2);
     expect(wrapper.find("Typography").at(1).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(1).props().children[0]).to.eq("ETH account. " +
+    expect(wrapper.find("Typography").at(1).props().children).to.eq("ETH account. " +
       "This account will be owner of the token!");
     expect(wrapper.find("a").length).to.eq(0);
   });

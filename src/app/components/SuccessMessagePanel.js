@@ -113,11 +113,13 @@ export class SuccessMessagePanel extends React.Component {
       transactionLink = "https://etherscan.io/tx/" + this.props.infoMessage;
     }
 
+    const cardHeaderTitle = this.props.isMobileDevice ? "Success!" : "Thank You For Using TokenMint!";
+
     return (
       <div>
         <Card className="card">
           <CardHeader
-            title="Thank You For Using TokenMint!"
+            title={cardHeaderTitle}
             classes={{
               root: "card_header",
               title: "card_header_text"
@@ -132,22 +134,25 @@ export class SuccessMessagePanel extends React.Component {
             <MuiThemeProvider theme={theme}>
               <Typography
                 align="center"
-                variant="subtitle1"
+                variant="body1"
                 className="typography_success_info_message"
               >
                 Your transaction has been successfully submitted to Ethereum network.
               </Typography>
               <Typography
                 align="center"
-                variant="subtitle1"
+                variant="body1"
                 className="typography_success_info_message"
               >
                 Your token creation transaction hash is:
               </Typography>
               <Typography
                 align="center"
-                variant="subtitle1"
+                variant="body1"
                 className="typography_success_info_message"
+                classes={{
+                  root: "typography_success_info_message_root"
+                }}
               >
                 <a href={transactionLink} rel="noopener noreferrer" target="_blank">
                   {this.props.infoMessage}
@@ -158,14 +163,14 @@ export class SuccessMessagePanel extends React.Component {
               </Typography>
               <Typography
                 align="center"
-                variant="subtitle1"
+                variant="body1"
                 className="typography_success_info_message"
               >
                 Once the mining is finished, you can check your new assets on <a href={etherscanLink} rel="noopener noreferrer" target="_blank">etherscan</a>
               </Typography>
               <Typography
                 align="center"
-                variant="subtitle1"
+                variant="body1"
                 className="typography_success_info_message"
               >
                 Share with the world:
@@ -265,6 +270,7 @@ export class SuccessMessagePanel extends React.Component {
 }
 
 SuccessMessagePanel.propTypes = {
+  isMobileDevice: PropTypes.bool.isRequired,
   network: PropTypes.string.isRequired,
   tokenSymbol: PropTypes.string.isRequired,
   infoMessage: PropTypes.string.isRequired,
@@ -288,7 +294,8 @@ function mapStateToProps(state) {
     tokenSymbol: state.tokenSymbol,
     infoMessage: state.infoMessage,
     tokenOwner: state.tokenOwner,
-    network: state.network
+    network: state.network,
+    isMobileDevice: state.isMobileDevice
   };
 }
 

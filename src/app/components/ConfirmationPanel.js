@@ -80,7 +80,7 @@ export class ConfirmationPanel extends React.Component {
           onClick={this.handleConfirm}
         >
           <FontAwesomeIcon className="fa_confirm_icon" icon={faCheck} />
-          Confirm
+          {!this.props.isMobileDevice && "Confirm"}
         </span>
       ) : (
         <span
@@ -89,7 +89,7 @@ export class ConfirmationPanel extends React.Component {
           data-wow-delay="400ms"
         >
           <FontAwesomeIcon className="fa_confirm_icon" icon={faCheck} />
-          Mint tokens
+          {!this.props.isMobileDevice && "Confirm"}
         </span>
       );
 
@@ -106,11 +106,13 @@ export class ConfirmationPanel extends React.Component {
       serviceFeeTypographyClass = "typography_right";
     }
 
+    const cardHeaderTitle = this.props.isMobileDevice ? "Confirm parameters" : "Please Confirm Token Creation Parameters!";
+
     return (
       <div>
         <Card className="card">
           <CardHeader
-            title="Please Confirm Token Creation Parameters!"
+            title={cardHeaderTitle}
             classes={{
               root: "card_header",
               title: "card_header_text"
@@ -121,20 +123,20 @@ export class ConfirmationPanel extends React.Component {
               root: "card_content"
             }}
           >
-            <Grid className="grid_container" container wrap="nowrap" spacing={8}>
-              <Grid item xs>
+            <Grid className="grid_container" container spacing={8}>
+              <Grid item xs={12} md={6}>
                 <Typography
                   align="left"
-                  variant="subtitle1"
+                  variant="body1"
                   className="typography_left"
                 >
                   Token Owner:
               </Typography>
               </Grid>
-              <Grid item xs className="grid_cell">
+              <Grid item xs={12} md={6} className="grid_cell">
                 <Typography
                   align="left"
-                  variant="subtitle1"
+                  variant="body1"
                   className="typography_right"
                   gutterBottom
                 >
@@ -142,140 +144,140 @@ export class ConfirmationPanel extends React.Component {
                 </Typography>
               </Grid>
             </Grid>
-            <Grid className="grid_container" container wrap="nowrap" spacing={8}>
-              <Grid item xs>
+            <Grid className="grid_container" container spacing={8}>
+              <Grid item xs={12} md={6}>
                 <Typography
                   align="left"
-                  variant="subtitle1"
+                  variant="body1"
                   className="typography_left"
                 >
                   Token Name:
-              </Typography>
+                </Typography>
               </Grid>
-              <Grid item xs>
+              <Grid item xs={12} md={6}>
                 <Typography
                   align="left"
-                  variant="subtitle1"
+                  variant="body1"
                   className="typography_right"
                 >
                   {this.props.tokenName}
                 </Typography>
               </Grid>
             </Grid>
-            <Grid className="grid_container" container wrap="nowrap" spacing={8}>
-              <Grid item xs>
+            <Grid className="grid_container" container spacing={8}>
+              <Grid item xs={12} md={6}>
                 <Typography
                   align="left"
-                  variant="subtitle1"
+                  variant="body1"
                   className="typography_left"
                 >
                   Token Symbol:
               </Typography>
               </Grid>
-              <Grid item xs>
+              <Grid item xs={12} md={6}>
                 <Typography
                   align="left"
-                  variant="subtitle1"
+                  variant="body1"
                   className="typography_right"
                 >
                   {this.props.tokenSymbol}
                 </Typography>
               </Grid>
             </Grid>
-            <Grid className="grid_container" container wrap="nowrap" spacing={8}>
-              <Grid item xs>
+            <Grid className="grid_container" container spacing={8}>
+              <Grid item xs={12} md={6}>
                 <Typography
                   align="left"
-                  variant="subtitle1"
+                  variant="body1"
                   className="typography_left"
                 >
                   Decimals:
               </Typography>
               </Grid>
-              <Grid item xs>
+              <Grid item xs={12} md={6}>
                 <Typography
                   align="left"
-                  variant="subtitle1"
+                  variant="body1"
                   className="typography_right"
                 >
                   {this.props.decimals}
                 </Typography>
               </Grid>
             </Grid>
-            <Grid className="grid_container" container wrap="nowrap" spacing={8}>
-              <Grid item xs>
+            <Grid className="grid_container" container spacing={8}>
+              <Grid item xs={12} md={6}>
                 <Typography
                   align="left"
-                  variant="subtitle1"
+                  variant="body1"
                   className="typography_left"
                 >
                   Total Supply:
               </Typography>
               </Grid>
-              <Grid item xs>
+              <Grid item xs={12} md={6}>
                 <Typography
                   align="left"
-                  variant="subtitle1"
+                  variant="body1"
                   className="typography_right"
                 >
                   {this.props.totalSupply}
                 </Typography>
               </Grid>
             </Grid>
-            <Grid className="grid_container" container wrap="nowrap" spacing={8}>
-              <Grid item xs>
+            <Grid className="grid_container" container spacing={8}>
+              <Grid item xs={12} md={6}>
                 <Typography
                   align="left"
-                  variant="subtitle1"
+                  variant="body1"
                   className="typography_left"
                 >
                   Token Type:
               </Typography>
               </Grid>
-              <Grid item xs>
+              <Grid item xs={12} md={6}>
                 <Typography
                   align="left"
-                  variant="subtitle1"
+                  variant="body1"
                   className="typography_right"
                 >
                   {this.props.tokenType}
                 </Typography>
               </Grid>
             </Grid>
-            <Grid className="grid_container" container wrap="nowrap" spacing={8}>
-              <Grid item xs>
+            <Grid className="grid_container" container spacing={8}>
+              <Grid item xs={12} md={6}>
                 <Typography
                   align="left"
-                  variant="subtitle1"
+                  variant="body1"
                   className="typography_left"
                 >
                   Service Fee:
               </Typography>
               </Grid>
-              <Grid item xs>
+              <Grid item xs={12} md={6}>
                 <Typography
                   align="left"
-                  variant="subtitle1"
+                  variant="body1"
                   className={serviceFeeTypographyClass}
                 >
                   {serviceFeeText}
-              </Typography>
+                </Typography>
               </Grid>
             </Grid>
-            <Grid className="grid_container" container wrap="nowrap" spacing={8}>
-              <Grid item xs>
+            <Grid className="grid_container" container spacing={8}>
+              <Grid item xs={12} md={6}>
                 <Typography
                   align="left"
-                  variant="subtitle1"
+                  variant="body1"
                   className="typography_left"
                 >
                   Mining Fee:
               </Typography>
               </Grid>
-              <Grid item xs>
+              <Grid item xs={12} md={6}>
                 <Typography
                   align="left"
-                  variant="subtitle1"
+                  variant="body1"
                   className={serviceFeeTypographyClass}
                 >
                   Should be set in wallet app
@@ -285,8 +287,8 @@ export class ConfirmationPanel extends React.Component {
           </CardContent>
         </Card>
         <form className="footer_main_form">
-          <Grid container wrap="nowrap" spacing={8}>
-            <Grid item xs className="grid_cell">
+          <Grid container spacing={8}>
+            <Grid item xs={6} md={6} className="grid_cell">
               <span
                 className="btn btn-cancel wow fadeInUp"
                 data-wow-duration="1000ms"
@@ -294,10 +296,10 @@ export class ConfirmationPanel extends React.Component {
                 onClick={this.handleCancel}
               >
                 <FontAwesomeIcon className="fa_back_icon" icon={faChevronLeft} />
-                Back
-              </span>
+                {!this.props.isMobileDevice && " Back"}
+                </span>
             </Grid>
-            <Grid item xs className="grid_cell">
+            <Grid item xs={6} md={6} className="grid_cell">
               {confirmButton}
             </Grid>
           </Grid>
@@ -323,7 +325,8 @@ ConfirmationPanel.propTypes = {
   tokenOwnerHasInsufficientFunds: PropTypes.bool.isRequired,
   loadingAccounts: PropTypes.bool.isRequired,
   serviceFee: PropTypes.number.isRequired,
-  network: PropTypes.string.isRequired
+  network: PropTypes.string.isRequired,
+  isMobileDevice: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state) {
@@ -338,7 +341,8 @@ function mapStateToProps(state) {
     tokenOwnerHasInsufficientFunds: state.tokenOwnerHasInsufficientFunds,
     loadingAccounts: state.loadingAccounts,
     serviceFee: state.serviceFee,
-    network: state.network
+    network: state.network,
+    isMobileDevice: state.isMobileDevice
   };
 }
 

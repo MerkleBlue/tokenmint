@@ -20,6 +20,7 @@ export class NetworkWarning extends React.Component {
     let icon = "";
     let networkMessage = "";
     let descriptionMessage = "";
+    let walletLink = "";
 
     if (this.props.network === "morden") {
       icon = <FontAwesomeIcon size="2x" className="fa_warning_icon" icon={faExclamationTriangle} />;
@@ -38,14 +39,17 @@ export class NetworkWarning extends React.Component {
         "If you wish to deploy on the Ethereum main network please switch to the main network and refresh the page.";
     } else if (this.props.network === NO_NETWORK) {
       icon = <FontAwesomeIcon size="2x" className="fa_error_icon" icon={faTimesCircle} />;
-      networkMessage = "No network detected!";
-      descriptionMessage = "Please activate MetaMask!";
+      networkMessage = "No Ethereum wallet detected!";
+      descriptionMessage = "We recommend using ";
+      walletLink = this.props.isMobileDevice ?
+        <a href="https://wallet.coinbase.com/" rel="noopener noreferrer" target="_blank"> Coinbase for mobile!</a> :
+        <a href="https://metamask.io/" rel="noopener noreferrer" target="_blank"> Metamask!</a>;
     }
 
     return (
       <Card className="card">
         <CardHeader
-          title="Network warning!"
+          title="Warning!"
           classes={{
             root: "card_header",
             title: "card_header_text"
@@ -68,14 +72,20 @@ export class NetworkWarning extends React.Component {
               align="left"
               variant="body1"
             >
-              {descriptionMessage}
+              {descriptionMessage} {this.props.network === NO_NETWORK && walletLink}
             </Typography>
             {this.props.network === NO_NETWORK &&
               <Typography
                 align="left"
                 variant="body1"
               >
-                You can download MetaMask at <a href="https://metamask.io/" rel="noopener noreferrer" target="_blank">metamask.io</a>
+                Read about other wallet options at our <a
+                  href="https://tokenmint.io/blog/web-3-enabled-ethereum-wallets-and-browsers.html"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Ethereum wallets
+                </a> blog post.
               </Typography>
             }
           </MuiThemeProvider>
@@ -86,12 +96,14 @@ export class NetworkWarning extends React.Component {
 }
 
 NetworkWarning.propTypes = {
-  network: PropTypes.string.isRequired
+  network: PropTypes.string.isRequired,
+  isMobileDevice: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    network: state.network
+    network: state.network,
+    isMobileDevice: state.isMobileDevice
   };
 }
 

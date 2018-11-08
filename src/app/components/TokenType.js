@@ -48,8 +48,8 @@ export class TokenType extends React.Component {
             root: "card_content"
           }}
         >
-          <Grid container wrap="nowrap" spacing={8}>
-            <Grid item xs>
+          <Grid container spacing={8}>
+            <Grid item xs={6} md={6}>
               <RadioGroup
                 aria-label="tokenType"
                 name="tokenType"
@@ -83,7 +83,7 @@ export class TokenType extends React.Component {
                 />
               </RadioGroup>
             </Grid>
-            <Grid item xs>
+            <Grid item xs={6} md={6}>
               <MuiThemeProvider theme={theme}>
                 <Typography
                   align="left"
@@ -91,7 +91,10 @@ export class TokenType extends React.Component {
                   variant="body1"
                   className="typography_token_type_erc20"
                 >
-                  ERC-20 is recommended option, accepted by most exchanges.
+                  {this.props.isMobileDevice ?
+                    "Recommended" :
+                    "ERC-20 is recommended option, accepted by most exchanges."
+                  }
                 </Typography>
                 <Typography
                   align="left"
@@ -99,8 +102,11 @@ export class TokenType extends React.Component {
                   variant="body1"
                   className="typography_token_type_erc223"
                 >
-                  ERC-223 is similar to ERC-20, but it provides extra safety during token transfers.
-              </Typography>
+                  {this.props.isMobileDevice ?
+                    "Provides extra safety features" :
+                    "ERC-223 is similar to ERC-20, but it provides extra safety during token transfers."
+                  }
+                </Typography>
               </MuiThemeProvider>
             </Grid>
           </Grid>
@@ -112,12 +118,14 @@ export class TokenType extends React.Component {
 
 TokenType.propTypes = {
   tokenType: PropTypes.string.isRequired,
+  isMobileDevice: PropTypes.bool.isRequired,
   tokenTypeActions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    tokenType: state.tokenType
+    tokenType: state.tokenType,
+    isMobileDevice: state.isMobileDevice
   };
 }
 

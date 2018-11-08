@@ -15,6 +15,7 @@ import serviceFee from './serviceFeeReducer';
 import network from './networkReducer';
 import checkingNetwork from './checkingNetworkReducer';
 import tokenOwnerHasInsufficientFunds from './tokenOwnerHasInsufficientFundsReducer';
+import isMobileDevice from './isMobileDeviceReducer';
 
 const rootReducer = combineReducers({
   tokenName: tokenName,
@@ -32,7 +33,8 @@ const rootReducer = combineReducers({
   serviceFee: serviceFee,
   network: network,
   checkingNetwork: checkingNetwork,
-  tokenOwnerHasInsufficientFunds: tokenOwnerHasInsufficientFunds
+  tokenOwnerHasInsufficientFunds: tokenOwnerHasInsufficientFunds,
+  isMobileDevice: isMobileDevice
 });
 
 export default rootReducer;

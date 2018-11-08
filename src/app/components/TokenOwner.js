@@ -20,6 +20,7 @@ import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
 import { bindActionCreators } from 'redux';
 import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
+import { NO_NETWORK } from '../../api/mintApi';
 
 export class TokenOwner extends React.Component {
 
@@ -94,8 +95,9 @@ export class TokenOwner extends React.Component {
           No available accounts
         </MenuItem>
       );
-      descriptionText = "There are no available accounts. Please make sure that you run Metamask or any other Ethereum wallet with at least one UNLOCKED account, and refresh the page. " +
-        "You can download Metamask at";
+      descriptionText = this.props.network === NO_NETWORK ?
+        "There are no available accounts. Please make sure that you run Metamask or any other Ethereum wallet with at least one UNLOCKED account, and refresh the page." :
+        "Ethereum wallet is detected, but there are no accounts available. You should UNLOCK your wallet or CREATE an account in your wallet.";
     }
 
     return (
@@ -114,8 +116,8 @@ export class TokenOwner extends React.Component {
             root: "card_content"
           }}
         >
-          <Grid container wrap="nowrap" spacing={8}>
-            <Grid item xs>
+          <Grid container spacing={8}>
+            <Grid item xs={12} md={6}>
               <MuiThemeProvider theme={theme}>
                 <FormControl variant="outlined">
                   <InputLabel>Select account</InputLabel>
@@ -135,13 +137,13 @@ export class TokenOwner extends React.Component {
                 </FormControl>
               </MuiThemeProvider>
             </Grid>
-            <Grid item xs>
+            <Grid item xs={12} md={6}>
               <Typography
                 align="left"
                 variant="body1"
                 className={error ? "typography_error" : "typography"}
               >
-                {descriptionText} {(this.props.accounts.length === 0 && !this.props.loadingAccounts) && metamaskLink}
+                {descriptionText}
               </Typography>
               {this.props.tokenOwnerHasInsufficientFunds &&
                 <div>
@@ -157,7 +159,7 @@ export class TokenOwner extends React.Component {
                     variant="body1"
                     className="typography_error_secondary"
                   >
-                  <strong>Minimum required balance:</strong> {this.props.serviceFee.toFixed(6)} ETH plus mining fee
+                    <strong>Minimum required balance:</strong> {this.props.serviceFee.toFixed(6)} ETH plus mining fee
                   </Typography>
                 </div>
               }
@@ -170,6 +172,7 @@ export class TokenOwner extends React.Component {
 }
 
 TokenOwner.propTypes = {
+  network: PropTypes.string.isRequired,
   tokenOwnerHasInsufficientFunds: PropTypes.bool.isRequired,
   checkingTokenOwnerFunds: PropTypes.bool.isRequired,
   checkingNetwork: PropTypes.bool.isRequired,
@@ -191,7 +194,8 @@ function mapStateToProps(state) {
     serviceFee: state.serviceFee,
     checkingNetwork: state.checkingNetwork,
     checkingTokenOwnerFunds: state.checkingTokenOwnerFunds,
-    tokenOwnerHasInsufficientFunds: state.tokenOwnerHasInsufficientFunds
+    tokenOwnerHasInsufficientFunds: state.tokenOwnerHasInsufficientFunds,
+    network: state.network
   };
 }
 
