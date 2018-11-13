@@ -50,7 +50,7 @@ export class SuccessMessagePanel extends React.Component {
     this.handleCopyToClipboard = this.handleCopyToClipboard.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     // TODO: remove logging when ga works properly
     console.log("Navigate to: /mint/success"); // eslint-disable-line no-console
     ReactGA.pageview('/mint/success');

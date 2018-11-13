@@ -29,7 +29,7 @@ export class ErrorPanel extends React.Component {
     this.handleBackClick = this.handleBackClick.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     // TODO: remove logging when ga works properly
     console.log("Navigate to: /mint/error"); // eslint-disable-line no-console
     ReactGA.pageview('/mint/error');

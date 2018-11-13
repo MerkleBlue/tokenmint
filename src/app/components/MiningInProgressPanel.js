@@ -8,7 +8,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 export class MiningInProgressPanel extends React.Component {
 
-  componentWillMount() {
+  componentDidMount() {
     // TODO: remove logging when ga works properly
     console.log("Navigate to: /mint/wallet-confirm"); // eslint-disable-line no-console
     ReactGA.pageview('/mint/wallet-confirm');

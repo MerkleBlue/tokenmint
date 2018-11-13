@@ -29,7 +29,7 @@ export class TokenOwner extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     // TODO: remove logging when ga works properly
     console.log("Navigate to: /mint/"); // eslint-disable-line no-console
     ReactGA.pageview('/mint/');

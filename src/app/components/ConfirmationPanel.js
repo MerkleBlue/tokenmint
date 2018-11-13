@@ -31,7 +31,7 @@ export class ConfirmationPanel extends React.Component {
     this.isConfirmationEnabled = this.isConfirmationEnabled.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     // TODO: remove logging when ga works properly
     console.log("Navigate to: /mint/confirm"); // eslint-disable-line no-console
     ReactGA.pageview('/mint/confirm');
