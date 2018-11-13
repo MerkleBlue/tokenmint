@@ -35,6 +35,30 @@ export class TokenOwner extends React.Component {
     ReactGA.pageview('/mint/');
   }
 
+  componentDidUpdate(prevProps) {
+    // after finishing all checks, send ga
+    if(!this.props.checkingNetwork && !this.props.checkingTokenOwnerFunds  && !this.props.loadingAccounts) {
+      if(this.props.network !== "NO_NETWORK") {
+        ReactGA.event({
+          category: 'User',
+          action: 'has web3'
+        });
+        if(this.props.network === "main") {
+          ReactGA.event({
+            category: 'User',
+            action: 'has web3 and main net'
+          });
+          if(!this.props.tokenOwnerHasInsufficientFunds && this.props.tokenOwnerBalance > 0.0000001) {
+            ReactGA.event({
+              category: 'User',
+              action: 'has web3 and main net and has funds'
+            });
+          }
+        }
+      }
+    }
+  }
+
   handleChange(e) {
     this.props.tokenOwnerActions.setTokenOwner(e.target.value);
     // if selected specific account

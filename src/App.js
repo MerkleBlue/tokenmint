@@ -19,7 +19,7 @@ import NetworkWarning from './app/components/NetworkWarning'; //eslint-disable-l
 
 class App extends Component {
 
-  componentDidMount(nextProps) {
+  componentDidMount() {
     document.title = "TokenMint - An ERC20 & ERC223 Token Generator";
   }
 
