@@ -40,6 +40,8 @@ export class TokenOwner extends React.Component {
     // if selected specific account
     if (e.target.value !== initialState.tokenOwner) {
       this.props.tokenOwnerFundsActions.checkFunds(e.target.value);
+    } else {
+      this.props.tokenOwnerFundsActions.setTokenOwnerHasInsufficientFunds(false);
     }
   }
 
@@ -54,7 +56,6 @@ export class TokenOwner extends React.Component {
     });
 
     let error = (this.props.accounts.length === 0 || this.props.tokenOwnerHasInsufficientFunds) && !this.props.loadingAccounts && !this.props.checkingTokenOwnerFunds;
-    const metamaskLink = (<a href="https://metamask.io/" rel="noopener noreferrer" target="_blank">metamask.io</a>);
 
     let menuItems;
     let descriptionText;
