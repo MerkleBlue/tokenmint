@@ -100,8 +100,8 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("Select").props().value).to.be.empty;
     expect(wrapper.find("Typography").length).to.eq(2);
     expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_error");
-    expect(wrapper.find("Typography").at(1).props().children).to.eq("Ethereum wallet is detected, but there are no accounts available. You should UNLOCK " +
-      "your wallet or CREATE an account in your wallet.");
+    expect(wrapper.find("Typography").at(1).props().children).to.eq("Ethereum wallet is detected, but there are no accounts available. " +
+      "If you are using Metamask, please LOG IN to it! Otherwise you should UNLOCK your wallet or CREATE an account in your wallet.");
   });
 
   it("renders TokenOwner while loading accounts", () => {

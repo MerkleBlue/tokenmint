@@ -37,18 +37,18 @@ export class TokenOwner extends React.Component {
 
   componentDidUpdate(prevProps) {
     // after finishing all checks, send ga
-    if(!this.props.checkingNetwork && !this.props.checkingTokenOwnerFunds  && !this.props.loadingAccounts) {
-      if(this.props.network !== "NO_NETWORK") {
+    if (!this.props.checkingNetwork && !this.props.checkingTokenOwnerFunds && !this.props.loadingAccounts) {
+      if (this.props.network !== "NO_NETWORK") {
         ReactGA.event({
           category: 'User',
           action: 'has web3'
         });
-        if(this.props.network === "main") {
+        if (this.props.network === "main") {
           ReactGA.event({
             category: 'User',
             action: 'has web3 and main net'
           });
-          if(!this.props.tokenOwnerHasInsufficientFunds && this.props.tokenOwnerBalance > 0.0000001) {
+          if (!this.props.tokenOwnerHasInsufficientFunds && this.props.tokenOwnerBalance > 0.0000001) {
             ReactGA.event({
               category: 'User',
               action: 'has web3 and main net and has funds'
@@ -122,7 +122,8 @@ export class TokenOwner extends React.Component {
       );
       descriptionText = this.props.network === NO_NETWORK ?
         "There are no available accounts. Please make sure that you run Metamask or any other Ethereum wallet with at least one UNLOCKED account, and refresh the page." :
-        "Ethereum wallet is detected, but there are no accounts available. You should UNLOCK your wallet or CREATE an account in your wallet.";
+        "Ethereum wallet is detected, but there are no accounts available. If you are using Metamask, please LOG IN to it! " +
+        "Otherwise you should UNLOCK your wallet or CREATE an account in your wallet.";
     }
 
     return (
