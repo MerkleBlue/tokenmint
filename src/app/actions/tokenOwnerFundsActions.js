@@ -10,7 +10,7 @@ export function checkFunds(tokenOwner) {
     return checkTokenOwnerFunds(tokenOwner).then((reply) => {
       dispatch(setTokenOwnerBalance(reply.tokenOwnerBalance));
       dispatch(setServiceFee(reply.serviceFee));
-      dispatch(setTokenOwnerHasInsufficientFunds(reply.tokenOwnerBalance - reply.serviceFee - 0.1 <= 0));
+      dispatch(setTokenOwnerHasInsufficientFunds(reply.tokenOwnerBalance - reply.serviceFee - 0.02 <= 0));
       dispatch(setCheckingTokenOwnerFunds(false));
     }).catch(() => {
       dispatch(setTokenOwnerBalance(initialState.tokenOwnerBalance));

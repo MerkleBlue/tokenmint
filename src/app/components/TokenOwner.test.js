@@ -173,7 +173,7 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("Typography").at(1).props().children).to.eq("This account has insufficient funds. " +
       "Please top up this account, or select another one, and refresh the page.");
     expect(wrapper.find("Typography").at(2).props().children[2]).to.eq("0.500000");
-    expect(wrapper.find("Typography").at(3).props().children[2]).to.eq("0.250000");
+    expect(wrapper.find("Typography").at(3).props().children[2]).to.eq("0.270000");
     expect(wrapper.find("a").length).to.eq(0);
   });
 
