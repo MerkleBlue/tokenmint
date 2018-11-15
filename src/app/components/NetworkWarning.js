@@ -44,6 +44,11 @@ export class NetworkWarning extends React.Component {
       walletLink = this.props.isMobileDevice ?
         <a href="https://wallet.coinbase.com/" rel="noopener noreferrer" target="_blank"> Coinbase for mobile!</a> :
         <a href="https://metamask.io/" rel="noopener noreferrer" target="_blank"> Metamask!</a>;
+    } else {
+      icon = <FontAwesomeIcon size="2x" className="fa_warning_icon" icon={faExclamationTriangle} />;
+      networkMessage = "You are not using Ethereum main network!";
+      descriptionMessage = "Your contract will not be deployed to the Ethereum main network. " +
+        "If you wish to deploy on the Ethereum main network please switch to the main network and refresh the page.";
     }
 
     return (

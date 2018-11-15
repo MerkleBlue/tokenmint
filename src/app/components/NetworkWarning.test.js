@@ -31,16 +31,17 @@ describe("<NetworkWarning /> tests", () => {
     mount.cleanUp();
   });
 
-  it("renders NetworkWarning with main net", () => {
-    const wrapper = setup("main");
-    expect(wrapper.props().network).to.eq("main");
+  it("renders NetworkWarning with random net", () => {
+    const wrapper = setup("random");
+    expect(wrapper.props().network).to.eq("random");
     expect(wrapper.find("Card").length).to.eq(1);
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Warning!");
     expect(wrapper.find("CardContent").length).to.eq(1);
     expect(wrapper.find("Typography").length).to.eq(3);
-    expect(wrapper.find("Typography").at(1).props().children).to.eq("");
-    expect(wrapper.find("Typography").at(2).props().children[0]).to.eq("");
+    expect(wrapper.find("Typography").at(1).props().children).to.eq("You are not using Ethereum main network!");
+    expect(wrapper.find("Typography").at(2).props().children[0]).to.eq("Your contract will not be deployed to the Ethereum main network. " +
+      "If you wish to deploy on the Ethereum main network please switch to the main network and refresh the page.");
     expect(wrapper.find("a").length).to.eq(0);
   });
 
