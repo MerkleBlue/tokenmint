@@ -18,10 +18,10 @@ const store = configureStore();
 window.addEventListener('load', function () {
   mintApi.initWeb3().then(walletNeedsToBeUnlocked => {
     store.dispatch(setWalletNeedsToBeUnlocked(walletNeedsToBeUnlocked));
+    store.dispatch(getNetworkType());
+    store.dispatch(loadAllAccounts());
+    store.dispatch(setIsMobileDevice(deviceDetector.isMobileDevice()));
   });
-  store.dispatch(getNetworkType());
-  store.dispatch(loadAllAccounts());
-  store.dispatch(setIsMobileDevice(deviceDetector.isMobileDevice()));
 });
 
 ReactGA.initialize('UA-125703137-2');
