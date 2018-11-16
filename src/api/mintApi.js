@@ -10,10 +10,40 @@ let web3;
 
 export const NO_NETWORK = "NO_NETWORK";
 
-export function initWeb3() {
-  if (typeof global.window !== 'undefined' && typeof global.window.web3 !== 'undefined') {
-    // Use Mist/MetaMask's provider
-    web3 = new Web3(window.web3.currentProvider);
+export async function initWeb3() {
+  if (typeof global.window !== 'undefined') {
+
+    // Modern dapp browsers...
+    if (window.ethereum) {
+      web3 = new Web3(window.ethereum);
+
+      try {
+        // Request account access if needed
+        await window.ethereum.enable();
+      } catch (error) {
+        console.error("User denied account access");
+        throw error;
+      }
+
+
+      // second way, without async
+      // Request account access if needed
+      /*return new Promise((accept, reject) => {
+        window.ethereum.enable().then(() => {
+          console.log("Connected");
+          accept();
+          return;
+        }).catch(e => {
+          reject(e);
+          return;
+        });
+      });*/
+    }
+    // Legacy dapp browsers...
+    else if(typeof global.window.web3 !== 'undefined') {
+      // Use Mist/MetaMask's provider
+      web3 = new Web3(window.web3.currentProvider);
+    }
   } else {
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
