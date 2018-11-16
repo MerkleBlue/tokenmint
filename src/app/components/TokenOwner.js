@@ -17,16 +17,20 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as tokenOwnerActions from '../actions/tokenOwnerActions';
 import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
+import * as walletActions from '../actions/walletActions';
 import { bindActionCreators } from 'redux';
 import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
 import { NO_NETWORK } from '../../api/mintApi';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWallet } from '@fortawesome/free-solid-svg-icons';
 
 export class TokenOwner extends React.Component {
 
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
+    this.handleUnlockWallet = this.handleUnlockWallet.bind(this);
   }
 
   componentDidMount() {
@@ -69,6 +73,10 @@ export class TokenOwner extends React.Component {
     }
   }
 
+  handleUnlockWallet(e) {
+    this.props.walletActions.unlockWallet();
+  }
+
   render() {
     const theme = createMuiTheme({
       typography: {
@@ -82,7 +90,7 @@ export class TokenOwner extends React.Component {
     let error = (this.props.accounts.length === 0 || this.props.tokenOwnerHasInsufficientFunds) && !this.props.loadingAccounts && !this.props.checkingTokenOwnerFunds;
 
     let menuItems;
-    let descriptionText;
+    let contentRight = "";
     if (this.props.loadingAccounts) {
       menuItems = (
         <MenuItem
@@ -93,7 +101,15 @@ export class TokenOwner extends React.Component {
           Loading accounts...
         </MenuItem>
       );
-      descriptionText = "ETH account. This account will be owner of the token!";
+      contentRight = (
+        <Typography
+          align="left"
+          variant="body1"
+          className={error ? "typography_error" : "typography"}
+        >
+          ETH account. This account will be owner of the token!
+        </Typography>
+      );
     } else if (this.props.accounts.length > 0) {
       menuItems = this.props.accounts.map((account) => (
         <MenuItem
@@ -105,11 +121,21 @@ export class TokenOwner extends React.Component {
           {account}
         </MenuItem>
       ));
+      let descriptionText;
       if (this.props.tokenOwnerHasInsufficientFunds) {
-        descriptionText = "This account has insufficient funds. Please top up this account, or select another one, and refresh the page.";
+        descriptionText = "This account has insufficient funds.";
       } else {
         descriptionText = "ETH account. This account will be owner of the token!";
       }
+      contentRight = (
+        <Typography
+          align="left"
+          variant="body1"
+          className={error ? "typography_error" : "typography"}
+        >
+          {descriptionText}
+        </Typography>
+      );
     } else {
       menuItems = (
         <MenuItem
@@ -120,10 +146,43 @@ export class TokenOwner extends React.Component {
           No available accounts
         </MenuItem>
       );
-      descriptionText = this.props.network === NO_NETWORK ?
-        "There are no available accounts. Please make sure that you run Metamask or any other Ethereum wallet with at least one UNLOCKED account, and refresh the page." :
-        "Ethereum wallet is detected, but there are no accounts available. If you are using Metamask, please LOG IN to it! " +
-        "Otherwise you should UNLOCK your wallet or CREATE an account in your wallet.";
+      if (this.props.network === NO_NETWORK) {
+        contentRight = (
+          <Typography
+            align="left"
+            variant="body1"
+            className={error ? "typography_error" : "typography"}
+          >
+            There are no available accounts.
+            Please make sure that you run Metamask or any other Ethereum wallet with at least one UNLOCKED account, and refresh the page.
+          </Typography>
+        );
+      } else {
+        if (this.props.walletNeedsToBeUnlocked) {
+          contentRight = (
+            <span
+              className="btn btn-unlock-wallet wow fadeInUp"
+              data-wow-duration="1000ms"
+              data-wow-delay="400ms"
+              onClick={this.handleUnlockWallet}
+            >
+              <FontAwesomeIcon className="fa_coins" icon={faWallet} />
+              Connect to Wallet
+            </span>
+          );
+        } else {
+          contentRight = (
+            <Typography
+              align="left"
+              variant="body1"
+              className={error ? "typography_error" : "typography"}
+            >
+              Ethereum wallet is detected, but there are no accounts available. If you are using Metamask, please LOG IN to it!
+              Otherwise you should UNLOCK your wallet or CREATE an account in your wallet.
+            </Typography>
+          );
+        }
+      }
     }
 
     return (
@@ -164,30 +223,16 @@ export class TokenOwner extends React.Component {
               </MuiThemeProvider>
             </Grid>
             <Grid item xs={12} md={6}>
-              <Typography
-                align="left"
-                variant="body1"
-                className={error ? "typography_error" : "typography"}
-              >
-                {descriptionText}
-              </Typography>
+              {contentRight}
               {this.props.tokenOwnerHasInsufficientFunds &&
-                <div>
-                  <Typography
-                    align="left"
-                    variant="body1"
-                    className="typography_error_secondary"
-                  >
-                    <strong>Selected account balance:</strong> {this.props.tokenOwnerBalance.toFixed(6)} ETH
-                  </Typography>
-                  <Typography
-                    align="left"
-                    variant="body1"
-                    className="typography_error_secondary"
-                  >
-                    <strong>Minimum required balance:</strong> {(this.props.serviceFee + 0.02).toFixed(6)} ETH plus mining fee
-                  </Typography>
-                </div>
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className="typography_error_secondary"
+                >
+                  Please top your account up with at least <strong>{(this.props.serviceFee + 0.02 - this.props.tokenOwnerBalance).toFixed(6)}</strong> ETH,
+                  and refresh the page!
+                </Typography>
               }
             </Grid>
           </Grid>
@@ -207,8 +252,10 @@ TokenOwner.propTypes = {
   tokenOwnerBalance: PropTypes.number.isRequired,
   serviceFee: PropTypes.number.isRequired,
   loadingAccounts: PropTypes.bool.isRequired,
+  walletNeedsToBeUnlocked: PropTypes.bool.isRequired,
   tokenOwnerActions: PropTypes.object.isRequired,
-  tokenOwnerFundsActions: PropTypes.object.isRequired
+  tokenOwnerFundsActions: PropTypes.object.isRequired,
+  walletActions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
@@ -221,14 +268,16 @@ function mapStateToProps(state) {
     checkingNetwork: state.checkingNetwork,
     checkingTokenOwnerFunds: state.checkingTokenOwnerFunds,
     tokenOwnerHasInsufficientFunds: state.tokenOwnerHasInsufficientFunds,
-    network: state.network
+    network: state.network,
+    walletNeedsToBeUnlocked: state.walletNeedsToBeUnlocked
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     tokenOwnerActions: bindActionCreators(tokenOwnerActions, dispatch),
-    tokenOwnerFundsActions: bindActionCreators(tokenOwnerFundsActions, dispatch)
+    tokenOwnerFundsActions: bindActionCreators(tokenOwnerFundsActions, dispatch),
+    walletActions: bindActionCreators(walletActions, dispatch)
   };
 }
 

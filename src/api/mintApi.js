@@ -10,48 +10,42 @@ let web3;
 
 export const NO_NETWORK = "NO_NETWORK";
 
-export async function initWeb3() {
-  if (typeof global.window !== 'undefined') {
-
-    // Modern dapp browsers...
-    if (window.ethereum) {
-      web3 = new Web3(window.ethereum);
-
-      try {
-        // Request account access if needed
-        await window.ethereum.enable();
-      } catch (error) {
-        console.error("User denied account access");
-        throw error;
+export function initWeb3() {
+  let walletNeedsToBeUnlocked = false;
+  return new Promise((accept) => {
+    if (typeof global.window !== 'undefined') {
+      // Modern dapp browsers...
+      if (window.ethereum) {
+        web3 = new Web3(window.ethereum);
+        walletNeedsToBeUnlocked = true;
       }
-
-
-      // second way, without async
-      // Request account access if needed
-      /*return new Promise((accept, reject) => {
-        window.ethereum.enable().then(() => {
-          console.log("Connected");
-          accept();
-          return;
-        }).catch(e => {
-          reject(e);
-          return;
-        });
-      });*/
+      // Legacy dapp browsers...
+      else if (typeof global.window.web3 !== 'undefined') {
+        // Use Mist/MetaMask's provider
+        web3 = new Web3(window.web3.currentProvider);
+      }
+    } else {
+      // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+      web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     }
-    // Legacy dapp browsers...
-    else if(typeof global.window.web3 !== 'undefined') {
-      // Use Mist/MetaMask's provider
-      web3 = new Web3(window.web3.currentProvider);
-    }
-  } else {
-    // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-    web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-  }
+    accept(walletNeedsToBeUnlocked);
+    return;
+  });
+}
+
+export function unlockWallet() {
+  return new Promise((accept, reject) => {
+    window.ethereum.enable().then(() => {
+      accept();
+      return;
+    }).catch(e => {
+      reject(e);
+      return;
+    });
+  });
 }
 
 export function loadAccounts() {
-  initWeb3();
   return new Promise((accept, reject) => {
     web3.eth.getAccounts().then(allAccounts => {
       accept(allAccounts);
@@ -130,7 +124,6 @@ function instantiateContract(tokenContract, name, symbol, decimals, totalSupply,
 }
 
 export function getNetwork() {
-  initWeb3();
   return new Promise((accept, reject) => {
     web3.eth.net.getNetworkType().then(networkType => {
       accept(networkType);
@@ -156,7 +149,7 @@ function estimateMiningFee(tokenContract, name, symbol, decimals, totalSupply, t
     // estimate gas
     myContract.deploy({
       data: tokenContract.bytecode,
-      arguments: [name, symbol, decimals, totalSupply /** 10**decimals*/ , tokenOwner]
+      arguments: [name, symbol, decimals, totalSupply /** 10**decimals*/, tokenOwner]
     }).estimateGas(function (err, gas) {
       //console.log("Estimated mining fee: " + gas * 1000000000 / 10 ** 18);
       accept(gas * 1000000000 / 10 ** 18);
@@ -166,7 +159,6 @@ function estimateMiningFee(tokenContract, name, symbol, decimals, totalSupply, t
 }
 
 export function checkTokenOwnerFunds(tokenOwner) {
-  initWeb3();
   return new Promise((accept, reject) => {
     getFee().then(fee => {
       getEthBalance(tokenOwner).then(balance => {
@@ -189,7 +181,6 @@ export function checkTokenOwnerFunds(tokenOwner) {
 }
 
 export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenType, tokenOwner, serviceFee) {
-  initWeb3();
   return new Promise((accept, reject) => {
     checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
       if (hasFunds) {

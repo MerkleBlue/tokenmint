@@ -17,5 +17,6 @@ export default {
   network: "",
   checkingNetwork: true,
   tokenOwnerHasInsufficientFunds: false,
-  isMobileDevice: false
+  isMobileDevice: false,
+  walletNeedsToBeUnlocked: false
 };

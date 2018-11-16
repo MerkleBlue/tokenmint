@@ -10,10 +10,15 @@ import ReactGA from 'react-ga';
 import { getNetworkType } from './app/actions/networkActions';
 import * as deviceDetector from './tools/deviceDetector';
 import { setIsMobileDevice } from './app/actions/deviceActions';
+import * as mintApi from './api/mintApi';
+import { setWalletNeedsToBeUnlocked } from './app/actions/walletActions';
 
 const store = configureStore();
 
 window.addEventListener('load', function () {
+  mintApi.initWeb3().then(walletNeedsToBeUnlocked => {
+    store.dispatch(setWalletNeedsToBeUnlocked(walletNeedsToBeUnlocked));
+  });
   store.dispatch(getNetworkType());
   store.dispatch(loadAllAccounts());
   store.dispatch(setIsMobileDevice(deviceDetector.isMobileDevice()));

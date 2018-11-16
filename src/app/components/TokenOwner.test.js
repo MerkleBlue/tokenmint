@@ -168,12 +168,11 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("Select").length).to.eq(1);
     expect(wrapper.find("Select").props().error).to.be.true;
     expect(wrapper.find("Select").props().value).to.eq(tokenOwner);
-    expect(wrapper.find("Typography").length).to.eq(4);
+    expect(wrapper.find("Typography").length).to.eq(3);
     expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_error");
-    expect(wrapper.find("Typography").at(1).props().children).to.eq("This account has insufficient funds. " +
-      "Please top up this account, or select another one, and refresh the page.");
-    expect(wrapper.find("Typography").at(2).props().children[2]).to.eq("0.500000");
-    expect(wrapper.find("Typography").at(3).props().children[2]).to.eq("0.270000");
+    expect(wrapper.find("Typography").at(1).props().children).to.eq("This account has insufficient funds.");
+    expect(wrapper.find("Typography").at(2).props().children[0]).to.eq("Please top your account up with at least ");
+    expect(wrapper.find("Typography").at(2).props().children[2]).to.eq(" ETH, and refresh the page!");
     expect(wrapper.find("a").length).to.eq(0);
   });
 
