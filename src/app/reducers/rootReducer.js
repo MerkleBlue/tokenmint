@@ -16,6 +16,7 @@ import network from './networkReducer';
 import checkingNetwork from './checkingNetworkReducer';
 import tokenOwnerHasInsufficientFunds from './tokenOwnerHasInsufficientFundsReducer';
 import isMobileDevice from './isMobileDeviceReducer';
+import walletNeedsToBeUnlocked from './walletNeedsToBeUnlockedReducer';
 
 const rootReducer = combineReducers({
   tokenName: tokenName,
@@ -34,7 +35,8 @@ const rootReducer = combineReducers({
   network: network,
   checkingNetwork: checkingNetwork,
   tokenOwnerHasInsufficientFunds: tokenOwnerHasInsufficientFunds,
-  isMobileDevice: isMobileDevice
+  isMobileDevice: isMobileDevice,
+  walletNeedsToBeUnlocked: walletNeedsToBeUnlocked
 });
 
 export default rootReducer;
