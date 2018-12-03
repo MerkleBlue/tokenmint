@@ -20,7 +20,6 @@ import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
 import initialState from '../reducers/initialState';
 import InputValidator from '../../tools/InputValidator';
 import ReactGA from 'react-ga';
-import { NO_NETWORK } from '../../api/mintApi';
 
 export class ConfirmationPanel extends React.Component {
 
@@ -44,11 +43,7 @@ export class ConfirmationPanel extends React.Component {
       this.props.decimals,
       this.props.totalSupply,
       this.props.tokenOwner
-    ) && !this.props.checkingTokenOwnerFunds
-      && !this.props.tokenOwnerHasInsufficientFunds
-      && !this.props.loadingAccounts
-      && this.props.serviceFee > 0
-      && this.props.network !== NO_NETWORK;
+    );
   }
 
   handleCancel(e) {
@@ -92,19 +87,6 @@ export class ConfirmationPanel extends React.Component {
           {!this.props.isMobileDevice && "Confirm"}
         </span>
       );
-
-    let serviceFeeText;
-    let serviceFeeTypographyClass;
-    if (this.props.serviceFee === 0) {
-      serviceFeeText = "Calculating...";
-      serviceFeeTypographyClass = "typography_right";
-    } else if (this.props.serviceFee === -1) {
-      serviceFeeText = "Unavailable. Please make sure you are connected to the wallet and refresh the page.";
-      serviceFeeTypographyClass = "typography_right_err";
-    } else {
-      serviceFeeText = "29.99$ (" + this.props.serviceFee.toFixed(8) + " ETH)";
-      serviceFeeTypographyClass = "typography_right";
-    }
 
     const cardHeaderTitle = this.props.isMobileDevice ? "Confirm parameters" : "Please Confirm Token Creation Parameters!";
 
@@ -242,46 +224,6 @@ export class ConfirmationPanel extends React.Component {
                 >
                   {this.props.tokenType}
                 </Typography>
-              </Grid>
-            </Grid>
-            <Grid className="grid_container" container spacing={8}>
-              <Grid item xs={12} md={6}>
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className="typography_left"
-                >
-                  Service Fee:
-              </Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className={serviceFeeTypographyClass}
-                >
-                  {serviceFeeText}
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid className="grid_container" container spacing={8}>
-              <Grid item xs={12} md={6}>
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className="typography_left"
-                >
-                  Mining Fee:
-              </Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className={serviceFeeTypographyClass}
-                >
-                  Should be set in wallet app
-              </Typography>
               </Grid>
             </Grid>
           </CardContent>
