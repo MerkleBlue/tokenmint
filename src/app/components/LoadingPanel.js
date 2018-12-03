@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
-export class MiningInProgressPanel extends React.Component {
+export class LoadingPanel extends React.Component {
 
   componentDidMount() {
     // TODO: remove logging when ga works properly
@@ -65,7 +65,7 @@ export class MiningInProgressPanel extends React.Component {
   }
 }
 
-MiningInProgressPanel.propTypes = {
+LoadingPanel.propTypes = {
   tokenOwner: PropTypes.string.isRequired
 };
 
@@ -75,4 +75,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(MiningInProgressPanel);
+export default connect(mapStateToProps)(LoadingPanel);

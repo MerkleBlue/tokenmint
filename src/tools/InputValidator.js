@@ -1,4 +1,5 @@
 import cc from 'cryptocurrencies';
+import web3 from 'web3';
 
 export default class InputValidator {
 
@@ -38,12 +39,19 @@ export default class InputValidator {
     return n !== Infinity && String(n) === totalSupply && n > 0 && n <= 1000000000000000;
   }
 
+  static isTokenOwnerValid(tokenOwner) {
+    if (tokenOwner === "") {
+      return true;
+    }
+    return web3.utils.isAddress(tokenOwner);
+  }
+
   static isInputValid(tokenName, tokenSymbol, decimals, totalSupply, tokenOwner) {
     return this.isTokenNameValid(tokenName) && tokenName !== "" &&
       this.isTokenSymbolValid(tokenSymbol) && tokenSymbol !== "" &&
       this.isDecimalsValid(decimals) && decimals !== "" &&
       this.isTotalSupplyValid(totalSupply) && totalSupply !== "" &&
-      tokenOwner !== "";
+      this.isTokenOwnerValid(tokenOwner) && tokenOwner !== "";
   }
 
   static isTokenSymbolUnique(tokenSymbol) {

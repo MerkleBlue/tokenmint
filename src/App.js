@@ -10,12 +10,13 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import appStates from './app/reducers/appStates';
 import ErrorPanel from './app/components/ErrorPanel'; //eslint-disable-line import/no-named-as-default
-import MiningInProgressPanel from './app/components/MiningInProgressPanel'; //eslint-disable-line import/no-named-as-default
+import LoadingPanel from './app/components/LoadingPanel'; //eslint-disable-line import/no-named-as-default
 import SuccessMessagePanel from './app/components/SuccessMessagePanel'; //eslint-disable-line import/no-named-as-default
 import { CSSTransitionGroup } from 'react-transition-group';
 import FullStory from 'react-fullstory';
 import pack from '../package.json';
 import NetworkWarning from './app/components/NetworkWarning'; //eslint-disable-line import/no-named-as-default
+import InstallMetamaskPanel from './app/components/InstallMetaMaskPanel';
 
 class App extends Component {
 
@@ -49,7 +50,7 @@ class App extends Component {
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          <MiningInProgressPanel />
+          <LoadingPanel />
         </CSSTransitionGroup>
       );
     } else if (this.props.appState === appStates.MINING_CONFIRMED) {

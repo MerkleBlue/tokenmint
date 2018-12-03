@@ -9,8 +9,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoins } from '@fortawesome/free-solid-svg-icons';
 import appStates from '../reducers/appStates';
 import { Tooltip } from '@material-ui/core';
-import { NO_NETWORK } from '../../api/mintApi';
-
 
 export class Footer extends React.Component {
 
@@ -27,11 +25,7 @@ export class Footer extends React.Component {
       this.props.decimals,
       this.props.totalSupply,
       this.props.tokenOwner
-    ) && !this.props.checkingTokenOwnerFunds
-      && !this.props.tokenOwnerHasInsufficientFunds
-      && !this.props.loadingAccounts
-      && this.props.serviceFee > 0
-      && this.props.network !== NO_NETWORK;
+    ) && !this.props.loadingAccounts;
   }
 
   handleTokenCreation(e) {
@@ -39,9 +33,6 @@ export class Footer extends React.Component {
   }
 
   render() {
-    const tooltipTitle = this.props.tokenOwnerHasInsufficientFunds ?
-      "The selected account has insufficient funds" :
-      "Please fill in all the parameters above to enable token creation";
     let createBtn = this.isCreationEnabled() ?
       (
         <span
@@ -58,7 +49,7 @@ export class Footer extends React.Component {
           classes={{
             tooltip: "tooltip_disabled"
           }}
-          title={tooltipTitle}
+          title="Please fill in all the parameters above to enable token creation"
         >
           <span
             className="btn btn-disabled wow fadeInUp"
@@ -87,11 +78,7 @@ Footer.propTypes = {
   totalSupply: PropTypes.string.isRequired,
   tokenType: PropTypes.string.isRequired,
   tokenOwner: PropTypes.string.isRequired,
-  checkingTokenOwnerFunds: PropTypes.bool.isRequired,
-  tokenOwnerHasInsufficientFunds: PropTypes.bool.isRequired,
-  loadingAccounts: PropTypes.bool.isRequired,
-  serviceFee: PropTypes.number.isRequired,
-  network: PropTypes.string.isRequired,
+  loadingAccounts: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state) {
@@ -102,11 +89,7 @@ function mapStateToProps(state) {
     totalSupply: state.totalSupply,
     tokenType: state.tokenType,
     tokenOwner: state.tokenOwner,
-    checkingTokenOwnerFunds: state.checkingTokenOwnerFunds,
-    tokenOwnerHasInsufficientFunds: state.tokenOwnerHasInsufficientFunds,
-    loadingAccounts: state.loadingAccounts,
-    serviceFee: state.serviceFee,
-    network: state.network
+    loadingAccounts: state.loadingAccounts
   };
 }
 
