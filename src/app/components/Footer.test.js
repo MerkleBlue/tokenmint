@@ -16,7 +16,6 @@ const decimals = "18";
 const totalSupply = "1000";
 const tokenType = "erc20";
 const tokenOwner = "0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef";
-const loadingAccounts = false;
 
 describe("<Footer /> tests", () => {
   let mount;
@@ -28,7 +27,6 @@ describe("<Footer /> tests", () => {
     totalSupply,
     tokenType,
     tokenOwner,
-    loadingAccounts,
     setAppState = () => { }
   ) {
     const props = {
@@ -38,7 +36,6 @@ describe("<Footer /> tests", () => {
       totalSupply: totalSupply,
       tokenType: tokenType,
       tokenOwner: tokenOwner,
-      loadingAccounts: loadingAccounts,
       appStateActions: { setAppState: setAppState },
     };
     return mount(<Footer {...props} />);
@@ -63,8 +60,7 @@ describe("<Footer /> tests", () => {
       decimals,
       totalSupply,
       tokenType,
-      tokenOwner,
-      loadingAccounts
+      tokenOwner
     );
     expect(wrapper.props().tokenName).to.be.empty;
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
@@ -72,7 +68,6 @@ describe("<Footer /> tests", () => {
     expect(wrapper.props().totalSupply).to.eq(totalSupply);
     expect(wrapper.props().tokenType).to.eq("erc20");
     expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().loadingAccounts).to.eq(loadingAccounts);
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(1);
     expect(wrapper.find("span").props().className).to.eq("btn btn-disabled wow fadeInUp");
@@ -85,8 +80,7 @@ describe("<Footer /> tests", () => {
       decimals,
       totalSupply,
       tokenType,
-      tokenOwner,
-      loadingAccounts
+      tokenOwner
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.be.empty;
@@ -94,7 +88,6 @@ describe("<Footer /> tests", () => {
     expect(wrapper.props().totalSupply).to.eq(totalSupply);
     expect(wrapper.props().tokenType).to.eq("erc20");
     expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().loadingAccounts).to.eq(loadingAccounts);
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(1);
     expect(wrapper.find("span").props().className).to.eq("btn btn-disabled wow fadeInUp");
@@ -107,8 +100,7 @@ describe("<Footer /> tests", () => {
       "-1",
       totalSupply,
       tokenType,
-      tokenOwner,
-      loadingAccounts
+      tokenOwner
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
@@ -116,7 +108,6 @@ describe("<Footer /> tests", () => {
     expect(wrapper.props().totalSupply).to.eq(totalSupply);
     expect(wrapper.props().tokenType).to.eq("erc20");
     expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().loadingAccounts).to.eq(loadingAccounts);
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(1);
     expect(wrapper.find("span").props().className).to.eq("btn btn-disabled wow fadeInUp");
@@ -129,8 +120,7 @@ describe("<Footer /> tests", () => {
       decimals,
       "0",
       tokenType,
-      tokenOwner,
-      loadingAccounts
+      tokenOwner
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
@@ -138,33 +128,11 @@ describe("<Footer /> tests", () => {
     expect(wrapper.props().totalSupply).to.eq("0");
     expect(wrapper.props().tokenType).to.eq("erc20");
     expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().loadingAccounts).to.eq(loadingAccounts);
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(1);
     expect(wrapper.find("span").props().className).to.eq("btn btn-disabled wow fadeInUp");
   });
 
-  it("renders Footer while loading accounts", () => {
-    const wrapper = setup(
-      tokenName,
-      tokenSymbol,
-      decimals,
-      totalSupply,
-      tokenType,
-      tokenOwner,
-      true
-    );
-    expect(wrapper.props().tokenName).to.eq(tokenName);
-    expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
-    expect(wrapper.props().decimals).to.eq(decimals);
-    expect(wrapper.props().totalSupply).to.eq(totalSupply);
-    expect(wrapper.props().tokenType).to.eq("erc20");
-    expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().loadingAccounts).to.be.true;
-    expect(wrapper.props().appStateActions).to.not.be.empty;
-    expect(wrapper.find("span").length).to.eq(1);
-    expect(wrapper.find("span").props().className).to.eq("btn btn-disabled wow fadeInUp");
-  });
 
   it("renders Footer with valid props", () => {
     const wrapper = setup(
@@ -173,8 +141,7 @@ describe("<Footer /> tests", () => {
       decimals,
       totalSupply,
       tokenType,
-      tokenOwner,
-      loadingAccounts
+      tokenOwner
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
@@ -182,7 +149,6 @@ describe("<Footer /> tests", () => {
     expect(wrapper.props().totalSupply).to.eq(totalSupply);
     expect(wrapper.props().tokenType).to.eq("erc20");
     expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().loadingAccounts).to.eq(loadingAccounts);
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(1);
     expect(wrapper.find("span").props().className).to.eq("btn btn-common wow fadeInUp");
@@ -197,7 +163,6 @@ describe("<Footer /> tests", () => {
       totalSupply,
       tokenType,
       tokenOwner,
-      loadingAccounts,
       setAppState
     );
     wrapper.find("span").simulate("click");
@@ -213,7 +178,6 @@ describe("<Footer /> tests", () => {
       totalSupply,
       tokenType,
       tokenOwner,
-      loadingAccounts,
       setAppState
     );
     wrapper.find("span").simulate("click");

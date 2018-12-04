@@ -25,7 +25,7 @@ export class Footer extends React.Component {
       this.props.decimals,
       this.props.totalSupply,
       this.props.tokenOwner
-    ) && !this.props.loadingAccounts;
+    );
   }
 
   handleTokenCreation(e) {
@@ -77,8 +77,7 @@ Footer.propTypes = {
   decimals: PropTypes.string.isRequired,
   totalSupply: PropTypes.string.isRequired,
   tokenType: PropTypes.string.isRequired,
-  tokenOwner: PropTypes.string.isRequired,
-  loadingAccounts: PropTypes.bool.isRequired
+  tokenOwner: PropTypes.string.isRequired
 };
 
 function mapStateToProps(state) {
@@ -88,8 +87,7 @@ function mapStateToProps(state) {
     decimals: state.decimals,
     totalSupply: state.totalSupply,
     tokenType: state.tokenType,
-    tokenOwner: state.tokenOwner,
-    loadingAccounts: state.loadingAccounts
+    tokenOwner: state.tokenOwner
   };
 }
 
