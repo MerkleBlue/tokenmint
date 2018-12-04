@@ -16,7 +16,8 @@ import { CSSTransitionGroup } from 'react-transition-group';
 import FullStory from 'react-fullstory';
 import pack from '../package.json';
 import NetworkWarning from './app/components/NetworkWarning'; //eslint-disable-line import/no-named-as-default
-import InstallMetamaskPanel from './app/components/InstallMetaMaskPanel';
+import InstallMetamaskPanel from './app/components/InstallMetaMaskPanel'; //eslint-disable-line import/no-named-as-default
+import InstallCoinbasePanel from './app/components/InstallCoinbasePanel'; //eslint-disable-line import/no-named-as-default
 
 class App extends Component {
 
@@ -26,7 +27,24 @@ class App extends Component {
 
   render() {
     let content;
-    if (this.props.appState === appStates.PENDING_CONFIRMATION) {
+    if (this.props.appState === appStates.INSTALL_WALLET) {
+      content = !this.props.isMobileDevice ?
+      (
+        <CSSTransitionGroup
+          transitionName="example"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}>
+          <InstallMetamaskPanel />
+        </CSSTransitionGroup>
+      ) : (
+        <CSSTransitionGroup
+          transitionName="example"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}>
+          <InstallCoinbasePanel />
+        </CSSTransitionGroup>
+      );
+    } else if (this.props.appState === appStates.PENDING_CONFIRMATION) {
       content = (
         <CSSTransitionGroup
           transitionName="example"
