@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import * as tokenOwnerActions from '../actions/tokenOwnerActions';
 import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
 import * as walletActions from '../actions/walletActions';
+import * as appStateActions from '../actions/appStateActions';
 import { bindActionCreators } from 'redux';
 import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
@@ -26,6 +27,7 @@ import { NO_NETWORK } from '../../api/mintApi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWallet } from '@fortawesome/free-solid-svg-icons';
 import InputValidator from '../../tools/InputValidator';
+import appStates from '../reducers/appStates';
 
 export class TokenOwner extends React.Component {
 
@@ -33,7 +35,9 @@ export class TokenOwner extends React.Component {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.handleUnlockWallet = this.handleUnlockWallet.bind(this);
+    this.backToHome = this.backToHome.bind(this);
   }
+
 
   componentDidMount() {
     // TODO: remove logging when ga works properly
@@ -63,6 +67,10 @@ export class TokenOwner extends React.Component {
         }
       }
     }
+  }
+
+  backToHome(e) {
+    this.props.appStateActions.setAppState(appStates.INIT);
   }
 
   handleChange(e) {
@@ -203,7 +211,7 @@ export class TokenOwner extends React.Component {
             root: "card_content"
           }}
         >
-          <p>Payment Panel</p>
+          <p onClick={this.backToHome}>Payment Panel</p>
         </CardContent>
       </Card>
     );
@@ -223,7 +231,8 @@ TokenOwner.propTypes = {
   walletNeedsToBeUnlocked: PropTypes.bool.isRequired,
   tokenOwnerActions: PropTypes.object.isRequired,
   tokenOwnerFundsActions: PropTypes.object.isRequired,
-  walletActions: PropTypes.object.isRequired
+  walletActions: PropTypes.object.isRequired,
+  appStateActions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
@@ -245,7 +254,8 @@ function mapDispatchToProps(dispatch) {
   return {
     tokenOwnerActions: bindActionCreators(tokenOwnerActions, dispatch),
     tokenOwnerFundsActions: bindActionCreators(tokenOwnerFundsActions, dispatch),
-    walletActions: bindActionCreators(walletActions, dispatch)
+    walletActions: bindActionCreators(walletActions, dispatch),
+    appStateActions: bindActionCreators(appStateActions, dispatch)
   };
 }
 

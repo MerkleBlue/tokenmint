@@ -130,7 +130,7 @@ export class InstallMetamaskPanel extends React.Component {
                 align="center"
                 variant="h6"
               >
-                Please install MetaMask in order to be able to continue
+                Please install MetaMask and REFRESH THE PAGE in order to be able to continue
               </Typography>
             </MuiThemeProvider>
             <img src={metamask_logo} alt="" />

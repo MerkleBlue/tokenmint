@@ -18,22 +18,18 @@ export function initWeb3() {
       if (window.ethereum) {
         web3 = new Web3(window.ethereum);
         walletNeedsToBeUnlocked = true;
-        console.log(1);
       }
       // Legacy dapp browsers...
       else if (typeof global.window.web3 !== 'undefined') {
         // Use Mist/MetaMask's provider
         web3 = new Web3(window.web3.currentProvider);
-        console.log(2);
       } else {
         // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
         web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-        console.log(3);
       }
     } else {
       // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
       web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-      console.log(4);
     }
     accept(walletNeedsToBeUnlocked);
     return;
