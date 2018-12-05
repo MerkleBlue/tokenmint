@@ -18,6 +18,7 @@ import pack from '../package.json';
 import NetworkWarning from './app/components/NetworkWarning'; //eslint-disable-line import/no-named-as-default
 import InstallMetamaskPanel from './app/components/InstallMetaMaskPanel'; //eslint-disable-line import/no-named-as-default
 import InstallCoinbasePanel from './app/components/InstallCoinbasePanel'; //eslint-disable-line import/no-named-as-default
+import HandlePaymentPanel from './app/components/HandlePaymentPanel';
 
 class App extends Component {
 
@@ -78,6 +79,15 @@ class App extends Component {
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
           <SuccessMessagePanel />
+        </CSSTransitionGroup>
+      );
+    } else if (this.props.appState === appStates.HANDLE_PAYMENT) {
+      content = (
+        <CSSTransitionGroup
+          transitionName="example"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}>
+          <HandlePaymentPanel />
         </CSSTransitionGroup>
       );
     } else {

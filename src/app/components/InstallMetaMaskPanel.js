@@ -6,7 +6,12 @@ import {
   CardHeader,
   CardContent,
   Tooltip,
-  Typography
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  CircularProgress,
+  Button
 } from '@material-ui/core';
 import './css/InstallMetaMaskPanel.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,9 +19,13 @@ import { faPlay, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-s
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as appStateActions from '../actions/appStateActions';
+import * as accountsActions from '../actions/accountsActions';
+import * as networkActions from '../actions/networkActions';
+import * as walletActions from '../actions/walletActions';
 import { bindActionCreators } from 'redux';
 import appStates from '../reducers/appStates';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import * as mintApi from '../../api/mintApi';
 
 export class InstallMetamaskPanel extends React.Component {
 
@@ -26,6 +35,12 @@ export class InstallMetamaskPanel extends React.Component {
     this.handleGetFirefoxExtension = this.handleGetFirefoxExtension.bind(this);
     this.handleBack = this.handleBack.bind(this);
     this.handleNext = this.handleNext.bind(this);
+    this.handleModalClose = this.handleModalClose.bind(this);
+    this.state = { isModalOpen: false };
+  }
+
+  handleModalClose() {
+    this.setState({ isModalOpen: false });
   }
 
   handleGetChromeExtension(e) {
@@ -43,7 +58,12 @@ export class InstallMetamaskPanel extends React.Component {
   }
 
   handleNext(e) {
-
+    mintApi.initWeb3().then(walletNeedsToBeUnlocked => {
+      this.props.walletActions.setWalletNeedsToBeUnlocked(walletNeedsToBeUnlocked);
+      this.props.networkActions.executeNetworkCheckWithStateTransition();
+      this.props.accountsActions.loadAllAccounts();
+    });
+    this.setState({ isModalOpen: true });
   }
 
   render() {
@@ -53,8 +73,37 @@ export class InstallMetamaskPanel extends React.Component {
       }
     });
 
+    let dialogTitle;
+    let dialogContent;
+    if (this.props.checkingNetwork) {
+      dialogTitle = "Detecting wallet";
+      dialogContent = <CircularProgress />;
+    } else {
+      dialogTitle = "No wallet detected";
+      dialogContent = (
+        <Button variant="contained" onClick={this.handleModalClose} >
+          Close
+        </Button>
+      );
+    }
+
     return (
       <div>
+        <Dialog
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          open={this.state.isModalOpen}
+          onClose={this.handleModalClose}
+          disableBackdropClick
+          disableEscapeKeyDown
+        >
+          <DialogTitle>
+            {dialogTitle}
+          </DialogTitle>
+          <DialogContent className="dialog-content">
+            {dialogContent}
+          </DialogContent>
+        </Dialog>
         <Card
           className="card"
         >
@@ -165,18 +214,26 @@ export class InstallMetamaskPanel extends React.Component {
 
 InstallMetamaskPanel.propTypes = {
   isMobileDevice: PropTypes.bool.isRequired,
-  appStateActions: PropTypes.object.isRequired
+  checkingNetwork: PropTypes.bool.isRequired,
+  appStateActions: PropTypes.object.isRequired,
+  accountsActions: PropTypes.object.isRequired,
+  networkActions: PropTypes.object.isRequired,
+  walletActions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    isMobileDevice: state.isMobileDevice
+    isMobileDevice: state.isMobileDevice,
+    checkingNetwork: state.checkingNetwork
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    appStateActions: bindActionCreators(appStateActions, dispatch)
+    appStateActions: bindActionCreators(appStateActions, dispatch),
+    accountsActions: bindActionCreators(accountsActions, dispatch),
+    networkActions: bindActionCreators(networkActions, dispatch),
+    walletActions: bindActionCreators(walletActions, dispatch)
   };
 }
 

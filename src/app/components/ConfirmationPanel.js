@@ -57,8 +57,6 @@ export class ConfirmationPanel extends React.Component {
   handleNext(e) {
     if (this.props.network === NO_NETWORK) {
       this.props.appStateActions.setAppState(appStates.INSTALL_WALLET);
-    } else if (this.props.walletNeedsToBeUnlocked && this.props.accounts.length === 0) {
-      this.props.appStateActions.setAppState(appStates.UNLOCK_WALLET);
     } else {
       this.props.appStateActions.setAppState(appStates.HANDLE_PAYMENT);
     }

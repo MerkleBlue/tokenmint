@@ -192,7 +192,7 @@ export class TokenOwner extends React.Component {
         className="card"
       >
         <CardHeader
-          title="Token Owner"
+          title="Payment Details"
           classes={{
             root: "card_header",
             title: "card_header_text"
@@ -203,37 +203,7 @@ export class TokenOwner extends React.Component {
             root: "card_content"
           }}
         >
-          <Grid container spacing={8}>
-            <Grid item xs={12} md={6}>
-              <MuiThemeProvider theme={theme}>
-                <TextField
-                  required
-                  id="outlined-required"
-                  label="Token name"
-                  className="text_field"
-                  margin="normal"
-                  variant="outlined"
-                  inputProps={{ maxLength: 25 }}
-                  value={this.props.tokenName}
-                  error={!InputValidator.isTokenNameValid(this.props.tokenName)}
-                  onChange={this.handleTokenNameChange}
-                />
-              </MuiThemeProvider>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              {contentRight}
-              {this.props.tokenOwnerHasInsufficientFunds &&
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className="typography_error_secondary"
-                >
-                  Please top your account up with at least <strong>{(this.props.serviceFee + 0.02 - this.props.tokenOwnerBalance).toFixed(6)}</strong> ETH,
-                  and refresh the page!
-                </Typography>
-              }
-            </Grid>
-          </Grid>
+          <p>Payment Panel</p>
         </CardContent>
       </Card>
     );
