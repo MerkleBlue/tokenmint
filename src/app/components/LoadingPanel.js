@@ -1,5 +1,5 @@
 import React from 'react';
-import './css/ErrorPanel.css';
+import './css/LoadingPanel.css';
 import { Typography, Card, CardHeader, CardContent, LinearProgress } from '@material-ui/core';
 import ReactGA from 'react-ga';
 import { connect } from 'react-redux';
