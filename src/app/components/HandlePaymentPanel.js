@@ -114,7 +114,7 @@ export class TokenOwner extends React.Component {
       contentRight = (
         <Typography
           align="left"
-          variant="body1"
+          variant="h6"
           className={error ? "typography_error" : "typography"}
         >
           ETH account. This account will be owner of the token!
@@ -140,7 +140,7 @@ export class TokenOwner extends React.Component {
       contentRight = (
         <Typography
           align="left"
-          variant="body1"
+          variant="h6"
           className={error ? "typography_error" : "typography"}
         >
           {descriptionText}
@@ -160,7 +160,7 @@ export class TokenOwner extends React.Component {
         contentRight = (
           <Typography
             align="left"
-            variant="body1"
+            variant="h6"
             className={error ? "typography_error" : "typography"}
           >
             There are no available accounts.
@@ -184,7 +184,7 @@ export class TokenOwner extends React.Component {
           contentRight = (
             <Typography
               align="left"
-              variant="body1"
+              variant="h6"
               className={error ? "typography_error" : "typography"}
             >
               Ethereum wallet is detected, but there are no accounts available. If you are using Metamask, please LOG IN to it!
@@ -213,41 +213,35 @@ export class TokenOwner extends React.Component {
               root: "card_content"
             }}
           >
-            <Grid container spacing={8}>
-              <Grid item xs={12} md={6}>
-                <MuiThemeProvider theme={theme}>
-                  <FormControl variant="outlined">
-                    <InputLabel>Select account</InputLabel>
-                    <Select
-                      error={error}
-                      value={this.props.tokenOwner}
-                      onChange={this.handleChange}
-                      input={
-                        <OutlinedInput
-                          labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
-                          className="select_field"
-                        />
-                      }
-                    >
-                      {menuItems}
-                    </Select>
-                  </FormControl>
-                </MuiThemeProvider>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                {contentRight}
-                {this.props.tokenOwnerHasInsufficientFunds &&
-                  <Typography
-                    align="left"
-                    variant="body1"
-                    className="typography_error_secondary"
-                  >
-                    Please top your account up with at least <strong>{(this.props.serviceFee + 0.02 - this.props.tokenOwnerBalance).toFixed(6)}</strong> ETH,
-                    and refresh the page!
+            <MuiThemeProvider theme={theme}>
+              <FormControl variant="outlined">
+                <InputLabel>Select account</InputLabel>
+                <Select
+                  error={error}
+                  value={this.props.tokenOwner}
+                  onChange={this.handleChange}
+                  input={
+                    <OutlinedInput
+                      labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
+                      className="select_field"
+                    />
+                  }
+                >
+                  {menuItems}
+                </Select>
+              </FormControl>
+            </MuiThemeProvider>
+            {contentRight}
+            {this.props.tokenOwnerHasInsufficientFunds &&
+              <Typography
+                align="left"
+                variant="h6"
+                className="typography_error_secondary"
+              >
+                Please top your account up with at least <strong>{(this.props.serviceFee + 0.02 - this.props.tokenOwnerBalance).toFixed(6)}</strong> ETH,
+                and refresh the page!
                 </Typography>
-                }
-              </Grid>
-            </Grid>
+            }
           </CardContent>
         </Card>
         <form className="footer_main_form">
