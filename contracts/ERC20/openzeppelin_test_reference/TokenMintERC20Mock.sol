@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-import '../../node_modules/openzeppelin-solidity/contracts/mocks/ERC20Mock.sol';
+import '../../../node_modules/openzeppelin-solidity/contracts/mocks/ERC20Mock.sol';
 
 /**
  * @title Used only to reference imported file so that ERC20Mock would be
