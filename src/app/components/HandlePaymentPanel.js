@@ -9,8 +9,7 @@ import {
   OutlinedInput,
   Card,
   CardHeader,
-  CardContent,
-  TextField
+  CardContent
 } from '@material-ui/core';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import './css/TokenOwner.css';
@@ -25,10 +24,10 @@ import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
 import { NO_NETWORK } from '../../api/mintApi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWallet } from '@fortawesome/free-solid-svg-icons';
-import InputValidator from '../../tools/InputValidator';
+import { faWallet, faCoins } from '@fortawesome/free-solid-svg-icons';
 import appStates from '../reducers/appStates';
 import NetworkWarning from './NetworkWarning'; //eslint-disable-line import/no-named-as-default
+
 
 export class TokenOwner extends React.Component {
 
@@ -214,9 +213,54 @@ export class TokenOwner extends React.Component {
               root: "card_content"
             }}
           >
-            <p onClick={this.backToHome}>Payment Panel</p>
+            <Grid container spacing={8}>
+              <Grid item xs={12} md={6}>
+                <MuiThemeProvider theme={theme}>
+                  <FormControl variant="outlined">
+                    <InputLabel>Select account</InputLabel>
+                    <Select
+                      error={error}
+                      value={this.props.tokenOwner}
+                      onChange={this.handleChange}
+                      input={
+                        <OutlinedInput
+                          labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
+                          className="select_field"
+                        />
+                      }
+                    >
+                      {menuItems}
+                    </Select>
+                  </FormControl>
+                </MuiThemeProvider>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                {contentRight}
+                {this.props.tokenOwnerHasInsufficientFunds &&
+                  <Typography
+                    align="left"
+                    variant="body1"
+                    className="typography_error_secondary"
+                  >
+                    Please top your account up with at least <strong>{(this.props.serviceFee + 0.02 - this.props.tokenOwnerBalance).toFixed(6)}</strong> ETH,
+                    and refresh the page!
+                </Typography>
+                }
+              </Grid>
+            </Grid>
           </CardContent>
         </Card>
+        <form className="footer_main_form">
+          <span
+            className="btn btn-confirm wow fadeInUp"
+            data-wow-duration="1000ms"
+            data-wow-delay="400ms"
+            onClick={this.backToHome}
+          >
+            <FontAwesomeIcon className="fa_back_icon" icon={faCoins} />
+            Finish
+          </span>
+        </form>
       </div>
     );
   }
