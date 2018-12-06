@@ -7,9 +7,6 @@ import {
   CardContent,
   Tooltip,
   Typography,
-  Dialog,
-  DialogTitle,
-  DialogContent,
   CircularProgress,
   Button
 } from '@material-ui/core';
@@ -27,6 +24,7 @@ import appStates from '../reducers/appStates';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import * as mintApi from '../../api/mintApi';
 import MetaMaskDemoPlayer from './MetaMaskDemoPlayer'; //eslint-disable-line import/no-named-as-default
+import DetectingWalletDialog from './DetectingWalletDialog'; //eslint-disable-line import/no-named-as-default
 
 export class InstallMetamaskPanel extends React.Component {
 
@@ -84,44 +82,16 @@ export class InstallMetamaskPanel extends React.Component {
       }
     });
 
-    let dialogTitle;
-    let dialogContent;
-    if (this.props.checkingNetwork) {
-      dialogTitle = "Detecting wallet";
-      dialogContent = <CircularProgress />;
-    } else {
-      dialogTitle = "No wallet detected";
-      dialogContent = (
-        <div>
-          <p className="modal-text">If you already installed MetaMask, please REFRESH THE PAGE and resume to the next step</p>
-          <Button className="close-modal-button" variant="contained" onClick={this.handleModalClose} >
-            Close
-          </Button>
-        </div>
-      );
-    }
-
     return (
       <div>
         <MetaMaskDemoPlayer
           isVideoOpen={this.state.isVideoOpen}
           handleVideoClose={this.handleVideoClose}
         />
-        <Dialog
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-          open={this.state.isModalOpen}
-          onClose={this.handleModalClose}
-          disableBackdropClick
-          disableEscapeKeyDown
-        >
-          <DialogTitle>
-            {dialogTitle}
-          </DialogTitle>
-          <DialogContent className="dialog-content">
-            {dialogContent}
-          </DialogContent>
-        </Dialog>
+        <DetectingWalletDialog
+          isModalOpen={this.state.isModalOpen}
+          handleModalClose={this.handleModalClose}
+        />
         <Card
           className="card"
         >
@@ -239,8 +209,7 @@ InstallMetamaskPanel.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    isMobileDevice: state.isMobileDevice,
-    checkingNetwork: state.checkingNetwork
+    isMobileDevice: state.isMobileDevice
   };
 }
 
