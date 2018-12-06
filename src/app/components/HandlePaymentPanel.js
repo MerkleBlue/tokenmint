@@ -28,6 +28,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWallet } from '@fortawesome/free-solid-svg-icons';
 import InputValidator from '../../tools/InputValidator';
 import appStates from '../reducers/appStates';
+import NetworkWarning from './NetworkWarning'; //eslint-disable-line import/no-named-as-default
 
 export class TokenOwner extends React.Component {
 
@@ -196,24 +197,27 @@ export class TokenOwner extends React.Component {
     }
 
     return (
-      <Card
-        className="card"
-      >
-        <CardHeader
-          title="Payment Details"
-          classes={{
-            root: "card_header",
-            title: "card_header_text"
-          }}
-        />
-        <CardContent
-          classes={{
-            root: "card_content"
-          }}
+      <div>
+        {(!this.props.checkingNetwork && this.props.network !== "main") && <NetworkWarning />}
+        <Card
+          className="card"
         >
-          <p onClick={this.backToHome}>Payment Panel</p>
-        </CardContent>
-      </Card>
+          <CardHeader
+            title="Payment Details"
+            classes={{
+              root: "card_header",
+              title: "card_header_text"
+            }}
+          />
+          <CardContent
+            classes={{
+              root: "card_content"
+            }}
+          >
+            <p onClick={this.backToHome}>Payment Panel</p>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 }

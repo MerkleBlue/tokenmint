@@ -26,6 +26,7 @@ import { bindActionCreators } from 'redux';
 import appStates from '../reducers/appStates';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import * as mintApi from '../../api/mintApi';
+import MetaMaskDemoPlayer from './MetaMaskDemoPlayer'; //eslint-disable-line import/no-named-as-default
 
 export class InstallMetamaskPanel extends React.Component {
 
@@ -36,11 +37,21 @@ export class InstallMetamaskPanel extends React.Component {
     this.handleBack = this.handleBack.bind(this);
     this.handleNext = this.handleNext.bind(this);
     this.handleModalClose = this.handleModalClose.bind(this);
-    this.state = { isModalOpen: false };
+    this.handleVideoClose = this.handleVideoClose.bind(this);
+    this.handleVideoOpen = this.handleVideoOpen.bind(this);
+    this.state = { isModalOpen: false, isVideoOpen: false };
   }
 
   handleModalClose() {
     this.setState({ isModalOpen: false });
+  }
+
+  handleVideoClose() {
+    this.setState({ isVideoOpen: false });
+  }
+
+  handleVideoOpen() {
+    this.setState({ isVideoOpen: true });
   }
 
   handleGetChromeExtension(e) {
@@ -81,14 +92,21 @@ export class InstallMetamaskPanel extends React.Component {
     } else {
       dialogTitle = "No wallet detected";
       dialogContent = (
-        <Button variant="contained" onClick={this.handleModalClose} >
-          Close
-        </Button>
+        <div>
+          <p className="modal-text">If you already installed MetaMask, please REFRESH THE PAGE and resume to the next step</p>
+          <Button className="close-modal-button" variant="contained" onClick={this.handleModalClose} >
+            Close
+          </Button>
+        </div>
       );
     }
 
     return (
       <div>
+        <MetaMaskDemoPlayer
+          isVideoOpen={this.state.isVideoOpen}
+          handleVideoClose={this.handleVideoClose}
+        />
         <Dialog
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
@@ -166,14 +184,12 @@ export class InstallMetamaskPanel extends React.Component {
                       }}
                       title="MetaMask demo video"
                     >
-                      <a
-                        href="https://www.youtube.com/watch?v=6Gf_kRE4MJU"
+                      <span
                         className="video-popup wow fadeInUp"
-                        rel="noopener noreferrer"
-                        target="_blank"
+                        onClick={this.handleVideoOpen}
                       >
                         <FontAwesomeIcon className="play-icon" icon={faPlay} />
-                      </a>
+                      </span>
                     </Tooltip>
                   </div>
                 </div>
@@ -238,4 +254,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(InstallMetamaskPanel);
-
