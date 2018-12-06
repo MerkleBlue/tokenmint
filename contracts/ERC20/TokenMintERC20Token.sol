@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-import '../../node_modules/openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol';
+import '../../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 
 /**
  * @title Standard ERC20 token with optional functions implemented
@@ -9,21 +9,24 @@ import '../../node_modules/openzeppelin-solidity/contracts/token/ERC20/StandardT
  * @dev Implementation of the basic standard token. For full specification see:
  * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md
  */
-contract TokenMintERC20Token is StandardToken {
+contract TokenMintERC20Token is ERC20 {
 
     string public name;
     string public symbol;
     uint8 public decimals;
 
-    constructor(string _name, string _symbol, uint8 _decimals, uint256 _totalSupply, address feeReceiver) public payable {
+    constructor(string _name, string _symbol, uint8 _decimals, uint256 totalSupply, address feeReceiver) public payable {
       name = _name;
       symbol = _symbol;
       decimals = _decimals;
-      totalSupply_ = _totalSupply;
+
+      _mint(msg.sender, totalSupply);
+      //_totalSupply = totalSupply;
 
       // set sender as owner of all tokens
-      balances[msg.sender] = totalSupply_;
-      emit Transfer(address(0), msg.sender, totalSupply_);
+      //transfer(msg.sender, totalSupply);
+      //_balances[msg.sender] = totalSupply;
+      //emit Transfer(address(0), msg.sender, totalSupply);
 
       // pay for service fee for contract deployment
       feeReceiver.transfer(msg.value);
