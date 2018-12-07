@@ -6,9 +6,7 @@ import {
   CardHeader,
   CardContent,
   Tooltip,
-  Typography,
-  CircularProgress,
-  Button
+  Typography
 } from '@material-ui/core';
 import './css/InstallMetaMaskPanel.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

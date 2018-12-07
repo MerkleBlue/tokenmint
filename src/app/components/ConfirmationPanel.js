@@ -15,7 +15,7 @@ import PropTypes from 'prop-types';
 import * as appStateActions from '../actions/appStateActions';
 import * as infoMessageActions from '../actions/infoMessageActions';
 import * as networkActions from '../actions/networkActions';
-import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
+import * as payingAccountFundsActions from '../actions/payingAccountFundsActions';
 import initialState from '../reducers/initialState';
 import InputValidator from '../../tools/InputValidator';
 import ReactGA from 'react-ga';
@@ -51,7 +51,7 @@ export class ConfirmationPanel extends React.Component {
     this.props.infoMessageActions.setInfoMessage(initialState.infoMessage);
     this.props.appStateActions.setAppState(initialState.appState);
     this.props.networkActions.getNetworkType();
-    this.props.tokenOwnerFundsActions.checkFunds(this.props.tokenOwner);
+    this.props.payingAccountFundsActions.checkFunds(this.props.payingAccount);
   }
 
   handleNext(e) {
@@ -249,7 +249,7 @@ export class ConfirmationPanel extends React.Component {
 }
 
 ConfirmationPanel.propTypes = {
-  tokenOwnerFundsActions: PropTypes.object.isRequired,
+  payingAccountFundsActions: PropTypes.object.isRequired,
   appStateActions: PropTypes.object.isRequired,
   infoMessageActions: PropTypes.object.isRequired,
   networkActions: PropTypes.object.isRequired,
@@ -259,6 +259,7 @@ ConfirmationPanel.propTypes = {
   totalSupply: PropTypes.string.isRequired,
   tokenType: PropTypes.string.isRequired,
   tokenOwner: PropTypes.string.isRequired,
+  payingAccount: PropTypes.string.isRequired,
   walletNeedsToBeUnlocked: PropTypes.bool.isRequired,
   accounts: PropTypes.array.isRequired,
   network: PropTypes.string.isRequired,
@@ -273,6 +274,7 @@ function mapStateToProps(state) {
     totalSupply: state.totalSupply,
     tokenType: state.tokenType,
     tokenOwner: state.tokenOwner,
+    payingAccount: state.payingAccount,
     network: state.network,
     isMobileDevice: state.isMobileDevice,
     walletNeedsToBeUnlocked: state.walletNeedsToBeUnlocked,
@@ -285,7 +287,7 @@ function mapDispatchToProps(dispatch) {
     appStateActions: bindActionCreators(appStateActions, dispatch),
     infoMessageActions: bindActionCreators(infoMessageActions, dispatch),
     networkActions: bindActionCreators(networkActions, dispatch),
-    tokenOwnerFundsActions: bindActionCreators(tokenOwnerFundsActions, dispatch)
+    payingAccountFundsActions: bindActionCreators(payingAccountFundsActions, dispatch)
   };
 }
 

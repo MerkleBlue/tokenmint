@@ -7,16 +7,17 @@ import tokenType from './tokenTypeReducer';
 import totalSupply from './totalSupplyReducer';
 import accounts from './accountsReducer';
 import appState from './appStateReducer';
-import checkingTokenOwnerFunds from './checkingTokenOwnerFundsReducer';
-import tokenOwnerBalance from './tokenOwnerBalanceReducer';
+import checkingPayingAccountFunds from './checkingPayingAccountFundsReducer';
+import payingAccountBalance from './payingAccountBalanceReducer';
 import loadingAccounts from './loadingAccountsReducer';
 import infoMessage from './infoMessageReducer';
 import serviceFee from './serviceFeeReducer';
 import network from './networkReducer';
 import checkingNetwork from './checkingNetworkReducer';
-import tokenOwnerHasInsufficientFunds from './tokenOwnerHasInsufficientFundsReducer';
+import payingAccountHasInsufficientFunds from './payingAccountHasInsufficientFundsReducer';
 import isMobileDevice from './isMobileDeviceReducer';
 import walletNeedsToBeUnlocked from './walletNeedsToBeUnlockedReducer';
+import payingAccount from './payingAccountReducer';
 
 const rootReducer = combineReducers({
   tokenName: tokenName,
@@ -27,16 +28,17 @@ const rootReducer = combineReducers({
   totalSupply: totalSupply,
   accounts: accounts,
   appState: appState,
-  checkingTokenOwnerFunds: checkingTokenOwnerFunds,
-  tokenOwnerBalance: tokenOwnerBalance,
+  checkingPayingAccountFunds: checkingPayingAccountFunds,
+  payingAccountBalance: payingAccountBalance,
   infoMessage: infoMessage,
   loadingAccounts: loadingAccounts,
   serviceFee: serviceFee,
   network: network,
   checkingNetwork: checkingNetwork,
-  tokenOwnerHasInsufficientFunds: tokenOwnerHasInsufficientFunds,
+  payingAccountHasInsufficientFunds: payingAccountHasInsufficientFunds,
   isMobileDevice: isMobileDevice,
-  walletNeedsToBeUnlocked: walletNeedsToBeUnlocked
+  walletNeedsToBeUnlocked: walletNeedsToBeUnlocked,
+  payingAccount: payingAccount
 });
 
 export default rootReducer;

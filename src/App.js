@@ -17,7 +17,7 @@ import FullStory from 'react-fullstory';
 import pack from '../package.json';
 import InstallMetamaskPanel from './app/components/InstallMetaMaskPanel'; //eslint-disable-line import/no-named-as-default
 import InstallCoinbasePanel from './app/components/InstallCoinbasePanel'; //eslint-disable-line import/no-named-as-default
-import HandlePaymentPanel from './app/components/HandlePaymentPanel';
+import HandlePaymentPanel from './app/components/HandlePaymentPanel'; //eslint-disable-line import/no-named-as-default
 
 class App extends Component {
 

@@ -18,8 +18,9 @@ import * as tokenSymbolActions from '../actions/tokenSymbolActions';
 import * as totalSupplyActions from '../actions/totalSupplyActions';
 import * as tokenTypeActions from '../actions/tokenTypeActions';
 import * as tokenOwnerActions from '../actions/tokenOwnerActions';
+import * as payingAccountActions from '../actions/payingAccountActions';
 import * as appStateActions from '../actions/appStateActions';
-import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
+import * as payingAccountFundsActions from '../actions/payingAccountFundsActions';
 import * as infoMessageActions from '../actions/infoMessageActions';
 import * as accountsActions from '../actions/accountsActions';
 import * as serviceFeeActions from '../actions/serviceFeeActions';
@@ -63,10 +64,11 @@ export class SuccessMessagePanel extends React.Component {
     this.props.totalSupplyActions.setTotalSupply(initialState.totalSupply);
     this.props.tokenTypeActions.setTokenType(initialState.tokenType);
     this.props.tokenOwnerActions.setTokenOwner(initialState.tokenOwner);
+    this.props.payingAccountActions.setPayingAccount(initialState.payingAccount);
     this.props.appStateActions.setAppState(initialState.appState);
-    this.props.tokenOwnerFundsActions.setCheckingTokenOwnerFunds(initialState.checkingTokenOwnerFunds);
-    this.props.tokenOwnerFundsActions.setTokenOwnerHasInsufficientFunds(initialState.tokenOwnerHasInsufficientFunds);
-    this.props.tokenOwnerFundsActions.setTokenOwnerBalance(initialState.tokenOwnerBalance);
+    this.props.payingAccountFundsActions.setCheckingPayingAccountFunds(initialState.checkingPayingAccountFunds);
+    this.props.payingAccountFundsActions.setPayingAccountHasInsufficientFunds(initialState.payingAccountHasInsufficientFunds);
+    this.props.payingAccountFundsActions.setPayingAccountBalance(initialState.payingAccountBalance);
     this.props.infoMessageActions.setInfoMessage(initialState.infoMessage);
     this.props.accountsActions.loadAllAccounts();
     this.props.serviceFeeActions.setServiceFee(initialState.serviceFee);
@@ -281,8 +283,9 @@ SuccessMessagePanel.propTypes = {
   totalSupplyActions: PropTypes.object.isRequired,
   tokenTypeActions: PropTypes.object.isRequired,
   tokenOwnerActions: PropTypes.object.isRequired,
+  payingAccountActions: PropTypes.object.isRequired,
   appStateActions: PropTypes.object.isRequired,
-  tokenOwnerFundsActions: PropTypes.object.isRequired,
+  payingAccountFundsActions: PropTypes.object.isRequired,
   infoMessageActions: PropTypes.object.isRequired,
   accountsActions: PropTypes.object.isRequired,
   serviceFeeActions: PropTypes.object.isRequired,
@@ -307,8 +310,9 @@ function mapDispatchToProps(dispatch) {
     totalSupplyActions: bindActionCreators(totalSupplyActions, dispatch),
     tokenTypeActions: bindActionCreators(tokenTypeActions, dispatch),
     tokenOwnerActions: bindActionCreators(tokenOwnerActions, dispatch),
+    payingAccountActions: bindActionCreators(payingAccountActions, dispatch),
     appStateActions: bindActionCreators(appStateActions, dispatch),
-    tokenOwnerFundsActions: bindActionCreators(tokenOwnerFundsActions, dispatch),
+    payingAccountFundsActions: bindActionCreators(payingAccountFundsActions, dispatch),
     infoMessageActions: bindActionCreators(infoMessageActions, dispatch),
     accountsActions: bindActionCreators(accountsActions, dispatch),
     serviceFeeActions: bindActionCreators(serviceFeeActions, dispatch),
