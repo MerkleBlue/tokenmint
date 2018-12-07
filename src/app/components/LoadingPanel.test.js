@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import React from 'react';
-import { MiningInProgressPanel } from './MiningInProgressPanel';
+import { LoadingPanel } from './LoadingPanel';
 import { createMount } from '@material-ui/core/test-utils';
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -10,7 +10,7 @@ const tokenOwner = "0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef";
 
 Enzyme.configure({ adapter: new Adapter() });
 
-describe("<MiningInProgressPanel /> tests", () => {
+describe("<LoadingPanel /> tests", () => {
   let mount;
 
   before(() => {
@@ -25,8 +25,8 @@ describe("<MiningInProgressPanel /> tests", () => {
     mount.cleanUp();
   });
 
-  it("renders MiningInProgressPanel", () => {
-    const wrapper = mount(<MiningInProgressPanel tokenOwner={tokenOwner}/>);
+  it("renders LoadingPanel", () => {
+    const wrapper = mount(<LoadingPanel tokenOwner={tokenOwner}/>);
     expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
     expect(wrapper.find("Card").length).to.eq(1);
     expect(wrapper.find("CardHeader").length).to.eq(1);

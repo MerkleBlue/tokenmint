@@ -10,9 +10,8 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
-import * as createTokensActions from '../actions/createTokensActions';
 import * as appStateActions from '../actions/appStateActions';
 import * as infoMessageActions from '../actions/infoMessageActions';
 import * as networkActions from '../actions/networkActions';
@@ -21,13 +20,14 @@ import initialState from '../reducers/initialState';
 import InputValidator from '../../tools/InputValidator';
 import ReactGA from 'react-ga';
 import { NO_NETWORK } from '../../api/mintApi';
+import appStates from '../reducers/appStates';
 
 export class ConfirmationPanel extends React.Component {
 
   constructor(props) {
     super(props);
-    this.handleCancel = this.handleCancel.bind(this);
-    this.handleConfirm = this.handleConfirm.bind(this);
+    this.handleBack = this.handleBack.bind(this);
+    this.handleNext = this.handleNext.bind(this);
     this.isConfirmationEnabled = this.isConfirmationEnabled.bind(this);
   }
 
@@ -44,43 +44,35 @@ export class ConfirmationPanel extends React.Component {
       this.props.decimals,
       this.props.totalSupply,
       this.props.tokenOwner
-    ) && !this.props.checkingTokenOwnerFunds
-      && !this.props.tokenOwnerHasInsufficientFunds
-      && !this.props.loadingAccounts
-      && this.props.serviceFee > 0
-      && this.props.network !== NO_NETWORK;
+    );
   }
 
-  handleCancel(e) {
+  handleBack(e) {
     this.props.infoMessageActions.setInfoMessage(initialState.infoMessage);
     this.props.appStateActions.setAppState(initialState.appState);
     this.props.networkActions.getNetworkType();
     this.props.tokenOwnerFundsActions.checkFunds(this.props.tokenOwner);
   }
 
-  handleConfirm(e) {
-    this.props.createTokensActions.createTokens(
-      this.props.tokenName.trim(),
-      this.props.tokenSymbol,
-      this.props.decimals,
-      this.props.totalSupply,
-      this.props.tokenType,
-      this.props.tokenOwner,
-      this.props.serviceFee
-    );
+  handleNext(e) {
+    if (this.props.network === NO_NETWORK) {
+      this.props.appStateActions.setAppState(appStates.INSTALL_WALLET);
+    } else {
+      this.props.appStateActions.setAppState(appStates.HANDLE_PAYMENT);
+    }
   }
 
   render() {
-    let confirmButton = this.isConfirmationEnabled() ?
+    let nextButton = this.isConfirmationEnabled() ?
       (
         <span
           className="btn btn-confirm wow fadeInUp"
           data-wow-duration="1000ms"
           data-wow-delay="400ms"
-          onClick={this.handleConfirm}
+          onClick={this.handleNext}
         >
-          <FontAwesomeIcon className="fa_confirm_icon" icon={faCheck} />
-          {!this.props.isMobileDevice && "Confirm"}
+        {!this.props.isMobileDevice && "Next "}
+        <FontAwesomeIcon className="fa_confirm_icon" icon={faChevronRight} />
         </span>
       ) : (
         <span
@@ -88,23 +80,10 @@ export class ConfirmationPanel extends React.Component {
           data-wow-duration="1000ms"
           data-wow-delay="400ms"
         >
-          <FontAwesomeIcon className="fa_confirm_icon" icon={faCheck} />
-          {!this.props.isMobileDevice && "Confirm"}
+        {!this.props.isMobileDevice && "Next "}
+        <FontAwesomeIcon className="fa_confirm_icon" icon={faChevronRight} />
         </span>
       );
-
-    let serviceFeeText;
-    let serviceFeeTypographyClass;
-    if (this.props.serviceFee === 0) {
-      serviceFeeText = "Calculating...";
-      serviceFeeTypographyClass = "typography_right";
-    } else if (this.props.serviceFee === -1) {
-      serviceFeeText = "Unavailable. Please make sure you are connected to the wallet and refresh the page.";
-      serviceFeeTypographyClass = "typography_right_err";
-    } else {
-      serviceFeeText = "29.99$ (" + this.props.serviceFee.toFixed(8) + " ETH)";
-      serviceFeeTypographyClass = "typography_right";
-    }
 
     const cardHeaderTitle = this.props.isMobileDevice ? "Confirm parameters" : "Please Confirm Token Creation Parameters!";
 
@@ -244,46 +223,6 @@ export class ConfirmationPanel extends React.Component {
                 </Typography>
               </Grid>
             </Grid>
-            <Grid className="grid_container" container spacing={8}>
-              <Grid item xs={12} md={6}>
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className="typography_left"
-                >
-                  Service Fee:
-              </Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className={serviceFeeTypographyClass}
-                >
-                  {serviceFeeText}
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid className="grid_container" container spacing={8}>
-              <Grid item xs={12} md={6}>
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className="typography_left"
-                >
-                  Mining Fee:
-              </Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className={serviceFeeTypographyClass}
-                >
-                  Should be set in wallet app
-              </Typography>
-              </Grid>
-            </Grid>
           </CardContent>
         </Card>
         <form className="footer_main_form">
@@ -293,14 +232,14 @@ export class ConfirmationPanel extends React.Component {
                 className="btn btn-cancel wow fadeInUp"
                 data-wow-duration="1000ms"
                 data-wow-delay="400ms"
-                onClick={this.handleCancel}
+                onClick={this.handleBack}
               >
                 <FontAwesomeIcon className="fa_back_icon" icon={faChevronLeft} />
                 {!this.props.isMobileDevice && " Back"}
                 </span>
             </Grid>
             <Grid item xs={6} md={6} className="grid_cell">
-              {confirmButton}
+              {nextButton}
             </Grid>
           </Grid>
         </form>
@@ -311,7 +250,6 @@ export class ConfirmationPanel extends React.Component {
 
 ConfirmationPanel.propTypes = {
   tokenOwnerFundsActions: PropTypes.object.isRequired,
-  createTokensActions: PropTypes.object.isRequired,
   appStateActions: PropTypes.object.isRequired,
   infoMessageActions: PropTypes.object.isRequired,
   networkActions: PropTypes.object.isRequired,
@@ -321,10 +259,8 @@ ConfirmationPanel.propTypes = {
   totalSupply: PropTypes.string.isRequired,
   tokenType: PropTypes.string.isRequired,
   tokenOwner: PropTypes.string.isRequired,
-  checkingTokenOwnerFunds: PropTypes.bool.isRequired,
-  tokenOwnerHasInsufficientFunds: PropTypes.bool.isRequired,
-  loadingAccounts: PropTypes.bool.isRequired,
-  serviceFee: PropTypes.number.isRequired,
+  walletNeedsToBeUnlocked: PropTypes.bool.isRequired,
+  accounts: PropTypes.array.isRequired,
   network: PropTypes.string.isRequired,
   isMobileDevice: PropTypes.bool.isRequired
 };
@@ -337,18 +273,15 @@ function mapStateToProps(state) {
     totalSupply: state.totalSupply,
     tokenType: state.tokenType,
     tokenOwner: state.tokenOwner,
-    checkingTokenOwnerFunds: state.checkingTokenOwnerFunds,
-    tokenOwnerHasInsufficientFunds: state.tokenOwnerHasInsufficientFunds,
-    loadingAccounts: state.loadingAccounts,
-    serviceFee: state.serviceFee,
     network: state.network,
-    isMobileDevice: state.isMobileDevice
+    isMobileDevice: state.isMobileDevice,
+    walletNeedsToBeUnlocked: state.walletNeedsToBeUnlocked,
+    accounts: state.accounts
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    createTokensActions: bindActionCreators(createTokensActions, dispatch),
     appStateActions: bindActionCreators(appStateActions, dispatch),
     infoMessageActions: bindActionCreators(infoMessageActions, dispatch),
     networkActions: bindActionCreators(networkActions, dispatch),

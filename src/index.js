@@ -12,8 +12,9 @@ import * as deviceDetector from './tools/deviceDetector';
 import { setIsMobileDevice } from './app/actions/deviceActions';
 import * as mintApi from './api/mintApi';
 import { setWalletNeedsToBeUnlocked } from './app/actions/walletActions';
+import { PersistGate } from 'redux-persist/integration/react';
 
-const store = configureStore();
+const { store, persistor } = configureStore();
 
 window.addEventListener('load', function () {
   mintApi.initWeb3().then(walletNeedsToBeUnlocked => {
@@ -28,7 +29,9 @@ ReactGA.initialize('UA-125703137-2');
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <PersistGate loading={null} persistor={persistor}>
+      <App />
+    </PersistGate>
   </Provider>,
   document.getElementById('root')
 );

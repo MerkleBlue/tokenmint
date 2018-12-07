@@ -8,6 +8,7 @@ import { JSDOM } from 'jsdom';
 import initialState from '../reducers/initialState';
 import sinon from 'sinon';
 import {NO_NETWORK} from '../../api/mintApi';
+import appStates from '../reducers/appStates';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -17,11 +18,10 @@ const decimals = "18";
 const totalSupply = "1000";
 const tokenType = "erc20";
 const tokenOwner = "0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef";
-const checkingTokenOwnerFunds = false;
-const tokenOwnerHasInsufficientFunds = false;
-const loadingAccounts = false;
-const serviceFee = 0.5;
 const network = "main";
+const walletNeedsToBeUnlocked = false;
+const accounts = ["0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef"];
+const isMobileDevice = false;
 
 describe("<ConfirmationPanel /> tests", () => {
   let mount;
@@ -33,14 +33,12 @@ describe("<ConfirmationPanel /> tests", () => {
     totalSupply,
     tokenType,
     tokenOwner,
-    checkingTokenOwnerFunds,
-    tokenOwnerHasInsufficientFunds,
-    loadingAccounts,
-    serviceFee,
     network,
+    walletNeedsToBeUnlocked,
+    accounts,
+    isMobileDevice,
     setAppState = () => { },
     setInfoMessage = () => { },
-    createTokens = () => { },
     getNetworkType = () => { },
     checkFunds = () => { }
   ) {
@@ -51,14 +49,12 @@ describe("<ConfirmationPanel /> tests", () => {
       totalSupply: totalSupply,
       tokenType: tokenType,
       tokenOwner: tokenOwner,
-      checkingTokenOwnerFunds: checkingTokenOwnerFunds,
-      tokenOwnerHasInsufficientFunds: tokenOwnerHasInsufficientFunds,
-      loadingAccounts: loadingAccounts,
-      serviceFee: serviceFee,
       network: network,
+      walletNeedsToBeUnlocked: walletNeedsToBeUnlocked,
+      accounts: accounts,
+      isMobileDevice: isMobileDevice,
       appStateActions: { setAppState: setAppState },
       infoMessageActions: { setInfoMessage: setInfoMessage },
-      createTokensActions: { createTokens: createTokens },
       networkActions: { getNetworkType: getNetworkType },
       tokenOwnerFundsActions: { checkFunds: checkFunds }
     };
@@ -85,11 +81,10 @@ describe("<ConfirmationPanel /> tests", () => {
       totalSupply,
       tokenType,
       tokenOwner,
-      checkingTokenOwnerFunds,
-      tokenOwnerHasInsufficientFunds,
-      loadingAccounts,
-      serviceFee,
-      network
+      network,
+      walletNeedsToBeUnlocked,
+      accounts,
+      isMobileDevice
     );
     expect(wrapper.props().tokenName).to.be.empty;
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
@@ -97,28 +92,28 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.props().totalSupply).to.eq(totalSupply);
     expect(wrapper.props().tokenType).to.eq("erc20");
     expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().checkingTokenOwnerFunds).to.eq(checkingTokenOwnerFunds);
-    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.eq(tokenOwnerHasInsufficientFunds);
-    expect(wrapper.props().loadingAccounts).to.eq(loadingAccounts);
-    expect(wrapper.props().serviceFee).to.eq(serviceFee);
+    expect(wrapper.props().network).to.eq(network);
+    expect(wrapper.props().walletNeedsToBeUnlocked).to.be.false;
+    expect(wrapper.props().accounts.length).to.eq(1);
+    expect(wrapper.props().accounts[0]).to.eq("0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef");
+    expect(wrapper.props().isMobileDevice).to.be.false;
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.props().infoMessageActions).to.not.be.empty;
-    expect(wrapper.props().createTokensActions).to.not.be.empty;
-    expect(wrapper.props().network).to.eq(network);
+    expect(wrapper.props().networkActions).to.not.be.empty;
+    expect(wrapper.props().tokenOwnerFundsActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(3);
     expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm-disabled wow fadeInUp");
     expect(wrapper.find("Card").length).to.eq(1);
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(17);
+    expect(wrapper.find("Typography").length).to.eq(13);
     expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(4).props().children).to.eq(initialState.tokenName);
     expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq(tokenType);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel non existing token symbol", () => {
@@ -129,11 +124,10 @@ describe("<ConfirmationPanel /> tests", () => {
       totalSupply,
       tokenType,
       tokenOwner,
-      checkingTokenOwnerFunds,
-      tokenOwnerHasInsufficientFunds,
-      loadingAccounts,
-      serviceFee,
-      network
+      network,
+      walletNeedsToBeUnlocked,
+      accounts,
+      isMobileDevice
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.eq(initialState.tokenSymbol);
@@ -141,28 +135,28 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.props().totalSupply).to.eq(totalSupply);
     expect(wrapper.props().tokenType).to.eq("erc20");
     expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().checkingTokenOwnerFunds).to.eq(checkingTokenOwnerFunds);
-    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.eq(tokenOwnerHasInsufficientFunds);
-    expect(wrapper.props().loadingAccounts).to.eq(loadingAccounts);
-    expect(wrapper.props().serviceFee).to.eq(serviceFee);
+    expect(wrapper.props().network).to.eq(network);
+    expect(wrapper.props().walletNeedsToBeUnlocked).to.be.false;
+    expect(wrapper.props().accounts.length).to.eq(1);
+    expect(wrapper.props().accounts[0]).to.eq("0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef");
+    expect(wrapper.props().isMobileDevice).to.be.false;
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.props().infoMessageActions).to.not.be.empty;
-    expect(wrapper.props().createTokensActions).to.not.be.empty;
-    expect(wrapper.props().network).to.eq(network);
+    expect(wrapper.props().networkActions).to.not.be.empty;
+    expect(wrapper.props().tokenOwnerFundsActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(3);
     expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm-disabled wow fadeInUp");
     expect(wrapper.find("Card").length).to.eq(1);
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(17);
+    expect(wrapper.find("Typography").length).to.eq(13);
     expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
     expect(wrapper.find("Typography").at(6).props().children).to.eq(initialState.tokenSymbol);
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq(tokenType);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel non existing decimals", () => {
@@ -173,11 +167,10 @@ describe("<ConfirmationPanel /> tests", () => {
       totalSupply,
       tokenType,
       tokenOwner,
-      checkingTokenOwnerFunds,
-      tokenOwnerHasInsufficientFunds,
-      loadingAccounts,
-      serviceFee,
-      network
+      network,
+      walletNeedsToBeUnlocked,
+      accounts,
+      isMobileDevice
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
@@ -185,28 +178,28 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.props().totalSupply).to.eq(totalSupply);
     expect(wrapper.props().tokenType).to.eq("erc20");
     expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().checkingTokenOwnerFunds).to.eq(checkingTokenOwnerFunds);
-    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.eq(tokenOwnerHasInsufficientFunds);
-    expect(wrapper.props().loadingAccounts).to.eq(loadingAccounts);
-    expect(wrapper.props().serviceFee).to.eq(serviceFee);
+    expect(wrapper.props().network).to.eq(network);
+    expect(wrapper.props().walletNeedsToBeUnlocked).to.be.false;
+    expect(wrapper.props().accounts.length).to.eq(1);
+    expect(wrapper.props().accounts[0]).to.eq("0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef");
+    expect(wrapper.props().isMobileDevice).to.be.false;
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.props().infoMessageActions).to.not.be.empty;
-    expect(wrapper.props().createTokensActions).to.not.be.empty;
-    expect(wrapper.props().network).to.eq(network);
+    expect(wrapper.props().networkActions).to.not.be.empty;
+    expect(wrapper.props().tokenOwnerFundsActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(3);
     expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm-disabled wow fadeInUp");
     expect(wrapper.find("Card").length).to.eq(1);
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(17);
+    expect(wrapper.find("Typography").length).to.eq(13);
     expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
     expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
     expect(wrapper.find("Typography").at(8).props().children).to.eq("");
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq(tokenType);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel non existing total supply", () => {
@@ -217,11 +210,10 @@ describe("<ConfirmationPanel /> tests", () => {
       initialState.totalSupply,
       tokenType,
       tokenOwner,
-      checkingTokenOwnerFunds,
-      tokenOwnerHasInsufficientFunds,
-      loadingAccounts,
-      serviceFee,
-      network
+      network,
+      walletNeedsToBeUnlocked,
+      accounts,
+      isMobileDevice
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
@@ -229,28 +221,28 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.props().totalSupply).to.eq(initialState.totalSupply);
     expect(wrapper.props().tokenType).to.eq("erc20");
     expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().checkingTokenOwnerFunds).to.eq(checkingTokenOwnerFunds);
-    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.eq(tokenOwnerHasInsufficientFunds);
-    expect(wrapper.props().loadingAccounts).to.eq(loadingAccounts);
-    expect(wrapper.props().serviceFee).to.eq(serviceFee);
+    expect(wrapper.props().network).to.eq(network);
+    expect(wrapper.props().walletNeedsToBeUnlocked).to.be.false;
+    expect(wrapper.props().accounts.length).to.eq(1);
+    expect(wrapper.props().accounts[0]).to.eq("0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef");
+    expect(wrapper.props().isMobileDevice).to.be.false;
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.props().infoMessageActions).to.not.be.empty;
-    expect(wrapper.props().createTokensActions).to.not.be.empty;
-    expect(wrapper.props().network).to.eq(network);
+    expect(wrapper.props().networkActions).to.not.be.empty;
+    expect(wrapper.props().tokenOwnerFundsActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(3);
     expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm-disabled wow fadeInUp");
     expect(wrapper.find("Card").length).to.eq(1);
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(17);
+    expect(wrapper.find("Typography").length).to.eq(13);
     expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
     expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(initialState.totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq(tokenType);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
   });
 
   it("renders ConfirmationPanel non existing token owner", () => {
@@ -261,11 +253,10 @@ describe("<ConfirmationPanel /> tests", () => {
       totalSupply,
       tokenType,
       initialState.tokenOwner,
-      checkingTokenOwnerFunds,
-      tokenOwnerHasInsufficientFunds,
-      loadingAccounts,
-      serviceFee,
-      network
+      network,
+      walletNeedsToBeUnlocked,
+      accounts,
+      isMobileDevice
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
@@ -273,31 +264,31 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.props().totalSupply).to.eq(totalSupply);
     expect(wrapper.props().tokenType).to.eq("erc20");
     expect(wrapper.props().tokenOwner).to.eq(initialState.tokenOwner);
-    expect(wrapper.props().checkingTokenOwnerFunds).to.eq(checkingTokenOwnerFunds);
-    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.eq(tokenOwnerHasInsufficientFunds);
-    expect(wrapper.props().loadingAccounts).to.eq(loadingAccounts);
-    expect(wrapper.props().serviceFee).to.eq(serviceFee);
+    expect(wrapper.props().network).to.eq(network);
+    expect(wrapper.props().walletNeedsToBeUnlocked).to.be.false;
+    expect(wrapper.props().accounts.length).to.eq(1);
+    expect(wrapper.props().accounts[0]).to.eq("0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef");
+    expect(wrapper.props().isMobileDevice).to.be.false;
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.props().infoMessageActions).to.not.be.empty;
-    expect(wrapper.props().createTokensActions).to.not.be.empty;
-    expect(wrapper.props().network).to.eq(network);
+    expect(wrapper.props().networkActions).to.not.be.empty;
+    expect(wrapper.props().tokenOwnerFundsActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(3);
     expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm-disabled wow fadeInUp");
     expect(wrapper.find("Card").length).to.eq(1);
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(17);
+    expect(wrapper.find("Typography").length).to.eq(13);
     expect(wrapper.find("Typography").at(2).props().children).to.eq(initialState.tokenOwner);
     expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
     expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq("erc20");
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
   });
 
-  it("renders ConfirmationPanel while checking token owner funds", () => {
+  it("renders ConfirmationPanel on mobile platform", () => {
     const wrapper = setup(
       tokenName,
       tokenSymbol,
@@ -305,11 +296,10 @@ describe("<ConfirmationPanel /> tests", () => {
       totalSupply,
       tokenType,
       tokenOwner,
-      true,
-      tokenOwnerHasInsufficientFunds,
-      loadingAccounts,
-      serviceFee,
-      network
+      network,
+      walletNeedsToBeUnlocked,
+      accounts,
+      true
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
@@ -317,31 +307,31 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.props().totalSupply).to.eq(totalSupply);
     expect(wrapper.props().tokenType).to.eq("erc20");
     expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().checkingTokenOwnerFunds).to.be.true;
-    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.eq(tokenOwnerHasInsufficientFunds);
-    expect(wrapper.props().loadingAccounts).to.eq(loadingAccounts);
-    expect(wrapper.props().serviceFee).to.eq(serviceFee);
+    expect(wrapper.props().network).to.eq(network);
+    expect(wrapper.props().walletNeedsToBeUnlocked).to.be.false;
+    expect(wrapper.props().accounts.length).to.eq(1);
+    expect(wrapper.props().accounts[0]).to.eq("0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef");
+    expect(wrapper.props().isMobileDevice).to.be.true;
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.props().infoMessageActions).to.not.be.empty;
-    expect(wrapper.props().createTokensActions).to.not.be.empty;
-    expect(wrapper.props().network).to.eq(network);
+    expect(wrapper.props().networkActions).to.not.be.empty;
+    expect(wrapper.props().tokenOwnerFundsActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(3);
-    expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm-disabled wow fadeInUp");
+    expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm wow fadeInUp");
     expect(wrapper.find("Card").length).to.eq(1);
     expect(wrapper.find("CardHeader").length).to.eq(1);
-    expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
+    expect(wrapper.find("CardHeader").props().title).to.eq("Confirm parameters");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(17);
+    expect(wrapper.find("Typography").length).to.eq(13);
     expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
     expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq("erc20");
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
   });
 
-  it("renders ConfirmationPanel - token owner with insufficient funds", () => {
+  it("renders ConfirmationPanel on desktop platform", () => {
     const wrapper = setup(
       tokenName,
       tokenSymbol,
@@ -349,11 +339,10 @@ describe("<ConfirmationPanel /> tests", () => {
       totalSupply,
       tokenType,
       tokenOwner,
-      checkingTokenOwnerFunds,
-      true,
-      loadingAccounts,
-      serviceFee,
-      network
+      network,
+      walletNeedsToBeUnlocked,
+      accounts,
+      isMobileDevice
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
@@ -361,254 +350,33 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.props().totalSupply).to.eq(totalSupply);
     expect(wrapper.props().tokenType).to.eq("erc20");
     expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().checkingTokenOwnerFunds).to.eq(checkingTokenOwnerFunds);
-    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.be.true;
-    expect(wrapper.props().loadingAccounts).to.eq(loadingAccounts);
-    expect(wrapper.props().serviceFee).to.eq(serviceFee);
-    expect(wrapper.props().appStateActions).to.not.be.empty;
-    expect(wrapper.props().infoMessageActions).to.not.be.empty;
-    expect(wrapper.props().createTokensActions).to.not.be.empty;
     expect(wrapper.props().network).to.eq(network);
-    expect(wrapper.find("span").length).to.eq(3);
-    expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm-disabled wow fadeInUp");
-    expect(wrapper.find("Card").length).to.eq(1);
-    expect(wrapper.find("CardHeader").length).to.eq(1);
-    expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
-    expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(17);
-    expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
-    expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
-    expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
-    expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
-    expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
-    expect(wrapper.find("Typography").at(12).props().children).to.eq("erc20");
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
-  });
-
-  it("renders ConfirmationPanel while loading accounts", () => {
-    const wrapper = setup(
-      tokenName,
-      tokenSymbol,
-      decimals,
-      totalSupply,
-      tokenType,
-      tokenOwner,
-      checkingTokenOwnerFunds,
-      tokenOwnerHasInsufficientFunds,
-      true,
-      serviceFee,
-      network
-    );
-    expect(wrapper.props().tokenName).to.eq(tokenName);
-    expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
-    expect(wrapper.props().decimals).to.eq(decimals);
-    expect(wrapper.props().totalSupply).to.eq(totalSupply);
-    expect(wrapper.props().tokenType).to.eq("erc20");
-    expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().checkingTokenOwnerFunds).to.eq(checkingTokenOwnerFunds);
-    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.eq(tokenOwnerHasInsufficientFunds);
-    expect(wrapper.props().loadingAccounts).to.be.true;
-    expect(wrapper.props().serviceFee).to.eq(serviceFee);
+    expect(wrapper.props().walletNeedsToBeUnlocked).to.be.false;
+    expect(wrapper.props().accounts.length).to.eq(1);
+    expect(wrapper.props().accounts[0]).to.eq("0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef");
+    expect(wrapper.props().isMobileDevice).to.be.false;
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.props().infoMessageActions).to.not.be.empty;
-    expect(wrapper.props().createTokensActions).to.not.be.empty;
-    expect(wrapper.props().network).to.eq(network);
-    expect(wrapper.find("span").length).to.eq(3);
-    expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm-disabled wow fadeInUp");
-    expect(wrapper.find("Card").length).to.eq(1);
-    expect(wrapper.find("CardHeader").length).to.eq(1);
-    expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
-    expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(17);
-    expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
-    expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
-    expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
-    expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
-    expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
-    expect(wrapper.find("Typography").at(12).props().children).to.eq("erc20");
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
-  });
-
-  it("renders ConfirmationPanel while calculating service fee", () => {
-    const wrapper = setup(
-      tokenName,
-      tokenSymbol,
-      decimals,
-      totalSupply,
-      tokenType,
-      tokenOwner,
-      checkingTokenOwnerFunds,
-      tokenOwnerHasInsufficientFunds,
-      loadingAccounts,
-      0,
-      network
-    );
-    expect(wrapper.props().tokenName).to.eq(tokenName);
-    expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
-    expect(wrapper.props().decimals).to.eq(decimals);
-    expect(wrapper.props().totalSupply).to.eq(totalSupply);
-    expect(wrapper.props().tokenType).to.eq("erc20");
-    expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().checkingTokenOwnerFunds).to.eq(checkingTokenOwnerFunds);
-    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.eq(tokenOwnerHasInsufficientFunds);
-    expect(wrapper.props().loadingAccounts).to.eq(loadingAccounts);
-    expect(wrapper.props().serviceFee).to.eq(0);
-    expect(wrapper.props().appStateActions).to.not.be.empty;
-    expect(wrapper.props().infoMessageActions).to.not.be.empty;
-    expect(wrapper.props().createTokensActions).to.not.be.empty;
-    expect(wrapper.props().network).to.eq(network);
-    expect(wrapper.find("span").length).to.eq(3);
-    expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm-disabled wow fadeInUp");
-    expect(wrapper.find("Card").length).to.eq(1);
-    expect(wrapper.find("CardHeader").length).to.eq(1);
-    expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
-    expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(17);
-    expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
-    expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
-    expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
-    expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
-    expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
-    expect(wrapper.find("Typography").at(12).props().children).to.eq("erc20");
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("Calculating...");
-  });
-
-  it("renders ConfirmationPanel with invalid service fee", () => {
-    const wrapper = setup(
-      tokenName,
-      tokenSymbol,
-      decimals,
-      totalSupply,
-      tokenType,
-      tokenOwner,
-      checkingTokenOwnerFunds,
-      tokenOwnerHasInsufficientFunds,
-      loadingAccounts,
-      -1,
-      network
-    );
-    expect(wrapper.props().tokenName).to.eq(tokenName);
-    expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
-    expect(wrapper.props().decimals).to.eq(decimals);
-    expect(wrapper.props().totalSupply).to.eq(totalSupply);
-    expect(wrapper.props().tokenType).to.eq("erc20");
-    expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().checkingTokenOwnerFunds).to.eq(checkingTokenOwnerFunds);
-    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.eq(tokenOwnerHasInsufficientFunds);
-    expect(wrapper.props().loadingAccounts).to.eq(loadingAccounts);
-    expect(wrapper.props().serviceFee).to.eq(-1);
-    expect(wrapper.props().appStateActions).to.not.be.empty;
-    expect(wrapper.props().infoMessageActions).to.not.be.empty;
-    expect(wrapper.props().createTokensActions).to.not.be.empty;
-    expect(wrapper.props().network).to.eq(network);
-    expect(wrapper.find("span").length).to.eq(3);
-    expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm-disabled wow fadeInUp");
-    expect(wrapper.find("Card").length).to.eq(1);
-    expect(wrapper.find("CardHeader").length).to.eq(1);
-    expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
-    expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(17);
-    expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
-    expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
-    expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
-    expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
-    expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
-    expect(wrapper.find("Typography").at(12).props().children).to.eq("erc20");
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("Unavailable. Please make sure you are connected to the wallet and refresh the page.");
-  });
-
-  it("renders ConfirmationPanel with no network", () => {
-    const wrapper = setup(
-      tokenName,
-      tokenSymbol,
-      decimals,
-      totalSupply,
-      tokenType,
-      tokenOwner,
-      checkingTokenOwnerFunds,
-      tokenOwnerHasInsufficientFunds,
-      loadingAccounts,
-      serviceFee,
-      NO_NETWORK
-    );
-    expect(wrapper.props().tokenName).to.eq(tokenName);
-    expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
-    expect(wrapper.props().decimals).to.eq(decimals);
-    expect(wrapper.props().totalSupply).to.eq(totalSupply);
-    expect(wrapper.props().tokenType).to.eq("erc20");
-    expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().checkingTokenOwnerFunds).to.eq(checkingTokenOwnerFunds);
-    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.eq(tokenOwnerHasInsufficientFunds);
-    expect(wrapper.props().loadingAccounts).to.eq(loadingAccounts);
-    expect(wrapper.props().serviceFee).to.eq(serviceFee);
-    expect(wrapper.props().appStateActions).to.not.be.empty;
-    expect(wrapper.props().infoMessageActions).to.not.be.empty;
-    expect(wrapper.props().createTokensActions).to.not.be.empty;
-    expect(wrapper.props().network).to.eq(NO_NETWORK);
-    expect(wrapper.find("span").length).to.eq(3);
-    expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm-disabled wow fadeInUp");
-    expect(wrapper.find("Card").length).to.eq(1);
-    expect(wrapper.find("CardHeader").length).to.eq(1);
-    expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
-    expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(17);
-    expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
-    expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
-    expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
-    expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
-    expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
-    expect(wrapper.find("Typography").at(12).props().children).to.eq("erc20");
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
-  });
-
-  it("renders ConfirmationPanel with valid props", () => {
-    const wrapper = setup(
-      tokenName,
-      tokenSymbol,
-      decimals,
-      totalSupply,
-      tokenType,
-      tokenOwner,
-      checkingTokenOwnerFunds,
-      tokenOwnerHasInsufficientFunds,
-      loadingAccounts,
-      serviceFee,
-      network
-    );
-    expect(wrapper.props().tokenName).to.eq(tokenName);
-    expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
-    expect(wrapper.props().decimals).to.eq(decimals);
-    expect(wrapper.props().totalSupply).to.eq(totalSupply);
-    expect(wrapper.props().tokenType).to.eq("erc20");
-    expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().checkingTokenOwnerFunds).to.eq(checkingTokenOwnerFunds);
-    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.eq(tokenOwnerHasInsufficientFunds);
-    expect(wrapper.props().loadingAccounts).to.eq(loadingAccounts);
-    expect(wrapper.props().serviceFee).to.eq(serviceFee);
-    expect(wrapper.props().appStateActions).to.not.be.empty;
-    expect(wrapper.props().infoMessageActions).to.not.be.empty;
-    expect(wrapper.props().createTokensActions).to.not.be.empty;
-    expect(wrapper.props().network).to.eq(network);
+    expect(wrapper.props().networkActions).to.not.be.empty;
+    expect(wrapper.props().tokenOwnerFundsActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(3);
     expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm wow fadeInUp");
     expect(wrapper.find("Card").length).to.eq(1);
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("Typography").length).to.eq(17);
+    expect(wrapper.find("Typography").length).to.eq(13);
     expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
     expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
     expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
     expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
     expect(wrapper.find("Typography").at(12).props().children).to.eq("erc20");
-    expect(wrapper.find("Typography").at(14).props().children).to.eq("29.99$ (0.50000000 ETH)");
   });
 
-  it("simulates click on cancel button", () => {
+  it("simulates click on back button", () => {
     const setAppState = sinon.spy();
     const setInfoMessage = sinon.spy();
-    const createTokens = sinon.spy();
     const getNetworkType = sinon.spy();
     const checkFunds = sinon.spy();
     const wrapper = setup(
@@ -618,14 +386,12 @@ describe("<ConfirmationPanel /> tests", () => {
       totalSupply,
       tokenType,
       tokenOwner,
-      checkingTokenOwnerFunds,
-      tokenOwnerHasInsufficientFunds,
-      loadingAccounts,
-      serviceFee,
       network,
+      walletNeedsToBeUnlocked,
+      accounts,
+      isMobileDevice,
       setAppState,
       setInfoMessage,
-      createTokens,
       getNetworkType,
       checkFunds
     );
@@ -634,13 +400,13 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(setInfoMessage.calledOnce).to.be.true;
     expect(checkFunds.calledOnce).to.be.true;
     expect(getNetworkType.calledOnce).to.be.true;
-    expect(createTokens.calledOnce).to.be.false;
   });
 
-  it("simulates click on confirm button - invalid props", () => {
+  it("simulates click on next button - invalid props", () => {
     const setAppState = sinon.spy();
     const setInfoMessage = sinon.spy();
-    const createTokens = sinon.spy();
+    const getNetworkType = sinon.spy();
+    const checkFunds = sinon.spy();
     const wrapper = setup(
       initialState.tokenName,
       tokenSymbol,
@@ -648,40 +414,91 @@ describe("<ConfirmationPanel /> tests", () => {
       totalSupply,
       tokenType,
       tokenOwner,
-      checkingTokenOwnerFunds,
-      tokenOwnerHasInsufficientFunds,
-      loadingAccounts,
-      serviceFee,
       network,
+      walletNeedsToBeUnlocked,
+      accounts,
+      isMobileDevice,
       setAppState,
       setInfoMessage,
-      createTokens
+      getNetworkType,
+      checkFunds
     );
     wrapper.find("span").at(2).simulate("click");
-    expect(createTokens.calledOnce).to.be.false;
+    expect(setAppState.calledOnce).to.be.false;
   });
 
-  it("simulates click on confirm button - valid props", () => {
+  it("simulates click on next button - no network", () => {
     const setAppState = sinon.spy();
     const setInfoMessage = sinon.spy();
-    const createTokens = sinon.spy();
+    const getNetworkType = sinon.spy();
+    const checkFunds = sinon.spy();
     const wrapper = setup(
-      tokenName,
+      initialState.tokenName,
       tokenSymbol,
       decimals,
       totalSupply,
       tokenType,
       tokenOwner,
-      checkingTokenOwnerFunds,
-      tokenOwnerHasInsufficientFunds,
-      loadingAccounts,
-      serviceFee,
-      network,
+      NO_NETWORK,
+      walletNeedsToBeUnlocked,
+      accounts,
+      isMobileDevice,
       setAppState,
       setInfoMessage,
-      createTokens
+      getNetworkType,
+      checkFunds
     );
     wrapper.find("span").at(2).simulate("click");
-    expect(createTokens.calledOnce).to.be.true;
+    expect(setAppState.calledWith(appStates.INSTALL_WALLET)).to.be.false;
+  });
+
+  it("simulates click on next button - wallet needs to be unlocked", () => {
+    const setAppState = sinon.spy();
+    const setInfoMessage = sinon.spy();
+    const getNetworkType = sinon.spy();
+    const checkFunds = sinon.spy();
+    const wrapper = setup(
+      initialState.tokenName,
+      tokenSymbol,
+      decimals,
+      totalSupply,
+      tokenType,
+      tokenOwner,
+      network,
+      true,
+      accounts,
+      isMobileDevice,
+      setAppState,
+      setInfoMessage,
+      getNetworkType,
+      checkFunds
+    );
+    wrapper.find("span").at(2).simulate("click");
+    expect(setAppState.calledWith(appStates.UNLOCK_WALLET)).to.be.false;
+  });
+
+  it("simulates click on next button - valid props", () => {
+    const setAppState = sinon.spy();
+    const setInfoMessage = sinon.spy();
+    const getNetworkType = sinon.spy();
+    const checkFunds = sinon.spy();
+    const wrapper = setup(
+      initialState.tokenName,
+      tokenSymbol,
+      decimals,
+      totalSupply,
+      tokenType,
+      tokenOwner,
+      network,
+      walletNeedsToBeUnlocked,
+      accounts,
+      isMobileDevice,
+      setAppState,
+      setInfoMessage,
+      getNetworkType,
+      checkFunds
+    );
+    wrapper.find("span").at(2).simulate("click");
+    expect(setAppState.calledWith(appStates.HANDLE_PAYMENT)).to.be.false;
   });
 });

@@ -7,21 +7,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import { JSDOM } from 'jsdom';
 import initialState from '../reducers/initialState';
 
-const network = "main";
-const tokenOwnerHasInsufficientFunds = false;
-const checkingTokenOwnerFunds = false;
-const checkingNetwork = false;
-const loadingAccounts = false;
 const tokenOwner = "0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef";
-const tokenOwnerBalance = 0.5;
-const serviceFee = 0.25;
-function generateAccounts(accountsCount) {
-  const accounts = [];
-  for (let i = 0; i < accountsCount; i++) {
-    accounts.push("Account" + i);
-  }
-  return accounts;
-}
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -29,30 +15,12 @@ describe("<TokenOwner /> tests", () => {
   let mount;
 
   function setup(
-    network,
-    tokenOwnerHasInsufficientFunds,
-    checkingTokenOwnerFunds,
-    checkingNetwork,
-    accounts,
     tokenOwner,
-    loadingAccounts,
-    tokenOwnerBalance,
-    serviceFee,
-    setTokenOwner = () => { },
-    checkFunds = () => { }
+    setTokenOwner = () => { }
   ) {
     const props = {
-      network: network,
-      checkingNetwork: checkingNetwork,
-      accounts: accounts,
       tokenOwner: tokenOwner,
-      tokenOwnerHasInsufficientFunds: tokenOwnerHasInsufficientFunds,
-      checkingTokenOwnerFunds: checkingTokenOwnerFunds,
-      loadingAccounts: loadingAccounts,
-      tokenOwnerBalance: tokenOwnerBalance,
-      serviceFee: serviceFee,
-      tokenOwnerActions: { setTokenOwner: setTokenOwner },
-      tokenOwnerFundsActions: { checkFunds: checkFunds }
+      tokenOwnerActions: { setTokenOwner: setTokenOwner }
     };
     return mount(<TokenOwner {...props} />);
   }
@@ -69,147 +37,51 @@ describe("<TokenOwner /> tests", () => {
     mount.cleanUp();
   });
 
-  it("renders TokenOwner without accounts", () => {
+  it("renders TokenOwner without tokenOwner", () => {
     const wrapper = setup(
-      network,
-      tokenOwnerHasInsufficientFunds,
-      checkingTokenOwnerFunds,
-      checkingNetwork,
-      initialState.accounts,
-      initialState.tokenOwner,
-      loadingAccounts,
-      tokenOwnerBalance,
-      serviceFee
+      initialState.tokenOwner
     );
-    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.be.false;
-    expect(wrapper.props().checkingTokenOwnerFunds).to.be.false;
-    expect(wrapper.props().checkingNetwork).to.be.false;
-    expect(wrapper.props().accounts).to.be.empty;
     expect(wrapper.props().tokenOwner).to.be.empty;
-    expect(wrapper.props().loadingAccounts).to.be.false;
-    expect(wrapper.props().tokenOwnerBalance).to.eq(tokenOwnerBalance);
-    expect(wrapper.props().serviceFee).to.eq(serviceFee);
     expect(wrapper.find("Card").length).to.eq(1);
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Token Owner");
     expect(wrapper.find("CardContent").length).to.eq(1);
     expect(wrapper.find("InputLabel").length).to.eq(1);
-    expect(wrapper.find("InputLabel").props().children).to.eq("Select account");
-    expect(wrapper.find("Select").length).to.eq(1);
-    expect(wrapper.find("Select").props().error).to.be.true;
-    expect(wrapper.find("Select").props().value).to.be.empty;
-    expect(wrapper.find("Typography").length).to.eq(2);
-    expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_error");
-    expect(wrapper.find("Typography").at(1).props().children).to.eq("Ethereum wallet is detected, but there are no accounts available. " +
-      "If you are using Metamask, please LOG IN to it! Otherwise you should UNLOCK your wallet or CREATE an account in your wallet.");
-  });
-
-  it("renders TokenOwner while loading accounts", () => {
-    const wrapper = setup(
-      network,
-      tokenOwnerHasInsufficientFunds,
-      checkingTokenOwnerFunds,
-      checkingNetwork,
-      initialState.accounts,
-      initialState.tokenOwner,
-      true,
-      tokenOwnerBalance,
-      serviceFee
-    );
-    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.be.false;
-    expect(wrapper.props().checkingTokenOwnerFunds).to.be.false;
-    expect(wrapper.props().checkingNetwork).to.be.false;
-    expect(wrapper.props().accounts).to.be.empty;
-    expect(wrapper.props().tokenOwner).to.be.empty;
-    expect(wrapper.props().loadingAccounts).to.be.true;
-    expect(wrapper.props().tokenOwnerBalance).to.eq(tokenOwnerBalance);
-    expect(wrapper.props().serviceFee).to.eq(serviceFee);
-    expect(wrapper.find("Card").length).to.eq(1);
-    expect(wrapper.find("CardHeader").length).to.eq(1);
-    expect(wrapper.find("CardHeader").props().title).to.eq("Token Owner");
-    expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("InputLabel").length).to.eq(1);
-    expect(wrapper.find("InputLabel").props().children).to.eq("Select account");
-    expect(wrapper.find("Select").length).to.eq(1);
-    expect(wrapper.find("Select").props().error).to.be.false;
-    expect(wrapper.find("Select").props().value).to.be.empty;
+    expect(wrapper.find("InputLabel").props().children).to.eq("Account");
     expect(wrapper.find("Typography").length).to.eq(2);
     expect(wrapper.find("Typography").at(1).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(1).props().children).to.eq("ETH account. " +
-      "This account will be owner of the token!");
+    expect(wrapper.find("Typography").at(1).props().children).to.eq("ETH account. This account will be owner of the token!");
   });
 
-  it("renders TokenOwner with insufficient funds", () => {
+  it("renders TokenOwner with invalid tokenOwner", () => {
     const wrapper = setup(
-      network,
-      true,
-      checkingTokenOwnerFunds,
-      checkingNetwork,
-      [tokenOwner],
-      tokenOwner,
-      loadingAccounts,
-      tokenOwnerBalance,
-      serviceFee
+      "AAA"
     );
-    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.be.true;
-    expect(wrapper.props().checkingTokenOwnerFunds).to.be.false;
-    expect(wrapper.props().checkingNetwork).to.be.false;
-    expect(wrapper.props().accounts.length).to.eq(1);
+    expect(wrapper.props().tokenOwner).to.eq("AAA");
+    expect(wrapper.find("Card").length).to.eq(1);
+    expect(wrapper.find("CardHeader").length).to.eq(1);
+    expect(wrapper.find("CardHeader").props().title).to.eq("Token Owner");
+    expect(wrapper.find("CardContent").length).to.eq(1);
+    expect(wrapper.find("InputLabel").length).to.eq(1);
+    expect(wrapper.find("InputLabel").props().children).to.eq("Account");
+    expect(wrapper.find("Typography").length).to.eq(2);
+    expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_error");
+    expect(wrapper.find("Typography").at(1).props().children).to.eq("ETH account. This account will be owner of the token!");
+  });
+
+  it("renders TokenOwner with valid tokenOwner", () => {
+    const wrapper = setup(
+      tokenOwner
+    );
     expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-    expect(wrapper.props().loadingAccounts).to.be.false;
-    expect(wrapper.props().tokenOwnerBalance).to.eq(tokenOwnerBalance);
-    expect(wrapper.props().serviceFee).to.eq(serviceFee);
     expect(wrapper.find("Card").length).to.eq(1);
     expect(wrapper.find("CardHeader").length).to.eq(1);
     expect(wrapper.find("CardHeader").props().title).to.eq("Token Owner");
     expect(wrapper.find("CardContent").length).to.eq(1);
     expect(wrapper.find("InputLabel").length).to.eq(1);
-    expect(wrapper.find("InputLabel").props().children).to.eq("Select account");
-    expect(wrapper.find("Select").length).to.eq(1);
-    expect(wrapper.find("Select").props().error).to.be.true;
-    expect(wrapper.find("Select").props().value).to.eq(tokenOwner);
-    expect(wrapper.find("Typography").length).to.eq(3);
-    expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_error");
-    expect(wrapper.find("Typography").at(1).props().children).to.eq("This account has insufficient funds.");
-    expect(wrapper.find("Typography").at(2).props().children[0]).to.eq("Please top your account up with at least ");
-    expect(wrapper.find("Typography").at(2).props().children[2]).to.eq(" ETH, and refresh the page!");
-    expect(wrapper.find("a").length).to.eq(0);
-  });
-
-  it("renders TokenOwner with multiple accounts", () => {
-    const accounts = generateAccounts(3);
-    const wrapper = setup(
-      network,
-      tokenOwnerHasInsufficientFunds,
-      checkingTokenOwnerFunds,
-      checkingNetwork,
-      accounts,
-      accounts[0],
-      loadingAccounts,
-      tokenOwnerBalance,
-      serviceFee
-    );
-    expect(wrapper.props().tokenOwnerHasInsufficientFunds).to.be.false;
-    expect(wrapper.props().checkingTokenOwnerFunds).to.be.false;
-    expect(wrapper.props().checkingNetwork).to.be.false;
-    expect(wrapper.props().accounts.length).to.eq(3);
-    expect(wrapper.props().tokenOwner).to.eq(accounts[0]);
-    expect(wrapper.props().loadingAccounts).to.be.false;
-    expect(wrapper.props().tokenOwnerBalance).to.eq(tokenOwnerBalance);
-    expect(wrapper.props().serviceFee).to.eq(serviceFee);
-    expect(wrapper.find("Card").length).to.eq(1);
-    expect(wrapper.find("CardHeader").length).to.eq(1);
-    expect(wrapper.find("CardHeader").props().title).to.eq("Token Owner");
-    expect(wrapper.find("CardContent").length).to.eq(1);
-    expect(wrapper.find("InputLabel").length).to.eq(1);
-    expect(wrapper.find("InputLabel").props().children).to.eq("Select account");
-    expect(wrapper.find("Select").length).to.eq(1);
-    expect(wrapper.find("Select").props().error).to.be.false;
-    expect(wrapper.find("Select").props().value).to.eq(accounts[0]);
+    expect(wrapper.find("InputLabel").props().children).to.eq("Account");
     expect(wrapper.find("Typography").length).to.eq(2);
     expect(wrapper.find("Typography").at(1).props().className).to.eq("typography");
-    expect(wrapper.find("Typography").at(1).props().children).to.eq("ETH account. " +
-      "This account will be owner of the token!");
-    expect(wrapper.find("a").length).to.eq(0);
+    expect(wrapper.find("Typography").at(1).props().children).to.eq("ETH account. This account will be owner of the token!");
   });
 });

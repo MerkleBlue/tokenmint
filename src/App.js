@@ -10,12 +10,14 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import appStates from './app/reducers/appStates';
 import ErrorPanel from './app/components/ErrorPanel'; //eslint-disable-line import/no-named-as-default
-import MiningInProgressPanel from './app/components/MiningInProgressPanel'; //eslint-disable-line import/no-named-as-default
+import LoadingPanel from './app/components/LoadingPanel'; //eslint-disable-line import/no-named-as-default
 import SuccessMessagePanel from './app/components/SuccessMessagePanel'; //eslint-disable-line import/no-named-as-default
 import { CSSTransitionGroup } from 'react-transition-group';
 import FullStory from 'react-fullstory';
 import pack from '../package.json';
-import NetworkWarning from './app/components/NetworkWarning'; //eslint-disable-line import/no-named-as-default
+import InstallMetamaskPanel from './app/components/InstallMetaMaskPanel'; //eslint-disable-line import/no-named-as-default
+import InstallCoinbasePanel from './app/components/InstallCoinbasePanel'; //eslint-disable-line import/no-named-as-default
+import HandlePaymentPanel from './app/components/HandlePaymentPanel';
 
 class App extends Component {
 
@@ -25,7 +27,24 @@ class App extends Component {
 
   render() {
     let content;
-    if (this.props.appState === appStates.PENDING_CONFIRMATION) {
+    if (this.props.appState === appStates.INSTALL_WALLET) {
+      content = !this.props.isMobileDevice ?
+      (
+        <CSSTransitionGroup
+          transitionName="example"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}>
+          <InstallMetamaskPanel />
+        </CSSTransitionGroup>
+      ) : (
+        <CSSTransitionGroup
+          transitionName="example"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}>
+          <InstallCoinbasePanel />
+        </CSSTransitionGroup>
+      );
+    } else if (this.props.appState === appStates.PENDING_CONFIRMATION) {
       content = (
         <CSSTransitionGroup
           transitionName="example"
@@ -49,7 +68,7 @@ class App extends Component {
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          <MiningInProgressPanel />
+          <LoadingPanel />
         </CSSTransitionGroup>
       );
     } else if (this.props.appState === appStates.MINING_CONFIRMED) {
@@ -61,13 +80,21 @@ class App extends Component {
           <SuccessMessagePanel />
         </CSSTransitionGroup>
       );
+    } else if (this.props.appState === appStates.HANDLE_PAYMENT) {
+      content = (
+        <CSSTransitionGroup
+          transitionName="example"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}>
+          <HandlePaymentPanel />
+        </CSSTransitionGroup>
+      );
     } else {
       content = (
         <CSSTransitionGroup
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          {(!this.props.checkingNetwork && this.props.network !== "main") && <NetworkWarning />}
           <TokenOwner />
           <TokenType />
           <TokenInfo />
