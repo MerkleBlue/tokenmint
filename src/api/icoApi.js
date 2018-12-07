@@ -3,6 +3,7 @@ import Web3 from 'web3';
 import { BigNumber } from 'bignumber.js';
 
 // contracts
+import SafeMathLibJSON from '../contracts/SafeMathLib.json';
 import FlatPricingJSON from '../contracts/FlatPricing.json';
 //import ERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
 
@@ -186,22 +187,21 @@ export function checkTokenOwnerFunds(tokenOwner) {
   });
 }
 
-export function deployPricingStrategy() {
+export function deploySafeMathLib(tokenOwner) {
   return new Promise((accept, reject) => {
     checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
       if (hasFunds) {
-        let pricingStrategyContract = FlatPricingJSON;
         BigNumber.config({ EXPONENTIAL_AT: 100 });
-        let myContract = new web3.eth.Contract(pricingStrategyContract.abi, {
-          from: account
+        let myContract = new web3.eth.Contract(SafeMathLibJSON.abi, {
+          from: tokenOwner
         });
         myContract.deploy({
-          data: tokenContract.bytecode,
-          arguments: [100], // price of token in wei
+          data: SafeMathLibJSON.bytecode,
+          arguments: [], // price of token in wei
         }).send({
-          from: account,
+          from: tokenOwner,
           gas: 4712388,
-          value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
+          value: web3.utils.toWei(/*feeInETH.toFixed(8).toString()*/"0", 'ether')
         }).on('error', (error) => {
           reject(error);
           return;
@@ -209,13 +209,49 @@ export function deployPricingStrategy() {
           accept(txHash);
           return;
         });
-        /*instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner, serviceFee).then(txHash => {
+      } else {
+        reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
+        return;
+      }
+    }).catch((e) => {
+      reject(new Error("Could not check token owner ETH funds."));
+      return;
+    });
+  });
+}
+
+export function deployFlatPricing(tokenOwner) {
+  // TODO: fix this
+  // HACK: manually linking: replace _SafeMathLib____ with actual bytecode
+  // This is not recommended, but it works. The problem is that SafeMathLib is a
+  // Solidity library, and must be manually linked with a contract that uses it.
+  // In deployment script, deployer.link(lib, contract) is explicitly called, but
+  // here there is no option in web3 to do that. The other option is to use
+  // truffle-contract to deploy contracts from js.
+  FlatPricingJSON.bytecode = FlatPricingJSON.bytecode.replace("__SafeMathLib___________________________", SafeMathLibJSON.bytecode.substr(2));
+
+  return new Promise((accept, reject) => {
+    checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
+      if (hasFunds) {
+        let pricingStrategyContract = FlatPricingJSON;
+        BigNumber.config({ EXPONENTIAL_AT: 100 });
+        let myContract = new web3.eth.Contract(pricingStrategyContract.abi, {
+          from: tokenOwner
+        });
+        myContract.deploy({
+          data: pricingStrategyContract.bytecode,
+          arguments: [100], // price of token in wei
+        }).send({
+          from: tokenOwner,
+          gas: 4712388,
+          //value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
+        }).on('error', (error) => {
+          reject(error);
+          return;
+        }).on('transactionHash', (txHash) => {
           accept(txHash);
           return;
-        }).catch((e) => {
-          reject(new Error("Could not create contract."));
-          return;
-        });*/
+        });
       } else {
         reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
         return;
