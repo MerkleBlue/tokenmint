@@ -29,13 +29,14 @@ describe("<SuccessMessagePanel /> tests", () => {
     setTokenType = () => { },
     setTokenOwner = () => { },
     setAppState = () => { },
-    setCheckingTokenOwnerFunds = () => { },
-    setTokenOwnerHasInsufficientFunds = () => { },
-    setTokenOwnerBalance = () => { },
+    setCheckingPayingAccountFunds = () => { },
+    setPayingAccountHasInsufficientFunds = () => { },
+    setPayingAccountBalance = () => { },
     setInfoMessage = () => { },
     loadAllAccounts = () => { },
     setServiceFee = () => { },
-    getNetworkType = () => { }
+    getNetworkType = () => { },
+    setPayingAccount = () => { }
   ) {
     const props = {
       infoMessage: infoMessage,
@@ -49,11 +50,12 @@ describe("<SuccessMessagePanel /> tests", () => {
       tokenTypeActions: { setTokenType: setTokenType },
       tokenOwnerActions: { setTokenOwner: setTokenOwner },
       appStateActions: { setAppState: setAppState },
-      tokenOwnerFundsActions: {
-        setCheckingTokenOwnerFunds: setCheckingTokenOwnerFunds,
-        setTokenOwnerHasInsufficientFunds: setTokenOwnerHasInsufficientFunds,
-        setTokenOwnerBalance: setTokenOwnerBalance
+      payingAccountFundsActions: {
+        setCheckingPayingAccountFunds: setCheckingPayingAccountFunds,
+        setPayingAccountHasInsufficientFunds: setPayingAccountHasInsufficientFunds,
+        setPayingAccountBalance: setPayingAccountBalance
       },
+      payingAccountActions: { setPayingAccount: setPayingAccount },
       infoMessageActions: { setInfoMessage: setInfoMessage },
       accountsActions: { loadAllAccounts: loadAllAccounts },
       serviceFeeActions: { setServiceFee: setServiceFee },
@@ -84,7 +86,7 @@ describe("<SuccessMessagePanel /> tests", () => {
     expect(wrapper.props().tokenTypeActions).to.exist;
     expect(wrapper.props().tokenOwnerActions).to.exist;
     expect(wrapper.props().appStateActions).to.exist;
-    expect(wrapper.props().tokenOwnerFundsActions).to.exist;
+    expect(wrapper.props().payingAccountFundsActions).to.exist;
     expect(wrapper.props().infoMessageActions).to.exist;
     expect(wrapper.props().accountsActions).to.exist;
     expect(wrapper.find("Card").length).to.eq(1);
@@ -113,7 +115,7 @@ describe("<SuccessMessagePanel /> tests", () => {
     expect(wrapper.props().tokenTypeActions).to.exist;
     expect(wrapper.props().tokenOwnerActions).to.exist;
     expect(wrapper.props().appStateActions).to.exist;
-    expect(wrapper.props().tokenOwnerFundsActions).to.exist;
+    expect(wrapper.props().payingAccountFundsActions).to.exist;
     expect(wrapper.props().infoMessageActions).to.exist;
     expect(wrapper.props().accountsActions).to.exist;
     expect(wrapper.find("Card").length).to.eq(1);
@@ -136,10 +138,11 @@ describe("<SuccessMessagePanel /> tests", () => {
     const setTotalSupply = sinon.spy();
     const setTokenType = sinon.spy();
     const setTokenOwner = sinon.spy();
+    const setPayingAccount = sinon.spy();
     const setAppState = sinon.spy();
-    const setCheckingTokenOwnerFunds = sinon.spy();
-    const setTokenOwnerHasInsufficientFunds = sinon.spy();
-    const setTokenOwnerBalance = sinon.spy();
+    const setCheckingPayingAccountFunds = sinon.spy();
+    const setPayingAccountHasInsufficientFunds = sinon.spy();
+    const setPayingAccountBalance = sinon.spy();
     const setInfoMessage = sinon.spy();
     const loadAllAccounts = sinon.spy();
     const setServiceFee = sinon.spy();
@@ -156,13 +159,14 @@ describe("<SuccessMessagePanel /> tests", () => {
       setTokenType,
       setTokenOwner,
       setAppState,
-      setCheckingTokenOwnerFunds,
-      setTokenOwnerHasInsufficientFunds,
-      setTokenOwnerBalance,
+      setCheckingPayingAccountFunds,
+      setPayingAccountHasInsufficientFunds,
+      setPayingAccountBalance,
       setInfoMessage,
       loadAllAccounts,
       setServiceFee,
-      getNetworkType
+      getNetworkType,
+      setPayingAccount
     );
     wrapper.find("span").at(1).simulate("click");
     expect(setDecimals.calledOnce).to.be.true;
@@ -172,12 +176,13 @@ describe("<SuccessMessagePanel /> tests", () => {
     expect(setTokenType.calledOnce).to.be.true;
     expect(setTokenOwner.calledOnce).to.be.true;
     expect(setAppState.calledOnce).to.be.true;
-    expect(setCheckingTokenOwnerFunds.calledOnce).to.be.true;
-    expect(setTokenOwnerHasInsufficientFunds.calledOnce).to.be.true;
+    expect(setCheckingPayingAccountFunds.calledOnce).to.be.true;
+    expect(setPayingAccountHasInsufficientFunds.calledOnce).to.be.true;
     expect(setInfoMessage.calledOnce).to.be.true;
     expect(loadAllAccounts.calledOnce).to.be.true;
     expect(setServiceFee.calledOnce).to.be.true;
     expect(getNetworkType.calledOnce).to.be.true;
-    expect(setTokenOwnerBalance.calledOnce).to.be.true;
+    expect(setPayingAccountBalance.calledOnce).to.be.true;
+    expect(setPayingAccount.calledOnce).to.be.true;
   });
 });

@@ -4,7 +4,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Grid,
   Typography,
   OutlinedInput,
   Card,
@@ -12,30 +11,32 @@ import {
   CardContent
 } from '@material-ui/core';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import './css/TokenOwner.css';
+import './css/HandlePaymentPanel.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import * as tokenOwnerActions from '../actions/tokenOwnerActions';
-import * as tokenOwnerFundsActions from '../actions/tokenOwnerFundsActions';
+import * as payingAccountActions from '../actions/payingAccountActions';
+import * as payingAccountFundsActions from '../actions/payingAccountFundsActions';
 import * as walletActions from '../actions/walletActions';
 import * as appStateActions from '../actions/appStateActions';
+import * as createTokensActions from '../actions/createTokensActions';
 import { bindActionCreators } from 'redux';
 import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
 import { NO_NETWORK } from '../../api/mintApi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWallet, faCoins } from '@fortawesome/free-solid-svg-icons';
+import { faWallet, faCheck } from '@fortawesome/free-solid-svg-icons';
 import appStates from '../reducers/appStates';
 import NetworkWarning from './NetworkWarning'; //eslint-disable-line import/no-named-as-default
+import InputValidator from '../../tools/InputValidator';
 
-
-export class TokenOwner extends React.Component {
+export class HandlePaymentPanel extends React.Component {
 
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.handleUnlockWallet = this.handleUnlockWallet.bind(this);
-    this.backToHome = this.backToHome.bind(this);
+    this.createTokens = this.createTokens.bind(this);
+    this.isTokenCreationEnabled = this.isTokenCreationEnabled.bind(this);
   }
 
 
@@ -47,7 +48,7 @@ export class TokenOwner extends React.Component {
 
   componentDidUpdate(prevProps) {
     // after finishing all checks, send ga
-    if (!this.props.checkingNetwork && !this.props.checkingTokenOwnerFunds && !this.props.loadingAccounts) {
+    if (!this.props.checkingNetwork && !this.props.checkingPayingAccountFunds && !this.props.loadingAccounts) {
       if (this.props.network !== "NO_NETWORK") {
         ReactGA.event({
           category: 'User',
@@ -58,7 +59,7 @@ export class TokenOwner extends React.Component {
             category: 'User',
             action: 'has web3 and main net'
           });
-          if (!this.props.tokenOwnerHasInsufficientFunds && this.props.tokenOwnerBalance > 0.0000001) {
+          if (!this.props.payingAccountHasInsufficientFunds && this.props.payingAccountBalance > 0.0000001) {
             ReactGA.event({
               category: 'User',
               action: 'has web3 and main net and has funds'
@@ -69,17 +70,38 @@ export class TokenOwner extends React.Component {
     }
   }
 
-  backToHome(e) {
-    this.props.appStateActions.setAppState(appStates.INIT);
+  isTokenCreationEnabled() {
+    return InputValidator.isInputValid(
+      this.props.tokenName,
+      this.props.tokenSymbol,
+      this.props.decimals,
+      this.props.totalSupply,
+      this.props.tokenOwner
+    ) && this.props.payingAccount !== initialState.payingAccount
+      && !this.props.payingAccountHasInsufficientFunds
+      && !this.props.loadingAccounts
+      && !this.props.checkingPayingAccountFunds;
+  }
+
+  createTokens(e) {
+    this.props.createTokensActions.createTokens(
+      this.props.tokenName,
+      this.props.tokenSymbol,
+      this.props.decimals,
+      this.props.totalSupply,
+      this.props.tokenType,
+      this.props.payingAccount,
+      this.props.serviceFee
+    );
   }
 
   handleChange(e) {
-    this.props.tokenOwnerActions.setTokenOwner(e.target.value);
+    this.props.payingAccountActions.setPayingAccount(e.target.value);
     // if selected specific account
-    if (e.target.value !== initialState.tokenOwner) {
-      this.props.tokenOwnerFundsActions.checkFunds(e.target.value);
+    if (e.target.value !== initialState.payingAccount) {
+      this.props.payingAccountFundsActions.checkFunds(e.target.value);
     } else {
-      this.props.tokenOwnerFundsActions.setTokenOwnerHasInsufficientFunds(false);
+      this.props.payingAccountFundsActions.setPayingAccountHasInsufficientFunds(false);
     }
   }
 
@@ -97,31 +119,71 @@ export class TokenOwner extends React.Component {
       }
     });
 
-    let error = (this.props.accounts.length === 0 || this.props.tokenOwnerHasInsufficientFunds) && !this.props.loadingAccounts && !this.props.checkingTokenOwnerFunds;
-
-    let menuItems;
-    let contentRight = "";
-    if (this.props.loadingAccounts) {
-      menuItems = (
-        <MenuItem
-          value={initialState.tokenOwner}
-          onMouseEnter={(e) => e.target.style.backgroundColor = '#31bfdf'}
-          onMouseLeave={(e) => e.target.style.backgroundColor = '#ffffff'}
+    let finishButton = this.isTokenCreationEnabled() ?
+      (
+        <span
+          className="btn btn-confirm wow fadeInUp"
+          data-wow-duration="1000ms"
+          data-wow-delay="400ms"
+          onClick={this.createTokens}
         >
-          Loading accounts...
-        </MenuItem>
+          <FontAwesomeIcon className="fa_check" icon={faCheck} />
+          Finish
+        </span>
+      ) : (
+        <span
+          className="btn btn-disabled wow fadeInUp"
+          data-wow-duration="1000ms"
+          data-wow-delay="400ms"
+        >
+          <FontAwesomeIcon className="fa_check" icon={faCheck} />
+          Finish
+        </span>
       );
-      contentRight = (
+
+    let error = (this.props.accounts.length === 0 || this.props.payingAccountHasInsufficientFunds) && !this.props.loadingAccounts && !this.props.checkingPayingAccountFunds;
+
+    //let menuItems;
+    let content;
+    let description;
+    if (this.props.loadingAccounts) {
+      content = (
+        <MuiThemeProvider theme={theme}>
+          <FormControl variant="outlined">
+            <InputLabel>Paying account</InputLabel>
+            <Select
+              error={error}
+              value={this.props.payingAccount}
+              onChange={this.handleChange}
+              input={
+                <OutlinedInput
+                  labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
+                  className="select_field"
+                />
+              }
+            >
+              <MenuItem
+                value={initialState.payingAccount}
+                onMouseEnter={(e) => e.target.style.backgroundColor = '#31bfdf'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = '#ffffff'}
+              >
+                Loading accounts...
+              </MenuItem>
+            </Select>
+          </FormControl>
+        </MuiThemeProvider>
+      );
+      description = (
         <Typography
           align="left"
           variant="h6"
-          className={error ? "typography_error" : "typography"}
+          className={error ? "typography_payment_error" : "typography_payment"}
         >
-          ETH account. This account will be owner of the token!
+          ETH paying account.
         </Typography>
       );
     } else if (this.props.accounts.length > 0) {
-      menuItems = this.props.accounts.map((account) => (
+      let menuItems = this.props.accounts.map((account) => (
         <MenuItem
           key={account}
           value={account}
@@ -132,24 +194,44 @@ export class TokenOwner extends React.Component {
         </MenuItem>
       ));
       let descriptionText;
-      if (this.props.tokenOwnerHasInsufficientFunds) {
+      if (this.props.payingAccountHasInsufficientFunds) {
         descriptionText = "This account has insufficient funds.";
       } else {
-        descriptionText = "ETH account. This account will be owner of the token!";
+        descriptionText = "ETH paying account.";
       }
-      contentRight = (
+      description = (
         <Typography
           align="left"
           variant="h6"
-          className={error ? "typography_error" : "typography"}
+          className={error ? "typography_payment_error" : "typography_payment"}
         >
           {descriptionText}
         </Typography>
       );
+      content = (
+        <MuiThemeProvider theme={theme}>
+          <FormControl variant="outlined">
+            <InputLabel>Paying account</InputLabel>
+            <Select
+              error={error}
+              value={this.props.payingAccount}
+              onChange={this.handleChange}
+              input={
+                <OutlinedInput
+                  labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
+                  className="select_field"
+                />
+              }
+            >
+              {menuItems}
+            </Select>
+          </FormControl>
+        </MuiThemeProvider>
+      );
     } else {
-      menuItems = (
+      let menuItems = (
         <MenuItem
-          value={initialState.tokenOwner}
+          value={initialState.payingAccount}
           onMouseEnter={(e) => e.target.style.backgroundColor = '#31bfdf'}
           onMouseLeave={(e) => e.target.style.backgroundColor = '#ffffff'}
         >
@@ -157,11 +239,31 @@ export class TokenOwner extends React.Component {
         </MenuItem>
       );
       if (this.props.network === NO_NETWORK) {
-        contentRight = (
+        content = (
+          <MuiThemeProvider theme={theme}>
+            <FormControl variant="outlined">
+              <InputLabel>Paying account</InputLabel>
+              <Select
+                error={error}
+                value={this.props.payingAccount}
+                onChange={this.handleChange}
+                input={
+                  <OutlinedInput
+                    labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
+                    className="select_field"
+                  />
+                }
+              >
+                {menuItems}
+              </Select>
+            </FormControl>
+          </MuiThemeProvider>
+        );
+        description = (
           <Typography
             align="left"
             variant="h6"
-            className={error ? "typography_error" : "typography"}
+            className={error ? "typography_payment_error" : "typography_payment"}
           >
             There are no available accounts.
             Please make sure that you run Metamask or any other Ethereum wallet with at least one UNLOCKED account, and refresh the page.
@@ -169,23 +271,52 @@ export class TokenOwner extends React.Component {
         );
       } else {
         if (this.props.walletNeedsToBeUnlocked) {
-          contentRight = (
+          content = (
             <span
               className="btn btn-unlock-wallet wow fadeInUp"
               data-wow-duration="1000ms"
               data-wow-delay="400ms"
               onClick={this.handleUnlockWallet}
             >
-              <FontAwesomeIcon className="fa_coins" icon={faWallet} />
+              <FontAwesomeIcon className="fa_check" icon={faWallet} />
               Connect to Wallet
             </span>
           );
-        } else {
-          contentRight = (
+          description = (
             <Typography
               align="left"
               variant="h6"
-              className={error ? "typography_error" : "typography"}
+              className="typography_payment"
+            >
+              Please connect to Ethereum wallet.
+            </Typography>
+          );
+        } else {
+          content = (
+            <MuiThemeProvider theme={theme}>
+              <FormControl variant="outlined">
+                <InputLabel>Paying account</InputLabel>
+                <Select
+                  error={error}
+                  value={this.props.payingAccount}
+                  onChange={this.handleChange}
+                  input={
+                    <OutlinedInput
+                      labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
+                      className="select_field"
+                    />
+                  }
+                >
+                  {menuItems}
+                </Select>
+              </FormControl>
+            </MuiThemeProvider>
+          );
+          description = (
+            <Typography
+              align="left"
+              variant="h6"
+              className={error ? "typography_payment_error" : "typography_payment"}
             >
               Ethereum wallet is detected, but there are no accounts available. If you are using Metamask, please LOG IN to it!
               Otherwise you should UNLOCK your wallet or CREATE an account in your wallet.
@@ -213,92 +344,81 @@ export class TokenOwner extends React.Component {
               root: "card_content"
             }}
           >
-            <MuiThemeProvider theme={theme}>
-              <FormControl variant="outlined">
-                <InputLabel>Select account</InputLabel>
-                <Select
-                  error={error}
-                  value={this.props.tokenOwner}
-                  onChange={this.handleChange}
-                  input={
-                    <OutlinedInput
-                      labelWidth={this.labelRef ? this.labelRef.offsetWidth : 0}
-                      className="select_field"
-                    />
-                  }
-                >
-                  {menuItems}
-                </Select>
-              </FormControl>
-            </MuiThemeProvider>
-            {contentRight}
-            {this.props.tokenOwnerHasInsufficientFunds &&
+            {content}
+            {description}
+            {this.props.payingAccountHasInsufficientFunds && (this.props.accounts.length !== 0) &&
               <Typography
                 align="left"
                 variant="h6"
                 className="typography_error_secondary"
               >
-                Please top your account up with at least <strong>{(this.props.serviceFee + 0.02 - this.props.tokenOwnerBalance).toFixed(6)}</strong> ETH,
+                Please top your account up with at least <strong>{(this.props.serviceFee + 0.02 - this.props.payingAccountBalance).toFixed(6)}</strong> ETH,
                 and refresh the page!
-                </Typography>
+              </Typography>
             }
           </CardContent>
         </Card>
         <form className="footer_main_form">
-          <span
-            className="btn btn-confirm wow fadeInUp"
-            data-wow-duration="1000ms"
-            data-wow-delay="400ms"
-            onClick={this.backToHome}
-          >
-            <FontAwesomeIcon className="fa_back_icon" icon={faCoins} />
-            Finish
-          </span>
+          {finishButton}
         </form>
       </div>
     );
   }
 }
 
-TokenOwner.propTypes = {
+HandlePaymentPanel.propTypes = {
   network: PropTypes.string.isRequired,
-  tokenOwnerHasInsufficientFunds: PropTypes.bool.isRequired,
-  checkingTokenOwnerFunds: PropTypes.bool.isRequired,
+  payingAccountHasInsufficientFunds: PropTypes.bool.isRequired,
+  checkingPayingAccountFunds: PropTypes.bool.isRequired,
   checkingNetwork: PropTypes.bool.isRequired,
   accounts: PropTypes.array.isRequired,
-  tokenOwner: PropTypes.string.isRequired,
-  tokenOwnerBalance: PropTypes.number.isRequired,
+  payingAccount: PropTypes.string.isRequired,
+  payingAccountBalance: PropTypes.number.isRequired,
   serviceFee: PropTypes.number.isRequired,
   loadingAccounts: PropTypes.bool.isRequired,
   walletNeedsToBeUnlocked: PropTypes.bool.isRequired,
-  tokenOwnerActions: PropTypes.object.isRequired,
-  tokenOwnerFundsActions: PropTypes.object.isRequired,
+  tokenName: PropTypes.string.isRequired,
+  tokenSymbol: PropTypes.string.isRequired,
+  decimals: PropTypes.string.isRequired,
+  totalSupply: PropTypes.string.isRequired,
+  tokenType: PropTypes.string.isRequired,
+  tokenOwner: PropTypes.string.isRequired,
+  payingAccountActions: PropTypes.object.isRequired,
+  payingAccountFundsActions: PropTypes.object.isRequired,
   walletActions: PropTypes.object.isRequired,
-  appStateActions: PropTypes.object.isRequired
+  appStateActions: PropTypes.object.isRequired,
+  createTokensActions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
     accounts: state.accounts,
     loadingAccounts: state.loadingAccounts,
-    tokenOwner: state.tokenOwner,
-    tokenOwnerBalance: state.tokenOwnerBalance,
+    payingAccount: state.payingAccount,
+    payingAccountBalance: state.payingAccountBalance,
     serviceFee: state.serviceFee,
     checkingNetwork: state.checkingNetwork,
-    checkingTokenOwnerFunds: state.checkingTokenOwnerFunds,
-    tokenOwnerHasInsufficientFunds: state.tokenOwnerHasInsufficientFunds,
+    checkingPayingAccountFunds: state.checkingPayingAccountFunds,
+    payingAccountHasInsufficientFunds: state.payingAccountHasInsufficientFunds,
     network: state.network,
-    walletNeedsToBeUnlocked: state.walletNeedsToBeUnlocked
+    walletNeedsToBeUnlocked: state.walletNeedsToBeUnlocked,
+    tokenName: state.tokenName,
+    tokenSymbol: state.tokenSymbol,
+    decimals: state.decimals,
+    totalSupply: state.totalSupply,
+    tokenOwner: state.tokenOwner,
+    tokenType: state.tokenType
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    tokenOwnerActions: bindActionCreators(tokenOwnerActions, dispatch),
-    tokenOwnerFundsActions: bindActionCreators(tokenOwnerFundsActions, dispatch),
+    payingAccountActions: bindActionCreators(payingAccountActions, dispatch),
+    payingAccountFundsActions: bindActionCreators(payingAccountFundsActions, dispatch),
     walletActions: bindActionCreators(walletActions, dispatch),
-    appStateActions: bindActionCreators(appStateActions, dispatch)
+    appStateActions: bindActionCreators(appStateActions, dispatch),
+    createTokensActions: bindActionCreators(createTokensActions, dispatch)
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TokenOwner);
+export default connect(mapStateToProps, mapDispatchToProps)(HandlePaymentPanel);

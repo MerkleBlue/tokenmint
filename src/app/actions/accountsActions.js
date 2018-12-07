@@ -1,7 +1,8 @@
 import * as types from './actionTypes';
 import { loadAccounts } from '../../api/mintApi';
 import { setTokenOwner } from './tokenOwnerActions';
-import { checkFunds } from './tokenOwnerFundsActions';
+import { setPayingAccount } from './payingAccountActions';
+import { checkFunds } from './payingAccountFundsActions';
 
 export function loadAllAccounts() {
   return (dispatch) => {
@@ -11,6 +12,7 @@ export function loadAllAccounts() {
       dispatch(setLoadingAccounts(false));
       if (accounts.length === 1) {
         dispatch(setTokenOwner(accounts[0]));
+        dispatch(setPayingAccount(accounts[0]));
         dispatch(checkFunds(accounts[0]));
       }
     }).catch(() => {

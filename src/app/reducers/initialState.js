@@ -9,14 +9,15 @@ export default {
   totalSupply: "",
   accounts: [],
   appState: appStates.INIT,
-  checkingTokenOwnerFunds: false,
-  tokenOwnerBalance: 0,
+  checkingPayingAccountFunds: false,
+  payingAccountBalance: 0,
   infoMessage: "",
   loadingAccounts: false,
   serviceFee: 0,
   network: "",
   checkingNetwork: true,
-  tokenOwnerHasInsufficientFunds: false,
+  payingAccountHasInsufficientFunds: false,
   isMobileDevice: false,
-  walletNeedsToBeUnlocked: false
+  walletNeedsToBeUnlocked: false,
+  payingAccount: ""
 };

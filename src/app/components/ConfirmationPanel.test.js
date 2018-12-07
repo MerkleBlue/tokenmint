@@ -18,6 +18,7 @@ const decimals = "18";
 const totalSupply = "1000";
 const tokenType = "erc20";
 const tokenOwner = "0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef";
+const payingAccount = "0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef";
 const network = "main";
 const walletNeedsToBeUnlocked = false;
 const accounts = ["0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef"];
@@ -37,6 +38,7 @@ describe("<ConfirmationPanel /> tests", () => {
     walletNeedsToBeUnlocked,
     accounts,
     isMobileDevice,
+    payingAccount,
     setAppState = () => { },
     setInfoMessage = () => { },
     getNetworkType = () => { },
@@ -53,10 +55,11 @@ describe("<ConfirmationPanel /> tests", () => {
       walletNeedsToBeUnlocked: walletNeedsToBeUnlocked,
       accounts: accounts,
       isMobileDevice: isMobileDevice,
+      payingAccount: payingAccount,
       appStateActions: { setAppState: setAppState },
       infoMessageActions: { setInfoMessage: setInfoMessage },
       networkActions: { getNetworkType: getNetworkType },
-      tokenOwnerFundsActions: { checkFunds: checkFunds }
+      payingAccountFundsActions: { checkFunds: checkFunds }
     };
     return mount(<ConfirmationPanel {...props} />);
   }
@@ -84,7 +87,8 @@ describe("<ConfirmationPanel /> tests", () => {
       network,
       walletNeedsToBeUnlocked,
       accounts,
-      isMobileDevice
+      isMobileDevice,
+      payingAccount
     );
     expect(wrapper.props().tokenName).to.be.empty;
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
@@ -100,7 +104,7 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.props().infoMessageActions).to.not.be.empty;
     expect(wrapper.props().networkActions).to.not.be.empty;
-    expect(wrapper.props().tokenOwnerFundsActions).to.not.be.empty;
+    expect(wrapper.props().payingAccountFundsActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(3);
     expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm-disabled wow fadeInUp");
     expect(wrapper.find("Card").length).to.eq(1);
@@ -127,7 +131,8 @@ describe("<ConfirmationPanel /> tests", () => {
       network,
       walletNeedsToBeUnlocked,
       accounts,
-      isMobileDevice
+      isMobileDevice,
+      payingAccount
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.eq(initialState.tokenSymbol);
@@ -143,7 +148,7 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.props().infoMessageActions).to.not.be.empty;
     expect(wrapper.props().networkActions).to.not.be.empty;
-    expect(wrapper.props().tokenOwnerFundsActions).to.not.be.empty;
+    expect(wrapper.props().payingAccountFundsActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(3);
     expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm-disabled wow fadeInUp");
     expect(wrapper.find("Card").length).to.eq(1);
@@ -170,7 +175,8 @@ describe("<ConfirmationPanel /> tests", () => {
       network,
       walletNeedsToBeUnlocked,
       accounts,
-      isMobileDevice
+      isMobileDevice,
+      payingAccount
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
@@ -186,7 +192,7 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.props().infoMessageActions).to.not.be.empty;
     expect(wrapper.props().networkActions).to.not.be.empty;
-    expect(wrapper.props().tokenOwnerFundsActions).to.not.be.empty;
+    expect(wrapper.props().payingAccountFundsActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(3);
     expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm-disabled wow fadeInUp");
     expect(wrapper.find("Card").length).to.eq(1);
@@ -213,7 +219,8 @@ describe("<ConfirmationPanel /> tests", () => {
       network,
       walletNeedsToBeUnlocked,
       accounts,
-      isMobileDevice
+      isMobileDevice,
+      payingAccount
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
@@ -229,7 +236,7 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.props().infoMessageActions).to.not.be.empty;
     expect(wrapper.props().networkActions).to.not.be.empty;
-    expect(wrapper.props().tokenOwnerFundsActions).to.not.be.empty;
+    expect(wrapper.props().payingAccountFundsActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(3);
     expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm-disabled wow fadeInUp");
     expect(wrapper.find("Card").length).to.eq(1);
@@ -256,7 +263,8 @@ describe("<ConfirmationPanel /> tests", () => {
       network,
       walletNeedsToBeUnlocked,
       accounts,
-      isMobileDevice
+      isMobileDevice,
+      payingAccount
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
@@ -272,7 +280,7 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.props().infoMessageActions).to.not.be.empty;
     expect(wrapper.props().networkActions).to.not.be.empty;
-    expect(wrapper.props().tokenOwnerFundsActions).to.not.be.empty;
+    expect(wrapper.props().payingAccountFundsActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(3);
     expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm-disabled wow fadeInUp");
     expect(wrapper.find("Card").length).to.eq(1);
@@ -299,7 +307,8 @@ describe("<ConfirmationPanel /> tests", () => {
       network,
       walletNeedsToBeUnlocked,
       accounts,
-      true
+      true,
+      payingAccount
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
@@ -315,7 +324,7 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.props().infoMessageActions).to.not.be.empty;
     expect(wrapper.props().networkActions).to.not.be.empty;
-    expect(wrapper.props().tokenOwnerFundsActions).to.not.be.empty;
+    expect(wrapper.props().payingAccountFundsActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(3);
     expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm wow fadeInUp");
     expect(wrapper.find("Card").length).to.eq(1);
@@ -342,7 +351,8 @@ describe("<ConfirmationPanel /> tests", () => {
       network,
       walletNeedsToBeUnlocked,
       accounts,
-      isMobileDevice
+      isMobileDevice,
+      payingAccount
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
@@ -358,7 +368,7 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.props().infoMessageActions).to.not.be.empty;
     expect(wrapper.props().networkActions).to.not.be.empty;
-    expect(wrapper.props().tokenOwnerFundsActions).to.not.be.empty;
+    expect(wrapper.props().payingAccountFundsActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(3);
     expect(wrapper.find("span").at(2).props().className).to.eq("btn btn-confirm wow fadeInUp");
     expect(wrapper.find("Card").length).to.eq(1);
@@ -390,6 +400,7 @@ describe("<ConfirmationPanel /> tests", () => {
       walletNeedsToBeUnlocked,
       accounts,
       isMobileDevice,
+      payingAccount,
       setAppState,
       setInfoMessage,
       getNetworkType,
@@ -418,6 +429,7 @@ describe("<ConfirmationPanel /> tests", () => {
       walletNeedsToBeUnlocked,
       accounts,
       isMobileDevice,
+      payingAccount,
       setAppState,
       setInfoMessage,
       getNetworkType,
@@ -443,6 +455,7 @@ describe("<ConfirmationPanel /> tests", () => {
       walletNeedsToBeUnlocked,
       accounts,
       isMobileDevice,
+      payingAccount,
       setAppState,
       setInfoMessage,
       getNetworkType,
@@ -468,6 +481,7 @@ describe("<ConfirmationPanel /> tests", () => {
       true,
       accounts,
       isMobileDevice,
+      payingAccount,
       setAppState,
       setInfoMessage,
       getNetworkType,
@@ -493,6 +507,7 @@ describe("<ConfirmationPanel /> tests", () => {
       walletNeedsToBeUnlocked,
       accounts,
       isMobileDevice,
+      payingAccount,
       setAppState,
       setInfoMessage,
       getNetworkType,

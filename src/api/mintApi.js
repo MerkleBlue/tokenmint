@@ -161,14 +161,14 @@ function estimateMiningFee(tokenContract, name, symbol, decimals, totalSupply, t
   });
 }
 
-export function checkTokenOwnerFunds(tokenOwner) {
+export function checkAccountFunds(account) {
   return new Promise((accept, reject) => {
     getFee().then(fee => {
-      getEthBalance(tokenOwner).then(balance => {
+      getEthBalance(account).then(balance => {
         // TODO: 0.01 ETH is just an estimation of gas costs for deploying a contract and paying a fee
         //accept(balance - fee - 0.01 > 0);
         accept({
-          tokenOwnerBalance: parseFloat(balance),
+          accountBalance: parseFloat(balance),
           serviceFee: fee
         });
         return;
@@ -185,7 +185,7 @@ export function checkTokenOwnerFunds(tokenOwner) {
 
 export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenType, tokenOwner, serviceFee) {
   return new Promise((accept, reject) => {
-    checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
+    checkAccountFunds(tokenOwner).then(hasFunds => {
       if (hasFunds) {
         let tokenContract = tokenType === "erc20" ? ERC20TokenJSON : ERC223TokenJSON;
         instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner, serviceFee).then(txHash => {
