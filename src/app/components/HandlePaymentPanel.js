@@ -18,6 +18,7 @@ import * as payingAccountActions from '../actions/payingAccountActions';
 import * as payingAccountFundsActions from '../actions/payingAccountFundsActions';
 import * as walletActions from '../actions/walletActions';
 import * as appStateActions from '../actions/appStateActions';
+import * as createTokensActions from '../actions/createTokensActions';
 import { bindActionCreators } from 'redux';
 import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
@@ -26,7 +27,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWallet, faCheck } from '@fortawesome/free-solid-svg-icons';
 import appStates from '../reducers/appStates';
 import NetworkWarning from './NetworkWarning'; //eslint-disable-line import/no-named-as-default
-
+import InputValidator from '../../tools/InputValidator';
 
 export class HandlePaymentPanel extends React.Component {
 
@@ -34,7 +35,8 @@ export class HandlePaymentPanel extends React.Component {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.handleUnlockWallet = this.handleUnlockWallet.bind(this);
-    this.backToHome = this.backToHome.bind(this);
+    this.createTokens = this.createTokens.bind(this);
+    this.isTokenCreationEnabled = this.isTokenCreationEnabled.bind(this);
   }
 
 
@@ -68,8 +70,29 @@ export class HandlePaymentPanel extends React.Component {
     }
   }
 
-  backToHome(e) {
-    this.props.appStateActions.setAppState(appStates.INIT);
+  isTokenCreationEnabled() {
+    return InputValidator.isInputValid(
+      this.props.tokenName,
+      this.props.tokenSymbol,
+      this.props.decimals,
+      this.props.totalSupply,
+      this.props.tokenOwner
+    ) && this.props.payingAccount !== initialState.payingAccount
+      && !this.props.payingAccountHasInsufficientFunds
+      && !this.props.loadingAccounts
+      && !this.props.checkingPayingAccountFunds;
+  }
+
+  createTokens(e) {
+    this.props.createTokensActions.createTokens(
+      this.props.tokenName,
+      this.props.tokenSymbol,
+      this.props.decimals,
+      this.props.totalSupply,
+      this.props.tokenType,
+      this.props.payingAccount,
+      this.props.serviceFee
+    );
   }
 
   handleChange(e) {
@@ -95,6 +118,28 @@ export class HandlePaymentPanel extends React.Component {
         primary: { 500: "#31bfdf" }
       }
     });
+
+    let finishButton = this.isTokenCreationEnabled() ?
+      (
+        <span
+          className="btn btn-confirm wow fadeInUp"
+          data-wow-duration="1000ms"
+          data-wow-delay="400ms"
+          onClick={this.createTokens}
+        >
+          <FontAwesomeIcon className="fa_check" icon={faCheck} />
+          Finish
+        </span>
+      ) : (
+        <span
+          className="btn btn-disabled wow fadeInUp"
+          data-wow-duration="1000ms"
+          data-wow-delay="400ms"
+        >
+          <FontAwesomeIcon className="fa_check" icon={faCheck} />
+          Finish
+        </span>
+      );
 
     let error = (this.props.accounts.length === 0 || this.props.payingAccountHasInsufficientFunds) && !this.props.loadingAccounts && !this.props.checkingPayingAccountFunds;
 
@@ -314,15 +359,7 @@ export class HandlePaymentPanel extends React.Component {
           </CardContent>
         </Card>
         <form className="footer_main_form">
-          <span
-            className="btn btn-confirm wow fadeInUp"
-            data-wow-duration="1000ms"
-            data-wow-delay="400ms"
-            onClick={this.backToHome}
-          >
-            <FontAwesomeIcon className="fa_check" icon={faCheck} />
-            Finish
-          </span>
+          {finishButton}
         </form>
       </div>
     );
@@ -340,10 +377,17 @@ HandlePaymentPanel.propTypes = {
   serviceFee: PropTypes.number.isRequired,
   loadingAccounts: PropTypes.bool.isRequired,
   walletNeedsToBeUnlocked: PropTypes.bool.isRequired,
+  tokenName: PropTypes.string.isRequired,
+  tokenSymbol: PropTypes.string.isRequired,
+  decimals: PropTypes.string.isRequired,
+  totalSupply: PropTypes.string.isRequired,
+  tokenType: PropTypes.string.isRequired,
+  tokenOwner: PropTypes.string.isRequired,
   payingAccountActions: PropTypes.object.isRequired,
   payingAccountFundsActions: PropTypes.object.isRequired,
   walletActions: PropTypes.object.isRequired,
-  appStateActions: PropTypes.object.isRequired
+  appStateActions: PropTypes.object.isRequired,
+  createTokensActions: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -357,7 +401,13 @@ function mapStateToProps(state) {
     checkingPayingAccountFunds: state.checkingPayingAccountFunds,
     payingAccountHasInsufficientFunds: state.payingAccountHasInsufficientFunds,
     network: state.network,
-    walletNeedsToBeUnlocked: state.walletNeedsToBeUnlocked
+    walletNeedsToBeUnlocked: state.walletNeedsToBeUnlocked,
+    tokenName: state.tokenName,
+    tokenSymbol: state.tokenSymbol,
+    decimals: state.decimals,
+    totalSupply: state.totalSupply,
+    tokenOwner: state.tokenOwner,
+    tokenType: state.tokenType
   };
 }
 
@@ -366,7 +416,8 @@ function mapDispatchToProps(dispatch) {
     payingAccountActions: bindActionCreators(payingAccountActions, dispatch),
     payingAccountFundsActions: bindActionCreators(payingAccountFundsActions, dispatch),
     walletActions: bindActionCreators(walletActions, dispatch),
-    appStateActions: bindActionCreators(appStateActions, dispatch)
+    appStateActions: bindActionCreators(appStateActions, dispatch),
+    createTokensActions: bindActionCreators(createTokensActions, dispatch)
   };
 }
 
