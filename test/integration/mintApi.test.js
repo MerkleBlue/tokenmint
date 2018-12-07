@@ -16,7 +16,7 @@ let token = {
   totalSupply: 1000000
 }
 
-describe('Tfa API integration tests', function () {
+describe('TokenMint mintApi integration tests', function () {
   this.timeout(120000);
 
   before((beforeDone) => {

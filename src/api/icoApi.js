@@ -1,8 +1,11 @@
 import cc from 'cryptocompare';
-import ERC20TokenJSON from '../contracts/TokenMintERC20Token.json';
-import ERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
 import Web3 from 'web3';
 import { BigNumber } from 'bignumber.js';
+
+// contracts
+import FlatPricingJSON from '../contracts/FlatPricing.json';
+//import ERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
+
 
 const feeInUsd = 29.99;
 let tokenMintAccount = "0x6603cb70464ca51481d4edBb3B927F66F53F4f42";
@@ -102,7 +105,7 @@ export function getTokenBalance(contractInstance, account) {
   });
 }
 
-function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, account, feeInETH) {
+/*function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, account, feeInETH) {
   return new Promise((accept, reject) => {
     // used for converting big number to string without scientific notation
     BigNumber.config({ EXPONENTIAL_AT: 100 });
@@ -124,7 +127,7 @@ function instantiateContract(tokenContract, name, symbol, decimals, totalSupply,
       return;
     });
   });
-}
+}*/
 
 export function getNetwork() {
   return new Promise((accept, reject) => {
@@ -178,6 +181,47 @@ export function checkTokenOwnerFunds(tokenOwner) {
       });
     }).catch((e) => {
       reject(e);
+      return;
+    });
+  });
+}
+
+export function deployPricingStrategy() {
+  return new Promise((accept, reject) => {
+    checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
+      if (hasFunds) {
+        let pricingStrategyContract = FlatPricingJSON;
+        BigNumber.config({ EXPONENTIAL_AT: 100 });
+        let myContract = new web3.eth.Contract(pricingStrategyContract.abi, {
+          from: account
+        });
+        myContract.deploy({
+          data: tokenContract.bytecode,
+          arguments: [100], // price of token in wei
+        }).send({
+          from: account,
+          gas: 4712388,
+          value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
+        }).on('error', (error) => {
+          reject(error);
+          return;
+        }).on('transactionHash', (txHash) => {
+          accept(txHash);
+          return;
+        });
+        /*instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner, serviceFee).then(txHash => {
+          accept(txHash);
+          return;
+        }).catch((e) => {
+          reject(new Error("Could not create contract."));
+          return;
+        });*/
+      } else {
+        reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
+        return;
+      }
+    }).catch((e) => {
+      reject(new Error("Could not check token owner ETH funds."));
       return;
     });
   });
