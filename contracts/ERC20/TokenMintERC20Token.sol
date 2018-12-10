@@ -15,13 +15,13 @@ contract TokenMintERC20Token is ERC20 {
     string public symbol;
     uint8 public decimals;
 
-    constructor(string _name, string _symbol, uint8 _decimals, uint256 totalSupply, address feeReceiver) public payable {
+    constructor(string _name, string _symbol, uint8 _decimals, uint256 totalSupply, address feeReceiver, address tokenOwnerAccount) public payable {
       name = _name;
       symbol = _symbol;
       decimals = _decimals;
 
       // set sender as owner of all tokens
-      _mint(msg.sender, totalSupply);
+      _mint(tokenOwnerAccount, totalSupply);
       //_totalSupply = totalSupply;
 
       // pay for service fee for contract deployment

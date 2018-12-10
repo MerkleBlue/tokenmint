@@ -17,7 +17,6 @@ import PropTypes from 'prop-types';
 import * as payingAccountActions from '../actions/payingAccountActions';
 import * as payingAccountFundsActions from '../actions/payingAccountFundsActions';
 import * as walletActions from '../actions/walletActions';
-import * as appStateActions from '../actions/appStateActions';
 import * as createTokensActions from '../actions/createTokensActions';
 import { bindActionCreators } from 'redux';
 import initialState from '../reducers/initialState';
@@ -25,7 +24,6 @@ import ReactGA from 'react-ga';
 import { NO_NETWORK } from '../../api/mintApi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWallet, faCheck } from '@fortawesome/free-solid-svg-icons';
-import appStates from '../reducers/appStates';
 import NetworkWarning from './NetworkWarning'; //eslint-disable-line import/no-named-as-default
 import InputValidator from '../../tools/InputValidator';
 
@@ -90,8 +88,9 @@ export class HandlePaymentPanel extends React.Component {
       this.props.decimals,
       this.props.totalSupply,
       this.props.tokenType,
-      this.props.payingAccount,
-      this.props.serviceFee
+      this.props.tokenOwner,
+      this.props.serviceFee,
+      this.props.payingAccount
     );
   }
 
@@ -386,7 +385,6 @@ HandlePaymentPanel.propTypes = {
   payingAccountActions: PropTypes.object.isRequired,
   payingAccountFundsActions: PropTypes.object.isRequired,
   walletActions: PropTypes.object.isRequired,
-  appStateActions: PropTypes.object.isRequired,
   createTokensActions: PropTypes.object.isRequired,
 };
 
@@ -416,7 +414,6 @@ function mapDispatchToProps(dispatch) {
     payingAccountActions: bindActionCreators(payingAccountActions, dispatch),
     payingAccountFundsActions: bindActionCreators(payingAccountFundsActions, dispatch),
     walletActions: bindActionCreators(walletActions, dispatch),
-    appStateActions: bindActionCreators(appStateActions, dispatch),
     createTokensActions: bindActionCreators(createTokensActions, dispatch)
   };
 }
