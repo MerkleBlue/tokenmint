@@ -215,7 +215,7 @@ export function deploySafeMathLib(tokenOwner) {
   return new Promise((accept, reject) => {
     checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
       if (hasFunds) {
-        instantiateContract(SafeMathLibJSON, [], tokenOwner, serviceFee).then(txHash => {
+        instantiateContract(SafeMathLibJSON, [], tokenOwner, 0).then(txHash => {
           accept(txHash);
           return;
         }).catch((e) => {
