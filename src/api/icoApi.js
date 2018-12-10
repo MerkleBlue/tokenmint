@@ -187,26 +187,39 @@ export function checkTokenOwnerFunds(tokenOwner) {
   });
 }
 
+function instantiateContract(contractJSON, constructorArguments, account, feeInETH) {
+  return new Promise((accept, reject) => {
+    // used for converting big number to string without scientific notation
+    BigNumber.config({ EXPONENTIAL_AT: 100 });
+    let myContract = new web3.eth.Contract(contractJSON.abi, {
+      from: account
+    });
+    myContract.deploy({
+      data: contractJSON.bytecode,
+      arguments: [...constructorArguments],
+    }).send({
+      from: account,
+      gas: 4712388,
+      value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
+    }).on('error', (error) => {
+      reject(error);
+      return;
+    }).on('transactionHash', (txHash) => {
+      accept(txHash);
+      return;
+    });
+  });
+}
+
 export function deploySafeMathLib(tokenOwner) {
   return new Promise((accept, reject) => {
     checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
       if (hasFunds) {
-        BigNumber.config({ EXPONENTIAL_AT: 100 });
-        let myContract = new web3.eth.Contract(SafeMathLibJSON.abi, {
-          from: tokenOwner
-        });
-        myContract.deploy({
-          data: SafeMathLibJSON.bytecode,
-          arguments: [], // price of token in wei
-        }).send({
-          from: tokenOwner,
-          gas: 4712388,
-          value: web3.utils.toWei(/*feeInETH.toFixed(8).toString()*/"0", 'ether')
-        }).on('error', (error) => {
-          reject(error);
-          return;
-        }).on('transactionHash', (txHash) => {
+        instantiateContract(SafeMathLibJSON, [], tokenOwner, serviceFee).then(txHash => {
           accept(txHash);
+          return;
+        }).catch((e) => {
+          reject(new Error("Could not create contract."));
           return;
         });
       } else {
@@ -233,53 +246,7 @@ export function deployFlatPricing(tokenOwner) {
   return new Promise((accept, reject) => {
     checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
       if (hasFunds) {
-        let pricingStrategyContract = FlatPricingJSON;
-        BigNumber.config({ EXPONENTIAL_AT: 100 });
-        let myContract = new web3.eth.Contract(pricingStrategyContract.abi, {
-          from: tokenOwner
-        });
-        myContract.deploy({
-          data: pricingStrategyContract.bytecode,
-          arguments: [100], // price of token in wei
-        }).send({
-          from: tokenOwner,
-          gas: 4712388,
-          //value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
-        }).on('error', (error) => {
-          reject(error);
-          return;
-        }).on('transactionHash', (txHash) => {
-          accept(txHash);
-          return;
-        });
-      } else {
-        reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
-        return;
-      }
-    }).catch((e) => {
-      reject(new Error("Could not check token owner ETH funds."));
-      return;
-    });
-  });
-}
-
-export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenType, tokenOwner, serviceFee) {
-  return new Promise((accept, reject) => {
-    checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
-      if (hasFunds) {
-        let tokenContract = tokenType === "erc20" ? ERC20TokenJSON : ERC223TokenJSON;
-        instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner, serviceFee).then(txHash => {
-          // getEthBalance(tokenOwner).then(balance => {
-          //   console.log("Customer ETH balance: " + balance);
-          // });
-
-          // getTokenBalance(contractInstance, tokenOwner).then(balance => {
-          //   console.log("Customer " + tokenSymbol + " balance: " + balance);
-          // });
-
-          // getEthBalance(tokenMintAccount).then(balance => {
-          //   console.log("TokenMint ETH balance: " + balance);
-          // });
+        instantiateContract(FlatPricingJSON, [100], tokenOwner, 0).then(txHash => {
           accept(txHash);
           return;
         }).catch((e) => {
@@ -296,3 +263,4 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
     });
   });
 }
+
