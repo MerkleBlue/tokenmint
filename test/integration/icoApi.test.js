@@ -68,7 +68,7 @@ describe('TokenMint icoApi integration tests', function () {
     });
   });
 
-  /*it('Deploy SafeMathLib', (done) => {
+  it('Deploy SafeMathLib', (done) => {
     icoApi.deploySafeMathLib(accounts[0]).then(txHash => {
       web3.eth.getTransactionReceipt(txHash).then(receipt => {
         expect(receipt.status).to.be.eq(true);
@@ -77,7 +77,7 @@ describe('TokenMint icoApi integration tests', function () {
     }).catch(e => {
       done(new Error());
     });
-  })*/
+  })
 
   it('Deploy FlatPricing contract', (done) => {
     icoApi.deployFlatPricing(accounts[0]).then(txHash => {
@@ -89,4 +89,15 @@ describe('TokenMint icoApi integration tests', function () {
       done(new Error());
     });
   });
+
+  /*it('Deploy UncappedCrowdsale contract', (done) => {
+    icoApi.deployFlatPricing(accounts[0]).then(txHash => {
+      web3.eth.getTransactionReceipt(txHash).then(receipt => {
+        expect(receipt.status).to.be.eq(true);
+        done();
+      });
+    }).catch(e => {
+      done(new Error());
+    });
+  });*/
 });
