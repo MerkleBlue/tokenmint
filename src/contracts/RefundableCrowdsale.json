@@ -286,20 +286,20 @@
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity ^0.4.18;\n\n\nimport \"../../math/SafeMath.sol\";\nimport \"./FinalizableCrowdsale.sol\";\nimport \"./utils/RefundVault.sol\";\n\n\n/**\n * @title RefundableCrowdsale\n * @dev Extension of Crowdsale contract that adds a funding goal, and\n * the possibility of users getting a refund if goal is not met.\n * Uses a RefundVault as the crowdsale's vault.\n */\ncontract RefundableCrowdsale is FinalizableCrowdsale {\n  using SafeMath for uint256;\n\n  // minimum amount of funds to be raised in weis\n  uint256 public goal;\n\n  // refund vault used to hold funds while crowdsale is running\n  RefundVault public vault;\n\n  /**\n   * @dev Constructor, creates RefundVault. \n   * @param _goal Funding goal\n   */\n  function RefundableCrowdsale(uint256 _goal) public {\n    require(_goal > 0);\n    vault = new RefundVault(wallet);\n    goal = _goal;\n  }\n\n  /**\n   * @dev Investors can claim refunds here if crowdsale is unsuccessful\n   */\n  function claimRefund() public {\n    require(isFinalized);\n    require(!goalReached());\n\n    vault.refund(msg.sender);\n  }\n\n  /**\n   * @dev Checks whether funding goal was reached. \n   * @return Whether funding goal was reached\n   */\n  function goalReached() public view returns (bool) {\n    return weiRaised >= goal;\n  }\n\n  /**\n   * @dev vault finalization task, called when owner calls finalize()\n   */\n  function finalization() internal {\n    if (goalReached()) {\n      vault.close();\n    } else {\n      vault.enableRefunds();\n    }\n\n    super.finalization();\n  }\n\n  /**\n   * @dev Overrides Crowdsale fund forwarding, sending funds to vault.\n   */\n  function _forwardFunds() internal {\n    vault.deposit.value(msg.value)(msg.sender);\n  }\n\n}\n",
-  "sourcePath": "D:\\dev\\tokenmint\\contracts\\tokenmarketnet-contracts\\contracts\\zeppelin\\contracts\\crowdsale\\distribution\\RefundableCrowdsale.sol",
+  "source": "pragma solidity ^0.4.18;\r\n\r\n\r\nimport \"../../math/SafeMath.sol\";\r\nimport \"./FinalizableCrowdsale.sol\";\r\nimport \"./utils/RefundVault.sol\";\r\n\r\n\r\n/**\r\n * @title RefundableCrowdsale\r\n * @dev Extension of Crowdsale contract that adds a funding goal, and\r\n * the possibility of users getting a refund if goal is not met.\r\n * Uses a RefundVault as the crowdsale's vault.\r\n */\r\ncontract RefundableCrowdsale is FinalizableCrowdsale {\r\n  using SafeMath for uint256;\r\n\r\n  // minimum amount of funds to be raised in weis\r\n  uint256 public goal;\r\n\r\n  // refund vault used to hold funds while crowdsale is running\r\n  RefundVault public vault;\r\n\r\n  /**\r\n   * @dev Constructor, creates RefundVault. \r\n   * @param _goal Funding goal\r\n   */\r\n  function RefundableCrowdsale(uint256 _goal) public {\r\n    require(_goal > 0);\r\n    vault = new RefundVault(wallet);\r\n    goal = _goal;\r\n  }\r\n\r\n  /**\r\n   * @dev Investors can claim refunds here if crowdsale is unsuccessful\r\n   */\r\n  function claimRefund() public {\r\n    require(isFinalized);\r\n    require(!goalReached());\r\n\r\n    vault.refund(msg.sender);\r\n  }\r\n\r\n  /**\r\n   * @dev Checks whether funding goal was reached. \r\n   * @return Whether funding goal was reached\r\n   */\r\n  function goalReached() public view returns (bool) {\r\n    return weiRaised >= goal;\r\n  }\r\n\r\n  /**\r\n   * @dev vault finalization task, called when owner calls finalize()\r\n   */\r\n  function finalization() internal {\r\n    if (goalReached()) {\r\n      vault.close();\r\n    } else {\r\n      vault.enableRefunds();\r\n    }\r\n\r\n    super.finalization();\r\n  }\r\n\r\n  /**\r\n   * @dev Overrides Crowdsale fund forwarding, sending funds to vault.\r\n   */\r\n  function _forwardFunds() internal {\r\n    vault.deposit.value(msg.value)(msg.sender);\r\n  }\r\n\r\n}\r\n",
+  "sourcePath": "D:\\trees\\tokenmint\\contracts\\tokenmarketnet-contracts\\contracts\\zeppelin\\contracts\\crowdsale\\distribution\\RefundableCrowdsale.sol",
   "ast": {
-    "absolutePath": "/D/dev/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/crowdsale/distribution/RefundableCrowdsale.sol",
+    "absolutePath": "/D/trees/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/crowdsale/distribution/RefundableCrowdsale.sol",
     "exportedSymbols": {
       "RefundableCrowdsale": [
-        380
+        11330
       ]
     },
-    "id": 381,
+    "id": 11331,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 273,
+        "id": 11223,
         "literals": [
           "solidity",
           "^",
@@ -307,38 +307,38 @@
           ".18"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:2"
+        "src": "0:24:78"
       },
       {
-        "absolutePath": "/D/dev/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/math/SafeMath.sol",
+        "absolutePath": "/D/trees/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/math/SafeMath.sol",
         "file": "../../math/SafeMath.sol",
-        "id": 274,
+        "id": 11224,
         "nodeType": "ImportDirective",
-        "scope": 381,
-        "sourceUnit": 920,
-        "src": "27:33:2",
+        "scope": 11331,
+        "sourceUnit": 12629,
+        "src": "30:33:78",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "absolutePath": "/D/dev/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/crowdsale/distribution/FinalizableCrowdsale.sol",
+        "absolutePath": "/D/trees/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/crowdsale/distribution/FinalizableCrowdsale.sol",
         "file": "./FinalizableCrowdsale.sol",
-        "id": 275,
+        "id": 11225,
         "nodeType": "ImportDirective",
-        "scope": 381,
-        "sourceUnit": 272,
-        "src": "61:36:2",
+        "scope": 11331,
+        "sourceUnit": 11153,
+        "src": "65:36:78",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "absolutePath": "/D/dev/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/crowdsale/distribution/utils/RefundVault.sol",
+        "absolutePath": "/D/trees/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/crowdsale/distribution/utils/RefundVault.sol",
         "file": "./utils/RefundVault.sol",
-        "id": 276,
+        "id": 11226,
         "nodeType": "ImportDirective",
-        "scope": 381,
-        "sourceUnit": 548,
-        "src": "98:33:2",
+        "scope": 11331,
+        "sourceUnit": 11498,
+        "src": "103:33:78",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -348,63 +348,63 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 277,
+              "id": 11227,
               "name": "FinalizableCrowdsale",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 271,
-              "src": "387:20:2",
+              "referencedDeclaration": 11152,
+              "src": "401:20:78",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_FinalizableCrowdsale_$271",
+                "typeIdentifier": "t_contract$_FinalizableCrowdsale_$11152",
                 "typeString": "contract FinalizableCrowdsale"
               }
             },
-            "id": 278,
+            "id": 11228,
             "nodeType": "InheritanceSpecifier",
-            "src": "387:20:2"
+            "src": "401:20:78"
           }
         ],
         "contractDependencies": [
-          223,
-          271,
-          547,
-          717,
-          1086
+          11104,
+          11152,
+          11497,
+          11971,
+          14561
         ],
         "contractKind": "contract",
-        "documentation": "@title RefundableCrowdsale\n@dev Extension of Crowdsale contract that adds a funding goal, and\nthe possibility of users getting a refund if goal is not met.\nUses a RefundVault as the crowdsale's vault.",
+        "documentation": "@title RefundableCrowdsale\r\n@dev Extension of Crowdsale contract that adds a funding goal, and\r\nthe possibility of users getting a refund if goal is not met.\r\nUses a RefundVault as the crowdsale's vault.\r",
         "fullyImplemented": false,
-        "id": 380,
+        "id": 11330,
         "linearizedBaseContracts": [
-          380,
-          271,
-          1086,
-          717,
-          223
+          11330,
+          11152,
+          14561,
+          11971,
+          11104
         ],
         "name": "RefundableCrowdsale",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "id": 281,
+            "id": 11231,
             "libraryName": {
               "contractScope": null,
-              "id": 279,
+              "id": 11229,
               "name": "SafeMath",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 919,
-              "src": "418:8:2",
+              "referencedDeclaration": 12628,
+              "src": "433:8:78",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_SafeMath_$919",
+                "typeIdentifier": "t_contract$_SafeMath_$12628",
                 "typeString": "library SafeMath"
               }
             },
             "nodeType": "UsingForDirective",
-            "src": "412:27:2",
+            "src": "427:27:78",
             "typeName": {
-              "id": 280,
+              "id": 11230,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "431:7:2",
+              "src": "446:7:78",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -413,11 +413,11 @@
           },
           {
             "constant": false,
-            "id": 283,
+            "id": 11233,
             "name": "goal",
             "nodeType": "VariableDeclaration",
-            "scope": 380,
-            "src": "493:19:2",
+            "scope": 11330,
+            "src": "511:19:78",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -425,10 +425,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 282,
+              "id": 11232,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "493:7:2",
+              "src": "511:7:78",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -439,26 +439,26 @@
           },
           {
             "constant": false,
-            "id": 285,
+            "id": 11235,
             "name": "vault",
             "nodeType": "VariableDeclaration",
-            "scope": 380,
-            "src": "581:24:2",
+            "scope": 11330,
+            "src": "602:24:78",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_RefundVault_$547",
+              "typeIdentifier": "t_contract$_RefundVault_$11497",
               "typeString": "contract RefundVault"
             },
             "typeName": {
               "contractScope": null,
-              "id": 284,
+              "id": 11234,
               "name": "RefundVault",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 547,
-              "src": "581:11:2",
+              "referencedDeclaration": 11497,
+              "src": "602:11:78",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_RefundVault_$547",
+                "typeIdentifier": "t_contract$_RefundVault_$11497",
                 "typeString": "contract RefundVault"
               }
             },
@@ -467,9 +467,9 @@
           },
           {
             "body": {
-              "id": 307,
+              "id": 11257,
               "nodeType": "Block",
-              "src": "749:84:2",
+              "src": "776:88:78",
               "statements": [
                 {
                   "expression": {
@@ -481,19 +481,19 @@
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         },
-                        "id": 293,
+                        "id": 11243,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
                           "argumentTypes": null,
-                          "id": 291,
+                          "id": 11241,
                           "name": "_goal",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 287,
-                          "src": "763:5:2",
+                          "referencedDeclaration": 11237,
+                          "src": "791:5:78",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
@@ -504,14 +504,14 @@
                         "rightExpression": {
                           "argumentTypes": null,
                           "hexValue": "30",
-                          "id": 292,
+                          "id": 11242,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "kind": "number",
                           "lValueRequested": false,
                           "nodeType": "Literal",
-                          "src": "771:1:2",
+                          "src": "799:1:78",
                           "subdenomination": null,
                           "typeDescriptions": {
                             "typeIdentifier": "t_rational_0_by_1",
@@ -519,7 +519,7 @@
                           },
                           "value": "0"
                         },
-                        "src": "763:9:2",
+                        "src": "791:9:78",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -533,21 +533,21 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 290,
+                      "id": 11240,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        1732,
-                        1733
+                        17888,
+                        17889
                       ],
-                      "referencedDeclaration": 1732,
-                      "src": "755:7:2",
+                      "referencedDeclaration": 17888,
+                      "src": "783:7:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 294,
+                    "id": 11244,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -555,34 +555,34 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "755:18:2",
+                    "src": "783:18:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 295,
+                  "id": 11245,
                   "nodeType": "ExpressionStatement",
-                  "src": "755:18:2"
+                  "src": "783:18:78"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 301,
+                    "id": 11251,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 296,
+                      "id": 11246,
                       "name": "vault",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 285,
-                      "src": "779:5:2",
+                      "referencedDeclaration": 11235,
+                      "src": "808:5:78",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_RefundVault_$547",
+                        "typeIdentifier": "t_contract$_RefundVault_$11497",
                         "typeString": "contract RefundVault"
                       }
                     },
@@ -593,12 +593,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 299,
+                          "id": 11249,
                           "name": "wallet",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 10,
-                          "src": "803:6:2",
+                          "referencedDeclaration": 10891,
+                          "src": "832:6:78",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -612,31 +612,31 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 298,
+                        "id": 11248,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "nodeType": "NewExpression",
-                        "src": "787:15:2",
+                        "src": "816:15:78",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_function_creation_nonpayable$_t_address_$returns$_t_contract$_RefundVault_$547_$",
+                          "typeIdentifier": "t_function_creation_nonpayable$_t_address_$returns$_t_contract$_RefundVault_$11497_$",
                           "typeString": "function (address) returns (contract RefundVault)"
                         },
                         "typeName": {
                           "contractScope": null,
-                          "id": 297,
+                          "id": 11247,
                           "name": "RefundVault",
                           "nodeType": "UserDefinedTypeName",
-                          "referencedDeclaration": 547,
-                          "src": "791:11:2",
+                          "referencedDeclaration": 11497,
+                          "src": "820:11:78",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_contract$_RefundVault_$547",
+                            "typeIdentifier": "t_contract$_RefundVault_$11497",
                             "typeString": "contract RefundVault"
                           }
                         }
                       },
-                      "id": 300,
+                      "id": 11250,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -644,38 +644,38 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "787:23:2",
+                      "src": "816:23:78",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_RefundVault_$547",
+                        "typeIdentifier": "t_contract$_RefundVault_$11497",
                         "typeString": "contract RefundVault"
                       }
                     },
-                    "src": "779:31:2",
+                    "src": "808:31:78",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_RefundVault_$547",
+                      "typeIdentifier": "t_contract$_RefundVault_$11497",
                       "typeString": "contract RefundVault"
                     }
                   },
-                  "id": 302,
+                  "id": 11252,
                   "nodeType": "ExpressionStatement",
-                  "src": "779:31:2"
+                  "src": "808:31:78"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 305,
+                    "id": 11255,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 303,
+                      "id": 11253,
                       "name": "goal",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 283,
-                      "src": "816:4:2",
+                      "referencedDeclaration": 11233,
+                      "src": "846:4:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -685,31 +685,31 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 304,
+                      "id": 11254,
                       "name": "_goal",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 287,
-                      "src": "823:5:2",
+                      "referencedDeclaration": 11237,
+                      "src": "853:5:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "816:12:2",
+                    "src": "846:12:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "id": 306,
+                  "id": 11256,
                   "nodeType": "ExpressionStatement",
-                  "src": "816:12:2"
+                  "src": "846:12:78"
                 }
               ]
             },
-            "documentation": "@dev Constructor, creates RefundVault. \n@param _goal Funding goal",
-            "id": 308,
+            "documentation": "@dev Constructor, creates RefundVault. \r\n@param _goal Funding goal\r",
+            "id": 11258,
             "implemented": true,
             "isConstructor": true,
             "isDeclaredConst": false,
@@ -717,16 +717,16 @@
             "name": "RefundableCrowdsale",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 288,
+              "id": 11238,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 287,
+                  "id": 11237,
                   "name": "_goal",
                   "nodeType": "VariableDeclaration",
-                  "scope": 308,
-                  "src": "727:13:2",
+                  "scope": 11258,
+                  "src": "754:13:78",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -734,10 +734,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 286,
+                    "id": 11236,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "727:7:2",
+                    "src": "754:7:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -747,26 +747,26 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "726:15:2"
+              "src": "753:15:78"
             },
             "payable": false,
             "returnParameters": {
-              "id": 289,
+              "id": 11239,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "749:0:2"
+              "src": "776:0:78"
             },
-            "scope": 380,
-            "src": "698:135:2",
+            "scope": 11330,
+            "src": "725:139:78",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 328,
+              "id": 11278,
               "nodeType": "Block",
-              "src": "951:91:2",
+              "src": "987:96:78",
               "statements": [
                 {
                   "expression": {
@@ -774,12 +774,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 312,
+                        "id": 11262,
                         "name": "isFinalized",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 238,
-                        "src": "965:11:2",
+                        "referencedDeclaration": 11119,
+                        "src": "1002:11:78",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -793,21 +793,21 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 311,
+                      "id": 11261,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        1732,
-                        1733
+                        17888,
+                        17889
                       ],
-                      "referencedDeclaration": 1732,
-                      "src": "957:7:2",
+                      "referencedDeclaration": 17888,
+                      "src": "994:7:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 313,
+                    "id": 11263,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -815,15 +815,15 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "957:20:2",
+                    "src": "994:20:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 314,
+                  "id": 11264,
                   "nodeType": "ExpressionStatement",
-                  "src": "957:20:2"
+                  "src": "994:20:78"
                 },
                 {
                   "expression": {
@@ -831,7 +831,7 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 318,
+                        "id": 11268,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -839,24 +839,24 @@
                         "nodeType": "UnaryOperation",
                         "operator": "!",
                         "prefix": true,
-                        "src": "991:14:2",
+                        "src": "1029:14:78",
                         "subExpression": {
                           "argumentTypes": null,
                           "arguments": [],
                           "expression": {
                             "argumentTypes": [],
-                            "id": 316,
+                            "id": 11266,
                             "name": "goalReached",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 339,
-                            "src": "992:11:2",
+                            "referencedDeclaration": 11289,
+                            "src": "1030:11:78",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_internal_view$__$returns$_t_bool_$",
                               "typeString": "function () view returns (bool)"
                             }
                           },
-                          "id": 317,
+                          "id": 11267,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -864,7 +864,7 @@
                           "lValueRequested": false,
                           "names": [],
                           "nodeType": "FunctionCall",
-                          "src": "992:13:2",
+                          "src": "1030:13:78",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bool",
                             "typeString": "bool"
@@ -883,21 +883,21 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 315,
+                      "id": 11265,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        1732,
-                        1733
+                        17888,
+                        17889
                       ],
-                      "referencedDeclaration": 1732,
-                      "src": "983:7:2",
+                      "referencedDeclaration": 17888,
+                      "src": "1021:7:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 319,
+                    "id": 11269,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -905,15 +905,15 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "983:23:2",
+                    "src": "1021:23:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 320,
+                  "id": 11270,
                   "nodeType": "ExpressionStatement",
-                  "src": "983:23:2"
+                  "src": "1021:23:78"
                 },
                 {
                   "expression": {
@@ -923,18 +923,18 @@
                         "argumentTypes": null,
                         "expression": {
                           "argumentTypes": null,
-                          "id": 324,
+                          "id": 11274,
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1729,
-                          "src": "1026:3:2",
+                          "referencedDeclaration": 17885,
+                          "src": "1066:3:78",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
                             "typeString": "msg"
                           }
                         },
-                        "id": 325,
+                        "id": 11275,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -942,7 +942,7 @@
                         "memberName": "sender",
                         "nodeType": "MemberAccess",
                         "referencedDeclaration": null,
-                        "src": "1026:10:2",
+                        "src": "1066:10:78",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -958,32 +958,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 321,
+                        "id": 11271,
                         "name": "vault",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 285,
-                        "src": "1013:5:2",
+                        "referencedDeclaration": 11235,
+                        "src": "1053:5:78",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_RefundVault_$547",
+                          "typeIdentifier": "t_contract$_RefundVault_$11497",
                           "typeString": "contract RefundVault"
                         }
                       },
-                      "id": 323,
+                      "id": 11273,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "refund",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 546,
-                      "src": "1013:12:2",
+                      "referencedDeclaration": 11496,
+                      "src": "1053:12:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address) external"
                       }
                     },
-                    "id": 326,
+                    "id": 11276,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -991,20 +991,20 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1013:24:2",
+                    "src": "1053:24:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 327,
+                  "id": 11277,
                   "nodeType": "ExpressionStatement",
-                  "src": "1013:24:2"
+                  "src": "1053:24:78"
                 }
               ]
             },
-            "documentation": "@dev Investors can claim refunds here if crowdsale is unsuccessful",
-            "id": 329,
+            "documentation": "@dev Investors can claim refunds here if crowdsale is unsuccessful\r",
+            "id": 11279,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -1012,29 +1012,29 @@
             "name": "claimRefund",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 309,
+              "id": 11259,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "941:2:2"
+              "src": "977:2:78"
             },
             "payable": false,
             "returnParameters": {
-              "id": 310,
+              "id": 11260,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "951:0:2"
+              "src": "987:0:78"
             },
-            "scope": 380,
-            "src": "921:121:2",
+            "scope": 11330,
+            "src": "957:126:78",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 338,
+              "id": 11288,
               "nodeType": "Block",
-              "src": "1206:35:2",
+              "src": "1253:37:78",
               "statements": [
                 {
                   "expression": {
@@ -1043,19 +1043,19 @@
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 336,
+                    "id": 11286,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
                       "argumentTypes": null,
-                      "id": 334,
+                      "id": 11284,
                       "name": "weiRaised",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 14,
-                      "src": "1219:9:2",
+                      "referencedDeclaration": 10895,
+                      "src": "1267:9:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -1065,32 +1065,32 @@
                     "operator": ">=",
                     "rightExpression": {
                       "argumentTypes": null,
-                      "id": 335,
+                      "id": 11285,
                       "name": "goal",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 283,
-                      "src": "1232:4:2",
+                      "referencedDeclaration": 11233,
+                      "src": "1280:4:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "1219:17:2",
+                    "src": "1267:17:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 333,
-                  "id": 337,
+                  "functionReturnParameters": 11283,
+                  "id": 11287,
                   "nodeType": "Return",
-                  "src": "1212:24:2"
+                  "src": "1260:24:78"
                 }
               ]
             },
-            "documentation": "@dev Checks whether funding goal was reached. \n@return Whether funding goal was reached",
-            "id": 339,
+            "documentation": "@dev Checks whether funding goal was reached. \r\n@return Whether funding goal was reached\r",
+            "id": 11289,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -1098,23 +1098,23 @@
             "name": "goalReached",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 330,
+              "id": 11280,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1176:2:2"
+              "src": "1223:2:78"
             },
             "payable": false,
             "returnParameters": {
-              "id": 333,
+              "id": 11283,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 332,
+                  "id": 11282,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 339,
-                  "src": "1200:4:2",
+                  "scope": 11289,
+                  "src": "1247:4:78",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1122,10 +1122,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 331,
+                    "id": 11281,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1200:4:2",
+                    "src": "1247:4:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -1135,19 +1135,19 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1199:6:2"
+              "src": "1246:6:78"
             },
-            "scope": 380,
-            "src": "1156:85:2",
+            "scope": 11330,
+            "src": "1203:87:78",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 362,
+              "id": 11312,
               "nodeType": "Block",
-              "src": "1360:126:2",
+              "src": "1414:134:78",
               "statements": [
                 {
                   "condition": {
@@ -1155,18 +1155,18 @@
                     "arguments": [],
                     "expression": {
                       "argumentTypes": [],
-                      "id": 342,
+                      "id": 11292,
                       "name": "goalReached",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 339,
-                      "src": "1370:11:2",
+                      "referencedDeclaration": 11289,
+                      "src": "1425:11:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$__$returns$_t_bool_$",
                         "typeString": "function () view returns (bool)"
                       }
                     },
-                    "id": 343,
+                    "id": 11293,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1174,16 +1174,16 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1370:13:2",
+                    "src": "1425:13:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
                   "falseBody": {
-                    "id": 355,
+                    "id": 11305,
                     "nodeType": "Block",
-                    "src": "1419:36:2",
+                    "src": "1476:38:78",
                     "statements": [
                       {
                         "expression": {
@@ -1193,32 +1193,32 @@
                             "argumentTypes": [],
                             "expression": {
                               "argumentTypes": null,
-                              "id": 350,
+                              "id": 11300,
                               "name": "vault",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 285,
-                              "src": "1427:5:2",
+                              "referencedDeclaration": 11235,
+                              "src": "1485:5:78",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_contract$_RefundVault_$547",
+                                "typeIdentifier": "t_contract$_RefundVault_$11497",
                                 "typeString": "contract RefundVault"
                               }
                             },
-                            "id": 352,
+                            "id": 11302,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
                             "lValueRequested": false,
                             "memberName": "enableRefunds",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 510,
-                            "src": "1427:19:2",
+                            "referencedDeclaration": 11460,
+                            "src": "1485:19:78",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
                               "typeString": "function () external"
                             }
                           },
-                          "id": 353,
+                          "id": 11303,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -1226,25 +1226,25 @@
                           "lValueRequested": false,
                           "names": [],
                           "nodeType": "FunctionCall",
-                          "src": "1427:21:2",
+                          "src": "1485:21:78",
                           "typeDescriptions": {
                             "typeIdentifier": "t_tuple$__$",
                             "typeString": "tuple()"
                           }
                         },
-                        "id": 354,
+                        "id": 11304,
                         "nodeType": "ExpressionStatement",
-                        "src": "1427:21:2"
+                        "src": "1485:21:78"
                       }
                     ]
                   },
-                  "id": 356,
+                  "id": 11306,
                   "nodeType": "IfStatement",
-                  "src": "1366:89:2",
+                  "src": "1421:93:78",
                   "trueBody": {
-                    "id": 349,
+                    "id": 11299,
                     "nodeType": "Block",
-                    "src": "1385:28:2",
+                    "src": "1440:30:78",
                     "statements": [
                       {
                         "expression": {
@@ -1254,32 +1254,32 @@
                             "argumentTypes": [],
                             "expression": {
                               "argumentTypes": null,
-                              "id": 344,
+                              "id": 11294,
                               "name": "vault",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 285,
-                              "src": "1393:5:2",
+                              "referencedDeclaration": 11235,
+                              "src": "1449:5:78",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_contract$_RefundVault_$547",
+                                "typeIdentifier": "t_contract$_RefundVault_$11497",
                                 "typeString": "contract RefundVault"
                               }
                             },
-                            "id": 346,
+                            "id": 11296,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
                             "lValueRequested": false,
                             "memberName": "close",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 489,
-                            "src": "1393:11:2",
+                            "referencedDeclaration": 11439,
+                            "src": "1449:11:78",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
                               "typeString": "function () external"
                             }
                           },
-                          "id": 347,
+                          "id": 11297,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -1287,15 +1287,15 @@
                           "lValueRequested": false,
                           "names": [],
                           "nodeType": "FunctionCall",
-                          "src": "1393:13:2",
+                          "src": "1449:13:78",
                           "typeDescriptions": {
                             "typeIdentifier": "t_tuple$__$",
                             "typeString": "tuple()"
                           }
                         },
-                        "id": 348,
+                        "id": 11298,
                         "nodeType": "ExpressionStatement",
-                        "src": "1393:13:2"
+                        "src": "1449:13:78"
                       }
                     ]
                   }
@@ -1308,32 +1308,32 @@
                       "argumentTypes": [],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 357,
+                        "id": 11307,
                         "name": "super",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1759,
-                        "src": "1461:5:2",
+                        "referencedDeclaration": 18093,
+                        "src": "1522:5:78",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_super$_RefundableCrowdsale_$380",
+                          "typeIdentifier": "t_super$_RefundableCrowdsale_$11330",
                           "typeString": "contract super RefundableCrowdsale"
                         }
                       },
-                      "id": 359,
+                      "id": 11309,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "finalization",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 270,
-                      "src": "1461:18:2",
+                      "referencedDeclaration": 11151,
+                      "src": "1522:18:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$__$returns$__$",
                         "typeString": "function ()"
                       }
                     },
-                    "id": 360,
+                    "id": 11310,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1341,20 +1341,20 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1461:20:2",
+                    "src": "1522:20:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 361,
+                  "id": 11311,
                   "nodeType": "ExpressionStatement",
-                  "src": "1461:20:2"
+                  "src": "1522:20:78"
                 }
               ]
             },
-            "documentation": "@dev vault finalization task, called when owner calls finalize()",
-            "id": 363,
+            "documentation": "@dev vault finalization task, called when owner calls finalize()\r",
+            "id": 11313,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -1362,29 +1362,29 @@
             "name": "finalization",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 340,
+              "id": 11290,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1348:2:2"
+              "src": "1402:2:78"
             },
             "payable": false,
             "returnParameters": {
-              "id": 341,
+              "id": 11291,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1360:0:2"
+              "src": "1414:0:78"
             },
-            "scope": 380,
-            "src": "1327:159:2",
+            "scope": 11330,
+            "src": "1381:167:78",
             "stateMutability": "nonpayable",
-            "superFunction": 270,
+            "superFunction": 11151,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 378,
+              "id": 11328,
               "nodeType": "Block",
-              "src": "1607:53:2",
+              "src": "1674:55:78",
               "statements": [
                 {
                   "expression": {
@@ -1394,18 +1394,18 @@
                         "argumentTypes": null,
                         "expression": {
                           "argumentTypes": null,
-                          "id": 374,
+                          "id": 11324,
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1729,
-                          "src": "1644:3:2",
+                          "referencedDeclaration": 17885,
+                          "src": "1712:3:78",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
                             "typeString": "msg"
                           }
                         },
-                        "id": 375,
+                        "id": 11325,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1413,7 +1413,7 @@
                         "memberName": "sender",
                         "nodeType": "MemberAccess",
                         "referencedDeclaration": null,
-                        "src": "1644:10:2",
+                        "src": "1712:10:78",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -1432,18 +1432,18 @@
                           "argumentTypes": null,
                           "expression": {
                             "argumentTypes": null,
-                            "id": 371,
+                            "id": 11321,
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1729,
-                            "src": "1633:3:2",
+                            "referencedDeclaration": 17885,
+                            "src": "1701:3:78",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
                               "typeString": "msg"
                             }
                           },
-                          "id": 372,
+                          "id": 11322,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -1451,7 +1451,7 @@
                           "memberName": "value",
                           "nodeType": "MemberAccess",
                           "referencedDeclaration": null,
-                          "src": "1633:9:2",
+                          "src": "1701:9:78",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
@@ -1469,32 +1469,32 @@
                           "argumentTypes": null,
                           "expression": {
                             "argumentTypes": null,
-                            "id": 366,
+                            "id": 11316,
                             "name": "vault",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 285,
-                            "src": "1613:5:2",
+                            "referencedDeclaration": 11235,
+                            "src": "1681:5:78",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_contract$_RefundVault_$547",
+                              "typeIdentifier": "t_contract$_RefundVault_$11497",
                               "typeString": "contract RefundVault"
                             }
                           },
-                          "id": 369,
+                          "id": 11319,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "deposit",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 461,
-                          "src": "1613:13:2",
+                          "referencedDeclaration": 11411,
+                          "src": "1681:13:78",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_external_payable$_t_address_$returns$__$",
                             "typeString": "function (address) payable external"
                           }
                         },
-                        "id": 370,
+                        "id": 11320,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1502,13 +1502,13 @@
                         "memberName": "value",
                         "nodeType": "MemberAccess",
                         "referencedDeclaration": null,
-                        "src": "1613:19:2",
+                        "src": "1681:19:78",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_setvalue_nonpayable$_t_uint256_$returns$_t_function_external_payable$_t_address_$returns$__$value_$",
                           "typeString": "function (uint256) returns (function (address) payable external)"
                         }
                       },
-                      "id": 373,
+                      "id": 11323,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1516,13 +1516,13 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "1613:30:2",
+                      "src": "1681:30:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_payable$_t_address_$returns$__$value",
                         "typeString": "function (address) payable external"
                       }
                     },
-                    "id": 376,
+                    "id": 11326,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1530,20 +1530,20 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1613:42:2",
+                    "src": "1681:42:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 377,
+                  "id": 11327,
                   "nodeType": "ExpressionStatement",
-                  "src": "1613:42:2"
+                  "src": "1681:42:78"
                 }
               ]
             },
-            "documentation": "@dev Overrides Crowdsale fund forwarding, sending funds to vault.",
-            "id": 379,
+            "documentation": "@dev Overrides Crowdsale fund forwarding, sending funds to vault.\r",
+            "id": 11329,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -1551,43 +1551,43 @@
             "name": "_forwardFunds",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 364,
+              "id": 11314,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1595:2:2"
+              "src": "1662:2:78"
             },
             "payable": false,
             "returnParameters": {
-              "id": 365,
+              "id": 11315,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1607:0:2"
+              "src": "1674:0:78"
             },
-            "scope": 380,
-            "src": "1573:87:2",
+            "scope": 11330,
+            "src": "1640:89:78",
             "stateMutability": "nonpayable",
-            "superFunction": 222,
+            "superFunction": 11103,
             "visibility": "internal"
           }
         ],
-        "scope": 381,
-        "src": "355:1308:2"
+        "scope": 11331,
+        "src": "369:1365:78"
       }
     ],
-    "src": "0:1664:2"
+    "src": "0:1736:78"
   },
   "legacyAST": {
-    "absolutePath": "/D/dev/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/crowdsale/distribution/RefundableCrowdsale.sol",
+    "absolutePath": "/D/trees/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/crowdsale/distribution/RefundableCrowdsale.sol",
     "exportedSymbols": {
       "RefundableCrowdsale": [
-        380
+        11330
       ]
     },
-    "id": 381,
+    "id": 11331,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 273,
+        "id": 11223,
         "literals": [
           "solidity",
           "^",
@@ -1595,38 +1595,38 @@
           ".18"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:2"
+        "src": "0:24:78"
       },
       {
-        "absolutePath": "/D/dev/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/math/SafeMath.sol",
+        "absolutePath": "/D/trees/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/math/SafeMath.sol",
         "file": "../../math/SafeMath.sol",
-        "id": 274,
+        "id": 11224,
         "nodeType": "ImportDirective",
-        "scope": 381,
-        "sourceUnit": 920,
-        "src": "27:33:2",
+        "scope": 11331,
+        "sourceUnit": 12629,
+        "src": "30:33:78",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "absolutePath": "/D/dev/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/crowdsale/distribution/FinalizableCrowdsale.sol",
+        "absolutePath": "/D/trees/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/crowdsale/distribution/FinalizableCrowdsale.sol",
         "file": "./FinalizableCrowdsale.sol",
-        "id": 275,
+        "id": 11225,
         "nodeType": "ImportDirective",
-        "scope": 381,
-        "sourceUnit": 272,
-        "src": "61:36:2",
+        "scope": 11331,
+        "sourceUnit": 11153,
+        "src": "65:36:78",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "absolutePath": "/D/dev/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/crowdsale/distribution/utils/RefundVault.sol",
+        "absolutePath": "/D/trees/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/crowdsale/distribution/utils/RefundVault.sol",
         "file": "./utils/RefundVault.sol",
-        "id": 276,
+        "id": 11226,
         "nodeType": "ImportDirective",
-        "scope": 381,
-        "sourceUnit": 548,
-        "src": "98:33:2",
+        "scope": 11331,
+        "sourceUnit": 11498,
+        "src": "103:33:78",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -1636,63 +1636,63 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 277,
+              "id": 11227,
               "name": "FinalizableCrowdsale",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 271,
-              "src": "387:20:2",
+              "referencedDeclaration": 11152,
+              "src": "401:20:78",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_FinalizableCrowdsale_$271",
+                "typeIdentifier": "t_contract$_FinalizableCrowdsale_$11152",
                 "typeString": "contract FinalizableCrowdsale"
               }
             },
-            "id": 278,
+            "id": 11228,
             "nodeType": "InheritanceSpecifier",
-            "src": "387:20:2"
+            "src": "401:20:78"
           }
         ],
         "contractDependencies": [
-          223,
-          271,
-          547,
-          717,
-          1086
+          11104,
+          11152,
+          11497,
+          11971,
+          14561
         ],
         "contractKind": "contract",
-        "documentation": "@title RefundableCrowdsale\n@dev Extension of Crowdsale contract that adds a funding goal, and\nthe possibility of users getting a refund if goal is not met.\nUses a RefundVault as the crowdsale's vault.",
+        "documentation": "@title RefundableCrowdsale\r\n@dev Extension of Crowdsale contract that adds a funding goal, and\r\nthe possibility of users getting a refund if goal is not met.\r\nUses a RefundVault as the crowdsale's vault.\r",
         "fullyImplemented": false,
-        "id": 380,
+        "id": 11330,
         "linearizedBaseContracts": [
-          380,
-          271,
-          1086,
-          717,
-          223
+          11330,
+          11152,
+          14561,
+          11971,
+          11104
         ],
         "name": "RefundableCrowdsale",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "id": 281,
+            "id": 11231,
             "libraryName": {
               "contractScope": null,
-              "id": 279,
+              "id": 11229,
               "name": "SafeMath",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 919,
-              "src": "418:8:2",
+              "referencedDeclaration": 12628,
+              "src": "433:8:78",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_SafeMath_$919",
+                "typeIdentifier": "t_contract$_SafeMath_$12628",
                 "typeString": "library SafeMath"
               }
             },
             "nodeType": "UsingForDirective",
-            "src": "412:27:2",
+            "src": "427:27:78",
             "typeName": {
-              "id": 280,
+              "id": 11230,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "431:7:2",
+              "src": "446:7:78",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -1701,11 +1701,11 @@
           },
           {
             "constant": false,
-            "id": 283,
+            "id": 11233,
             "name": "goal",
             "nodeType": "VariableDeclaration",
-            "scope": 380,
-            "src": "493:19:2",
+            "scope": 11330,
+            "src": "511:19:78",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1713,10 +1713,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 282,
+              "id": 11232,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "493:7:2",
+              "src": "511:7:78",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -1727,26 +1727,26 @@
           },
           {
             "constant": false,
-            "id": 285,
+            "id": 11235,
             "name": "vault",
             "nodeType": "VariableDeclaration",
-            "scope": 380,
-            "src": "581:24:2",
+            "scope": 11330,
+            "src": "602:24:78",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_RefundVault_$547",
+              "typeIdentifier": "t_contract$_RefundVault_$11497",
               "typeString": "contract RefundVault"
             },
             "typeName": {
               "contractScope": null,
-              "id": 284,
+              "id": 11234,
               "name": "RefundVault",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 547,
-              "src": "581:11:2",
+              "referencedDeclaration": 11497,
+              "src": "602:11:78",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_RefundVault_$547",
+                "typeIdentifier": "t_contract$_RefundVault_$11497",
                 "typeString": "contract RefundVault"
               }
             },
@@ -1755,9 +1755,9 @@
           },
           {
             "body": {
-              "id": 307,
+              "id": 11257,
               "nodeType": "Block",
-              "src": "749:84:2",
+              "src": "776:88:78",
               "statements": [
                 {
                   "expression": {
@@ -1769,19 +1769,19 @@
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         },
-                        "id": 293,
+                        "id": 11243,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
                           "argumentTypes": null,
-                          "id": 291,
+                          "id": 11241,
                           "name": "_goal",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 287,
-                          "src": "763:5:2",
+                          "referencedDeclaration": 11237,
+                          "src": "791:5:78",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
@@ -1792,14 +1792,14 @@
                         "rightExpression": {
                           "argumentTypes": null,
                           "hexValue": "30",
-                          "id": 292,
+                          "id": 11242,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "kind": "number",
                           "lValueRequested": false,
                           "nodeType": "Literal",
-                          "src": "771:1:2",
+                          "src": "799:1:78",
                           "subdenomination": null,
                           "typeDescriptions": {
                             "typeIdentifier": "t_rational_0_by_1",
@@ -1807,7 +1807,7 @@
                           },
                           "value": "0"
                         },
-                        "src": "763:9:2",
+                        "src": "791:9:78",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -1821,21 +1821,21 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 290,
+                      "id": 11240,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        1732,
-                        1733
+                        17888,
+                        17889
                       ],
-                      "referencedDeclaration": 1732,
-                      "src": "755:7:2",
+                      "referencedDeclaration": 17888,
+                      "src": "783:7:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 294,
+                    "id": 11244,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1843,34 +1843,34 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "755:18:2",
+                    "src": "783:18:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 295,
+                  "id": 11245,
                   "nodeType": "ExpressionStatement",
-                  "src": "755:18:2"
+                  "src": "783:18:78"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 301,
+                    "id": 11251,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 296,
+                      "id": 11246,
                       "name": "vault",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 285,
-                      "src": "779:5:2",
+                      "referencedDeclaration": 11235,
+                      "src": "808:5:78",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_RefundVault_$547",
+                        "typeIdentifier": "t_contract$_RefundVault_$11497",
                         "typeString": "contract RefundVault"
                       }
                     },
@@ -1881,12 +1881,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 299,
+                          "id": 11249,
                           "name": "wallet",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 10,
-                          "src": "803:6:2",
+                          "referencedDeclaration": 10891,
+                          "src": "832:6:78",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -1900,31 +1900,31 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 298,
+                        "id": 11248,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "nodeType": "NewExpression",
-                        "src": "787:15:2",
+                        "src": "816:15:78",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_function_creation_nonpayable$_t_address_$returns$_t_contract$_RefundVault_$547_$",
+                          "typeIdentifier": "t_function_creation_nonpayable$_t_address_$returns$_t_contract$_RefundVault_$11497_$",
                           "typeString": "function (address) returns (contract RefundVault)"
                         },
                         "typeName": {
                           "contractScope": null,
-                          "id": 297,
+                          "id": 11247,
                           "name": "RefundVault",
                           "nodeType": "UserDefinedTypeName",
-                          "referencedDeclaration": 547,
-                          "src": "791:11:2",
+                          "referencedDeclaration": 11497,
+                          "src": "820:11:78",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_contract$_RefundVault_$547",
+                            "typeIdentifier": "t_contract$_RefundVault_$11497",
                             "typeString": "contract RefundVault"
                           }
                         }
                       },
-                      "id": 300,
+                      "id": 11250,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1932,38 +1932,38 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "787:23:2",
+                      "src": "816:23:78",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_RefundVault_$547",
+                        "typeIdentifier": "t_contract$_RefundVault_$11497",
                         "typeString": "contract RefundVault"
                       }
                     },
-                    "src": "779:31:2",
+                    "src": "808:31:78",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_RefundVault_$547",
+                      "typeIdentifier": "t_contract$_RefundVault_$11497",
                       "typeString": "contract RefundVault"
                     }
                   },
-                  "id": 302,
+                  "id": 11252,
                   "nodeType": "ExpressionStatement",
-                  "src": "779:31:2"
+                  "src": "808:31:78"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 305,
+                    "id": 11255,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 303,
+                      "id": 11253,
                       "name": "goal",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 283,
-                      "src": "816:4:2",
+                      "referencedDeclaration": 11233,
+                      "src": "846:4:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -1973,31 +1973,31 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 304,
+                      "id": 11254,
                       "name": "_goal",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 287,
-                      "src": "823:5:2",
+                      "referencedDeclaration": 11237,
+                      "src": "853:5:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "816:12:2",
+                    "src": "846:12:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "id": 306,
+                  "id": 11256,
                   "nodeType": "ExpressionStatement",
-                  "src": "816:12:2"
+                  "src": "846:12:78"
                 }
               ]
             },
-            "documentation": "@dev Constructor, creates RefundVault. \n@param _goal Funding goal",
-            "id": 308,
+            "documentation": "@dev Constructor, creates RefundVault. \r\n@param _goal Funding goal\r",
+            "id": 11258,
             "implemented": true,
             "isConstructor": true,
             "isDeclaredConst": false,
@@ -2005,16 +2005,16 @@
             "name": "RefundableCrowdsale",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 288,
+              "id": 11238,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 287,
+                  "id": 11237,
                   "name": "_goal",
                   "nodeType": "VariableDeclaration",
-                  "scope": 308,
-                  "src": "727:13:2",
+                  "scope": 11258,
+                  "src": "754:13:78",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2022,10 +2022,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 286,
+                    "id": 11236,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "727:7:2",
+                    "src": "754:7:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -2035,26 +2035,26 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "726:15:2"
+              "src": "753:15:78"
             },
             "payable": false,
             "returnParameters": {
-              "id": 289,
+              "id": 11239,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "749:0:2"
+              "src": "776:0:78"
             },
-            "scope": 380,
-            "src": "698:135:2",
+            "scope": 11330,
+            "src": "725:139:78",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 328,
+              "id": 11278,
               "nodeType": "Block",
-              "src": "951:91:2",
+              "src": "987:96:78",
               "statements": [
                 {
                   "expression": {
@@ -2062,12 +2062,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 312,
+                        "id": 11262,
                         "name": "isFinalized",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 238,
-                        "src": "965:11:2",
+                        "referencedDeclaration": 11119,
+                        "src": "1002:11:78",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -2081,21 +2081,21 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 311,
+                      "id": 11261,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        1732,
-                        1733
+                        17888,
+                        17889
                       ],
-                      "referencedDeclaration": 1732,
-                      "src": "957:7:2",
+                      "referencedDeclaration": 17888,
+                      "src": "994:7:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 313,
+                    "id": 11263,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2103,15 +2103,15 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "957:20:2",
+                    "src": "994:20:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 314,
+                  "id": 11264,
                   "nodeType": "ExpressionStatement",
-                  "src": "957:20:2"
+                  "src": "994:20:78"
                 },
                 {
                   "expression": {
@@ -2119,7 +2119,7 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 318,
+                        "id": 11268,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -2127,24 +2127,24 @@
                         "nodeType": "UnaryOperation",
                         "operator": "!",
                         "prefix": true,
-                        "src": "991:14:2",
+                        "src": "1029:14:78",
                         "subExpression": {
                           "argumentTypes": null,
                           "arguments": [],
                           "expression": {
                             "argumentTypes": [],
-                            "id": 316,
+                            "id": 11266,
                             "name": "goalReached",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 339,
-                            "src": "992:11:2",
+                            "referencedDeclaration": 11289,
+                            "src": "1030:11:78",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_internal_view$__$returns$_t_bool_$",
                               "typeString": "function () view returns (bool)"
                             }
                           },
-                          "id": 317,
+                          "id": 11267,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -2152,7 +2152,7 @@
                           "lValueRequested": false,
                           "names": [],
                           "nodeType": "FunctionCall",
-                          "src": "992:13:2",
+                          "src": "1030:13:78",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bool",
                             "typeString": "bool"
@@ -2171,21 +2171,21 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 315,
+                      "id": 11265,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        1732,
-                        1733
+                        17888,
+                        17889
                       ],
-                      "referencedDeclaration": 1732,
-                      "src": "983:7:2",
+                      "referencedDeclaration": 17888,
+                      "src": "1021:7:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 319,
+                    "id": 11269,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2193,15 +2193,15 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "983:23:2",
+                    "src": "1021:23:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 320,
+                  "id": 11270,
                   "nodeType": "ExpressionStatement",
-                  "src": "983:23:2"
+                  "src": "1021:23:78"
                 },
                 {
                   "expression": {
@@ -2211,18 +2211,18 @@
                         "argumentTypes": null,
                         "expression": {
                           "argumentTypes": null,
-                          "id": 324,
+                          "id": 11274,
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1729,
-                          "src": "1026:3:2",
+                          "referencedDeclaration": 17885,
+                          "src": "1066:3:78",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
                             "typeString": "msg"
                           }
                         },
-                        "id": 325,
+                        "id": 11275,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -2230,7 +2230,7 @@
                         "memberName": "sender",
                         "nodeType": "MemberAccess",
                         "referencedDeclaration": null,
-                        "src": "1026:10:2",
+                        "src": "1066:10:78",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -2246,32 +2246,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 321,
+                        "id": 11271,
                         "name": "vault",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 285,
-                        "src": "1013:5:2",
+                        "referencedDeclaration": 11235,
+                        "src": "1053:5:78",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_RefundVault_$547",
+                          "typeIdentifier": "t_contract$_RefundVault_$11497",
                           "typeString": "contract RefundVault"
                         }
                       },
-                      "id": 323,
+                      "id": 11273,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "refund",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 546,
-                      "src": "1013:12:2",
+                      "referencedDeclaration": 11496,
+                      "src": "1053:12:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address) external"
                       }
                     },
-                    "id": 326,
+                    "id": 11276,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2279,20 +2279,20 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1013:24:2",
+                    "src": "1053:24:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 327,
+                  "id": 11277,
                   "nodeType": "ExpressionStatement",
-                  "src": "1013:24:2"
+                  "src": "1053:24:78"
                 }
               ]
             },
-            "documentation": "@dev Investors can claim refunds here if crowdsale is unsuccessful",
-            "id": 329,
+            "documentation": "@dev Investors can claim refunds here if crowdsale is unsuccessful\r",
+            "id": 11279,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -2300,29 +2300,29 @@
             "name": "claimRefund",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 309,
+              "id": 11259,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "941:2:2"
+              "src": "977:2:78"
             },
             "payable": false,
             "returnParameters": {
-              "id": 310,
+              "id": 11260,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "951:0:2"
+              "src": "987:0:78"
             },
-            "scope": 380,
-            "src": "921:121:2",
+            "scope": 11330,
+            "src": "957:126:78",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 338,
+              "id": 11288,
               "nodeType": "Block",
-              "src": "1206:35:2",
+              "src": "1253:37:78",
               "statements": [
                 {
                   "expression": {
@@ -2331,19 +2331,19 @@
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     },
-                    "id": 336,
+                    "id": 11286,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
                       "argumentTypes": null,
-                      "id": 334,
+                      "id": 11284,
                       "name": "weiRaised",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 14,
-                      "src": "1219:9:2",
+                      "referencedDeclaration": 10895,
+                      "src": "1267:9:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -2353,32 +2353,32 @@
                     "operator": ">=",
                     "rightExpression": {
                       "argumentTypes": null,
-                      "id": 335,
+                      "id": 11285,
                       "name": "goal",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 283,
-                      "src": "1232:4:2",
+                      "referencedDeclaration": 11233,
+                      "src": "1280:4:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "1219:17:2",
+                    "src": "1267:17:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 333,
-                  "id": 337,
+                  "functionReturnParameters": 11283,
+                  "id": 11287,
                   "nodeType": "Return",
-                  "src": "1212:24:2"
+                  "src": "1260:24:78"
                 }
               ]
             },
-            "documentation": "@dev Checks whether funding goal was reached. \n@return Whether funding goal was reached",
-            "id": 339,
+            "documentation": "@dev Checks whether funding goal was reached. \r\n@return Whether funding goal was reached\r",
+            "id": 11289,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -2386,23 +2386,23 @@
             "name": "goalReached",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 330,
+              "id": 11280,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1176:2:2"
+              "src": "1223:2:78"
             },
             "payable": false,
             "returnParameters": {
-              "id": 333,
+              "id": 11283,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 332,
+                  "id": 11282,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 339,
-                  "src": "1200:4:2",
+                  "scope": 11289,
+                  "src": "1247:4:78",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2410,10 +2410,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 331,
+                    "id": 11281,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1200:4:2",
+                    "src": "1247:4:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -2423,19 +2423,19 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1199:6:2"
+              "src": "1246:6:78"
             },
-            "scope": 380,
-            "src": "1156:85:2",
+            "scope": 11330,
+            "src": "1203:87:78",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 362,
+              "id": 11312,
               "nodeType": "Block",
-              "src": "1360:126:2",
+              "src": "1414:134:78",
               "statements": [
                 {
                   "condition": {
@@ -2443,18 +2443,18 @@
                     "arguments": [],
                     "expression": {
                       "argumentTypes": [],
-                      "id": 342,
+                      "id": 11292,
                       "name": "goalReached",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 339,
-                      "src": "1370:11:2",
+                      "referencedDeclaration": 11289,
+                      "src": "1425:11:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$__$returns$_t_bool_$",
                         "typeString": "function () view returns (bool)"
                       }
                     },
-                    "id": 343,
+                    "id": 11293,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2462,16 +2462,16 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1370:13:2",
+                    "src": "1425:13:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
                   "falseBody": {
-                    "id": 355,
+                    "id": 11305,
                     "nodeType": "Block",
-                    "src": "1419:36:2",
+                    "src": "1476:38:78",
                     "statements": [
                       {
                         "expression": {
@@ -2481,32 +2481,32 @@
                             "argumentTypes": [],
                             "expression": {
                               "argumentTypes": null,
-                              "id": 350,
+                              "id": 11300,
                               "name": "vault",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 285,
-                              "src": "1427:5:2",
+                              "referencedDeclaration": 11235,
+                              "src": "1485:5:78",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_contract$_RefundVault_$547",
+                                "typeIdentifier": "t_contract$_RefundVault_$11497",
                                 "typeString": "contract RefundVault"
                               }
                             },
-                            "id": 352,
+                            "id": 11302,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
                             "lValueRequested": false,
                             "memberName": "enableRefunds",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 510,
-                            "src": "1427:19:2",
+                            "referencedDeclaration": 11460,
+                            "src": "1485:19:78",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
                               "typeString": "function () external"
                             }
                           },
-                          "id": 353,
+                          "id": 11303,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -2514,25 +2514,25 @@
                           "lValueRequested": false,
                           "names": [],
                           "nodeType": "FunctionCall",
-                          "src": "1427:21:2",
+                          "src": "1485:21:78",
                           "typeDescriptions": {
                             "typeIdentifier": "t_tuple$__$",
                             "typeString": "tuple()"
                           }
                         },
-                        "id": 354,
+                        "id": 11304,
                         "nodeType": "ExpressionStatement",
-                        "src": "1427:21:2"
+                        "src": "1485:21:78"
                       }
                     ]
                   },
-                  "id": 356,
+                  "id": 11306,
                   "nodeType": "IfStatement",
-                  "src": "1366:89:2",
+                  "src": "1421:93:78",
                   "trueBody": {
-                    "id": 349,
+                    "id": 11299,
                     "nodeType": "Block",
-                    "src": "1385:28:2",
+                    "src": "1440:30:78",
                     "statements": [
                       {
                         "expression": {
@@ -2542,32 +2542,32 @@
                             "argumentTypes": [],
                             "expression": {
                               "argumentTypes": null,
-                              "id": 344,
+                              "id": 11294,
                               "name": "vault",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 285,
-                              "src": "1393:5:2",
+                              "referencedDeclaration": 11235,
+                              "src": "1449:5:78",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_contract$_RefundVault_$547",
+                                "typeIdentifier": "t_contract$_RefundVault_$11497",
                                 "typeString": "contract RefundVault"
                               }
                             },
-                            "id": 346,
+                            "id": 11296,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
                             "lValueRequested": false,
                             "memberName": "close",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 489,
-                            "src": "1393:11:2",
+                            "referencedDeclaration": 11439,
+                            "src": "1449:11:78",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
                               "typeString": "function () external"
                             }
                           },
-                          "id": 347,
+                          "id": 11297,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -2575,15 +2575,15 @@
                           "lValueRequested": false,
                           "names": [],
                           "nodeType": "FunctionCall",
-                          "src": "1393:13:2",
+                          "src": "1449:13:78",
                           "typeDescriptions": {
                             "typeIdentifier": "t_tuple$__$",
                             "typeString": "tuple()"
                           }
                         },
-                        "id": 348,
+                        "id": 11298,
                         "nodeType": "ExpressionStatement",
-                        "src": "1393:13:2"
+                        "src": "1449:13:78"
                       }
                     ]
                   }
@@ -2596,32 +2596,32 @@
                       "argumentTypes": [],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 357,
+                        "id": 11307,
                         "name": "super",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1759,
-                        "src": "1461:5:2",
+                        "referencedDeclaration": 18093,
+                        "src": "1522:5:78",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_super$_RefundableCrowdsale_$380",
+                          "typeIdentifier": "t_super$_RefundableCrowdsale_$11330",
                           "typeString": "contract super RefundableCrowdsale"
                         }
                       },
-                      "id": 359,
+                      "id": 11309,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "finalization",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 270,
-                      "src": "1461:18:2",
+                      "referencedDeclaration": 11151,
+                      "src": "1522:18:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$__$returns$__$",
                         "typeString": "function ()"
                       }
                     },
-                    "id": 360,
+                    "id": 11310,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2629,20 +2629,20 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1461:20:2",
+                    "src": "1522:20:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 361,
+                  "id": 11311,
                   "nodeType": "ExpressionStatement",
-                  "src": "1461:20:2"
+                  "src": "1522:20:78"
                 }
               ]
             },
-            "documentation": "@dev vault finalization task, called when owner calls finalize()",
-            "id": 363,
+            "documentation": "@dev vault finalization task, called when owner calls finalize()\r",
+            "id": 11313,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -2650,29 +2650,29 @@
             "name": "finalization",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 340,
+              "id": 11290,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1348:2:2"
+              "src": "1402:2:78"
             },
             "payable": false,
             "returnParameters": {
-              "id": 341,
+              "id": 11291,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1360:0:2"
+              "src": "1414:0:78"
             },
-            "scope": 380,
-            "src": "1327:159:2",
+            "scope": 11330,
+            "src": "1381:167:78",
             "stateMutability": "nonpayable",
-            "superFunction": 270,
+            "superFunction": 11151,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 378,
+              "id": 11328,
               "nodeType": "Block",
-              "src": "1607:53:2",
+              "src": "1674:55:78",
               "statements": [
                 {
                   "expression": {
@@ -2682,18 +2682,18 @@
                         "argumentTypes": null,
                         "expression": {
                           "argumentTypes": null,
-                          "id": 374,
+                          "id": 11324,
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1729,
-                          "src": "1644:3:2",
+                          "referencedDeclaration": 17885,
+                          "src": "1712:3:78",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
                             "typeString": "msg"
                           }
                         },
-                        "id": 375,
+                        "id": 11325,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -2701,7 +2701,7 @@
                         "memberName": "sender",
                         "nodeType": "MemberAccess",
                         "referencedDeclaration": null,
-                        "src": "1644:10:2",
+                        "src": "1712:10:78",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -2720,18 +2720,18 @@
                           "argumentTypes": null,
                           "expression": {
                             "argumentTypes": null,
-                            "id": 371,
+                            "id": 11321,
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1729,
-                            "src": "1633:3:2",
+                            "referencedDeclaration": 17885,
+                            "src": "1701:3:78",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
                               "typeString": "msg"
                             }
                           },
-                          "id": 372,
+                          "id": 11322,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -2739,7 +2739,7 @@
                           "memberName": "value",
                           "nodeType": "MemberAccess",
                           "referencedDeclaration": null,
-                          "src": "1633:9:2",
+                          "src": "1701:9:78",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
@@ -2757,32 +2757,32 @@
                           "argumentTypes": null,
                           "expression": {
                             "argumentTypes": null,
-                            "id": 366,
+                            "id": 11316,
                             "name": "vault",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 285,
-                            "src": "1613:5:2",
+                            "referencedDeclaration": 11235,
+                            "src": "1681:5:78",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_contract$_RefundVault_$547",
+                              "typeIdentifier": "t_contract$_RefundVault_$11497",
                               "typeString": "contract RefundVault"
                             }
                           },
-                          "id": 369,
+                          "id": 11319,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "deposit",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 461,
-                          "src": "1613:13:2",
+                          "referencedDeclaration": 11411,
+                          "src": "1681:13:78",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_external_payable$_t_address_$returns$__$",
                             "typeString": "function (address) payable external"
                           }
                         },
-                        "id": 370,
+                        "id": 11320,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -2790,13 +2790,13 @@
                         "memberName": "value",
                         "nodeType": "MemberAccess",
                         "referencedDeclaration": null,
-                        "src": "1613:19:2",
+                        "src": "1681:19:78",
                         "typeDescriptions": {
                           "typeIdentifier": "t_function_setvalue_nonpayable$_t_uint256_$returns$_t_function_external_payable$_t_address_$returns$__$value_$",
                           "typeString": "function (uint256) returns (function (address) payable external)"
                         }
                       },
-                      "id": 373,
+                      "id": 11323,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -2804,13 +2804,13 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "1613:30:2",
+                      "src": "1681:30:78",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_payable$_t_address_$returns$__$value",
                         "typeString": "function (address) payable external"
                       }
                     },
-                    "id": 376,
+                    "id": 11326,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2818,20 +2818,20 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1613:42:2",
+                    "src": "1681:42:78",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 377,
+                  "id": 11327,
                   "nodeType": "ExpressionStatement",
-                  "src": "1613:42:2"
+                  "src": "1681:42:78"
                 }
               ]
             },
-            "documentation": "@dev Overrides Crowdsale fund forwarding, sending funds to vault.",
-            "id": 379,
+            "documentation": "@dev Overrides Crowdsale fund forwarding, sending funds to vault.\r",
+            "id": 11329,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -2839,30 +2839,30 @@
             "name": "_forwardFunds",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 364,
+              "id": 11314,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1595:2:2"
+              "src": "1662:2:78"
             },
             "payable": false,
             "returnParameters": {
-              "id": 365,
+              "id": 11315,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1607:0:2"
+              "src": "1674:0:78"
             },
-            "scope": 380,
-            "src": "1573:87:2",
+            "scope": 11330,
+            "src": "1640:89:78",
             "stateMutability": "nonpayable",
-            "superFunction": 222,
+            "superFunction": 11103,
             "visibility": "internal"
           }
         ],
-        "scope": 381,
-        "src": "355:1308:2"
+        "scope": 11331,
+        "src": "369:1365:78"
       }
     ],
-    "src": "0:1664:2"
+    "src": "0:1736:78"
   },
   "compiler": {
     "name": "solc",
@@ -2870,5 +2870,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-12-07T17:16:01.560Z"
+  "updatedAt": "2018-12-10T14:03:30.301Z"
 }

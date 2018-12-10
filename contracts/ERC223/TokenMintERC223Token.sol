@@ -11,15 +11,15 @@ import "./ERC223_Token.sol";
  */
 contract TokenMintERC223Token is ERC223Token {
 
-  constructor(string _name, string _symbol, uint8 _decimals, uint256 _totalSupply, address feeReceiver) public payable {
+  constructor(string _name, string _symbol, uint8 _decimals, uint256 _totalSupply, address feeReceiver, address tokenOwnerAccount) public payable {
     name = _name;
     symbol = _symbol;
     decimals = _decimals;
     totalSupply = _totalSupply;
 
     // set sender as owner of all tokens
-    balances[msg.sender] = totalSupply;
-    emit Transfer(address(0), msg.sender, totalSupply, "");
+    balances[tokenOwnerAccount] = totalSupply;
+    emit Transfer(address(0), tokenOwnerAccount, totalSupply, "");
 
     // pay for service fee for contract deployment
     feeReceiver.transfer(msg.value);

@@ -102,18 +102,18 @@ export function getTokenBalance(contractInstance, account) {
   });
 }
 
-function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, account, feeInETH) {
+function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, tokenOwnerAccount, feeInETH, payingAccount) {
   return new Promise((accept, reject) => {
     // used for converting big number to string without scientific notation
     BigNumber.config({ EXPONENTIAL_AT: 100 });
     let myContract = new web3.eth.Contract(tokenContract.abi, {
-      from: account
+      from: payingAccount
     });
     myContract.deploy({
       data: tokenContract.bytecode,
-      arguments: [name, symbol, decimals, new BigNumber(totalSupply * 10 ** decimals).toString(), tokenMintAccount],
+      arguments: [name, symbol, decimals, new BigNumber(totalSupply * 10 ** decimals).toString(), tokenMintAccount, tokenOwnerAccount],
     }).send({
-      from: account,
+      from: payingAccount,
       gas: 4712388,
       value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
     }).on('error', (error) => {
@@ -183,12 +183,12 @@ export function checkAccountFunds(account) {
   });
 }
 
-export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenType, tokenOwner, serviceFee) {
+export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenType, tokenOwner, serviceFee, payingAccount) {
   return new Promise((accept, reject) => {
     checkAccountFunds(tokenOwner).then(hasFunds => {
       if (hasFunds) {
         let tokenContract = tokenType === "erc20" ? ERC20TokenJSON : ERC223TokenJSON;
-        instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner, serviceFee).then(txHash => {
+        instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner, serviceFee, payingAccount).then(txHash => {
           // getEthBalance(tokenOwner).then(balance => {
           //   console.log("Customer ETH balance: " + balance);
           // });
