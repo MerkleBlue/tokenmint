@@ -77,7 +77,7 @@ describe('TokenMint mintApi integration tests', function () {
     let tokenType = 'erc20';
     let serviceFee = 0.02;
     mintApi.getEthBalance(tokenMintAccount).then(tokenMintBalanceBefore => {
-      mintApi.mintTokens(token.name, token.symbol, token.decimals, token.totalSupply, tokenType, accounts[0], serviceFee).then(contractInstance => {
+      mintApi.mintTokens(token.name, token.symbol, token.decimals, token.totalSupply, tokenType, accounts[0], serviceFee, accounts[0]).then(contractInstance => {
         mintApi.getEthBalance(tokenMintAccount).then(tokenMintBalanceAfter => {
           assert.closeTo(new Number(tokenMintBalanceAfter).valueOf(), new Number(tokenMintBalanceBefore).valueOf() + serviceFee, 0.000001)
           done();
@@ -90,7 +90,7 @@ describe('TokenMint mintApi integration tests', function () {
     let tokenType = 'erc223';
     let serviceFee = 0.0223;
     mintApi.getEthBalance(tokenMintAccount).then(tokenMintBalanceBefore => {
-      mintApi.mintTokens(token.name, token.symbol, token.decimals, token.totalSupply, tokenType, accounts[0], serviceFee).then(contractInstance => {
+      mintApi.mintTokens(token.name, token.symbol, token.decimals, token.totalSupply, tokenType, accounts[0], serviceFee, accounts[0]).then(contractInstance => {
         mintApi.getEthBalance(tokenMintAccount).then(tokenMintBalanceAfter => {
           assert.closeTo(new Number(tokenMintBalanceAfter).valueOf(), new Number(tokenMintBalanceBefore).valueOf() + serviceFee, 0.000001)
           done();
@@ -102,7 +102,7 @@ describe('TokenMint mintApi integration tests', function () {
   it('Mint ERC-20 tokens', (done) => {
     let tokenType = 'erc20';
     let serviceFee = 0.01;
-    mintApi.mintTokens(token.name, token.symbol, token.decimals, token.totalSupply, tokenType, accounts[0], serviceFee).then(txHash => {
+    mintApi.mintTokens(token.name, token.symbol, token.decimals, token.totalSupply, tokenType, accounts[0], serviceFee, accounts[0]).then(txHash => {
       web3.eth.getTransactionReceipt(txHash).then(receipt => {
         let contractInstance = new web3.eth.Contract(ERC20TokenJSON.abi, receipt.contractAddress);
         mintApi.getTokenBalance(contractInstance, accounts[0]).then(actualTokenBalance => {
@@ -132,7 +132,7 @@ describe('TokenMint mintApi integration tests', function () {
   it('Mint ERC-223 tokens', (done) => {
     let tokenType = 'erc223';
     let serviceFee = 0.01;
-    mintApi.mintTokens(token.name, token.symbol, token.decimals, token.totalSupply, tokenType, accounts[0], serviceFee).then(txHash => {
+    mintApi.mintTokens(token.name, token.symbol, token.decimals, token.totalSupply, tokenType, accounts[0], serviceFee, accounts[0]).then(txHash => {
       web3.eth.getTransactionReceipt(txHash).then(receipt => {
         let contractInstance = new web3.eth.Contract(ERC223TokenJSON.abi, receipt.contractAddress);
         mintApi.getTokenBalance(contractInstance, accounts[0]).then(actualTokenBalance => {
