@@ -65,7 +65,6 @@ export class SuccessMessagePanel extends React.Component {
     this.props.tokenTypeActions.setTokenType(initialState.tokenType);
     this.props.tokenOwnerActions.setTokenOwner(initialState.tokenOwner);
     this.props.payingAccountActions.setPayingAccount(initialState.payingAccount);
-    this.props.appStateActions.setAppState(initialState.appState);
     this.props.payingAccountFundsActions.setCheckingPayingAccountFunds(initialState.checkingPayingAccountFunds);
     this.props.payingAccountFundsActions.setPayingAccountHasInsufficientFunds(initialState.payingAccountHasInsufficientFunds);
     this.props.payingAccountFundsActions.setPayingAccountBalance(initialState.payingAccountBalance);
@@ -73,6 +72,7 @@ export class SuccessMessagePanel extends React.Component {
     this.props.accountsActions.loadAllAccounts();
     this.props.serviceFeeActions.setServiceFee(initialState.serviceFee);
     this.props.networkActions.getNetworkType();
+    this.props.appStateActions.setAppState(initialState.appState);
   }
 
   // a hack that creates an element outside the screen and uses it to copy its content to clipboard
