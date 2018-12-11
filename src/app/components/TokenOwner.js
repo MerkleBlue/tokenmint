@@ -44,6 +44,10 @@ export class TokenOwner extends React.Component {
       }
     });
 
+    const description = InputValidator.isTokenOwnerValid(this.props.tokenOwner) ?
+      "ETH account. This account will be owner of the token!" :
+      "Not a valid ETH account";
+
     return (
       <Card
         className="card"
@@ -83,7 +87,7 @@ export class TokenOwner extends React.Component {
                 variant="body1"
                 className={!InputValidator.isTokenOwnerValid(this.props.tokenOwner) ? "typography_error" : "typography"}
               >
-                ETH account. This account will be owner of the token!
+                {description}
               </Typography>
             </Grid>
           </Grid>
