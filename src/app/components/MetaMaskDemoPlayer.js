@@ -14,7 +14,7 @@ export class MetaMaskDemoPlayer extends React.Component {
         onClose={this.props.handleVideoClose}
         onEscapeKeyDown={this.props.handleVideoClose}
       >
-        <iframe width="580" height="360"
+        <iframe title="metamask-intro" width="580" height="360"
           src="https://www.youtube.com/embed/6Gf_kRE4MJU"
         />
       </Dialog>
