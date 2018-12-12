@@ -66,7 +66,7 @@ describe("<TokenOwner /> tests", () => {
     expect(wrapper.find("InputLabel").props().children).to.eq("Account");
     expect(wrapper.find("Typography").length).to.eq(2);
     expect(wrapper.find("Typography").at(1).props().className).to.eq("typography_error");
-    expect(wrapper.find("Typography").at(1).props().children).to.eq("ETH account. This account will be owner of the token!");
+    expect(wrapper.find("Typography").at(1).props().children).to.eq("Not a valid ETH account");
   });
 
   it("renders TokenOwner with valid tokenOwner", () => {
