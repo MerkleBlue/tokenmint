@@ -21,7 +21,7 @@ import { bindActionCreators } from 'redux';
 import appStates from '../reducers/appStates';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import * as mintApi from '../../api/mintApi';
-import MetaMaskDemoPlayer from './MetaMaskDemoPlayer'; //eslint-disable-line import/no-named-as-default
+import MetaMaskDemoPlayer from './MetaMaskDemoPlayer';
 import DetectingWalletDialog from './DetectingWalletDialog'; //eslint-disable-line import/no-named-as-default
 
 export class InstallMetamaskPanel extends React.Component {

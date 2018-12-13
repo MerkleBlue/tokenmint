@@ -43,6 +43,9 @@ export default class InputValidator {
     if (tokenOwner === "") {
       return true;
     }
+    if (!tokenOwner.startsWith("0x")) {
+      return false;
+    }
     return web3.utils.isAddress(tokenOwner);
   }
 
