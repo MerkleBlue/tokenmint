@@ -78,7 +78,8 @@ export class HandlePaymentPanel extends React.Component {
     ) && this.props.payingAccount !== initialState.payingAccount
       && !this.props.payingAccountHasInsufficientFunds
       && !this.props.loadingAccounts
-      && !this.props.checkingPayingAccountFunds;
+      && !this.props.checkingPayingAccountFunds
+      && !this.props.walletNeedsToBeUnlocked;
   }
 
   createTokens(e) {
