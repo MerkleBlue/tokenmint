@@ -39,9 +39,8 @@ export class HandlePaymentPanel extends React.Component {
 
 
   componentDidMount() {
-    // TODO: remove logging when ga works properly
-    console.log("Navigate to: /mint/"); // eslint-disable-line no-console
-    ReactGA.pageview('/mint/');
+    console.log("Navigate to: /mint/payment"); // eslint-disable-line no-console
+    ReactGA.pageview('/mint/payment');
   }
 
   componentDidUpdate(prevProps) {
