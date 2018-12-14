@@ -15,7 +15,6 @@ const tokenSymbol = "TFA";
 const decimals = "18";
 const totalSupply = "1000";
 const tokenType = "erc20";
-const tokenOwner = "0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef";
 
 describe("<Footer /> tests", () => {
   let mount;
@@ -26,7 +25,6 @@ describe("<Footer /> tests", () => {
     decimals,
     totalSupply,
     tokenType,
-    tokenOwner,
     setAppState = () => { }
   ) {
     const props = {
@@ -35,7 +33,6 @@ describe("<Footer /> tests", () => {
       decimals: decimals,
       totalSupply: totalSupply,
       tokenType: tokenType,
-      tokenOwner: tokenOwner,
       appStateActions: { setAppState: setAppState },
     };
     return mount(<Footer {...props} />);
@@ -59,18 +56,16 @@ describe("<Footer /> tests", () => {
       tokenSymbol,
       decimals,
       totalSupply,
-      tokenType,
-      tokenOwner
+      tokenType
     );
     expect(wrapper.props().tokenName).to.be.empty;
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
     expect(wrapper.props().decimals).to.eq(decimals);
     expect(wrapper.props().totalSupply).to.eq(totalSupply);
     expect(wrapper.props().tokenType).to.eq("erc20");
-    expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(1);
-    expect(wrapper.find("span").props().className).to.eq("btn btn-disabled wow fadeInUp");
+    expect(wrapper.find("span").props().className).to.eq("btn btn-disabled-mint wow fadeInUp");
   });
 
   it("renders Footer non existing token symbol", () => {
@@ -79,18 +74,16 @@ describe("<Footer /> tests", () => {
       initialState.tokenSymbol,
       decimals,
       totalSupply,
-      tokenType,
-      tokenOwner
+      tokenType
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.be.empty;
     expect(wrapper.props().decimals).to.eq(decimals);
     expect(wrapper.props().totalSupply).to.eq(totalSupply);
     expect(wrapper.props().tokenType).to.eq("erc20");
-    expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(1);
-    expect(wrapper.find("span").props().className).to.eq("btn btn-disabled wow fadeInUp");
+    expect(wrapper.find("span").props().className).to.eq("btn btn-disabled-mint wow fadeInUp");
   });
 
   it("renders Footer invalid decimals", () => {
@@ -99,18 +92,16 @@ describe("<Footer /> tests", () => {
       tokenSymbol,
       "-1",
       totalSupply,
-      tokenType,
-      tokenOwner
+      tokenType
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
     expect(wrapper.props().decimals).to.eq("-1");
     expect(wrapper.props().totalSupply).to.eq(totalSupply);
     expect(wrapper.props().tokenType).to.eq("erc20");
-    expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(1);
-    expect(wrapper.find("span").props().className).to.eq("btn btn-disabled wow fadeInUp");
+    expect(wrapper.find("span").props().className).to.eq("btn btn-disabled-mint wow fadeInUp");
   });
 
   it("renders Footer invalid decimals", () => {
@@ -119,18 +110,16 @@ describe("<Footer /> tests", () => {
       tokenSymbol,
       decimals,
       "0",
-      tokenType,
-      tokenOwner
+      tokenType
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
     expect(wrapper.props().decimals).to.eq(decimals);
     expect(wrapper.props().totalSupply).to.eq("0");
     expect(wrapper.props().tokenType).to.eq("erc20");
-    expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(1);
-    expect(wrapper.find("span").props().className).to.eq("btn btn-disabled wow fadeInUp");
+    expect(wrapper.find("span").props().className).to.eq("btn btn-disabled-mint wow fadeInUp");
   });
 
 
@@ -140,18 +129,16 @@ describe("<Footer /> tests", () => {
       tokenSymbol,
       decimals,
       totalSupply,
-      tokenType,
-      tokenOwner
+      tokenType
     );
     expect(wrapper.props().tokenName).to.eq(tokenName);
     expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
     expect(wrapper.props().decimals).to.eq(decimals);
     expect(wrapper.props().totalSupply).to.eq(totalSupply);
     expect(wrapper.props().tokenType).to.eq("erc20");
-    expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
     expect(wrapper.props().appStateActions).to.not.be.empty;
     expect(wrapper.find("span").length).to.eq(1);
-    expect(wrapper.find("span").props().className).to.eq("btn btn-common wow fadeInUp");
+    expect(wrapper.find("span").props().className).to.eq("btn btn-common-mint wow fadeInUp");
   });
 
   it("simulates click on disabled button", () => {
@@ -162,7 +149,6 @@ describe("<Footer /> tests", () => {
       decimals,
       totalSupply,
       tokenType,
-      tokenOwner,
       setAppState
     );
     wrapper.find("span").simulate("click");
@@ -177,7 +163,6 @@ describe("<Footer /> tests", () => {
       decimals,
       totalSupply,
       tokenType,
-      tokenOwner,
       setAppState
     );
     wrapper.find("span").simulate("click");

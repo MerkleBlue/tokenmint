@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoins } from '@fortawesome/free-solid-svg-icons';
 import appStates from '../reducers/appStates';
 import { Tooltip } from '@material-ui/core';
+import { NO_NETWORK } from '../../api/mintApi';
 
 export class Footer extends React.Component {
 
@@ -23,20 +24,23 @@ export class Footer extends React.Component {
       this.props.tokenName,
       this.props.tokenSymbol,
       this.props.decimals,
-      this.props.totalSupply,
-      this.props.tokenOwner
+      this.props.totalSupply
     );
   }
 
   handleTokenCreation(e) {
-    this.props.appStateActions.setAppState(appStates.PENDING_CONFIRMATION);
+    if (this.props.network === NO_NETWORK) {
+      this.props.appStateActions.setAppState(appStates.INSTALL_WALLET);
+    } else {
+      this.props.appStateActions.setAppState(appStates.HANDLE_PAYMENT);
+    }
   }
 
   render() {
     let createBtn = this.isCreationEnabled() ?
       (
         <span
-          className="btn btn-common wow fadeInUp"
+          className="btn btn-common-mint wow fadeInUp"
           data-wow-duration="1000ms"
           data-wow-delay="400ms"
           onClick={this.handleTokenCreation}
@@ -52,7 +56,7 @@ export class Footer extends React.Component {
           title="Please fill in all the parameters above to enable token creation"
         >
           <span
-            className="btn btn-disabled wow fadeInUp"
+            className="btn btn-disabled-mint wow fadeInUp"
             data-wow-duration="1000ms"
             data-wow-delay="400ms"
           >
@@ -77,7 +81,7 @@ Footer.propTypes = {
   decimals: PropTypes.string.isRequired,
   totalSupply: PropTypes.string.isRequired,
   tokenType: PropTypes.string.isRequired,
-  tokenOwner: PropTypes.string.isRequired
+  network: PropTypes.string.isRequired
 };
 
 function mapStateToProps(state) {
@@ -87,7 +91,7 @@ function mapStateToProps(state) {
     decimals: state.decimals,
     totalSupply: state.totalSupply,
     tokenType: state.tokenType,
-    tokenOwner: state.tokenOwner
+    network: state.network
   };
 }
 
