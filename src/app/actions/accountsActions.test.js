@@ -26,7 +26,7 @@ describe("accountsActions tests", () => {
       { type: types.SET_LOADING_ACCOUNTS, loadingAccounts: true },
       { type: types.SET_ACCOUNTS, accounts: accounts },
       { type: types.SET_LOADING_ACCOUNTS, loadingAccounts: false },
-      { type: types.SET_TOKEN_OWNER, tokenOwner: "Account0" },
+      { type: types.INIT_TOKEN_OWNER, tokenOwner: "Account0" },
       { type: types.SET_PAYING_ACCOUNT, payingAccount: "Account0" }
     ];
     const store = mockStore({ accounts: [] }, expectedActions);

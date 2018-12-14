@@ -6,6 +6,9 @@ export default function tokenOwnerReducer(state = initialState.tokenOwner, actio
     case types.SET_TOKEN_OWNER:
       return action.tokenOwner;
 
+    case types.INIT_TOKEN_OWNER:
+      return state === initialState.tokenOwner ? action.tokenOwner : state;
+
     default:
       return state;
   }
