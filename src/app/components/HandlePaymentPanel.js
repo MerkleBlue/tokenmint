@@ -8,7 +8,8 @@ import {
   OutlinedInput,
   Card,
   CardHeader,
-  CardContent
+  CardContent,
+  Grid
 } from '@material-ui/core';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import './css/HandlePaymentPanel.css';
@@ -18,14 +19,16 @@ import * as payingAccountActions from '../actions/payingAccountActions';
 import * as payingAccountFundsActions from '../actions/payingAccountFundsActions';
 import * as walletActions from '../actions/walletActions';
 import * as createTokensActions from '../actions/createTokensActions';
+import * as appStateActions from '../actions/appStateActions';
 import { bindActionCreators } from 'redux';
 import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
 import { NO_NETWORK } from '../../api/mintApi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWallet, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faWallet, faCheck, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import NetworkWarning from './NetworkWarning'; //eslint-disable-line import/no-named-as-default
 import InputValidator from '../../tools/InputValidator';
+import appStates from '../reducers/appStates';
 
 export class HandlePaymentPanel extends React.Component {
 
@@ -35,6 +38,7 @@ export class HandlePaymentPanel extends React.Component {
     this.handleUnlockWallet = this.handleUnlockWallet.bind(this);
     this.createTokens = this.createTokens.bind(this);
     this.isTokenCreationEnabled = this.isTokenCreationEnabled.bind(this);
+    this.handleBack = this.handleBack.bind(this);
   }
 
 
@@ -65,6 +69,10 @@ export class HandlePaymentPanel extends React.Component {
         }
       }
     }
+  }
+
+  handleBack(e) {
+    this.props.appStateActions.setAppState(appStates.PENDING_CONFIRMATION);
   }
 
   isTokenCreationEnabled() {
@@ -126,8 +134,8 @@ export class HandlePaymentPanel extends React.Component {
           data-wow-delay="400ms"
           onClick={this.createTokens}
         >
-          <FontAwesomeIcon className="fa_check" icon={faCheck} />
-          Finish
+          <FontAwesomeIcon className="fa_check_icon" icon={faCheck} />
+          {!this.props.isMobileDevice && " Finish"}
         </span>
       ) : (
         <span
@@ -135,8 +143,8 @@ export class HandlePaymentPanel extends React.Component {
           data-wow-duration="1000ms"
           data-wow-delay="400ms"
         >
-          <FontAwesomeIcon className="fa_check" icon={faCheck} />
-          Finish
+          <FontAwesomeIcon className="fa_check_icon" icon={faCheck} />
+          {!this.props.isMobileDevice && " Finish"}
         </span>
       );
 
@@ -358,7 +366,22 @@ export class HandlePaymentPanel extends React.Component {
           </CardContent>
         </Card>
         <form className="footer_main_form">
-          {finishButton}
+          <Grid container spacing={8}>
+            <Grid item xs={6} md={6} className="grid_cell">
+              <span
+                className="btn btn-cancel wow fadeInUp"
+                data-wow-duration="1000ms"
+                data-wow-delay="400ms"
+                onClick={this.handleBack}
+              >
+                <FontAwesomeIcon className="fa_back_icon" icon={faChevronLeft} />
+                {!this.props.isMobileDevice && " Back"}
+              </span>
+            </Grid>
+            <Grid item xs={6} md={6} className="grid_cell">
+              {finishButton}
+            </Grid>
+          </Grid>
         </form>
       </div>
     );
@@ -370,6 +393,7 @@ HandlePaymentPanel.propTypes = {
   payingAccountHasInsufficientFunds: PropTypes.bool.isRequired,
   checkingPayingAccountFunds: PropTypes.bool.isRequired,
   checkingNetwork: PropTypes.bool.isRequired,
+  isMobileDevice: PropTypes.bool.isRequired,
   accounts: PropTypes.array.isRequired,
   payingAccount: PropTypes.string.isRequired,
   payingAccountBalance: PropTypes.number.isRequired,
@@ -386,6 +410,7 @@ HandlePaymentPanel.propTypes = {
   payingAccountFundsActions: PropTypes.object.isRequired,
   walletActions: PropTypes.object.isRequired,
   createTokensActions: PropTypes.object.isRequired,
+  appStateActions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
@@ -405,7 +430,8 @@ function mapStateToProps(state) {
     decimals: state.decimals,
     totalSupply: state.totalSupply,
     tokenOwner: state.tokenOwner,
-    tokenType: state.tokenType
+    tokenType: state.tokenType,
+    isMobileDevice: state.isMobileDevice
   };
 }
 
@@ -414,7 +440,8 @@ function mapDispatchToProps(dispatch) {
     payingAccountActions: bindActionCreators(payingAccountActions, dispatch),
     payingAccountFundsActions: bindActionCreators(payingAccountFundsActions, dispatch),
     walletActions: bindActionCreators(walletActions, dispatch),
-    createTokensActions: bindActionCreators(createTokensActions, dispatch)
+    createTokensActions: bindActionCreators(createTokensActions, dispatch),
+    appStateActions: bindActionCreators(appStateActions, dispatch)
   };
 }
 
