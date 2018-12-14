@@ -49,7 +49,7 @@ export class InstallCoinbasePanel extends React.Component {
   }
 
   handleBack(e) {
-    this.props.appStateActions.setAppState(appStates.PENDING_CONFIRMATION);
+    this.props.appStateActions.setAppState(appStates.INIT);
   }
 
   handleNext(e) {

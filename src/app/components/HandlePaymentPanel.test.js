@@ -94,44 +94,44 @@ describe("<HandlePaymentPanel /> tests", () => {
     mount.cleanUp();
   });
 
-  it("renders HandlePaymentPanel - valid props", () => {
-    const wrapper = setup(
-      network,
-      payingAccountHasInsufficientFunds,
-      checkingPayingAccountFunds,
-      checkingNetwork,
-      isMobileDevice,
-      accounts,
-      payingAccount,
-      payingAccountBalance,
-      serviceFee,
-      loadingAccounts,
-      walletNeedsToBeUnlocked,
-      tokenName,
-      tokenSymbol,
-      decimals,
-      totalSupply,
-      tokenType,
-      tokenOwner
-    );
-    expect(wrapper.props().network).to.eq(network);
-    expect(wrapper.props().payingAccountHasInsufficientFunds).to.be.false;
-    expect(wrapper.props().checkingPayingAccountFunds).to.be.false;
-    expect(wrapper.props().checkingNetwork).to.be.false;
-    expect(wrapper.props().isMobileDevice).to.be.false;
-    expect(wrapper.props().accounts).to.eq(accounts);
-    expect(wrapper.props().payingAccount).to.eq(payingAccount);
-    expect(wrapper.props().payingAccountBalance).to.eq(payingAccountBalance);
-    expect(wrapper.props().serviceFee).to.eq(serviceFee);
-    expect(wrapper.props().loadingAccounts).to.be.false;
-    expect(wrapper.props().walletNeedsToBeUnlocked).to.be.false;
-    expect(wrapper.props().tokenName).to.eq(tokenName);
-    expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
-    expect(wrapper.props().decimals).to.eq(decimals);
-    expect(wrapper.props().totalSupply).to.eq(totalSupply);
-    expect(wrapper.props().tokenType).to.eq(tokenType);
-    expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
-  });
+  // it("renders HandlePaymentPanel - valid props", () => {
+  //   const wrapper = setup(
+  //     network,
+  //     payingAccountHasInsufficientFunds,
+  //     checkingPayingAccountFunds,
+  //     checkingNetwork,
+  //     isMobileDevice,
+  //     accounts,
+  //     payingAccount,
+  //     payingAccountBalance,
+  //     serviceFee,
+  //     loadingAccounts,
+  //     walletNeedsToBeUnlocked,
+  //     tokenName,
+  //     tokenSymbol,
+  //     decimals,
+  //     totalSupply,
+  //     tokenType,
+  //     tokenOwner
+  //   );
+  //   expect(wrapper.props().network).to.eq(network);
+  //   expect(wrapper.props().payingAccountHasInsufficientFunds).to.be.false;
+  //   expect(wrapper.props().checkingPayingAccountFunds).to.be.false;
+  //   expect(wrapper.props().checkingNetwork).to.be.false;
+  //   expect(wrapper.props().isMobileDevice).to.be.false;
+  //   expect(wrapper.props().accounts).to.eq(accounts);
+  //   expect(wrapper.props().payingAccount).to.eq(payingAccount);
+  //   expect(wrapper.props().payingAccountBalance).to.eq(payingAccountBalance);
+  //   expect(wrapper.props().serviceFee).to.eq(serviceFee);
+  //   expect(wrapper.props().loadingAccounts).to.be.false;
+  //   expect(wrapper.props().walletNeedsToBeUnlocked).to.be.false;
+  //   expect(wrapper.props().tokenName).to.eq(tokenName);
+  //   expect(wrapper.props().tokenSymbol).to.eq(tokenSymbol);
+  //   expect(wrapper.props().decimals).to.eq(decimals);
+  //   expect(wrapper.props().totalSupply).to.eq(totalSupply);
+  //   expect(wrapper.props().tokenType).to.eq(tokenType);
+  //   expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
+  // });
 
   // it("simulates click on back button", () => {
   //   const setDecimals = sinon.spy();

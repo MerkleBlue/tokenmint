@@ -10,24 +10,21 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faCheck } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import * as appStateActions from '../actions/appStateActions';
-import * as infoMessageActions from '../actions/infoMessageActions';
-import * as networkActions from '../actions/networkActions';
-import * as payingAccountFundsActions from '../actions/payingAccountFundsActions';
-import initialState from '../reducers/initialState';
+import * as createTokensActions from '../actions/createTokensActions';
 import InputValidator from '../../tools/InputValidator';
 import ReactGA from 'react-ga';
-import { NO_NETWORK } from '../../api/mintApi';
 import appStates from '../reducers/appStates';
+import initialState from '../reducers/initialState';
 
 export class ConfirmationPanel extends React.Component {
 
   constructor(props) {
     super(props);
     this.handleBack = this.handleBack.bind(this);
-    this.handleNext = this.handleNext.bind(this);
+    this.handleConfirm = this.handleConfirm.bind(this);
     this.isConfirmationEnabled = this.isConfirmationEnabled.bind(this);
   }
 
@@ -44,22 +41,24 @@ export class ConfirmationPanel extends React.Component {
       this.props.decimals,
       this.props.totalSupply,
       this.props.tokenOwner
-    );
+    ) && this.props.payingAccount !== initialState.payingAccount;
   }
 
   handleBack(e) {
-    this.props.infoMessageActions.setInfoMessage(initialState.infoMessage);
-    this.props.appStateActions.setAppState(initialState.appState);
-    this.props.networkActions.getNetworkType();
-    this.props.payingAccountFundsActions.checkFunds(this.props.payingAccount);
+    this.props.appStateActions.setAppState(appStates.HANDLE_PAYMENT);
   }
 
-  handleNext(e) {
-    if (this.props.network === NO_NETWORK) {
-      this.props.appStateActions.setAppState(appStates.INSTALL_WALLET);
-    } else {
-      this.props.appStateActions.setAppState(appStates.HANDLE_PAYMENT);
-    }
+  handleConfirm(e) {
+    this.props.createTokensActions.createTokens(
+      this.props.tokenName,
+      this.props.tokenSymbol,
+      this.props.decimals,
+      this.props.totalSupply,
+      this.props.tokenType,
+      this.props.tokenOwner,
+      this.props.serviceFee,
+      this.props.payingAccount
+    );
   }
 
   render() {
@@ -69,10 +68,10 @@ export class ConfirmationPanel extends React.Component {
           className="btn btn-confirm wow fadeInUp"
           data-wow-duration="1000ms"
           data-wow-delay="400ms"
-          onClick={this.handleNext}
+          onClick={this.handleConfirm}
         >
-        {!this.props.isMobileDevice && "Next "}
-        <FontAwesomeIcon className="fa_confirm_icon" icon={faChevronRight} />
+        <FontAwesomeIcon className="fa_confirm_icon" icon={faCheck} />
+        {!this.props.isMobileDevice && " Finish"}
         </span>
       ) : (
         <span
@@ -80,8 +79,8 @@ export class ConfirmationPanel extends React.Component {
           data-wow-duration="1000ms"
           data-wow-delay="400ms"
         >
-        {!this.props.isMobileDevice && "Next "}
-        <FontAwesomeIcon className="fa_confirm_icon" icon={faChevronRight} />
+        <FontAwesomeIcon className="fa_confirm_icon" icon={faCheck} />
+        {!this.props.isMobileDevice && " Finish"}
         </span>
       );
 
@@ -120,6 +119,27 @@ export class ConfirmationPanel extends React.Component {
                   gutterBottom
                 >
                   {this.props.tokenOwner}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid className="grid_container" container spacing={8}>
+              <Grid item xs={12} md={6}>
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className="typography_left"
+                >
+                  Paying Account:
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={6} className="grid_cell">
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className="typography_right"
+                  gutterBottom
+                >
+                  {this.props.payingAccount}
                 </Typography>
               </Grid>
             </Grid>
@@ -223,6 +243,27 @@ export class ConfirmationPanel extends React.Component {
                 </Typography>
               </Grid>
             </Grid>
+            <Grid className="grid_container" container spacing={8}>
+              <Grid item xs={12} md={6}>
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className="typography_left"
+                >
+                  Service Fee:
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={6} className="grid_cell">
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className="typography_right"
+                  gutterBottom
+                >
+                  {this.props.serviceFee} ETH (plus mining fee)
+                </Typography>
+              </Grid>
+            </Grid>
           </CardContent>
         </Card>
         <form className="footer_main_form">
@@ -249,10 +290,8 @@ export class ConfirmationPanel extends React.Component {
 }
 
 ConfirmationPanel.propTypes = {
-  payingAccountFundsActions: PropTypes.object.isRequired,
   appStateActions: PropTypes.object.isRequired,
-  infoMessageActions: PropTypes.object.isRequired,
-  networkActions: PropTypes.object.isRequired,
+  createTokensActions: PropTypes.object.isRequired,
   tokenName: PropTypes.string.isRequired,
   tokenSymbol: PropTypes.string.isRequired,
   decimals: PropTypes.string.isRequired,
@@ -260,10 +299,8 @@ ConfirmationPanel.propTypes = {
   tokenType: PropTypes.string.isRequired,
   tokenOwner: PropTypes.string.isRequired,
   payingAccount: PropTypes.string.isRequired,
-  walletNeedsToBeUnlocked: PropTypes.bool.isRequired,
-  accounts: PropTypes.array.isRequired,
-  network: PropTypes.string.isRequired,
-  isMobileDevice: PropTypes.bool.isRequired
+  isMobileDevice: PropTypes.bool.isRequired,
+  serviceFee: PropTypes.number.isRequired
 };
 
 function mapStateToProps(state) {
@@ -275,19 +312,15 @@ function mapStateToProps(state) {
     tokenType: state.tokenType,
     tokenOwner: state.tokenOwner,
     payingAccount: state.payingAccount,
-    network: state.network,
     isMobileDevice: state.isMobileDevice,
-    walletNeedsToBeUnlocked: state.walletNeedsToBeUnlocked,
-    accounts: state.accounts
+    serviceFee: state.serviceFee
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     appStateActions: bindActionCreators(appStateActions, dispatch),
-    infoMessageActions: bindActionCreators(infoMessageActions, dispatch),
-    networkActions: bindActionCreators(networkActions, dispatch),
-    payingAccountFundsActions: bindActionCreators(payingAccountFundsActions, dispatch)
+    createTokensActions: bindActionCreators(createTokensActions, dispatch)
   };
 }
 

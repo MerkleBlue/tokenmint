@@ -2,9 +2,6 @@ import React from 'react';
 import {
   Grid,
   Typography,
-  Card,
-  CardHeader,
-  CardContent,
   TextField
 } from '@material-ui/core';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -45,54 +42,37 @@ export class TokenOwner extends React.Component {
     });
 
     const description = InputValidator.isTokenOwnerValid(this.props.tokenOwner) ?
-      "ETH account. This account will be owner of the token!" :
+      "This account will be owner of the created tokens!" :
       "Not a valid ETH account";
 
     return (
-      <Card
-        className="card"
-      >
-        <CardHeader
-          title="Token Owner"
-          classes={{
-            root: "card_header",
-            title: "card_header_text"
-          }}
-        />
-        <CardContent
-          classes={{
-            root: "card_content"
-          }}
-        >
-          <Grid container spacing={8}>
-            <Grid item xs={12} md={6}>
-              <MuiThemeProvider theme={theme}>
-                <TextField
-                  required
-                  id="outlined-required"
-                  label="Account"
-                  className="text_field"
-                  margin="normal"
-                  variant="outlined"
-                  inputProps={{ maxLength: 42 }}
-                  value={this.props.tokenOwner}
-                  error={!InputValidator.isTokenOwnerValid(this.props.tokenOwner)}
-                  onChange={this.handleChange}
-                />
-              </MuiThemeProvider>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Typography
-                align="left"
-                variant="body1"
-                className={!InputValidator.isTokenOwnerValid(this.props.tokenOwner) ? "typography_error" : "typography"}
-              >
-                {description}
-              </Typography>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+      <Grid container spacing={8}>
+        <Grid item xs={12} md={6}>
+          <MuiThemeProvider theme={theme}>
+            <TextField
+              required
+              id="outlined-required"
+              label="Account"
+              className="text_field"
+              margin="normal"
+              variant="outlined"
+              inputProps={{ maxLength: 42 }}
+              value={this.props.tokenOwner}
+              error={!InputValidator.isTokenOwnerValid(this.props.tokenOwner)}
+              onChange={this.handleChange}
+            />
+          </MuiThemeProvider>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Typography
+            align="left"
+            variant="body1"
+            className={!InputValidator.isTokenOwnerValid(this.props.tokenOwner) ? "typography_error" : "typography"}
+          >
+            {description}
+          </Typography>
+        </Grid>
+      </Grid>
     );
   }
 }

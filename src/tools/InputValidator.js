@@ -57,6 +57,13 @@ export default class InputValidator {
       this.isTokenOwnerValid(tokenOwner) && tokenOwner !== "";
   }
 
+  static areTokenAttributesValid(tokenName, tokenSymbol, decimals, totalSupply) {
+    return this.isTokenNameValid(tokenName) && tokenName !== "" &&
+      this.isTokenSymbolValid(tokenSymbol) && tokenSymbol !== "" &&
+      this.isDecimalsValid(decimals) && decimals !== "" &&
+      this.isTotalSupplyValid(totalSupply) && totalSupply !== "";
+  }
+
   static isTokenSymbolUnique(tokenSymbol) {
     return (cc.symbols().find(symbol => symbol === tokenSymbol) === undefined);
   }

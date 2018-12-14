@@ -20,7 +20,7 @@ export class Footer extends React.Component {
   }
 
   isCreationEnabled() {
-    return InputValidator.isInputValid(
+    return InputValidator.areTokenAttributesValid(
       this.props.tokenName,
       this.props.tokenSymbol,
       this.props.decimals,
