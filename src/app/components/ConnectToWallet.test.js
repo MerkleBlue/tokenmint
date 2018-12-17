@@ -9,8 +9,6 @@ import sinon from 'sinon';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const infoMessage = "Some error happened!";
-
 describe("<ConnectToWallet /> tests", () => {
   let mount;
 
