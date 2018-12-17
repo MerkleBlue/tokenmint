@@ -3,13 +3,6 @@ import { assert, expect } from 'chai';
 import Web3 from 'web3';
 const icoApi = require('../../src/api/icoApi');
 import fetch from 'node-fetch';
-import SafeMathLibJSON from '../../src/contracts/SafeMathLib.json';
-import FlatPricingJSON from '../../src/contracts/FlatPricing.json';
-
-
-import ERC20TokenJSON from '../../src/contracts/TokenMintERC20Token.json';
-import ERC223TokenJSON from '../../src/contracts/TokenMintERC223Token.json';
-
 
 let web3, accounts;
 let tokenMintAccount = "0x6603cb70464ca51481d4edBb3B927F66F53F4f42";
@@ -38,36 +31,6 @@ describe('TokenMint icoApi integration tests', function () {
     done();
   });
 
-  it('Load accounts', (done) => {
-    icoApi.loadAccounts().then(actualAccounts => {
-      expect(actualAccounts).to.eql(accounts);
-      done();
-    });
-  });
-
-  it('Get fee', (done) => {
-    icoApi.getFee().then(fee => {
-      expect(fee).to.be.greaterThan(0.3);
-      done();
-    });
-  });
-
-  it('Get ETH balance with empty account', (done) => {
-    icoApi.getEthBalance('0x1000000000000000000000000000000000000000').then(actual => {
-      expect(web3.utils.fromWei(actual, 'ether')).to.be.eq('0');
-      done();
-    });
-  });
-
-  it('Get ETH balance with first account', (done) => {
-    web3.eth.getBalance(accounts[0]).then(actual => {
-      icoApi.getEthBalance(accounts[0]).then(expected => {
-        expect(web3.utils.fromWei(actual, 'ether')).to.be.eq(expected);
-        done();
-      });
-    });
-  });
-
   it('Deploy SafeMathLib', (done) => {
     icoApi.deploySafeMathLib(accounts[0]).then(txHash => {
       web3.eth.getTransactionReceipt(txHash).then(receipt => {
@@ -77,7 +40,7 @@ describe('TokenMint icoApi integration tests', function () {
     }).catch(e => {
       done(new Error());
     });
-  })
+  });
 
   it('Deploy FlatPricing contract', (done) => {
     icoApi.deployFlatPricing(accounts[0]).then(txHash => {
@@ -86,6 +49,18 @@ describe('TokenMint icoApi integration tests', function () {
         done();
       });
     }).catch(e => {
+      done(new Error());
+    });
+  });
+
+  it('Deploy CrowdsaleToken contract', (done) => {
+    icoApi.deployCrowdsaleToken(accounts[0], "Name", "SYM", 1000, 18, true).then(txHash => {
+      web3.eth.getTransactionReceipt(txHash).then(receipt => {
+        expect(receipt.status).to.be.eq(true);
+        done();
+      });
+    }).catch(e => {
+      console.log(e)
       done(new Error());
     });
   });

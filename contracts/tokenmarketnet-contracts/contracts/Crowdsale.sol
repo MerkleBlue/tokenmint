@@ -9,7 +9,7 @@ pragma solidity ^0.4.8;
 import "./SafeMathLib.sol";
 import "./PricingStrategy.sol";
 import "./FinalizeAgent.sol";
-import "./FractionalERC20.sol";
+import "./CrowdsaleToken.sol";
 import "./CrowdsaleBase.sol";
 
 

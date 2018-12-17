@@ -7,7 +7,7 @@
 
 import "./Haltable.sol";
 import "./SafeMathLib.sol";
-import "./FractionalERC20.sol";
+import "./CrowdsaleToken.sol";
 import "./PricingStrategy.sol";
 import "./FinalizeAgent.sol";
 
@@ -29,7 +29,7 @@ contract CrowdsaleBase is Haltable {
   using SafeMathLib for uint;
 
   /* The token we are selling */
-  FractionalERC20 public token;
+  CrowdsaleToken public token;
 
   /* How we are going to price our offering */
   PricingStrategy public pricingStrategy;
@@ -113,7 +113,7 @@ contract CrowdsaleBase is Haltable {
 
     owner = msg.sender;
 
-    token = FractionalERC20(_token);
+    token = CrowdsaleToken(_token);
     setPricingStrategy(_pricingStrategy);
 
     multisigWallet = _multisigWallet;
