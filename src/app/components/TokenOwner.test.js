@@ -43,7 +43,7 @@ describe("<TokenOwner /> tests", () => {
     );
     expect(wrapper.props().tokenOwner).to.be.empty;
     expect(wrapper.find("InputLabel").length).to.eq(1);
-    expect(wrapper.find("InputLabel").props().children).to.eq("Account");
+    expect(wrapper.find("InputLabel").props().children).to.eq("Token Owner");
     expect(wrapper.find("Typography").length).to.eq(1);
     expect(wrapper.find("Typography").at(0).props().className).to.eq("typography");
     expect(wrapper.find("Typography").at(0).props().children).to.eq("This account will be owner of the created tokens!");
@@ -55,7 +55,7 @@ describe("<TokenOwner /> tests", () => {
     );
     expect(wrapper.props().tokenOwner).to.eq("AAA");
     expect(wrapper.find("InputLabel").length).to.eq(1);
-    expect(wrapper.find("InputLabel").props().children).to.eq("Account");
+    expect(wrapper.find("InputLabel").props().children).to.eq("Token Owner");
     expect(wrapper.find("Typography").length).to.eq(1);
     expect(wrapper.find("Typography").at(0).props().className).to.eq("typography_error");
     expect(wrapper.find("Typography").at(0).props().children).to.eq("Not a valid ETH account");
@@ -67,7 +67,7 @@ describe("<TokenOwner /> tests", () => {
     );
     expect(wrapper.props().tokenOwner).to.eq(tokenOwner);
     expect(wrapper.find("InputLabel").length).to.eq(1);
-    expect(wrapper.find("InputLabel").props().children).to.eq("Account");
+    expect(wrapper.find("InputLabel").props().children).to.eq("Token Owner");
     expect(wrapper.find("Typography").length).to.eq(1);
     expect(wrapper.find("Typography").at(0).props().className).to.eq("typography");
     expect(wrapper.find("Typography").at(0).props().children).to.eq("This account will be owner of the created tokens!");

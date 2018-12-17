@@ -52,7 +52,7 @@ export class TokenOwner extends React.Component {
             <TextField
               required
               id="outlined-required"
-              label="Account"
+              label="Token Owner"
               className="text_field"
               margin="normal"
               variant="outlined"

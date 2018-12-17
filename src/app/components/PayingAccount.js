@@ -133,7 +133,7 @@ export class PayingAccount extends React.Component {
           variant="body1"
           className={error ? "typography_payment_error" : "typography_payment"}
         >
-          ETH paying account. This account pays for token creation service.
+          This account pays for token creation service.
         </Typography>
       );
     }
@@ -143,7 +143,7 @@ export class PayingAccount extends React.Component {
         <Grid item xs={12} md={6}>
           <MuiThemeProvider theme={theme}>
             <FormControl variant="outlined">
-              <InputLabel>Paying account</InputLabel>
+              <InputLabel>Paying Account</InputLabel>
               <Select
                 error={error}
                 value={this.props.payingAccount}

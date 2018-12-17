@@ -83,7 +83,7 @@ describe("<PayingAccount /> tests", () => {
     expect(wrapper.find("FormControl").length).to.eq(1);
     expect(wrapper.find("FormControl").props().variant).to.eq("outlined");
     expect(wrapper.find("InputLabel").length).to.eq(1);
-    expect(wrapper.find("InputLabel").props().children).to.eq("Paying account");
+    expect(wrapper.find("InputLabel").props().children).to.eq("Paying Account");
     expect(wrapper.find("Select").length).to.eq(1);
     expect(wrapper.find("Select").props().error).to.be.false;
     expect(wrapper.find("Select").props().value).to.be.empty;
@@ -92,7 +92,7 @@ describe("<PayingAccount /> tests", () => {
     expect(wrapper.find("Typography").props().align).to.eq("left");
     expect(wrapper.find("Typography").props().variant).to.eq("body1");
     expect(wrapper.find("Typography").props().className).to.eq("typography_payment");
-    expect(wrapper.find("Typography").props().children).to.eq("ETH paying account. This account pays for token creation service.");
+    expect(wrapper.find("Typography").props().children).to.eq("This account pays for token creation service.");
   });
 
   it("renders PayingAccount - no accounts", () => {
@@ -118,7 +118,7 @@ describe("<PayingAccount /> tests", () => {
     expect(wrapper.find("FormControl").length).to.eq(1);
     expect(wrapper.find("FormControl").props().variant).to.eq("outlined");
     expect(wrapper.find("InputLabel").length).to.eq(1);
-    expect(wrapper.find("InputLabel").props().children).to.eq("Paying account");
+    expect(wrapper.find("InputLabel").props().children).to.eq("Paying Account");
     expect(wrapper.find("Select").length).to.eq(1);
     expect(wrapper.find("Select").props().error).to.be.true;
     expect(wrapper.find("Select").props().value).to.be.empty;
@@ -154,7 +154,7 @@ describe("<PayingAccount /> tests", () => {
     expect(wrapper.find("FormControl").length).to.eq(1);
     expect(wrapper.find("FormControl").props().variant).to.eq("outlined");
     expect(wrapper.find("InputLabel").length).to.eq(1);
-    expect(wrapper.find("InputLabel").props().children).to.eq("Paying account");
+    expect(wrapper.find("InputLabel").props().children).to.eq("Paying Account");
     expect(wrapper.find("Select").length).to.eq(1);
     expect(wrapper.find("Select").props().error).to.be.false;
     expect(wrapper.find("Select").props().value).to.be.empty;
@@ -163,7 +163,7 @@ describe("<PayingAccount /> tests", () => {
     expect(wrapper.find("Typography").props().align).to.eq("left");
     expect(wrapper.find("Typography").props().variant).to.eq("body1");
     expect(wrapper.find("Typography").props().className).to.eq("typography_payment");
-    expect(wrapper.find("Typography").props().children).to.eq("ETH paying account. This account pays for token creation service.");
+    expect(wrapper.find("Typography").props().children).to.eq("This account pays for token creation service.");
   });
 
   it("renders PayingAccount - while checking paying account funds", () => {
@@ -189,7 +189,7 @@ describe("<PayingAccount /> tests", () => {
     expect(wrapper.find("FormControl").length).to.eq(1);
     expect(wrapper.find("FormControl").props().variant).to.eq("outlined");
     expect(wrapper.find("InputLabel").length).to.eq(1);
-    expect(wrapper.find("InputLabel").props().children).to.eq("Paying account");
+    expect(wrapper.find("InputLabel").props().children).to.eq("Paying Account");
     expect(wrapper.find("Select").length).to.eq(1);
     expect(wrapper.find("Select").props().error).to.be.false;
     expect(wrapper.find("Select").props().value).to.eq(payingAccount);
@@ -198,7 +198,7 @@ describe("<PayingAccount /> tests", () => {
     expect(wrapper.find("Typography").props().align).to.eq("left");
     expect(wrapper.find("Typography").props().variant).to.eq("body1");
     expect(wrapper.find("Typography").props().className).to.eq("typography_payment");
-    expect(wrapper.find("Typography").props().children).to.eq("ETH paying account. This account pays for token creation service.");
+    expect(wrapper.find("Typography").props().children).to.eq("This account pays for token creation service.");
   });
 
     it("renders PayingAccount - while checking paying account funds", () => {
@@ -224,7 +224,7 @@ describe("<PayingAccount /> tests", () => {
     expect(wrapper.find("FormControl").length).to.eq(1);
     expect(wrapper.find("FormControl").props().variant).to.eq("outlined");
     expect(wrapper.find("InputLabel").length).to.eq(1);
-    expect(wrapper.find("InputLabel").props().children).to.eq("Paying account");
+    expect(wrapper.find("InputLabel").props().children).to.eq("Paying Account");
     expect(wrapper.find("Select").length).to.eq(1);
     expect(wrapper.find("Select").props().error).to.be.true;
     expect(wrapper.find("Select").props().value).to.eq(payingAccount);
