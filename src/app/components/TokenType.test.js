@@ -50,10 +50,10 @@ describe("<TokenType /> tests", () => {
     expect(wrapper.find("RadioGroup").props().value).to.eq("erc20");
     expect(wrapper.find("FormControlLabel").length).to.eq(2);
     expect(wrapper.find("FormControlLabel").at(0).props().value).to.eq("erc20");
-    expect(wrapper.find("FormControlLabel").at(0).props().label).to.eq("ERC20");
+    expect(wrapper.find("FormControlLabel").at(0).props().label).to.eq("ERC-20");
     expect(wrapper.find("FormControlLabel").at(0).props().labelPlacement).to.eq("start");
     expect(wrapper.find("FormControlLabel").at(1).props().value).to.eq("erc223");
-    expect(wrapper.find("FormControlLabel").at(1).props().label).to.eq("ERC223");
+    expect(wrapper.find("FormControlLabel").at(1).props().label).to.eq("ERC-223");
     expect(wrapper.find("FormControlLabel").at(1).props().labelPlacement).to.eq("start");
     expect(wrapper.find("Radio").length).to.eq(2);
     expect(wrapper.find("Radio").at(0).props().checked).to.be.true;
@@ -70,10 +70,10 @@ describe("<TokenType /> tests", () => {
     expect(wrapper.find("RadioGroup").props().value).to.eq("erc223");
     expect(wrapper.find("FormControlLabel").length).to.eq(2);
     expect(wrapper.find("FormControlLabel").at(0).props().value).to.eq("erc20");
-    expect(wrapper.find("FormControlLabel").at(0).props().label).to.eq("ERC20");
+    expect(wrapper.find("FormControlLabel").at(0).props().label).to.eq("ERC-20");
     expect(wrapper.find("FormControlLabel").at(0).props().labelPlacement).to.eq("start");
     expect(wrapper.find("FormControlLabel").at(1).props().value).to.eq("erc223");
-    expect(wrapper.find("FormControlLabel").at(1).props().label).to.eq("ERC223");
+    expect(wrapper.find("FormControlLabel").at(1).props().label).to.eq("ERC-223");
     expect(wrapper.find("FormControlLabel").at(1).props().labelPlacement).to.eq("start");
     expect(wrapper.find("Radio").length).to.eq(2);
     expect(wrapper.find("Radio").at(0).props().checked).to.be.false;

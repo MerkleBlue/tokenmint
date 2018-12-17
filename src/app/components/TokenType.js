@@ -66,7 +66,7 @@ export class TokenType extends React.Component {
                       }}
                     />
                   }
-                  label="ERC20"
+                  label="ERC-20"
                   labelPlacement="start"
                 />
                 <FormControlLabel
@@ -78,7 +78,7 @@ export class TokenType extends React.Component {
                       }}
                     />
                   }
-                  label="ERC223"
+                  label="ERC-223"
                   labelPlacement="start"
                 />
               </RadioGroup>
