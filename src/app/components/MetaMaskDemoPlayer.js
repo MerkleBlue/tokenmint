@@ -3,7 +3,7 @@ import { Dialog } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import './css/MetaMaskDemoPlayer.css';
 
-export class MetaMaskDemoPlayer extends React.Component {
+class MetaMaskDemoPlayer extends React.Component {
 
   render() {
     return (

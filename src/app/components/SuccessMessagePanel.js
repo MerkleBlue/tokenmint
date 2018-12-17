@@ -136,7 +136,7 @@ export class SuccessMessagePanel extends React.Component {
             <MuiThemeProvider theme={theme}>
               <Typography
                 align="center"
-                variant="body1"
+                variant="h6"
                 className="typography_success_info_message"
               >
                 Your transaction has been successfully submitted to Ethereum network.
@@ -169,6 +169,13 @@ export class SuccessMessagePanel extends React.Component {
                 className="typography_success_info_message"
               >
                 Once the mining is finished, you can check your new assets on <a href={etherscanLink} rel="noopener noreferrer" target="_blank">etherscan</a>
+              </Typography>
+              <Typography
+                align="center"
+                variant="body1"
+                className="typography_success_info_message"
+              >
+                If you need help verifying the token, please contact us at <i>merkleblue@gmail.com</i>
               </Typography>
               <Typography
                 align="center"

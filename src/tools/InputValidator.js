@@ -43,6 +43,9 @@ export default class InputValidator {
     if (tokenOwner === "") {
       return true;
     }
+    if (!tokenOwner.startsWith("0x")) {
+      return false;
+    }
     return web3.utils.isAddress(tokenOwner);
   }
 
@@ -52,6 +55,13 @@ export default class InputValidator {
       this.isDecimalsValid(decimals) && decimals !== "" &&
       this.isTotalSupplyValid(totalSupply) && totalSupply !== "" &&
       this.isTokenOwnerValid(tokenOwner) && tokenOwner !== "";
+  }
+
+  static areTokenAttributesValid(tokenName, tokenSymbol, decimals, totalSupply) {
+    return this.isTokenNameValid(tokenName) && tokenName !== "" &&
+      this.isTokenSymbolValid(tokenSymbol) && tokenSymbol !== "" &&
+      this.isDecimalsValid(decimals) && decimals !== "" &&
+      this.isTotalSupplyValid(totalSupply) && totalSupply !== "";
   }
 
   static isTokenSymbolUnique(tokenSymbol) {

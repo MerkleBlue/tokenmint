@@ -27,7 +27,7 @@ describe("walletActions tests", () => {
       { type: types.SET_WALLET_NEEDS_TO_BE_UNLOCKED, walletNeedsToBeUnlocked: false },
       { type: types.SET_ACCOUNTS, accounts: accounts },
       { type: types.SET_LOADING_ACCOUNTS, loadingAccounts: false },
-      { type: types.SET_TOKEN_OWNER, tokenOwner: "Account0" }
+      { type: types.INIT_TOKEN_OWNER, tokenOwner: "Account0" }
     ];
     const store = mockStore({ walletNeedsToBeUnlocked: true, accounts: [] }, expectedActions);
     store.dispatch(walletActions.unlockWallet()).then(() => {

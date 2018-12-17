@@ -200,9 +200,6 @@ describe('test InputValidator', () => {
   it ('is invalid input - empty total supply', () => {
     expect(InputValidator.isInputValid(validTokenName, validTokenSymbol, validDecimals, '', validTokenOwner)).to.be.false;
   });
-  it ('is invalid input - empty token owner', () => {
-    expect(InputValidator.isInputValid(validTokenName, validTokenSymbol, validDecimals, validTotalSupply, '')).to.be.false;
-  });
   it ('is valid input', () => {
     expect(InputValidator.isInputValid(validTokenName, validTokenSymbol, validDecimals, validTotalSupply, validTokenOwner)).to.be.true;
   });

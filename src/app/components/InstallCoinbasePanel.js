@@ -4,7 +4,8 @@ import {
   Grid,
   Card,
   CardHeader,
-  CardContent
+  CardContent,
+  Typography
 } from '@material-ui/core';
 import './css/InstallCoinbasePanel.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,6 +20,7 @@ import { bindActionCreators } from 'redux';
 import * as mintApi from '../../api/mintApi';
 import appStates from '../reducers/appStates';
 import DetectingWalletDialog from './DetectingWalletDialog'; //eslint-disable-line import/no-named-as-default
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 export class InstallCoinbasePanel extends React.Component {
 
@@ -47,7 +49,7 @@ export class InstallCoinbasePanel extends React.Component {
   }
 
   handleBack(e) {
-    this.props.appStateActions.setAppState(appStates.PENDING_CONFIRMATION);
+    this.props.appStateActions.setAppState(appStates.INIT);
   }
 
   handleNext(e) {
@@ -60,6 +62,12 @@ export class InstallCoinbasePanel extends React.Component {
   }
 
   render() {
+    const theme = createMuiTheme({
+      typography: {
+        useNextVariants: true,
+      }
+    });
+
     return (
       <div>
         <DetectingWalletDialog
@@ -81,6 +89,20 @@ export class InstallCoinbasePanel extends React.Component {
               root: "card_content"
             }}
           >
+            <MuiThemeProvider theme={theme}>
+              <Typography
+                align="center"
+                variant="h6"
+              >
+                We detected no embedded Ethereum wallet!
+              </Typography>
+              <Typography
+                align="center"
+                variant="h6"
+              >
+                Please install Coinbase and REFRESH THE PAGE in order to be able to continue
+              </Typography>
+            </MuiThemeProvider>
             <img src={coinbase_logo} alt="" />
             <Grid container spacing={8}>
               <Grid item xs={12} md={6}>
@@ -105,31 +127,31 @@ export class InstallCoinbasePanel extends React.Component {
               </Grid>
             </Grid>
           </CardContent>
-          </Card>
-          <form className="footer_main_form">
-            <Grid container spacing={8}>
-              <Grid item xs={6} md={6} className="grid_cell">
-                <span
-                  className="btn btn-cancel wow fadeInUp"
-                  data-wow-duration="1000ms"
-                  data-wow-delay="400ms"
-                  onClick={this.handleBack}
-                >
-                  <FontAwesomeIcon className="fa_back_icon" icon={faChevronLeft} />
-                </span>
-              </Grid>
-              <Grid item xs={6} md={6} className="grid_cell">
-                <span
-                  className="btn btn-confirm wow fadeInUp"
-                  data-wow-duration="1000ms"
-                  data-wow-delay="400ms"
-                  onClick={this.handleNext}
-                >
-                  <FontAwesomeIcon className="fa_confirm_icon" icon={faChevronRight} />
-                </span>
-              </Grid>
+        </Card>
+        <form className="footer_main_form">
+          <Grid container spacing={8}>
+            <Grid item xs={6} md={6} className="grid_cell">
+              <span
+                className="btn btn-cancel wow fadeInUp"
+                data-wow-duration="1000ms"
+                data-wow-delay="400ms"
+                onClick={this.handleBack}
+              >
+                <FontAwesomeIcon className="fa_back_icon" icon={faChevronLeft} />
+              </span>
             </Grid>
-          </form>
+            <Grid item xs={6} md={6} className="grid_cell">
+              <span
+                className="btn btn-confirm wow fadeInUp"
+                data-wow-duration="1000ms"
+                data-wow-delay="400ms"
+                onClick={this.handleNext}
+              >
+                <FontAwesomeIcon className="fa_confirm_icon" icon={faChevronRight} />
+              </span>
+            </Grid>
+          </Grid>
+        </form>
       </div>
     );
   }

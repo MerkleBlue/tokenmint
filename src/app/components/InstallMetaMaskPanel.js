@@ -21,10 +21,10 @@ import { bindActionCreators } from 'redux';
 import appStates from '../reducers/appStates';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import * as mintApi from '../../api/mintApi';
-import MetaMaskDemoPlayer from './MetaMaskDemoPlayer'; //eslint-disable-line import/no-named-as-default
+import MetaMaskDemoPlayer from './MetaMaskDemoPlayer';
 import DetectingWalletDialog from './DetectingWalletDialog'; //eslint-disable-line import/no-named-as-default
 
-export class InstallMetamaskPanel extends React.Component {
+export class InstallMetaMaskPanel extends React.Component {
 
   constructor(props) {
     super(props);
@@ -61,7 +61,7 @@ export class InstallMetamaskPanel extends React.Component {
   }
 
   handleBack(e) {
-    this.props.appStateActions.setAppState(appStates.PENDING_CONFIRMATION);
+    this.props.appStateActions.setAppState(appStates.INIT);
   }
 
   handleNext(e) {
@@ -196,9 +196,8 @@ export class InstallMetamaskPanel extends React.Component {
   }
 }
 
-InstallMetamaskPanel.propTypes = {
+InstallMetaMaskPanel.propTypes = {
   isMobileDevice: PropTypes.bool.isRequired,
-  checkingNetwork: PropTypes.bool.isRequired,
   appStateActions: PropTypes.object.isRequired,
   accountsActions: PropTypes.object.isRequired,
   networkActions: PropTypes.object.isRequired,
@@ -220,4 +219,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(InstallMetamaskPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(InstallMetaMaskPanel);

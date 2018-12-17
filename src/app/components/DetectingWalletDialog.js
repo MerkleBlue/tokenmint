@@ -15,6 +15,7 @@ export class DetectingWalletDialog extends React.Component {
   render() {
     let dialogTitle;
     let dialogContent;
+    const walletName = this.props.isMobileDevice ? "Coinbase" : "MetaMask";
     if (this.props.checkingNetwork) {
       dialogTitle = "Detecting wallet";
       dialogContent = <CircularProgress />;
@@ -22,7 +23,7 @@ export class DetectingWalletDialog extends React.Component {
       dialogTitle = "No wallet detected";
       dialogContent = (
         <div>
-          <p className="modal-text">If you already installed MetaMask, please REFRESH THE PAGE and resume to the next step</p>
+          <p className="modal-text">If you already installed {walletName}, please REFRESH THE PAGE and resume to the next step</p>
           <Button className="close-modal-button" variant="contained" onClick={this.props.handleModalClose} >
             Close
           </Button>
@@ -53,12 +54,14 @@ export class DetectingWalletDialog extends React.Component {
 DetectingWalletDialog.propTypes = {
   isModalOpen: PropTypes.bool.isRequired,
   checkingNetwork: PropTypes.bool.isRequired,
-  handleModalClose: PropTypes.func.isRequired
+  handleModalClose: PropTypes.func.isRequired,
+  isMobileDevice: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    checkingNetwork: state.checkingNetwork
+    checkingNetwork: state.checkingNetwork,
+    isMobileDevice: state.isMobileDevice
   };
 }
 

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import TokenInfo from './app/components/TokenInfo'; //eslint-disable-line import/no-named-as-default
 import TokenType from './app/components/TokenType'; //eslint-disable-line import/no-named-as-default
-import TokenOwner from './app/components/TokenOwner'; //eslint-disable-line import/no-named-as-default
 import Footer from './app/components/Footer'; //eslint-disable-line import/no-named-as-default
 import Header from './app/components/Header'; //eslint-disable-line import/no-named-as-default
 import ConfirmationPanel from './app/components/ConfirmationPanel'; //eslint-disable-line import/no-named-as-default
@@ -15,7 +14,7 @@ import SuccessMessagePanel from './app/components/SuccessMessagePanel'; //eslint
 import { CSSTransitionGroup } from 'react-transition-group';
 import FullStory from 'react-fullstory';
 import pack from '../package.json';
-import InstallMetamaskPanel from './app/components/InstallMetaMaskPanel'; //eslint-disable-line import/no-named-as-default
+import InstallMetaMaskPanel from './app/components/InstallMetaMaskPanel'; //eslint-disable-line import/no-named-as-default
 import InstallCoinbasePanel from './app/components/InstallCoinbasePanel'; //eslint-disable-line import/no-named-as-default
 import HandlePaymentPanel from './app/components/HandlePaymentPanel'; //eslint-disable-line import/no-named-as-default
 
@@ -34,7 +33,7 @@ class App extends Component {
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          <InstallMetamaskPanel />
+          <InstallMetaMaskPanel />
         </CSSTransitionGroup>
       ) : (
         <CSSTransitionGroup
@@ -95,7 +94,6 @@ class App extends Component {
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          <TokenOwner />
           <TokenType />
           <TokenInfo />
           <Footer />
