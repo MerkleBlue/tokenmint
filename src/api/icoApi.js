@@ -5,7 +5,10 @@ import { BigNumber } from 'bignumber.js';
 // contracts
 import SafeMathLibJSON from '../contracts/SafeMathLib.json';
 import FlatPricingJSON from '../contracts/FlatPricing.json';
+import CrowdsaleTokenJSON from '../contracts/CrowdsaleToken.json';
 //import ERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
+
+var contract = require("truffle-contract");
 
 
 const feeInUsd = 29.99;
@@ -187,19 +190,51 @@ export function checkTokenOwnerFunds(tokenOwner) {
   });
 }
 
+function instantiateContractWithTruffleContract(contractJSON, constructorArguments, account, feeInETH) {
+  return new Promise((accept, reject) => {
+    var MyContract = contract(contractJSON);
+
+    MyContract.setProvider(web3.currentProvider);
+
+    // TODO: there's a bug with web3 1.0.
+    //dirty hack for web3@1.0.0 support for localhost testrpc, see https://github.com/trufflesuite/truffle-contract/issues/56#issuecomment-331084530
+    if (typeof MyContract.currentProvider.sendAsync !== "function") {
+      MyContract.currentProvider.sendAsync = function () {
+        return MyContract.currentProvider.send.apply(
+          MyContract.currentProvider, arguments
+        );
+      };
+    }
+
+    console.log(constructorArguments);
+
+    MyContract.new(...constructorArguments, { from: account }).then((instance) => {
+      console.log(instance);
+      accept(txHash);
+      return;
+    }).catch(e => {
+      console.log(e);
+      reject(e);
+      return;
+    });
+  });
+}
+
 function instantiateContract(contractJSON, constructorArguments, account, feeInETH) {
   return new Promise((accept, reject) => {
     // used for converting big number to string without scientific notation
     BigNumber.config({ EXPONENTIAL_AT: 100 });
     let myContract = new web3.eth.Contract(contractJSON.abi, {
-      from: account
+      from: account,
+      //gasPrice: '1000'
     });
     myContract.deploy({
       data: contractJSON.bytecode,
       arguments: [...constructorArguments],
     }).send({
       from: account,
-      gas: 4712388,
+      gas: 6721975, // was 4712388 // max gas willing to pay, should not exceed block gas limit
+      //gasPrice: '1',
       value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
     }).on('error', (error) => {
       reject(error);
@@ -234,6 +269,7 @@ export function deploySafeMathLib(tokenOwner) {
 }
 
 export function deployFlatPricing(tokenOwner) {
+  //console.log(FlatPricingJSON.bytecode)
   // TODO: fix this
   // HACK: manually linking: replace _SafeMathLib____ with actual bytecode
   // This is not recommended, but it works. The problem is that SafeMathLib is a
@@ -250,6 +286,29 @@ export function deployFlatPricing(tokenOwner) {
           accept(txHash);
           return;
         }).catch((e) => {
+          reject(new Error("Could not create contract."));
+          return;
+        });
+      } else {
+        reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
+        return;
+      }
+    }).catch((e) => {
+      reject(new Error("Could not check token owner ETH funds."));
+      return;
+    });
+  });
+}
+
+export function deployCrowdsaleToken(tokenOwner, name, symbol, initialSupply, decimals, mintable) {
+  return new Promise((accept, reject) => {
+    checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
+      if (hasFunds) {
+        instantiateContract(CrowdsaleTokenJSON, [name, symbol, initialSupply, decimals, mintable], tokenOwner, 0).then(txHash => {
+          accept(txHash);
+          return;
+        }).catch((e) => {
+          console.log(e)
           reject(new Error("Could not create contract."));
           return;
         });
