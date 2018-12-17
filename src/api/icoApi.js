@@ -190,7 +190,7 @@ export function checkTokenOwnerFunds(tokenOwner) {
   });
 }
 
-function instantiateContractWithTruffleContract(contractJSON, constructorArguments, account, feeInETH) {
+/*function instantiateContractWithTruffleContract(contractJSON, constructorArguments, account, feeInETH) {
   return new Promise((accept, reject) => {
     var MyContract = contract(contractJSON);
 
@@ -210,7 +210,7 @@ function instantiateContractWithTruffleContract(contractJSON, constructorArgumen
 
     MyContract.new(...constructorArguments, { from: account }).then((instance) => {
       console.log(instance);
-      accept(txHash);
+      accept();
       return;
     }).catch(e => {
       console.log(e);
@@ -218,7 +218,7 @@ function instantiateContractWithTruffleContract(contractJSON, constructorArgumen
       return;
     });
   });
-}
+}*/
 
 function instantiateContract(contractJSON, constructorArguments, account, feeInETH) {
   return new Promise((accept, reject) => {
@@ -301,6 +301,29 @@ export function deployFlatPricing(tokenOwner) {
 }
 
 export function deployCrowdsaleToken(tokenOwner, name, symbol, initialSupply, decimals, mintable) {
+  return new Promise((accept, reject) => {
+    checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
+      if (hasFunds) {
+        instantiateContract(CrowdsaleTokenJSON, [name, symbol, initialSupply, decimals, mintable], tokenOwner, 0).then(txHash => {
+          accept(txHash);
+          return;
+        }).catch((e) => {
+          console.log(e)
+          reject(new Error("Could not create contract."));
+          return;
+        });
+      } else {
+        reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
+        return;
+      }
+    }).catch((e) => {
+      reject(new Error("Could not check token owner ETH funds."));
+      return;
+    });
+  });
+}
+
+export function deployAllocatedCrowdsale(tokenOwner, name, symbol, initialSupply, decimals, mintable) {
   return new Promise((accept, reject) => {
     checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
       if (hasFunds) {
