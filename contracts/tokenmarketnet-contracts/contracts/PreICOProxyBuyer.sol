@@ -9,6 +9,7 @@ pragma solidity ^0.4.6;
 import "./zeppelin/contracts/math/SafeMath.sol";
 import "./Crowdsale.sol";
 import "./Haltable.sol";
+import "./CrowdsaleToken.sol";
 
 /**
  * Collect funds from presale investors, buy tokens for them in a single transaction and distribute out tokens.
@@ -115,7 +116,7 @@ contract PreICOProxyBuyer is Ownable, Haltable {
   /**
    * Get the token we are distributing.
    */
-  function getToken() public constant returns(FractionalERC20) {
+  function getToken() public constant returns(CrowdsaleToken) {
     if(address(crowdsale) == 0)  {
       throw;
     }
