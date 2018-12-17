@@ -94,13 +94,13 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
     expect(wrapper.find("Typography").length).to.eq(17);
-    expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
-    expect(wrapper.find("Typography").at(4).props().children).to.eq(payingAccount);
-    expect(wrapper.find("Typography").at(6).props().children).to.eq(initialState.tokenName);
-    expect(wrapper.find("Typography").at(8).props().children).to.eq(tokenSymbol);
-    expect(wrapper.find("Typography").at(10).props().children).to.eq(decimals);
-    expect(wrapper.find("Typography").at(12).props().children).to.eq(totalSupply);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq(tokenType);
+    expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenType);
+    expect(wrapper.find("Typography").at(4).props().children).to.eq(initialState.tokenName);
+    expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
+    expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
+    expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
+    expect(wrapper.find("Typography").at(12).props().children).to.eq(payingAccount);
+    expect(wrapper.find("Typography").at(14).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(16).props().children[0]).to.eq(serviceFee);
   });
 
@@ -132,13 +132,13 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
     expect(wrapper.find("Typography").length).to.eq(17);
-    expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
-    expect(wrapper.find("Typography").at(4).props().children).to.eq(payingAccount);
-    expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenName);
-    expect(wrapper.find("Typography").at(8).props().children).to.eq(initialState.tokenSymbol);
-    expect(wrapper.find("Typography").at(10).props().children).to.eq(decimals);
-    expect(wrapper.find("Typography").at(12).props().children).to.eq(totalSupply);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq(tokenType);
+    expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenType);
+    expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
+    expect(wrapper.find("Typography").at(6).props().children).to.eq(initialState.tokenSymbol);
+    expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
+    expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
+    expect(wrapper.find("Typography").at(12).props().children).to.eq(payingAccount);
+    expect(wrapper.find("Typography").at(14).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(16).props().children[0]).to.eq(serviceFee);
   });
 
@@ -170,13 +170,13 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
     expect(wrapper.find("Typography").length).to.eq(17);
-    expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
-    expect(wrapper.find("Typography").at(4).props().children).to.eq(payingAccount);
-    expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenName);
-    expect(wrapper.find("Typography").at(8).props().children).to.eq(tokenSymbol);
-    expect(wrapper.find("Typography").at(10).props().children).to.eq("");
-    expect(wrapper.find("Typography").at(12).props().children).to.eq(totalSupply);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq(tokenType);
+    expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenType);
+    expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
+    expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
+    expect(wrapper.find("Typography").at(8).props().children).to.eq("");
+    expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
+    expect(wrapper.find("Typography").at(12).props().children).to.eq(payingAccount);
+    expect(wrapper.find("Typography").at(14).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(16).props().children[0]).to.eq(serviceFee);
   });
 
@@ -208,13 +208,13 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
     expect(wrapper.find("Typography").length).to.eq(17);
-    expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
-    expect(wrapper.find("Typography").at(4).props().children).to.eq(payingAccount);
-    expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenName);
-    expect(wrapper.find("Typography").at(8).props().children).to.eq(tokenSymbol);
-    expect(wrapper.find("Typography").at(10).props().children).to.eq(decimals);
-    expect(wrapper.find("Typography").at(12).props().children).to.eq(initialState.totalSupply);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq(tokenType);
+    expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenType);
+    expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
+    expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
+    expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
+    expect(wrapper.find("Typography").at(10).props().children).to.eq(initialState.totalSupply);
+    expect(wrapper.find("Typography").at(12).props().children).to.eq(payingAccount);
+    expect(wrapper.find("Typography").at(14).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(16).props().children[0]).to.eq(serviceFee);
   });
 
@@ -246,13 +246,13 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
     expect(wrapper.find("Typography").length).to.eq(17);
-    expect(wrapper.find("Typography").at(2).props().children).to.eq(initialState.tokenOwner);
-    expect(wrapper.find("Typography").at(4).props().children).to.eq(payingAccount);
-    expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenName);
-    expect(wrapper.find("Typography").at(8).props().children).to.eq(tokenSymbol);
-    expect(wrapper.find("Typography").at(10).props().children).to.eq(decimals);
-    expect(wrapper.find("Typography").at(12).props().children).to.eq(totalSupply);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq(tokenType);
+    expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenType);
+    expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
+    expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
+    expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
+    expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
+    expect(wrapper.find("Typography").at(12).props().children).to.eq(payingAccount);
+    expect(wrapper.find("Typography").at(14).props().children).to.eq(initialState.tokenOwner);
     expect(wrapper.find("Typography").at(16).props().children[0]).to.eq(serviceFee);
   });
 
@@ -284,13 +284,13 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("CardHeader").props().title).to.eq("Confirm parameters");
     expect(wrapper.find("CardContent").length).to.eq(1);
     expect(wrapper.find("Typography").length).to.eq(17);
-    expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
-    expect(wrapper.find("Typography").at(4).props().children).to.eq(payingAccount);
-    expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenName);
-    expect(wrapper.find("Typography").at(8).props().children).to.eq(tokenSymbol);
-    expect(wrapper.find("Typography").at(10).props().children).to.eq(decimals);
-    expect(wrapper.find("Typography").at(12).props().children).to.eq(totalSupply);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq(tokenType);
+    expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenType);
+    expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
+    expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
+    expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
+    expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
+    expect(wrapper.find("Typography").at(12).props().children).to.eq(payingAccount);
+    expect(wrapper.find("Typography").at(14).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(16).props().children[0]).to.eq(serviceFee);
   });
 
@@ -322,13 +322,13 @@ describe("<ConfirmationPanel /> tests", () => {
     expect(wrapper.find("CardHeader").props().title).to.eq("Please Confirm Token Creation Parameters!");
     expect(wrapper.find("CardContent").length).to.eq(1);
     expect(wrapper.find("Typography").length).to.eq(17);
-    expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenOwner);
-    expect(wrapper.find("Typography").at(4).props().children).to.eq(payingAccount);
-    expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenName);
-    expect(wrapper.find("Typography").at(8).props().children).to.eq(tokenSymbol);
-    expect(wrapper.find("Typography").at(10).props().children).to.eq(decimals);
-    expect(wrapper.find("Typography").at(12).props().children).to.eq(totalSupply);
-    expect(wrapper.find("Typography").at(14).props().children).to.eq(tokenType);
+    expect(wrapper.find("Typography").at(2).props().children).to.eq(tokenType);
+    expect(wrapper.find("Typography").at(4).props().children).to.eq(tokenName);
+    expect(wrapper.find("Typography").at(6).props().children).to.eq(tokenSymbol);
+    expect(wrapper.find("Typography").at(8).props().children).to.eq(decimals);
+    expect(wrapper.find("Typography").at(10).props().children).to.eq(totalSupply);
+    expect(wrapper.find("Typography").at(12).props().children).to.eq(payingAccount);
+    expect(wrapper.find("Typography").at(14).props().children).to.eq(tokenOwner);
     expect(wrapper.find("Typography").at(16).props().children[0]).to.eq(serviceFee);
   });
 

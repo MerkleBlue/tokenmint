@@ -70,8 +70,8 @@ export class ConfirmationPanel extends React.Component {
           data-wow-delay="400ms"
           onClick={this.handleConfirm}
         >
-        <FontAwesomeIcon className="fa_confirm_icon" icon={faCheck} />
-        {!this.props.isMobileDevice && " Finish"}
+          <FontAwesomeIcon className="fa_confirm_icon" icon={faCheck} />
+          {!this.props.isMobileDevice && " Finish"}
         </span>
       ) : (
         <span
@@ -79,8 +79,8 @@ export class ConfirmationPanel extends React.Component {
           data-wow-duration="1000ms"
           data-wow-delay="400ms"
         >
-        <FontAwesomeIcon className="fa_confirm_icon" icon={faCheck} />
-        {!this.props.isMobileDevice && " Finish"}
+          <FontAwesomeIcon className="fa_confirm_icon" icon={faCheck} />
+          {!this.props.isMobileDevice && " Finish"}
         </span>
       );
 
@@ -108,38 +108,16 @@ export class ConfirmationPanel extends React.Component {
                   variant="body1"
                   className="typography_left"
                 >
-                  Token Owner:
-              </Typography>
-              </Grid>
-              <Grid item xs={12} md={6} className="grid_cell">
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className="typography_right"
-                  gutterBottom
-                >
-                  {this.props.tokenOwner}
+                  Token Type:
                 </Typography>
               </Grid>
-            </Grid>
-            <Grid className="grid_container" container spacing={8}>
               <Grid item xs={12} md={6}>
                 <Typography
                   align="left"
                   variant="body1"
-                  className="typography_left"
-                >
-                  Paying Account:
-                </Typography>
-              </Grid>
-              <Grid item xs={12} md={6} className="grid_cell">
-                <Typography
-                  align="left"
-                  variant="body1"
                   className="typography_right"
-                  gutterBottom
                 >
-                  {this.props.payingAccount}
+                  {this.props.tokenType}
                 </Typography>
               </Grid>
             </Grid>
@@ -230,16 +208,38 @@ export class ConfirmationPanel extends React.Component {
                   variant="body1"
                   className="typography_left"
                 >
-                  Token Type:
-              </Typography>
+                  Paying Account:
+                </Typography>
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={6} className="grid_cell">
                 <Typography
                   align="left"
                   variant="body1"
                   className="typography_right"
+                  gutterBottom
                 >
-                  {this.props.tokenType}
+                  {this.props.payingAccount}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid className="grid_container" container spacing={8}>
+              <Grid item xs={12} md={6}>
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className="typography_left"
+                >
+                  Token Owner:
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={6} className="grid_cell">
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className="typography_right"
+                  gutterBottom
+                >
+                  {this.props.tokenOwner}
                 </Typography>
               </Grid>
             </Grid>
@@ -277,7 +277,7 @@ export class ConfirmationPanel extends React.Component {
               >
                 <FontAwesomeIcon className="fa_back_icon" icon={faChevronLeft} />
                 {!this.props.isMobileDevice && " Back"}
-                </span>
+              </span>
             </Grid>
             <Grid item xs={6} md={6} className="grid_cell">
               {nextButton}
