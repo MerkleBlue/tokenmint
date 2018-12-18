@@ -36,7 +36,7 @@ contract Issuer is Ownable {
   /** How many addresses have received their tokens. */
   uint public issuedCount;
 
-  function Issuer(address _owner, address _allower, StandardTokenExt _token) {
+  constructor(address _owner, address _allower, StandardTokenExt _token) {
     owner = _owner;
     allower = _allower;
     token = _token;

@@ -27,7 +27,7 @@ contract AllocatedCrowdsaleMixin is CrowdsaleBase {
    * @param _beneficiary The account who has performed approve() to allocate tokens for the token sale.
    *
    */
-  function AllocatedCrowdsaleMixin(address _beneficiary) {
+  constructor(address _beneficiary) {
     beneficiary = _beneficiary;
   }
 

@@ -34,7 +34,7 @@ contract BonusFinalizeAgent is FinalizeAgent {
   /* How much bonus tokens we allocated */
   uint public allocatedBonus;
 
-  function BonusFinalizeAgent(CrowdsaleToken _token, Crowdsale _crowdsale, uint _bonusBasePoints, address _teamMultisig) {
+  constructor(CrowdsaleToken _token, Crowdsale _crowdsale, uint _bonusBasePoints, address _teamMultisig) {
     token = _token;
     crowdsale = _crowdsale;
     if(address(crowdsale) == 0) {

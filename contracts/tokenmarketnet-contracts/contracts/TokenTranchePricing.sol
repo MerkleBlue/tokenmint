@@ -46,7 +46,7 @@ contract TokenTranchePricing is PricingStrategy, Ownable {
 
   /// @dev Contruction, creating a list of tranches
   /// @param _tranches uint[] tranches Pairs of (start amount, price)
-  function TokenTranchePricing(uint[] _tranches) {
+  constructor(uint[] _tranches) {
     // Need to have tuples, length check
     if(_tranches.length % 2 == 1 || _tranches.length >= MAX_TRANCHES*2) {
       throw;

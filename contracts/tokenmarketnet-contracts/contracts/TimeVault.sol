@@ -33,7 +33,7 @@ contract TimeVault {
 
   event Unlocked();
 
-  function TimeVault(address _teamMultisig, StandardTokenExt _token, uint _unlockedAt) {
+  constructor(address _teamMultisig, StandardTokenExt _token, uint _unlockedAt) {
 
     teamMultisig = _teamMultisig;
     token = _token;
