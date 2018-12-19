@@ -6,6 +6,7 @@ import { BigNumber } from 'bignumber.js';
 import SafeMathLibJSON from '../contracts/SafeMathLib.json';
 import FlatPricingJSON from '../contracts/FlatPricing.json';
 import CrowdsaleTokenJSON from '../contracts/CrowdsaleToken.json';
+import AllocatedCrowdsaleJSON from '../contracts/AllocatedCrowdsale.json';
 //import ERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
 
 var contract = require("truffle-contract");
@@ -108,30 +109,6 @@ export function getTokenBalance(contractInstance, account) {
     });
   });
 }
-
-/*function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, account, feeInETH) {
-  return new Promise((accept, reject) => {
-    // used for converting big number to string without scientific notation
-    BigNumber.config({ EXPONENTIAL_AT: 100 });
-    let myContract = new web3.eth.Contract(tokenContract.abi, {
-      from: account
-    });
-    myContract.deploy({
-      data: tokenContract.bytecode,
-      arguments: [name, symbol, decimals, new BigNumber(totalSupply * 10 ** decimals).toString(), tokenMintAccount],
-    }).send({
-      from: account,
-      gas: 4712388,
-      value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
-    }).on('error', (error) => {
-      reject(error);
-      return;
-    }).on('transactionHash', (txHash) => {
-      accept(txHash);
-      return;
-    });
-  });
-}*/
 
 export function getNetwork() {
   return new Promise((accept, reject) => {
@@ -240,8 +217,10 @@ function instantiateContract(contractJSON, constructorArguments, account, feeInE
       reject(error);
       return;
     }).on('transactionHash', (txHash) => {
-      accept(txHash);
-      return;
+      web3.eth.getTransactionReceipt(txHash).then(receipt => {
+        accept(receipt);
+        return;
+      });
     });
   });
 }
@@ -250,8 +229,8 @@ export function deploySafeMathLib(tokenOwner) {
   return new Promise((accept, reject) => {
     checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
       if (hasFunds) {
-        instantiateContract(SafeMathLibJSON, [], tokenOwner, 0).then(txHash => {
-          accept(txHash);
+        instantiateContract(SafeMathLibJSON, [], tokenOwner, 0).then(receipt => {
+          accept(receipt);
           return;
         }).catch((e) => {
           reject(new Error("Could not create contract."));
@@ -282,8 +261,8 @@ export function deployFlatPricing(tokenOwner) {
   return new Promise((accept, reject) => {
     checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
       if (hasFunds) {
-        instantiateContract(FlatPricingJSON, [100], tokenOwner, 0).then(txHash => {
-          accept(txHash);
+        instantiateContract(FlatPricingJSON, [100], tokenOwner, 0).then(receipt => {
+          accept(receipt);
           return;
         }).catch((e) => {
           reject(new Error("Could not create contract."));
@@ -300,12 +279,13 @@ export function deployFlatPricing(tokenOwner) {
   });
 }
 
+// initial supply is in full tokens, not weis, (1000 tokens with 18 decimals would make initialSupply = 1000)
 export function deployCrowdsaleToken(tokenOwner, name, symbol, initialSupply, decimals, mintable) {
   return new Promise((accept, reject) => {
     checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
       if (hasFunds) {
-        instantiateContract(CrowdsaleTokenJSON, [name, symbol, initialSupply, decimals, mintable], tokenOwner, 0).then(txHash => {
-          accept(txHash);
+        instantiateContract(CrowdsaleTokenJSON, [name, symbol, new BigNumber(initialSupply * 10 ** decimals).toString(), decimals, mintable], tokenOwner, 0).then(receipt => {
+          accept(receipt);
           return;
         }).catch((e) => {
           console.log(e)
@@ -323,10 +303,37 @@ export function deployCrowdsaleToken(tokenOwner, name, symbol, initialSupply, de
   });
 }
 
-export function deployAllocatedCrowdsale(tokenOwner, name, symbol, initialSupply, decimals, mintable) {
+export function deployAllocatedCrowdsale(tokenArgs) {
   return new Promise((accept, reject) => {
-    checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
+    checkTokenOwnerFunds(tokenArgs[0]).then(hasFunds => {
       if (hasFunds) {
+        deployCrowdsaleToken(...tokenArgs).then(receipt1 => {
+          //console.log("Deployed CrowdsaleToken contract: " + receipt1.transactionHash)
+          deployFlatPricing(tokenArgs[0]).then(receipt2 => {
+            //console.log("Deployed FlatPricing contract: " + receipt2.transactionHash)
+            instantiateContract(AllocatedCrowdsaleJSON, [receipt1.contractAddress, receipt2.contractAddress, tokenArgs[0], 1, 5, 500, tokenArgs[0]], tokenArgs[0], 0).then(receipt3 => {
+              accept(receipt3);
+              return;
+            }).catch((e) => {
+              console.log(e)
+              reject(new Error("Could deploy FlatPricing contract."));
+              return;
+            });
+          }).catch((e) => {
+            console.log(e)
+            reject(new Error("Could not deploy CrowdsaleToken contract."));
+            return;
+          });
+        }).catch((e) => {
+          console.log(e)
+          reject(new Error("Could not deploy CrowdsaleToken contract."));
+          return;
+        });
+      } else {
+        reject(new Error("Account: " + tokenArgs[0] + " doesn't have enough funds to pay for service."));
+        return;
+      }
+      /*if (hasFunds) {
         instantiateContract(CrowdsaleTokenJSON, [name, symbol, initialSupply, decimals, mintable], tokenOwner, 0).then(txHash => {
           accept(txHash);
           return;
@@ -338,8 +345,9 @@ export function deployAllocatedCrowdsale(tokenOwner, name, symbol, initialSupply
       } else {
         reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
         return;
-      }
+      }*/
     }).catch((e) => {
+      console.log(e)
       reject(new Error("Could not check token owner ETH funds."));
       return;
     });
