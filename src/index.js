@@ -33,17 +33,17 @@ ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <Router>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/token/">Token</Link>
-          </li>
-          <li>
-            <Link to="/ico/">ICO</Link>
-          </li>
-        </ul>
-      </nav>
         <div>
+          <nav>
+            <ul>
+              <li>
+                <Link to="/token/">Token</Link>
+              </li>
+              <li>
+                <Link to="/ico/">ICO</Link>
+              </li>
+            </ul>
+          </nav>
           <Route exact path="/token/" component={MintApp} />
           <Route exact path="/ico/" component={IcoApp} />
         </div>
