@@ -34,16 +34,6 @@ ReactDOM.render(
     <PersistGate loading={null} persistor={persistor}>
       <Router>
         <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/app/token/">Token</Link>
-              </li>
-              <li>
-                <Link to="/app/ico/">Ico</Link>
-              </li>
-            </ul>
-          </nav>
           <Route exact path="/app/token/" component={MintApp} />
           <Route exact path="/app/ico/" component={IcoApp} />
         </div>
@@ -53,3 +43,14 @@ ReactDOM.render(
   document.getElementById('root')
 );
 registerServiceWorker();
+
+// <nav>
+// <ul>
+//   <li>
+//     <Link to="/app/token/">Token</Link>
+//   </li>
+//   <li>
+//     <Link to="/app/ico/">Ico</Link>
+//   </li>
+// </ul>
+// </nav>
