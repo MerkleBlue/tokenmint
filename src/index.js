@@ -44,8 +44,8 @@ ReactDOM.render(
         </ul>
       </nav>
         <div>
-          <Route path="/token/" component={MintApp} />
-          <Route path="/ico/" component={IcoApp} />
+          <Route exact path="/token/" component={MintApp} />
+          <Route exact path="/ico/" component={IcoApp} />
         </div>
       </Router>
     </PersistGate>
