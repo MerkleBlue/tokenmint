@@ -36,10 +36,10 @@ ReactDOM.render(
       <nav>
         <ul>
           <li>
-            <Link to="/about/">About</Link>
+            <Link to="/token/">Token</Link>
           </li>
           <li>
-            <Link to="/users/">Users</Link>
+            <Link to="/ico/">ICO</Link>
           </li>
         </ul>
       </nav>
