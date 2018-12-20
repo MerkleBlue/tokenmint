@@ -50,7 +50,7 @@ contract UpgradeableToken is StandardTokenExt {
   /**
    * Do not allow construction without upgrade master set.
    */
-  function UpgradeableToken(address _upgradeMaster) {
+  constructor(address _upgradeMaster) {
     upgradeMaster = _upgradeMaster;
   }
 

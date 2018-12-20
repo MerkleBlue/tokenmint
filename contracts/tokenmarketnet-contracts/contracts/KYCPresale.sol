@@ -33,7 +33,7 @@ contract KYCPresale is CrowdsaleBase, KYCPayloadDeserializer {
    *
    * @dev The parent contract has some unnecessary variables for our use case. For this round of development, we chose to use null value for token and pricing strategy. In the future versions have a parent sale contract that does not assume an existing token.
    */
-  function KYCPresale(address _multisigWallet, uint _start, uint _end, uint _saleWeiCap) CrowdsaleBase(FractionalERC20(address(1)), PricingStrategy(address(0)), _multisigWallet, _start, _end, 0) {
+  constructor(address _multisigWallet, uint _start, uint _end, uint _saleWeiCap) CrowdsaleBase(CrowdsaleToken(address(1)), PricingStrategy(address(0)), _multisigWallet, _start, _end, 0) {
     saleWeiCap = _saleWeiCap;
   }
 

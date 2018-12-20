@@ -39,7 +39,7 @@ contract IssuerWithId is Ownable {
   /** Issue event **/
   event Issued(address benefactor, uint amount, uint id);
 
-  function IssuerWithId(address _owner, address _allower, StandardTokenExt _token) {
+  constructor(address _owner, address _allower, StandardTokenExt _token) {
     require(address(_owner) != address(0));
     require(address(_allower) != address(0));
     require(address(_token) != address(0));

@@ -37,7 +37,7 @@ contract ExtraFinalizeAgent is FinalizeAgent {
   /* How many tokens other finalizers will allocate and we do not count these in */
   uint public accountedTokenSales;
 
-  function ExtraFinalizeAgent(CrowdsaleToken _token, Crowdsale _crowdsale, uint _bonusBasePoints, address _teamMultisig, uint _accountedTokenSales) {
+  constructor(CrowdsaleToken _token, Crowdsale _crowdsale, uint _bonusBasePoints, address _teamMultisig, uint _accountedTokenSales) {
     token = _token;
     crowdsale = _crowdsale;
 

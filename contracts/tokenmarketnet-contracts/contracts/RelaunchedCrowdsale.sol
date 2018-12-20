@@ -49,8 +49,8 @@ contract RelaunchedCrowdsale is MintedTokenCappedCrowdsale {
     weiRaised += _weiAmount;
     tokensSold += _tokenAmount;
 
-    Invested(_addr, _weiAmount, _tokenAmount, 0);
-    RestoredInvestment(_addr, _originalTxHash);
+    emit Invested(_addr, _weiAmount, _tokenAmount, 0);
+    emit RestoredInvestment(_addr, _originalTxHash);
   }
 
   /**

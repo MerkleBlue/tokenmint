@@ -36,7 +36,7 @@ contract PaymentForwarder is Haltable {
   /** A customer has made a payment. Benefactor is the address where the tokens will be ultimately issued.*/
   event PaymentForwarded(address source, uint amount, uint128 customerId, address benefactor);
 
-  function PaymentForwarder(address _owner, address _teamMultisig) {
+  constructor(address _owner, address _teamMultisig) {
     teamMultisig = _teamMultisig;
     owner = _owner;
   }

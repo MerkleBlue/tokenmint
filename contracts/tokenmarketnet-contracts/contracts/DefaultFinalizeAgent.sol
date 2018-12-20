@@ -19,7 +19,7 @@ contract DefaultFinalizeAgent is FinalizeAgent {
   ReleasableToken public token;
   Crowdsale public crowdsale;
 
-  function DefaultFinalizeAgent(ReleasableToken _token, Crowdsale _crowdsale) {
+  constructor(ReleasableToken _token, Crowdsale _crowdsale) {
     token = _token;
     crowdsale = _crowdsale;
   }

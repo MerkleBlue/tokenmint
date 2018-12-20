@@ -44,7 +44,7 @@ contract MilestonePricing is PricingStrategy, Ownable {
 
   /// @dev Contruction, creating a list of milestones
   /// @param _milestones uint[] milestones Pairs of (time, price)
-  function MilestonePricing(uint[] _milestones) {
+  constructor(uint[] _milestones) {
     // Need to have tuples, length check
     if(_milestones.length % 2 == 1 || _milestones.length >= MAX_MILESTONE*2) {
       throw;

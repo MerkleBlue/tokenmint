@@ -89,7 +89,7 @@ contract TokenVault is Ownable, Recoverable {
    * @param _tokensToBeAllocated Total number of tokens this vault will hold - including decimal multiplication
    * @param _tokensPerSecond Define the tap: how many tokens we permit an user to withdraw per second, 0 to disable
    */
-  function TokenVault(address _owner, uint _freezeEndsAt, StandardTokenExt _token, uint _tokensToBeAllocated, uint _tokensPerSecond) {
+  constructor(address _owner, uint _freezeEndsAt, StandardTokenExt _token, uint _tokensToBeAllocated, uint _tokensPerSecond) {
 
     owner = _owner;
 

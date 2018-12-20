@@ -44,7 +44,7 @@ contract CrowdsaleToken is ReleasableToken, MintableToken, UpgradeableToken {
    * @param _decimals Number of decimal places
    * @param _mintable Are new tokens created over the crowdsale or do we distribute only the initial supply? Note that when the token becomes transferable the minting always ends.
    */
-  function CrowdsaleToken(string _name, string _symbol, uint _initialSupply, uint _decimals, bool _mintable)
+  constructor(string _name, string _symbol, uint _initialSupply, uint _decimals, bool _mintable)
     UpgradeableToken(msg.sender) {
 
     // Create any address, can be transferred

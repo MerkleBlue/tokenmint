@@ -18,7 +18,7 @@ contract NullFinalizeAgent is FinalizeAgent {
 
   Crowdsale public crowdsale;
 
-  function NullFinalizeAgent(Crowdsale _crowdsale) {
+  constructor(Crowdsale _crowdsale) {
     crowdsale = _crowdsale;
   }
 

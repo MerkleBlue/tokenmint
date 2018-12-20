@@ -30,7 +30,7 @@ contract CentrallyIssuedToken is BurnableToken, UpgradeableToken {
   /** Name and symbol were updated. */
   event UpdatedTokenInformation(string newName, string newSymbol);
 
-  function CentrallyIssuedToken(address _owner, string _name, string _symbol, uint _totalSupply, uint _decimals, uint _releaseFinalizationDate)  UpgradeableToken(_owner) {
+  constructor(address _owner, string _name, string _symbol, uint _totalSupply, uint _decimals, uint _releaseFinalizationDate)  UpgradeableToken(_owner) {
     name = _name;
     symbol = _symbol;
     totalSupply_ = _totalSupply;
