@@ -37,15 +37,15 @@ ReactDOM.render(
           <nav>
             <ul>
               <li>
-                <Link to="/token/">Token</Link>
+                <Link to="/app/token/">Token</Link>
               </li>
               <li>
-                <Link to="/ico/">Ico</Link>
+                <Link to="/app/ico/">Ico</Link>
               </li>
             </ul>
           </nav>
-          <Route exact path="/token/" component={MintApp} />
-          <Route exact path="/ico/" component={IcoApp} />
+          <Route exact path="/app/token/" component={MintApp} />
+          <Route exact path="/app/ico/" component={IcoApp} />
         </div>
       </Router>
     </PersistGate>
