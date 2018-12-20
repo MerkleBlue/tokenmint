@@ -167,36 +167,6 @@ export function checkTokenOwnerFunds(tokenOwner) {
   });
 }
 
-/*function instantiateContractWithTruffleContract(contractJSON, constructorArguments, account, feeInETH) {
-  return new Promise((accept, reject) => {
-    var MyContract = contract(contractJSON);
-
-    MyContract.setProvider(web3.currentProvider);
-
-    // TODO: there's a bug with web3 1.0.
-    //dirty hack for web3@1.0.0 support for localhost testrpc, see https://github.com/trufflesuite/truffle-contract/issues/56#issuecomment-331084530
-    if (typeof MyContract.currentProvider.sendAsync !== "function") {
-      MyContract.currentProvider.sendAsync = function () {
-        return MyContract.currentProvider.send.apply(
-          MyContract.currentProvider, arguments
-        );
-      };
-    }
-
-    console.log(constructorArguments);
-
-    MyContract.new(...constructorArguments, { from: account }).then((instance) => {
-      console.log(instance);
-      accept();
-      return;
-    }).catch(e => {
-      console.log(e);
-      reject(e);
-      return;
-    });
-  });
-}*/
-
 function instantiateContract(contractJSON, constructorArguments, account, feeInETH) {
   return new Promise((accept, reject) => {
     // used for converting big number to string without scientific notation
@@ -247,7 +217,7 @@ export function deploySafeMathLib(tokenOwner) {
   });
 }
 
-export function deployFlatPricing(tokenOwner) {
+export function deployFlatPricing(owner, args) {
   //console.log(FlatPricingJSON.bytecode)
   // TODO: fix this
   // HACK: manually linking: replace _SafeMathLib____ with actual bytecode
@@ -259,9 +229,9 @@ export function deployFlatPricing(tokenOwner) {
   FlatPricingJSON.bytecode = FlatPricingJSON.bytecode.replace("__SafeMathLib___________________________", SafeMathLibJSON.bytecode.substr(2));
 
   return new Promise((accept, reject) => {
-    checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
+    checkTokenOwnerFunds(owner).then(hasFunds => {
       if (hasFunds) {
-        instantiateContract(FlatPricingJSON, [100], tokenOwner, 0).then(receipt => {
+        instantiateContract(FlatPricingJSON, [...args], owner, 0).then(receipt => {
           accept(receipt);
           return;
         }).catch((e) => {
@@ -269,10 +239,11 @@ export function deployFlatPricing(tokenOwner) {
           return;
         });
       } else {
-        reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
+        reject(new Error("Account: " + owner + " doesn't have enough funds to pay for service."));
         return;
       }
     }).catch((e) => {
+      console.log(e)
       reject(new Error("Could not check token owner ETH funds."));
       return;
     });
@@ -280,11 +251,11 @@ export function deployFlatPricing(tokenOwner) {
 }
 
 // initial supply is in full tokens, not weis, (1000 tokens with 18 decimals would make initialSupply = 1000)
-export function deployCrowdsaleToken(tokenOwner, name, symbol, initialSupply, decimals, mintable) {
+export function deployCrowdsaleToken(owner, name, symbol, initialSupply, decimals, mintable) {
   return new Promise((accept, reject) => {
-    checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
+    checkTokenOwnerFunds(owner).then(hasFunds => {
       if (hasFunds) {
-        instantiateContract(CrowdsaleTokenJSON, [name, symbol, new BigNumber(initialSupply * 10 ** decimals).toString(), decimals, mintable], tokenOwner, 0).then(receipt => {
+        instantiateContract(CrowdsaleTokenJSON, [name, symbol, new BigNumber(initialSupply * 10 ** decimals).toString(), decimals, mintable], owner, 0).then(receipt => {
           accept(receipt);
           return;
         }).catch((e) => {
@@ -293,7 +264,7 @@ export function deployCrowdsaleToken(tokenOwner, name, symbol, initialSupply, de
           return;
         });
       } else {
-        reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
+        reject(new Error("Account: " + owner + " doesn't have enough funds to pay for service."));
         return;
       }
     }).catch((e) => {
@@ -303,15 +274,13 @@ export function deployCrowdsaleToken(tokenOwner, name, symbol, initialSupply, de
   });
 }
 
-export function deployAllocatedCrowdsale(tokenArgs) {
+export function deployAllocatedCrowdsale(owner, tokenArgs, pricingArgs) {
   return new Promise((accept, reject) => {
-    checkTokenOwnerFunds(tokenArgs[0]).then(hasFunds => {
+    checkTokenOwnerFunds(owner).then(hasFunds => {
       if (hasFunds) {
-        deployCrowdsaleToken(...tokenArgs).then(receipt1 => {
-          //console.log("Deployed CrowdsaleToken contract: " + receipt1.transactionHash)
-          deployFlatPricing(tokenArgs[0]).then(receipt2 => {
-            //console.log("Deployed FlatPricing contract: " + receipt2.transactionHash)
-            instantiateContract(AllocatedCrowdsaleJSON, [receipt1.contractAddress, receipt2.contractAddress, tokenArgs[0], 1, 5, 500, tokenArgs[0]], tokenArgs[0], 0).then(receipt3 => {
+        deployCrowdsaleToken(owner, ...tokenArgs).then(receipt1 => {
+          deployFlatPricing(owner, pricingArgs).then(receipt2 => {
+            instantiateContract(AllocatedCrowdsaleJSON, [receipt1.contractAddress, receipt2.contractAddress, owner, 1, 5, 500, owner], owner, 0).then(receipt3 => {
               accept(receipt3);
               return;
             }).catch((e) => {

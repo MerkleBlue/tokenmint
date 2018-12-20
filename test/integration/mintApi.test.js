@@ -171,10 +171,10 @@ describe('TokenMint mintApi integration tests', function () {
           contractInstance.methods.transfer(accounts[1], new BigNumber(20 * 10 ** token.decimals).toString()).send({ from: accounts[0] }).then(receipt => {
             mintApi.getTokenBalance(contractInstance, accounts[1]).then(actualTokenBalance => {
               expect(parseInt(actualTokenBalance)).to.be.eq(20);
+              done();
             }).catch(e => {
               done(new Error(e));
             });
-            done();
           }).catch(e => {
             done(new Error(e));
           });
@@ -198,10 +198,10 @@ describe('TokenMint mintApi integration tests', function () {
           contractInstance.methods.transfer(accounts[1], new BigNumber(223 * 10 ** token.decimals).toString()).send({ from: accounts[0] }).then(receipt => {
             mintApi.getTokenBalance(contractInstance, accounts[1]).then(actualTokenBalance => {
               expect(parseInt(actualTokenBalance)).to.be.eq(223);
+              done();
             }).catch(e => {
               done(new Error(e));
             });
-            done();
           }).catch(e => {
             done(new Error(e));
           });
