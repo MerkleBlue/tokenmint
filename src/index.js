@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import './index.css';
-import App from './App';
+import MintApp from './MintApp';
+import IcoApp from './IcoApp';
 import registerServiceWorker from './registerServiceWorker';
 import configureStore from './app/store/configureStore';
 import { loadAllAccounts } from './app/actions/accountsActions';
@@ -13,6 +14,7 @@ import { setIsMobileDevice } from './app/actions/deviceActions';
 import * as mintApi from './api/mintApi';
 import { setWalletNeedsToBeUnlocked } from './app/actions/walletActions';
 import { PersistGate } from 'redux-persist/integration/react';
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 const { store, persistor } = configureStore();
 
@@ -30,7 +32,12 @@ ReactGA.initialize('UA-125703137-2');
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <App />
+      <Router>
+        <div>
+          <Route path="/token/" component={MintApp} />
+          <Route path="/ico/" component={IcoApp} />
+        </div>
+      </Router>
     </PersistGate>
   </Provider>,
   document.getElementById('root')
