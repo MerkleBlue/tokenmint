@@ -14,7 +14,7 @@ import { setIsMobileDevice } from './app/actions/deviceActions';
 import * as mintApi from './api/mintApi';
 import { setWalletNeedsToBeUnlocked } from './app/actions/walletActions';
 import { PersistGate } from 'redux-persist/integration/react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { HashRouter as Router, Route, Link } from "react-router-dom";
 
 const { store, persistor } = configureStore();
 
