@@ -6,6 +6,7 @@ import { BigNumber } from 'bignumber.js';
 import SafeMathLibJSON from '../contracts/SafeMathLib.json';
 import FlatPricingJSON from '../contracts/FlatPricing.json';
 import CrowdsaleTokenJSON from '../contracts/CrowdsaleToken.json';
+import AllocatedCrowdsaleJSON from '../contracts/AllocatedCrowdsale.json';
 //import ERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
 
 var contract = require("truffle-contract");
@@ -109,30 +110,6 @@ export function getTokenBalance(contractInstance, account) {
   });
 }
 
-/*function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, account, feeInETH) {
-  return new Promise((accept, reject) => {
-    // used for converting big number to string without scientific notation
-    BigNumber.config({ EXPONENTIAL_AT: 100 });
-    let myContract = new web3.eth.Contract(tokenContract.abi, {
-      from: account
-    });
-    myContract.deploy({
-      data: tokenContract.bytecode,
-      arguments: [name, symbol, decimals, new BigNumber(totalSupply * 10 ** decimals).toString(), tokenMintAccount],
-    }).send({
-      from: account,
-      gas: 4712388,
-      value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
-    }).on('error', (error) => {
-      reject(error);
-      return;
-    }).on('transactionHash', (txHash) => {
-      accept(txHash);
-      return;
-    });
-  });
-}*/
-
 export function getNetwork() {
   return new Promise((accept, reject) => {
     web3.eth.net.getNetworkType().then(networkType => {
@@ -190,36 +167,6 @@ export function checkTokenOwnerFunds(tokenOwner) {
   });
 }
 
-/*function instantiateContractWithTruffleContract(contractJSON, constructorArguments, account, feeInETH) {
-  return new Promise((accept, reject) => {
-    var MyContract = contract(contractJSON);
-
-    MyContract.setProvider(web3.currentProvider);
-
-    // TODO: there's a bug with web3 1.0.
-    //dirty hack for web3@1.0.0 support for localhost testrpc, see https://github.com/trufflesuite/truffle-contract/issues/56#issuecomment-331084530
-    if (typeof MyContract.currentProvider.sendAsync !== "function") {
-      MyContract.currentProvider.sendAsync = function () {
-        return MyContract.currentProvider.send.apply(
-          MyContract.currentProvider, arguments
-        );
-      };
-    }
-
-    console.log(constructorArguments);
-
-    MyContract.new(...constructorArguments, { from: account }).then((instance) => {
-      console.log(instance);
-      accept();
-      return;
-    }).catch(e => {
-      console.log(e);
-      reject(e);
-      return;
-    });
-  });
-}*/
-
 function instantiateContract(contractJSON, constructorArguments, account, feeInETH) {
   return new Promise((accept, reject) => {
     // used for converting big number to string without scientific notation
@@ -240,8 +187,10 @@ function instantiateContract(contractJSON, constructorArguments, account, feeInE
       reject(error);
       return;
     }).on('transactionHash', (txHash) => {
-      accept(txHash);
-      return;
+      web3.eth.getTransactionReceipt(txHash).then(receipt => {
+        accept(receipt);
+        return;
+      });
     });
   });
 }
@@ -250,8 +199,8 @@ export function deploySafeMathLib(tokenOwner) {
   return new Promise((accept, reject) => {
     checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
       if (hasFunds) {
-        instantiateContract(SafeMathLibJSON, [], tokenOwner, 0).then(txHash => {
-          accept(txHash);
+        instantiateContract(SafeMathLibJSON, [], tokenOwner, 0).then(receipt => {
+          accept(receipt);
           return;
         }).catch((e) => {
           reject(new Error("Could not create contract."));
@@ -268,7 +217,7 @@ export function deploySafeMathLib(tokenOwner) {
   });
 }
 
-export function deployFlatPricing(tokenOwner) {
+export function deployFlatPricing(owner, args) {
   //console.log(FlatPricingJSON.bytecode)
   // TODO: fix this
   // HACK: manually linking: replace _SafeMathLib____ with actual bytecode
@@ -280,17 +229,42 @@ export function deployFlatPricing(tokenOwner) {
   FlatPricingJSON.bytecode = FlatPricingJSON.bytecode.replace("__SafeMathLib___________________________", SafeMathLibJSON.bytecode.substr(2));
 
   return new Promise((accept, reject) => {
-    checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
+    checkTokenOwnerFunds(owner).then(hasFunds => {
       if (hasFunds) {
-        instantiateContract(FlatPricingJSON, [100], tokenOwner, 0).then(txHash => {
-          accept(txHash);
+        instantiateContract(FlatPricingJSON, [...args], owner, 0).then(receipt => {
+          accept(receipt);
           return;
         }).catch((e) => {
           reject(new Error("Could not create contract."));
           return;
         });
       } else {
-        reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
+        reject(new Error("Account: " + owner + " doesn't have enough funds to pay for service."));
+        return;
+      }
+    }).catch((e) => {
+      console.log(e)
+      reject(new Error("Could not check token owner ETH funds."));
+      return;
+    });
+  });
+}
+
+// initial supply is in full tokens, not weis, (1000 tokens with 18 decimals would make initialSupply = 1000)
+export function deployCrowdsaleToken(owner, name, symbol, initialSupply, decimals, mintable) {
+  return new Promise((accept, reject) => {
+    checkTokenOwnerFunds(owner).then(hasFunds => {
+      if (hasFunds) {
+        instantiateContract(CrowdsaleTokenJSON, [name, symbol, new BigNumber(initialSupply * 10 ** decimals).toString(), decimals, mintable], owner, 0).then(receipt => {
+          accept(receipt);
+          return;
+        }).catch((e) => {
+          console.log(e)
+          reject(new Error("Could not create contract."));
+          return;
+        });
+      } else {
+        reject(new Error("Account: " + owner + " doesn't have enough funds to pay for service."));
         return;
       }
     }).catch((e) => {
@@ -300,10 +274,35 @@ export function deployFlatPricing(tokenOwner) {
   });
 }
 
-export function deployCrowdsaleToken(tokenOwner, name, symbol, initialSupply, decimals, mintable) {
+export function deployAllocatedCrowdsale(owner, tokenArgs, pricingArgs) {
   return new Promise((accept, reject) => {
-    checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
+    checkTokenOwnerFunds(owner).then(hasFunds => {
       if (hasFunds) {
+        deployCrowdsaleToken(owner, ...tokenArgs).then(receipt1 => {
+          deployFlatPricing(owner, pricingArgs).then(receipt2 => {
+            instantiateContract(AllocatedCrowdsaleJSON, [receipt1.contractAddress, receipt2.contractAddress, owner, 1, 5, 500, owner], owner, 0).then(receipt3 => {
+              accept(receipt3);
+              return;
+            }).catch((e) => {
+              console.log(e)
+              reject(new Error("Could deploy FlatPricing contract."));
+              return;
+            });
+          }).catch((e) => {
+            console.log(e)
+            reject(new Error("Could not deploy CrowdsaleToken contract."));
+            return;
+          });
+        }).catch((e) => {
+          console.log(e)
+          reject(new Error("Could not deploy CrowdsaleToken contract."));
+          return;
+        });
+      } else {
+        reject(new Error("Account: " + tokenArgs[0] + " doesn't have enough funds to pay for service."));
+        return;
+      }
+      /*if (hasFunds) {
         instantiateContract(CrowdsaleTokenJSON, [name, symbol, initialSupply, decimals, mintable], tokenOwner, 0).then(txHash => {
           accept(txHash);
           return;
@@ -315,31 +314,9 @@ export function deployCrowdsaleToken(tokenOwner, name, symbol, initialSupply, de
       } else {
         reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
         return;
-      }
+      }*/
     }).catch((e) => {
-      reject(new Error("Could not check token owner ETH funds."));
-      return;
-    });
-  });
-}
-
-export function deployAllocatedCrowdsale(tokenOwner, name, symbol, initialSupply, decimals, mintable) {
-  return new Promise((accept, reject) => {
-    checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
-      if (hasFunds) {
-        instantiateContract(CrowdsaleTokenJSON, [name, symbol, initialSupply, decimals, mintable], tokenOwner, 0).then(txHash => {
-          accept(txHash);
-          return;
-        }).catch((e) => {
-          console.log(e)
-          reject(new Error("Could not create contract."));
-          return;
-        });
-      } else {
-        reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
-        return;
-      }
-    }).catch((e) => {
+      console.log(e)
       reject(new Error("Could not check token owner ETH funds."));
       return;
     });
