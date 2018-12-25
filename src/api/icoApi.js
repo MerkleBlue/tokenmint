@@ -7,6 +7,8 @@ import SafeMathLibJSON from '../contracts/SafeMathLib.json';
 import FlatPricingJSON from '../contracts/FlatPricing.json';
 import CrowdsaleTokenJSON from '../contracts/CrowdsaleToken.json';
 import AllocatedCrowdsaleJSON from '../contracts/AllocatedCrowdsale.json';
+import DefaultFinalizeAgentJSON from '../contracts/DefaultFinalizeAgent.json';
+
 //import ERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
 
 var contract = require("truffle-contract");
@@ -167,19 +169,19 @@ export function checkTokenOwnerFunds(tokenOwner) {
   });
 }
 
-function instantiateContract(contractJSON, constructorArguments, account, feeInETH) {
+function instantiateContract(contractJSON, constructorArguments, owner, feeInETH) {
   return new Promise((accept, reject) => {
     // used for converting big number to string without scientific notation
     BigNumber.config({ EXPONENTIAL_AT: 100 });
     let myContract = new web3.eth.Contract(contractJSON.abi, {
-      from: account,
+      from: owner,
       //gasPrice: '1000'
     });
     myContract.deploy({
       data: contractJSON.bytecode,
       arguments: [...constructorArguments],
     }).send({
-      from: account,
+      from: owner,
       gas: 6721975, // was 4712388 // max gas willing to pay, should not exceed block gas limit
       //gasPrice: '1',
       value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
@@ -195,11 +197,11 @@ function instantiateContract(contractJSON, constructorArguments, account, feeInE
   });
 }
 
-export function deploySafeMathLib(tokenOwner) {
+export function deploySafeMathLib(owner) {
   return new Promise((accept, reject) => {
-    checkTokenOwnerFunds(tokenOwner).then(hasFunds => {
+    checkTokenOwnerFunds(owner).then(hasFunds => {
       if (hasFunds) {
-        instantiateContract(SafeMathLibJSON, [], tokenOwner, 0).then(receipt => {
+        instantiateContract(SafeMathLibJSON, [], owner, 0).then(receipt => {
           accept(receipt);
           return;
         }).catch((e) => {
@@ -207,7 +209,7 @@ export function deploySafeMathLib(tokenOwner) {
           return;
         });
       } else {
-        reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
+        reject(new Error("Account: " + owner + " doesn't have enough funds to pay for service."));
         return;
       }
     }).catch((e) => {
@@ -274,23 +276,55 @@ export function deployCrowdsaleToken(owner, name, symbol, initialSupply, decimal
   });
 }
 
+export function deployDefaultFinalizeAgent(owner, crowdsaleTokenAddress, crowdsaleAddress) {
+  return new Promise((accept, reject) => {
+    checkTokenOwnerFunds(owner).then(hasFunds => {
+      if (hasFunds) {
+        instantiateContract(DefaultFinalizeAgentJSON, [crowdsaleTokenAddress, crowdsaleAddress], owner, 0).then(receipt => {
+          accept(receipt);
+          return;
+        }).catch((e) => {
+          reject(new Error("Could not create contract."));
+          return;
+        });
+      } else {
+        reject(new Error("Account: " + owner + " doesn't have enough funds to pay for service."));
+        return;
+      }
+    }).catch((e) => {
+      reject(new Error("Could not check token owner ETH funds."));
+      return;
+    });
+  });
+}
+
 export function deployAllocatedCrowdsale(owner, tokenArgs, pricingArgs) {
   return new Promise((accept, reject) => {
     checkTokenOwnerFunds(owner).then(hasFunds => {
       if (hasFunds) {
-        deployCrowdsaleToken(owner, ...tokenArgs).then(receipt1 => {
-          deployFlatPricing(owner, pricingArgs).then(receipt2 => {
-            instantiateContract(AllocatedCrowdsaleJSON, [receipt1.contractAddress, receipt2.contractAddress, owner, 1, 5, 500, owner], owner, 0).then(receipt3 => {
-              accept(receipt3);
-              return;
+        deployCrowdsaleToken(owner, ...tokenArgs).then(crowdsaleTokenReceipt => {
+          deployFlatPricing(owner, pricingArgs).then(flatPricingReceipt => {
+            instantiateContract(AllocatedCrowdsaleJSON, [crowdsaleTokenReceipt.contractAddress, flatPricingReceipt.contractAddress, owner, 1, 5, 500, owner], owner, 0).then(allocatedCrowdsaleReceipt => {
+              deployDefaultFinalizeAgent(owner, crowdsaleTokenReceipt.contractAddress, allocatedCrowdsaleReceipt.contractAddress).then(defaultFinalizeAgentReceipt => {
+                accept({
+                  crowdsaleTokenReceipt: crowdsaleTokenReceipt,
+                  allocatedCrowdsaleReceipt: allocatedCrowdsaleReceipt,
+                  finalizeAgentReceipt: defaultFinalizeAgentReceipt
+                });
+                return;
+              }).catch((e) => {
+                console.log(e)
+                reject(new Error("Could deploy DefaultFinalizeAgent contract."));
+                return;
+              });
             }).catch((e) => {
               console.log(e)
-              reject(new Error("Could deploy FlatPricing contract."));
+              reject(new Error("Could deploy AllocatedCrowdsale contract."));
               return;
             });
           }).catch((e) => {
             console.log(e)
-            reject(new Error("Could not deploy CrowdsaleToken contract."));
+            reject(new Error("Could not deploy FlatPricing contract."));
             return;
           });
         }).catch((e) => {
