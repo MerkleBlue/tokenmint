@@ -298,13 +298,13 @@ export function deployDefaultFinalizeAgent(owner, crowdsaleTokenAddress, crowdsa
   });
 }
 
-export function deployAllocatedCrowdsale(owner, tokenArgs, pricingArgs) {
+export function deployAllocatedCrowdsale(owner, tokenArgs, pricingArgs, allocatedCrowdsaleArgs) {
   return new Promise((accept, reject) => {
     checkTokenOwnerFunds(owner).then(hasFunds => {
       if (hasFunds) {
         deployCrowdsaleToken(owner, ...tokenArgs).then(crowdsaleTokenReceipt => {
           deployFlatPricing(owner, pricingArgs).then(flatPricingReceipt => {
-            instantiateContract(AllocatedCrowdsaleJSON, [crowdsaleTokenReceipt.contractAddress, flatPricingReceipt.contractAddress, owner, 1, 5, 500, owner], owner, 0).then(allocatedCrowdsaleReceipt => {
+            instantiateContract(AllocatedCrowdsaleJSON, [crowdsaleTokenReceipt.contractAddress, flatPricingReceipt.contractAddress, ...allocatedCrowdsaleArgs], owner, 0).then(allocatedCrowdsaleReceipt => {
               deployDefaultFinalizeAgent(owner, crowdsaleTokenReceipt.contractAddress, allocatedCrowdsaleReceipt.contractAddress).then(defaultFinalizeAgentReceipt => {
                 accept({
                   crowdsaleTokenReceipt: crowdsaleTokenReceipt,
@@ -314,12 +314,12 @@ export function deployAllocatedCrowdsale(owner, tokenArgs, pricingArgs) {
                 return;
               }).catch((e) => {
                 console.log(e)
-                reject(new Error("Could deploy DefaultFinalizeAgent contract."));
+                reject(new Error("Could not deploy DefaultFinalizeAgent contract."));
                 return;
               });
             }).catch((e) => {
               console.log(e)
-              reject(new Error("Could deploy AllocatedCrowdsale contract."));
+              reject(new Error("Could not deploy AllocatedCrowdsale contract."));
               return;
             });
           }).catch((e) => {
@@ -336,19 +336,6 @@ export function deployAllocatedCrowdsale(owner, tokenArgs, pricingArgs) {
         reject(new Error("Account: " + tokenArgs[0] + " doesn't have enough funds to pay for service."));
         return;
       }
-      /*if (hasFunds) {
-        instantiateContract(CrowdsaleTokenJSON, [name, symbol, initialSupply, decimals, mintable], tokenOwner, 0).then(txHash => {
-          accept(txHash);
-          return;
-        }).catch((e) => {
-          console.log(e)
-          reject(new Error("Could not create contract."));
-          return;
-        });
-      } else {
-        reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
-        return;
-      }*/
     }).catch((e) => {
       console.log(e)
       reject(new Error("Could not check token owner ETH funds."));
