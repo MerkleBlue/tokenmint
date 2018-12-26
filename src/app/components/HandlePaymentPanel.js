@@ -87,7 +87,7 @@ export class HandlePaymentPanel extends React.Component {
     let nextButton = this.isNextButtonEnabled() ?
       (
         <span
-          className="btn btn-next wow fadeInUp"
+          className="btn btn-payment-next wow fadeInUp"
           data-wow-duration="1000ms"
           data-wow-delay="400ms"
           onClick={this.handleNextClick}
@@ -97,7 +97,7 @@ export class HandlePaymentPanel extends React.Component {
         </span>
       ) : (
         <span
-          className="btn btn-disabled wow fadeInUp"
+          className="btn btn-payment-disabled wow fadeInUp"
           data-wow-duration="1000ms"
           data-wow-delay="400ms"
         >
