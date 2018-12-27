@@ -9,12 +9,18 @@ import PropTypes from 'prop-types';
 
 export class Header extends React.Component {
 
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     const theme = createMuiTheme({
       typography: {
         useNextVariants: true,
       }
     });
+
+    const title = this.props.isIco ? "Your own ICO powered by" : "Your own Token powered by";
 
     return (
       <div className="header_div">
@@ -34,7 +40,7 @@ export class Header extends React.Component {
                   gutterBottom
                   className="typography_header"
                 >
-                  Your own Token powered by
+                  {title}
                 </Typography>
               </MuiThemeProvider>
             </div>
@@ -46,7 +52,8 @@ export class Header extends React.Component {
 }
 
 Header.propTypes = {
-  isMobileDevice: PropTypes.bool.isRequired
+  isMobileDevice: PropTypes.bool.isRequired,
+  isIco: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {

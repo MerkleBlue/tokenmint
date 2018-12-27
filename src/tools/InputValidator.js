@@ -49,6 +49,14 @@ export default class InputValidator {
     return web3.utils.isAddress(tokenOwner);
   }
 
+  static isIcoCapValid(icoCap) {
+    if (icoCap === "") {
+      return true;
+    }
+    let n = Math.floor(Number(icoCap));
+    return n !== Infinity && String(n) === icoCap && n > 0 && n <= 1000000000000000;
+  }
+
   static isInputValid(tokenName, tokenSymbol, decimals, totalSupply, tokenOwner) {
     return this.isTokenNameValid(tokenName) && tokenName !== "" &&
       this.isTokenSymbolValid(tokenSymbol) && tokenSymbol !== "" &&
