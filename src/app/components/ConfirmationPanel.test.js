@@ -7,7 +7,6 @@ import Adapter from 'enzyme-adapter-react-16';
 import { JSDOM } from 'jsdom';
 import initialState from '../reducers/initialState';
 import sinon from 'sinon';
-import { NO_NETWORK } from '../../api/mintApi';
 import appStates from '../reducers/appStates';
 
 Enzyme.configure({ adapter: new Adapter() });
