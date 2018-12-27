@@ -3,15 +3,11 @@ import Web3 from 'web3';
 import { BigNumber } from 'bignumber.js';
 
 // contracts
-import SafeMathLibJSON from '../contracts/SafeMathLib.json';
-import FlatPricingJSON from '../contracts/FlatPricing.json';
-import CrowdsaleTokenJSON from '../contracts/CrowdsaleToken.json';
-import AllocatedCrowdsaleJSON from '../contracts/AllocatedCrowdsale.json';
-import DefaultFinalizeAgentJSON from '../contracts/DefaultFinalizeAgent.json';
-
-//import ERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
-
-var contract = require("truffle-contract");
+//import SafeMathLibJSON from '../contracts/SafeMathLib.json';
+//import FlatPricingJSON from '../contracts/FlatPricing.json';
+//import CrowdsaleTokenJSON from '../contracts/CrowdsaleToken.json';
+//import AllocatedCrowdsaleJSON from '../contracts/AllocatedCrowdsale.json';
+//import DefaultFinalizeAgentJSON from '../contracts/DefaultFinalizeAgent.json';
 
 
 const feeInUsd = 29.99;
@@ -219,7 +215,7 @@ export function deploySafeMathLib(owner) {
   });
 }
 
-export function deployFlatPricing(owner, args) {
+/*export function deployFlatPricing(owner, args) {
   //console.log(FlatPricingJSON.bytecode)
   // TODO: fix this
   // HACK: manually linking: replace _SafeMathLib____ with actual bytecode
@@ -388,5 +384,5 @@ export function getCrowdsaleState(crowdsaleAddress) {
       return;
     });
   });
-}
+}*/
 

@@ -41,7 +41,7 @@ describe('TokenMint icoApi integration tests', function () {
     done();
   });
 
-  it('Deploy SafeMathLib', (done) => {
+  /*it('Deploy SafeMathLib', (done) => {
     icoApi.deploySafeMathLib(accounts[0]).then(receipt => {
       expect(receipt.status).to.be.eq(true);
       done();
@@ -116,7 +116,7 @@ describe('TokenMint icoApi integration tests', function () {
       console.log(e)
       done(new Error(e));
     });
-  });*/
+  });
 
   it('CrowsaleToken attributes', (done) => {
     icoApi.deployCrowdsaleToken(accounts[0], token.name, token.symbol, token.totalSupply, token.decimals, false).then(receipt => {
@@ -152,13 +152,6 @@ describe('TokenMint icoApi integration tests', function () {
     icoApi.deployAllocatedCrowdsale(icoMaker, tokenArgs, [100], allocatedCrowdsaleArgs).then(receipt => {
       //expect(receipt.status).to.be.eq(true);
       let contractInstance = new web3.eth.Contract(AllocatedCrowdsaleJSON.abi, receipt.allocatedCrowdsaleReceipt.contractAddress);
-
-      // get state
-      /*contractInstance.methods.getState().call().then(receipt => {
-        console.log("Printing state")
-        console.log(receipt);
-      });*/
-
 
       contractInstance.methods.buy().send({ from: investor1, gas: 4712388, value: web3.utils.toWei('0.01', 'ether') }).then(r => {
         let contractInstance = new web3.eth.Contract(CrowdsaleTokenJSON.abi, receipt.crowdsaleTokenReceipt.contractAddress);
