@@ -14,7 +14,7 @@ let token = {
   name: 'Token name',
   symbol: 'TSY',
   decimals: 18,
-  totalSupply: 1000000
+  totalSupply: 1000
 }
 
 let dates = {
@@ -74,13 +74,31 @@ describe('TokenMint icoApi integration tests', function () {
   it('Deploy AllocatedCrowdsale contract', (done) => {
     let owner = accounts[0];
     let tokenArgs = ["Name", "SYM", 1000, 18, true];
-
-    let allocatedCrowdsaleArgs = [owner, Math.round(dates.yesterday.getTime() / 1000), Math.round(dates.now.getTime() / 1000), 500, owner];
+    let allocatedCrowdsaleArgs = [owner, Math.round(dates.yesterday.getTime() / 1000), Math.round(dates.tommorow.getTime() / 1000), 500, owner];
     icoApi.deployAllocatedCrowdsale(owner, tokenArgs, [100], allocatedCrowdsaleArgs).then(receipt => {
       expect(receipt.crowdsaleTokenReceipt.status).to.be.eq(true);
       expect(receipt.allocatedCrowdsaleReceipt.status).to.be.eq(true);
       expect(receipt.finalizeAgentReceipt.status).to.be.eq(true);
       done();
+    }).catch(e => {
+      console.log(e)
+      done(new Error(e));
+    });
+  });
+
+  it('AllocatedCrowdsale getState', (done) => {
+    let owner = accounts[0];
+    let tokenArgs = ["Name", "SYM", 1000, 18, true];
+    let allocatedCrowdsaleArgs = [owner, Math.round(dates.yesterday.getTime() / 1000), Math.round(dates.tommorow.getTime() / 1000), 500, owner];
+    icoApi.deployAllocatedCrowdsale(owner, tokenArgs, [100], allocatedCrowdsaleArgs).then(receipt => {
+      expect(receipt.crowdsaleTokenReceipt.status).to.be.eq(true);
+      expect(receipt.allocatedCrowdsaleReceipt.status).to.be.eq(true);
+      expect(receipt.finalizeAgentReceipt.status).to.be.eq(true);
+      icoApi.getCrowdsaleState(receipt.allocatedCrowdsaleReceipt.contractAddress).then(state => {
+        console.log(state)
+        done();
+      });
+
     }).catch(e => {
       console.log(e)
       done(new Error(e));
@@ -124,27 +142,31 @@ describe('TokenMint icoApi integration tests', function () {
     });
   });
 
-  /*it('AllocatedCrowdsale buy', (done) => {
+  it('AllocatedCrowdsale buy', (done) => {
     let icoMaker = accounts[0];
     let investor1 = accounts[1];
     let investor2 = accounts[2];
-    let tokenInfo = ["Name", "SYM", 1000, 18, true];
-    icoApi.deployAllocatedCrowdsale(icoMaker, tokenInfo, [100]).then(receipt => {
-      expect(receipt.status).to.be.eq(true);
-      let contractInstance = new web3.eth.Contract(AllocatedCrowdsaleJSON.abi, receipt.contractAddress);
+    let owner = accounts[0];
+    let tokenArgs = ["Name", "SYM", 1000, 18, true];
+    let allocatedCrowdsaleArgs = [owner, Math.round(dates.yesterday.getTime() / 1000), Math.round(dates.tommorow.getTime() / 1000), 500, owner];
+    icoApi.deployAllocatedCrowdsale(icoMaker, tokenArgs, [100], allocatedCrowdsaleArgs).then(receipt => {
+      //expect(receipt.status).to.be.eq(true);
+      let contractInstance = new web3.eth.Contract(AllocatedCrowdsaleJSON.abi, receipt.allocatedCrowdsaleReceipt.contractAddress);
 
       // get state
-      contractInstance.methods.getState().call().then(receipt => {
+      /*contractInstance.methods.getState().call().then(receipt => {
         console.log("Printing state")
         console.log(receipt);
-      });
+      });*/
 
 
-      contractInstance.methods.buy().send({ from: investor1, value: web3.utils.toWei('1', 'ether') }).then(receipt => {
+      contractInstance.methods.buy().send({ from: investor1, gas: 4712388, value: web3.utils.toWei('0.01', 'ether') }).then(r => {
+        let contractInstance = new web3.eth.Contract(CrowdsaleTokenJSON.abi, receipt.crowdsaleTokenReceipt.contractAddress);
         icoApi.getTokenBalance(contractInstance, investor1).then(actualTokenBalance => {
           expect(parseInt(actualTokenBalance)).to.be.eq(100);
           done();
         }).catch(e => {
+          console.log(e)
           done(new Error(e));
         });
       }).catch(e => {
@@ -154,7 +176,7 @@ describe('TokenMint icoApi integration tests', function () {
       console.log(e)
       done(new Error(e));
     });
-  });*/
+  });
 
   // uncomment later, don't delete
   /*it('CrowsaleToken transfer', (done) => {

@@ -257,6 +257,7 @@ export function deployCrowdsaleToken(owner, name, symbol, initialSupply, decimal
   return new Promise((accept, reject) => {
     checkTokenOwnerFunds(owner).then(hasFunds => {
       if (hasFunds) {
+        //console.log("create : " + new BigNumber(initialSupply * 10 ** decimals).toString())
         instantiateContract(CrowdsaleTokenJSON, [name, symbol, new BigNumber(initialSupply * 10 ** decimals).toString(), decimals, mintable], owner, 0).then(receipt => {
           accept(receipt);
           return;
@@ -306,12 +307,42 @@ export function deployAllocatedCrowdsale(owner, tokenArgs, pricingArgs, allocate
           deployFlatPricing(owner, pricingArgs).then(flatPricingReceipt => {
             instantiateContract(AllocatedCrowdsaleJSON, [crowdsaleTokenReceipt.contractAddress, flatPricingReceipt.contractAddress, ...allocatedCrowdsaleArgs], owner, 0).then(allocatedCrowdsaleReceipt => {
               deployDefaultFinalizeAgent(owner, crowdsaleTokenReceipt.contractAddress, allocatedCrowdsaleReceipt.contractAddress).then(defaultFinalizeAgentReceipt => {
-                accept({
-                  crowdsaleTokenReceipt: crowdsaleTokenReceipt,
-                  allocatedCrowdsaleReceipt: allocatedCrowdsaleReceipt,
-                  finalizeAgentReceipt: defaultFinalizeAgentReceipt
+                // set finalize agent to AllocatedCrowdsale contract
+                let contractInstance = new web3.eth.Contract(AllocatedCrowdsaleJSON.abi, allocatedCrowdsaleReceipt.contractAddress);
+                contractInstance.methods.setFinalizeAgent(defaultFinalizeAgentReceipt.contractAddress).send({ from: owner }).then(txHash => {
+                  // set release (finalize) agent to CrowdsaleToken contract
+                  let contractInstance = new web3.eth.Contract(CrowdsaleTokenJSON.abi, crowdsaleTokenReceipt.contractAddress);
+                  contractInstance.methods.setReleaseAgent(defaultFinalizeAgentReceipt.contractAddress).send({ from: owner }).then(txHash => {
+                    // approve to crowdsale contract certain amount of ERC0 tokens (hence allocated crowdsale)
+                    let contractInstance = new web3.eth.Contract(CrowdsaleTokenJSON.abi, crowdsaleTokenReceipt.contractAddress);
+                    //console.log("approv1: " + new BigNumber(tokenArgs[2] * 10 ** tokenArgs[3]).toString())
+                    //console.log("approv2: " + new BigNumber((tokenArgs[2] * 10 ** tokenArgs[3]) + 1000).toString())
+                    //let overflow = new BigNumber(tokenArgs[2] * 10 ** tokenArgs[3]).plus(new BigNumber(1)).toString();
+                    //console.log('overflo: ' + overflow)
+                    // NOTE: can approve more than the owner has: new BigNumber(tokenArgs[2] * 10 ** tokenArgs[3]).plus(new BigNumber(1)).toString()
+                    contractInstance.methods.approve(allocatedCrowdsaleReceipt.contractAddress, new BigNumber(tokenArgs[2] * 10 ** tokenArgs[3]).toString()).send({ from: owner }).then(success => {
+                      //console.log(success);
+                      accept({
+                        crowdsaleTokenReceipt: crowdsaleTokenReceipt,
+                        allocatedCrowdsaleReceipt: allocatedCrowdsaleReceipt,
+                        finalizeAgentReceipt: defaultFinalizeAgentReceipt
+                      });
+                      return;
+                    }).catch((e) => {
+                      console.log(e)
+                      reject(new Error("Could not set allowance in CrowdsaleToken contract for Crowdsale pool."));
+                      return;
+                    });
+                  }).catch((e) => {
+                    console.log(e)
+                    reject(new Error("Could not set release agent to CrowdsaleToken contract."));
+                    return;
+                  });
+                }).catch((e) => {
+                  console.log(e)
+                  reject(new Error("Could not set finalize agent to AllocatedCrowdsale contract."));
+                  return;
                 });
-                return;
               }).catch((e) => {
                 console.log(e)
                 reject(new Error("Could not deploy DefaultFinalizeAgent contract."));
@@ -339,6 +370,21 @@ export function deployAllocatedCrowdsale(owner, tokenArgs, pricingArgs, allocate
     }).catch((e) => {
       console.log(e)
       reject(new Error("Could not check token owner ETH funds."));
+      return;
+    });
+  });
+}
+
+export function getCrowdsaleState(crowdsaleAddress) {
+  return new Promise((accept, reject) => {
+    let contractInstance = new web3.eth.Contract(AllocatedCrowdsaleJSON.abi, crowdsaleAddress);
+    contractInstance.methods.getState().call().then(state => {
+      console.log(state);
+      accept(state);
+      return;
+    }).catch((e) => {
+      console.log(e)
+      reject(new Error("Could not call getState method."));
       return;
     });
   });
