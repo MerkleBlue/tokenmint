@@ -21,5 +21,6 @@ export default {
   walletNeedsToBeUnlocked: false,
   payingAccount: "",
   icoCap: "",
-  icoRate: ""
+  icoRate: "",
+  icoWallet: ""
 };

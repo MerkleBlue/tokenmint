@@ -41,7 +41,7 @@ export class TokenOwner extends React.Component {
       }
     });
 
-    const description = InputValidator.isTokenOwnerValid(this.props.tokenOwner) ?
+    const description = InputValidator.isEthereumAddress(this.props.tokenOwner) ?
       "This account will be owner of the created tokens!" :
       "Not a valid ETH account";
 
@@ -58,7 +58,7 @@ export class TokenOwner extends React.Component {
               variant="outlined"
               inputProps={{ maxLength: 42 }}
               value={this.props.tokenOwner}
-              error={!InputValidator.isTokenOwnerValid(this.props.tokenOwner)}
+              error={!InputValidator.isEthereumAddress(this.props.tokenOwner)}
               onChange={this.handleChange}
             />
           </MuiThemeProvider>
@@ -67,7 +67,7 @@ export class TokenOwner extends React.Component {
           <Typography
             align="left"
             variant="body1"
-            className={!InputValidator.isTokenOwnerValid(this.props.tokenOwner) ? "typography_error" : "typography"}
+            className={!InputValidator.isEthereumAddress(this.props.tokenOwner) ? "typography_error" : "typography"}
           >
             {description}
           </Typography>

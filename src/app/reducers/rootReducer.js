@@ -20,6 +20,7 @@ import walletNeedsToBeUnlocked from './walletNeedsToBeUnlockedReducer';
 import payingAccount from './payingAccountReducer';
 import icoCap from './icoCapReducer';
 import icoRate from './icoRateReducer';
+import icoWallet from './icoWalletReducer';
 
 const rootReducer = combineReducers({
   tokenName: tokenName,
@@ -42,7 +43,8 @@ const rootReducer = combineReducers({
   walletNeedsToBeUnlocked: walletNeedsToBeUnlocked,
   payingAccount: payingAccount,
   icoCap: icoCap,
-  icoRate: icoRate
+  icoRate: icoRate,
+  icoWallet: icoWallet
 });
 
 export default rootReducer;
