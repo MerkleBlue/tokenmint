@@ -57,6 +57,14 @@ export default class InputValidator {
     return n !== Infinity && String(n) === icoCap && n > 0 && n <= 1000000000000000;
   }
 
+  static isIcoRateValid(icoRate) {
+    if (icoRate === "") {
+      return true;
+    }
+    let n = Math.floor(Number(icoRate));
+    return n !== Infinity && String(n) === icoRate && n > 0 && n <= 1000000000000000;
+  }
+
   static isInputValid(tokenName, tokenSymbol, decimals, totalSupply, tokenOwner) {
     return this.isTokenNameValid(tokenName) && tokenName !== "" &&
       this.isTokenSymbolValid(tokenSymbol) && tokenSymbol !== "" &&

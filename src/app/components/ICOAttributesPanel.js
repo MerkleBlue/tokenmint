@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import * as icoCapActions from '../actions/icoCapActions';
+import * as icoRateActions from '../actions/icoRateActions';
 import './css/ICOAttributesPanel.css';
 
 export class ICOAttributesPanel extends React.Component {
@@ -20,10 +21,15 @@ export class ICOAttributesPanel extends React.Component {
   constructor(props) {
     super(props);
     this.handleCapChange = this.handleCapChange.bind(this);
+    this.handleRateChange = this.handleRateChange.bind(this);
   }
 
   handleCapChange(e) {
     this.props.icoCapActions.setIcoCap(e.target.value);
+  }
+
+  handleRateChange(e) {
+    this.props.icoRateActions.setIcoRate(e.target.value);
   }
 
   render() {
@@ -79,6 +85,35 @@ export class ICOAttributesPanel extends React.Component {
               </MuiThemeProvider>
             </Grid>
           </Grid>
+          <Grid container spacing={8}>
+            <Grid item xs={12} md={6}>
+              <MuiThemeProvider theme={theme}>
+                <TextField
+                  required
+                  id="outlined-required"
+                  label="Rate"
+                  className="ico_text_field"
+                  margin="normal"
+                  variant="outlined"
+                  inputProps={{ maxLength: 25 }}
+                  value={this.props.icoRate}
+                  error={!InputValidator.isIcoRateValid(this.props.icoRate)}
+                  onChange={this.handleRateChange}
+                />
+              </MuiThemeProvider>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <MuiThemeProvider theme={theme}>
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className={InputValidator.isIcoRateValid(this.props.icoRate) ? "typography_ico_info" : "typography_ico_info_error"}
+                >
+                  ICO rate.
+              </Typography>
+              </MuiThemeProvider>
+            </Grid>
+          </Grid>
         </CardContent>
       </Card>
     );
@@ -87,18 +122,22 @@ export class ICOAttributesPanel extends React.Component {
 
 ICOAttributesPanel.propTypes = {
   icoCapActions: PropTypes.object.isRequired,
+  icoRateActions: PropTypes.object.isRequired,
   icoCap: PropTypes.string.isRequired,
+  icoRate: PropTypes.string.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    icoCap: state.icoCap
+    icoCap: state.icoCap,
+    icoRate: state.icoRate
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    icoCapActions: bindActionCreators(icoCapActions, dispatch)
+    icoCapActions: bindActionCreators(icoCapActions, dispatch),
+    icoRateActions: bindActionCreators(icoRateActions, dispatch)
   };
 }
 

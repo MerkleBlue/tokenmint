@@ -20,5 +20,6 @@ export default {
   isMobileDevice: false,
   walletNeedsToBeUnlocked: false,
   payingAccount: "",
-  icoCap: ""
+  icoCap: "",
+  icoRate: ""
 };

@@ -21,7 +21,7 @@ export const SET_PAYING_ACCOUNT = "SET_PAYING_ACCOUNT";
 
 // ICO
 export const SET_ICO_CAP = "SET_ICO_CAP";
-
+export const SET_ICO_RATE = "SET_ICO_RATE";
 
 
 
