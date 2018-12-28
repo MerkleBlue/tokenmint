@@ -95,7 +95,7 @@ export default class InputValidator {
     return true;
   }
 
-  // function only evaluates dates if they are both in valid format. Otherwise it returns true
+  // function only evaluates dates if they are both valid. Otherwise it returns true
   static isOpeningTimeBeforeClosingTime(strOpeningDate, strClosingDate) {
     if (this.isDateValid(strOpeningDate) && this.isDateValid(strClosingDate)) {
       const openingDate = new Date(strOpeningDate);
