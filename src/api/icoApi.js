@@ -10,6 +10,9 @@ import { BigNumber } from 'bignumber.js';
 //import DefaultFinalizeAgentJSON from '../contracts/DefaultFinalizeAgent.json';
 import ERC20TokenJSON from '../contracts/TokenMintERC20Token.json';
 import CrowdsaleJSON from '../contracts/Crowdsale.json';
+import AllowanceCrowdsaleImplJSON from '../contracts/AllowanceCrowdsaleImpl.json';
+import TimedCappedAllowanceCrowdsaleJSON from '../contracts/TimedCappedAllowanceCrowdsale.json';
+
 
 const feeInUsd = 29.99;
 let tokenMintAccount = "0x6603cb70464ca51481d4edBb3B927F66F53F4f42";
@@ -121,29 +124,6 @@ export function getNetwork() {
   });
 }
 
-// NOTE: mining fees are estimated in a wallet based on gasPrice. This function can corectly
-// estimate mining fees if gas price is set here.
-function estimateMiningFee(tokenContract, name, symbol, decimals, totalSupply, tokenOwner) {
-  return new Promise((accept, reject) => {
-    // create new contract instance using web3, not truffle contract
-    let myContract = new web3.eth.Contract(tokenContract.abi, {
-      from: tokenOwner,
-      //gasPrice: '1000000000',  // default gas price in wei
-      data: tokenContract.bytecode
-    });
-
-    // estimate gas
-    myContract.deploy({
-      data: tokenContract.bytecode,
-      arguments: [name, symbol, decimals, totalSupply /** 10**decimals*/, tokenOwner]
-    }).estimateGas(function (err, gas) {
-      //console.log("Estimated mining fee: " + gas * 1000000000 / 10 ** 18);
-      accept(gas * 1000000000 / 10 ** 18);
-      return;
-    });
-  });
-}
-
 export function checkTokenOwnerFunds(tokenOwner) {
   return new Promise((accept, reject) => {
     getFee().then(fee => {
@@ -222,16 +202,83 @@ export function deployCrowdsale(owner, tokenArgs, crowdsaleArgs) {
   return new Promise((accept, reject) => {
     checkTokenOwnerFunds(owner).then(hasFunds => {
       if (hasFunds) {
-        deployCrowdsaleToken(owner, ...tokenArgs).then(crowdsaleTokenReceipt => {
-          instantiateContract(CrowdsaleJSON, [...crowdsaleArgs, crowdsaleTokenReceipt.contractAddress], owner, 0).then(crowdsaleReceipt => {
+        deployCrowdsaleToken(owner, ...tokenArgs).then(tokenReceipt => {
+          instantiateContract(CrowdsaleJSON, [...crowdsaleArgs, tokenReceipt.contractAddress], owner, 0).then(crowdsaleReceipt => {
             accept({
-              crowdsaleTokenReceipt: crowdsaleTokenReceipt,
+              tokenReceipt: tokenReceipt,
               crowdsaleReceipt: crowdsaleReceipt,
             });
             return;
           }).catch((e) => {
             console.log(e)
             reject(new Error("Could not deploy Crowdsale contract."));
+            return;
+          });
+        }).catch((e) => {
+          console.log(e)
+          reject(new Error("Could not deploy CrowdsaleToken contract."));
+          return;
+        });
+      } else {
+        reject(new Error("Account: " + tokenArgs[0] + " doesn't have enough funds to pay for service."));
+        return;
+      }
+    }).catch((e) => {
+      console.log(e)
+      reject(new Error("Could not check token owner ETH funds."));
+      return;
+    });
+  });
+}
+
+export function deployAllowanceCrowdsale(owner, tokenArgs, crowdsaleArgs) {
+  return new Promise((accept, reject) => {
+    checkTokenOwnerFunds(owner).then(hasFunds => {
+      if (hasFunds) {
+        deployCrowdsaleToken(owner, ...tokenArgs).then(tokenReceipt => {
+          instantiateContract(AllowanceCrowdsaleImplJSON, [crowdsaleArgs[0], crowdsaleArgs[1], tokenReceipt.contractAddress, crowdsaleArgs[1]], owner, 0).then(crowdsaleReceipt => {
+            accept({
+              tokenReceipt: tokenReceipt,
+              crowdsaleReceipt: crowdsaleReceipt,
+            });
+            return;
+          }).catch((e) => {
+            console.log(e)
+            reject(new Error("Could not deploy AllowanceCrowdsaleImpl contract."));
+            return;
+          });
+        }).catch((e) => {
+          console.log(e)
+          reject(new Error("Could not deploy CrowdsaleToken contract."));
+          return;
+        });
+      } else {
+        reject(new Error("Account: " + tokenArgs[0] + " doesn't have enough funds to pay for service."));
+        return;
+      }
+    }).catch((e) => {
+      console.log(e)
+      reject(new Error("Could not check token owner ETH funds."));
+      return;
+    });
+  });
+}
+
+export function deployTimedCappedAllowanceCrowdsale(owner, tokenArgs, crowdsaleArgs) {
+  return new Promise((accept, reject) => {
+    checkTokenOwnerFunds(owner).then(hasFunds => {
+      if (hasFunds) {
+        deployCrowdsaleToken(owner, ...tokenArgs).then(tokenReceipt => {
+          crowdsaleArgs[4] = tokenReceipt.contractAddress;
+          instantiateContract(TimedCappedAllowanceCrowdsaleJSON, crowdsaleArgs, owner, 0).then(crowdsaleReceipt => {
+            accept({
+              tokenReceipt: tokenReceipt,
+              crowdsaleReceipt: crowdsaleReceipt,
+            });
+            return;
+          }).catch((e) => {
+            console.log(e)
+            reject(new Error("Could not deploy TimedCappedAllowanceCrowdsaleJSON contract."));
             return;
           });
         }).catch((e) => {
