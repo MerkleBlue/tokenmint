@@ -203,4 +203,13 @@ describe('test InputValidator', () => {
   it ('is valid input', () => {
     expect(InputValidator.isInputValid(validTokenName, validTokenSymbol, validDecimals, validTotalSupply, validTokenOwner)).to.be.true;
   });
+
+  ////////// date tests
+  it ('is valid date format - valid date', () => {
+    expect(InputValidator.isDateFormatValid("2018-02-02")).to.be.true;
+  });
+
+  it ('is valid date format - invalid date', () => {
+    expect(InputValidator.isDateFormatValid("Blah")).to.be.false;
+  });
 });

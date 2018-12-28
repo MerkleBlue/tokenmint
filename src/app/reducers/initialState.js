@@ -22,5 +22,7 @@ export default {
   payingAccount: "",
   icoCap: "",
   icoRate: "",
-  icoWallet: ""
+  icoWallet: "",
+  icoOpeningTime: "",
+  icoClosingTime: ""
 };
