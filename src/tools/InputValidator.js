@@ -65,6 +65,45 @@ export default class InputValidator {
     return n !== Infinity && String(n) === icoRate && n > 0 && n <= 1000000000000000;
   }
 
+  static isDateFormatValid(date) {
+    const timestamp = Date.parse(date);
+    if(isNaN(timestamp)) {
+      return false;
+    }
+    return true;
+  }
+
+  static isDateInPast(strDate) {
+    const date = new Date(strDate);
+    let now = new Date();
+    return (date < now);
+  }
+
+  static isDateValid(date) {
+    if (date === "") {
+      return true;
+    }
+    if(date !== "") {
+      if(!this.isDateFormatValid(date)) {
+        return false;
+      }
+      if(this.isDateInPast(date)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  // function only evaluates dates if they are both valid. Otherwise it returns true
+  static isOpeningTimeBeforeClosingTime(strOpeningDate, strClosingDate) {
+    if (this.isDateValid(strOpeningDate) && this.isDateValid(strClosingDate)) {
+      const openingDate = new Date(strOpeningDate);
+      const closingDate = new Date(strClosingDate);
+      return (openingDate < closingDate);
+    }
+    return true;
+  }
+
   static isInputValid(tokenName, tokenSymbol, decimals, totalSupply, tokenOwner) {
     return this.isTokenNameValid(tokenName) && tokenName !== "" &&
       this.isTokenSymbolValid(tokenSymbol) && tokenSymbol !== "" &&

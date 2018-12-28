@@ -9,10 +9,6 @@ import PropTypes from 'prop-types';
 
 export class Header extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const theme = createMuiTheme({
       typography: {
