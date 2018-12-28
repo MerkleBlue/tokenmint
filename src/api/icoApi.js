@@ -8,7 +8,8 @@ import { BigNumber } from 'bignumber.js';
 //import CrowdsaleTokenJSON from '../contracts/CrowdsaleToken.json';
 //import AllocatedCrowdsaleJSON from '../contracts/AllocatedCrowdsale.json';
 //import DefaultFinalizeAgentJSON from '../contracts/DefaultFinalizeAgent.json';
-
+import ERC20TokenJSON from '../contracts/TokenMintERC20Token.json';
+import CrowdsaleJSON from '../contracts/Crowdsale.json';
 
 const feeInUsd = 29.99;
 let tokenMintAccount = "0x6603cb70464ca51481d4edBb3B927F66F53F4f42";
@@ -165,19 +166,17 @@ export function checkTokenOwnerFunds(tokenOwner) {
   });
 }
 
-function instantiateContract(contractJSON, constructorArguments, owner, feeInETH) {
+function instantiateContract(contractJSON, constructorArguments, contractCreator, feeInETH) {
   return new Promise((accept, reject) => {
-    // used for converting big number to string without scientific notation
-    BigNumber.config({ EXPONENTIAL_AT: 100 });
     let myContract = new web3.eth.Contract(contractJSON.abi, {
-      from: owner,
+      from: contractCreator,
       //gasPrice: '1000'
     });
     myContract.deploy({
       data: contractJSON.bytecode,
       arguments: [...constructorArguments],
     }).send({
-      from: owner,
+      from: contractCreator,
       gas: 6721975, // was 4712388 // max gas willing to pay, should not exceed block gas limit
       //gasPrice: '1',
       value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
@@ -193,7 +192,66 @@ function instantiateContract(contractJSON, constructorArguments, owner, feeInETH
   });
 }
 
-export function deploySafeMathLib(owner) {
+// initial supply is in full tokens, not weis, (1000 tokens with 18 decimals would make initialSupply = 1000)
+export function deployCrowdsaleToken(contractCreator, name, symbol, decimals, initialSupply, feeReceiver, tokenOwner) {
+  return new Promise((accept, reject) => {
+    checkTokenOwnerFunds(contractCreator).then(hasFunds => {
+      if (hasFunds) {
+        // used for converting big number to string without scientific notation
+        BigNumber.config({ EXPONENTIAL_AT: 100 });
+        instantiateContract(ERC20TokenJSON, [name, symbol, decimals, new BigNumber(initialSupply * 10 ** decimals).toString(), feeReceiver, tokenOwner], contractCreator, 0).then(receipt => {
+          accept(receipt);
+          return;
+        }).catch((e) => {
+          console.log(e)
+          reject(new Error("Could not create TokenMintERC20Token contract."));
+          return;
+        });
+      } else {
+        reject(new Error("Account: " + contractCreator + " doesn't have enough funds to pay for service."));
+        return;
+      }
+    }).catch((e) => {
+      reject(new Error("Could not check token owner ETH funds."));
+      return;
+    });
+  });
+}
+
+export function deployCrowdsale(owner, tokenArgs, crowdsaleArgs) {
+  return new Promise((accept, reject) => {
+    checkTokenOwnerFunds(owner).then(hasFunds => {
+      if (hasFunds) {
+        deployCrowdsaleToken(owner, ...tokenArgs).then(crowdsaleTokenReceipt => {
+          instantiateContract(CrowdsaleJSON, [...crowdsaleArgs, crowdsaleTokenReceipt.contractAddress], owner, 0).then(crowdsaleReceipt => {
+            accept({
+              crowdsaleTokenReceipt: crowdsaleTokenReceipt,
+              crowdsaleReceipt: crowdsaleReceipt,
+            });
+            return;
+          }).catch((e) => {
+            console.log(e)
+            reject(new Error("Could not deploy Crowdsale contract."));
+            return;
+          });
+        }).catch((e) => {
+          console.log(e)
+          reject(new Error("Could not deploy CrowdsaleToken contract."));
+          return;
+        });
+      } else {
+        reject(new Error("Account: " + tokenArgs[0] + " doesn't have enough funds to pay for service."));
+        return;
+      }
+    }).catch((e) => {
+      console.log(e)
+      reject(new Error("Could not check token owner ETH funds."));
+      return;
+    });
+  });
+}
+
+/*export function deploySafeMathLib(owner) {
   return new Promise((accept, reject) => {
     checkTokenOwnerFunds(owner).then(hasFunds => {
       if (hasFunds) {
@@ -215,7 +273,7 @@ export function deploySafeMathLib(owner) {
   });
 }
 
-/*export function deployFlatPricing(owner, args) {
+export function deployFlatPricing(owner, args) {
   //console.log(FlatPricingJSON.bytecode)
   // TODO: fix this
   // HACK: manually linking: replace _SafeMathLib____ with actual bytecode
@@ -242,31 +300,6 @@ export function deploySafeMathLib(owner) {
       }
     }).catch((e) => {
       console.log(e)
-      reject(new Error("Could not check token owner ETH funds."));
-      return;
-    });
-  });
-}
-
-// initial supply is in full tokens, not weis, (1000 tokens with 18 decimals would make initialSupply = 1000)
-export function deployCrowdsaleToken(owner, name, symbol, initialSupply, decimals, mintable) {
-  return new Promise((accept, reject) => {
-    checkTokenOwnerFunds(owner).then(hasFunds => {
-      if (hasFunds) {
-        //console.log("create : " + new BigNumber(initialSupply * 10 ** decimals).toString())
-        instantiateContract(CrowdsaleTokenJSON, [name, symbol, new BigNumber(initialSupply * 10 ** decimals).toString(), decimals, mintable], owner, 0).then(receipt => {
-          accept(receipt);
-          return;
-        }).catch((e) => {
-          console.log(e)
-          reject(new Error("Could not create contract."));
-          return;
-        });
-      } else {
-        reject(new Error("Account: " + owner + " doesn't have enough funds to pay for service."));
-        return;
-      }
-    }).catch((e) => {
       reject(new Error("Could not check token owner ETH funds."));
       return;
     });

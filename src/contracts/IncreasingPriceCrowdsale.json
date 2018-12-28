@@ -18,39 +18,25 @@
     {
       "constant": true,
       "inputs": [],
-      "name": "finalRate",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "rate",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
       "name": "weiRaised",
       "outputs": [
         {
           "name": "",
           "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isOpen",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
         }
       ],
       "payable": false,
@@ -88,20 +74,6 @@
     {
       "constant": true,
       "inputs": [],
-      "name": "initialRate",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
       "name": "openingTime",
       "outputs": [
         {
@@ -117,7 +89,7 @@
       "constant": false,
       "inputs": [
         {
-          "name": "_beneficiary",
+          "name": "beneficiary",
           "type": "address"
         }
       ],
@@ -144,11 +116,11 @@
     {
       "inputs": [
         {
-          "name": "_initialRate",
+          "name": "initialRate",
           "type": "uint256"
         },
         {
-          "name": "_finalRate",
+          "name": "finalRate",
           "type": "uint256"
         }
       ],
@@ -185,8 +157,50 @@
           "type": "uint256"
         }
       ],
-      "name": "TokenPurchase",
+      "name": "TokensPurchased",
       "type": "event"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "rate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "initialRate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "finalRate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "constant": true,
@@ -207,48 +221,48 @@
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity ^0.4.18;\r\n\r\nimport \"../validation/TimedCrowdsale.sol\";\r\nimport \"../../math/SafeMath.sol\";\r\n\r\n/**\r\n * @title IncreasingPriceCrowdsale\r\n * @dev Extension of Crowdsale contract that increases the price of tokens linearly in time. \r\n * Note that what should be provided to the constructor is the initial and final _rates_, that is,\r\n * the amount of tokens per wei contributed. Thus, the initial rate must be greater than the final rate.\r\n */\r\ncontract IncreasingPriceCrowdsale is TimedCrowdsale {\r\n  using SafeMath for uint256;\r\n\r\n  uint256 public initialRate;\r\n  uint256 public finalRate;\r\n\r\n  /**\r\n   * @dev Constructor, takes intial and final rates of tokens received per wei contributed.\r\n   * @param _initialRate Number of tokens a buyer gets per wei at the start of the crowdsale\r\n   * @param _finalRate Number of tokens a buyer gets per wei at the end of the crowdsale\r\n   */\r\n  function IncreasingPriceCrowdsale(uint256 _initialRate, uint256 _finalRate) public {\r\n    require(_initialRate >= _finalRate);\r\n    require(_finalRate > 0);\r\n    initialRate = _initialRate;\r\n    finalRate = _finalRate;\r\n  }\r\n\r\n  /**\r\n   * @dev Returns the rate of tokens per wei at the present time. \r\n   * Note that, as price _increases_ with time, the rate _decreases_. \r\n   * @return The number of tokens a buyer gets per wei at a given time\r\n   */\r\n  function getCurrentRate() public view returns (uint256) {\r\n    uint256 elapsedTime = now.sub(openingTime);\r\n    uint256 timeRange = closingTime.sub(openingTime);\r\n    uint256 rateRange = initialRate.sub(finalRate);\r\n    return initialRate.sub(elapsedTime.mul(rateRange).div(timeRange));\r\n  }\r\n\r\n  /**\r\n   * @dev Overrides parent method taking into account variable rate.\r\n   * @param _weiAmount The value in wei to be converted into tokens\r\n   * @return The number of tokens _weiAmount wei will buy at present time\r\n   */\r\n  function _getTokenAmount(uint256 _weiAmount) internal view returns (uint256) {\r\n    uint256 currentRate = getCurrentRate();\r\n    return currentRate.mul(_weiAmount);\r\n  }\r\n\r\n}\r\n",
-  "sourcePath": "D:\\trees\\tokenmint\\contracts\\tokenmarketnet-contracts\\contracts\\zeppelin\\contracts\\crowdsale\\price\\IncreasingPriceCrowdsale.sol",
+  "source": "pragma solidity ^0.4.24;\r\n\r\nimport \"../validation/TimedCrowdsale.sol\";\r\nimport \"../../math/SafeMath.sol\";\r\n\r\n/**\r\n * @title IncreasingPriceCrowdsale\r\n * @dev Extension of Crowdsale contract that increases the price of tokens linearly in time.\r\n * Note that what should be provided to the constructor is the initial and final _rates_, that is,\r\n * the amount of tokens per wei contributed. Thus, the initial rate must be greater than the final rate.\r\n */\r\ncontract IncreasingPriceCrowdsale is TimedCrowdsale {\r\n    using SafeMath for uint256;\r\n\r\n    uint256 private _initialRate;\r\n    uint256 private _finalRate;\r\n\r\n    /**\r\n     * @dev Constructor, takes initial and final rates of tokens received per wei contributed.\r\n     * @param initialRate Number of tokens a buyer gets per wei at the start of the crowdsale\r\n     * @param finalRate Number of tokens a buyer gets per wei at the end of the crowdsale\r\n     */\r\n    constructor (uint256 initialRate, uint256 finalRate) public {\r\n        require(finalRate > 0);\r\n        require(initialRate > finalRate);\r\n        _initialRate = initialRate;\r\n        _finalRate = finalRate;\r\n    }\r\n\r\n    /**\r\n     * The base rate function is overridden to revert, since this crowdsale doens't use it, and\r\n     * all calls to it are a mistake.\r\n     */\r\n    function rate() public view returns (uint256) {\r\n        revert();\r\n    }\r\n\r\n    /**\r\n     * @return the initial rate of the crowdsale.\r\n     */\r\n    function initialRate() public view returns (uint256) {\r\n        return _initialRate;\r\n    }\r\n\r\n    /**\r\n     * @return the final rate of the crowdsale.\r\n     */\r\n    function finalRate() public view returns (uint256) {\r\n        return _finalRate;\r\n    }\r\n\r\n    /**\r\n     * @dev Returns the rate of tokens per wei at the present time.\r\n     * Note that, as price _increases_ with time, the rate _decreases_.\r\n     * @return The number of tokens a buyer gets per wei at a given time\r\n     */\r\n    function getCurrentRate() public view returns (uint256) {\r\n        if (!isOpen()) {\r\n            return 0;\r\n        }\r\n\r\n        // solium-disable-next-line security/no-block-members\r\n        uint256 elapsedTime = block.timestamp.sub(openingTime());\r\n        uint256 timeRange = closingTime().sub(openingTime());\r\n        uint256 rateRange = _initialRate.sub(_finalRate);\r\n        return _initialRate.sub(elapsedTime.mul(rateRange).div(timeRange));\r\n    }\r\n\r\n    /**\r\n     * @dev Overrides parent method taking into account variable rate.\r\n     * @param weiAmount The value in wei to be converted into tokens\r\n     * @return The number of tokens _weiAmount wei will buy at present time\r\n     */\r\n    function _getTokenAmount(uint256 weiAmount) internal view returns (uint256) {\r\n        uint256 currentRate = getCurrentRate();\r\n        return currentRate.mul(weiAmount);\r\n    }\r\n}\r\n",
+  "sourcePath": "D:\\dev\\tokenmint\\contracts\\open-zeppelin-contracts\\crowdsale\\price\\IncreasingPriceCrowdsale.sol",
   "ast": {
-    "absolutePath": "/D/trees/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/crowdsale/price/IncreasingPriceCrowdsale.sol",
+    "absolutePath": "/D/dev/tokenmint/contracts/open-zeppelin-contracts/crowdsale/price/IncreasingPriceCrowdsale.sol",
     "exportedSymbols": {
       "IncreasingPriceCrowdsale": [
-        11679
+        2314
       ]
     },
-    "id": 11680,
+    "id": 2315,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 11583,
+        "id": 2182,
         "literals": [
           "solidity",
           "^",
           "0.4",
-          ".18"
+          ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:82"
+        "src": "0:24:21"
       },
       {
-        "absolutePath": "/D/trees/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/crowdsale/validation/TimedCrowdsale.sol",
+        "absolutePath": "/D/dev/tokenmint/contracts/open-zeppelin-contracts/crowdsale/validation/TimedCrowdsale.sol",
         "file": "../validation/TimedCrowdsale.sol",
-        "id": 11584,
+        "id": 2183,
         "nodeType": "ImportDirective",
-        "scope": 11680,
-        "sourceUnit": 11972,
-        "src": "28:42:82",
+        "scope": 2315,
+        "sourceUnit": 2639,
+        "src": "28:42:21",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "absolutePath": "/D/trees/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/math/SafeMath.sol",
+        "absolutePath": "/D/dev/tokenmint/contracts/open-zeppelin-contracts/math/SafeMath.sol",
         "file": "../../math/SafeMath.sol",
-        "id": 11585,
+        "id": 2184,
         "nodeType": "ImportDirective",
-        "scope": 11680,
-        "sourceUnit": 12629,
-        "src": "72:33:82",
+        "scope": 2315,
+        "sourceUnit": 4343,
+        "src": "72:33:21",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -258,58 +272,60 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 11586,
+              "id": 2185,
               "name": "TimedCrowdsale",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 11971,
-              "src": "493:14:82",
+              "referencedDeclaration": 2638,
+              "src": "492:14:21",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_TimedCrowdsale_$11971",
+                "typeIdentifier": "t_contract$_TimedCrowdsale_$2638",
                 "typeString": "contract TimedCrowdsale"
               }
             },
-            "id": 11587,
+            "id": 2186,
             "nodeType": "InheritanceSpecifier",
-            "src": "493:14:82"
+            "src": "492:14:21"
           }
         ],
         "contractDependencies": [
-          11104,
-          11971
+          1777,
+          2638,
+          10186
         ],
         "contractKind": "contract",
-        "documentation": "@title IncreasingPriceCrowdsale\r\n@dev Extension of Crowdsale contract that increases the price of tokens linearly in time. \r\nNote that what should be provided to the constructor is the initial and final _rates_, that is,\r\nthe amount of tokens per wei contributed. Thus, the initial rate must be greater than the final rate.\r",
+        "documentation": "@title IncreasingPriceCrowdsale\r\n@dev Extension of Crowdsale contract that increases the price of tokens linearly in time.\r\nNote that what should be provided to the constructor is the initial and final _rates_, that is,\r\nthe amount of tokens per wei contributed. Thus, the initial rate must be greater than the final rate.\r",
         "fullyImplemented": false,
-        "id": 11679,
+        "id": 2314,
         "linearizedBaseContracts": [
-          11679,
-          11971,
-          11104
+          2314,
+          2638,
+          1777,
+          10186
         ],
         "name": "IncreasingPriceCrowdsale",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "id": 11590,
+            "id": 2189,
             "libraryName": {
               "contractScope": null,
-              "id": 11588,
+              "id": 2187,
               "name": "SafeMath",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 12628,
-              "src": "519:8:82",
+              "referencedDeclaration": 4342,
+              "src": "520:8:21",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_SafeMath_$12628",
+                "typeIdentifier": "t_contract$_SafeMath_$4342",
                 "typeString": "library SafeMath"
               }
             },
             "nodeType": "UsingForDirective",
-            "src": "513:27:82",
+            "src": "514:27:21",
             "typeName": {
-              "id": 11589,
+              "id": 2188,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "532:7:82",
+              "src": "533:7:21",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -318,11 +334,11 @@
           },
           {
             "constant": false,
-            "id": 11592,
-            "name": "initialRate",
+            "id": 2191,
+            "name": "_initialRate",
             "nodeType": "VariableDeclaration",
-            "scope": 11679,
-            "src": "546:26:82",
+            "scope": 2314,
+            "src": "549:28:21",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -330,25 +346,25 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 11591,
+              "id": 2190,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "546:7:82",
+              "src": "549:7:21",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
               }
             },
             "value": null,
-            "visibility": "public"
+            "visibility": "private"
           },
           {
             "constant": false,
-            "id": 11594,
-            "name": "finalRate",
+            "id": 2193,
+            "name": "_finalRate",
             "nodeType": "VariableDeclaration",
-            "scope": 11679,
-            "src": "577:24:82",
+            "scope": 2314,
+            "src": "584:26:21",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -356,23 +372,23 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 11593,
+              "id": 2192,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "577:7:82",
+              "src": "584:7:21",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
               }
             },
             "value": null,
-            "visibility": "public"
+            "visibility": "private"
           },
           {
             "body": {
-              "id": 11621,
+              "id": 2220,
               "nodeType": "Block",
-              "src": "982:140:82",
+              "src": "979:154:21",
               "statements": [
                 {
                   "expression": {
@@ -384,108 +400,19 @@
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         },
-                        "id": 11604,
+                        "id": 2203,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
                           "argumentTypes": null,
-                          "id": 11602,
-                          "name": "_initialRate",
+                          "id": 2201,
+                          "name": "finalRate",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 11596,
-                          "src": "997:12:82",
-                          "typeDescriptions": {
-                            "typeIdentifier": "t_uint256",
-                            "typeString": "uint256"
-                          }
-                        },
-                        "nodeType": "BinaryOperation",
-                        "operator": ">=",
-                        "rightExpression": {
-                          "argumentTypes": null,
-                          "id": 11603,
-                          "name": "_finalRate",
-                          "nodeType": "Identifier",
-                          "overloadedDeclarations": [],
-                          "referencedDeclaration": 11598,
-                          "src": "1013:10:82",
-                          "typeDescriptions": {
-                            "typeIdentifier": "t_uint256",
-                            "typeString": "uint256"
-                          }
-                        },
-                        "src": "997:26:82",
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_bool",
-                          "typeString": "bool"
-                        }
-                      }
-                    ],
-                    "expression": {
-                      "argumentTypes": [
-                        {
-                          "typeIdentifier": "t_bool",
-                          "typeString": "bool"
-                        }
-                      ],
-                      "id": 11601,
-                      "name": "require",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        17888,
-                        17889
-                      ],
-                      "referencedDeclaration": 17888,
-                      "src": "989:7:82",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
-                        "typeString": "function (bool) pure"
-                      }
-                    },
-                    "id": 11605,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": false,
-                    "kind": "functionCall",
-                    "lValueRequested": false,
-                    "names": [],
-                    "nodeType": "FunctionCall",
-                    "src": "989:35:82",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_tuple$__$",
-                      "typeString": "tuple()"
-                    }
-                  },
-                  "id": 11606,
-                  "nodeType": "ExpressionStatement",
-                  "src": "989:35:82"
-                },
-                {
-                  "expression": {
-                    "argumentTypes": null,
-                    "arguments": [
-                      {
-                        "argumentTypes": null,
-                        "commonType": {
-                          "typeIdentifier": "t_uint256",
-                          "typeString": "uint256"
-                        },
-                        "id": 11610,
-                        "isConstant": false,
-                        "isLValue": false,
-                        "isPure": false,
-                        "lValueRequested": false,
-                        "leftExpression": {
-                          "argumentTypes": null,
-                          "id": 11608,
-                          "name": "_finalRate",
-                          "nodeType": "Identifier",
-                          "overloadedDeclarations": [],
-                          "referencedDeclaration": 11598,
-                          "src": "1039:10:82",
+                          "referencedDeclaration": 2197,
+                          "src": "998:9:21",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
@@ -496,14 +423,14 @@
                         "rightExpression": {
                           "argumentTypes": null,
                           "hexValue": "30",
-                          "id": 11609,
+                          "id": 2202,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "kind": "number",
                           "lValueRequested": false,
                           "nodeType": "Literal",
-                          "src": "1052:1:82",
+                          "src": "1010:1:21",
                           "subdenomination": null,
                           "typeDescriptions": {
                             "typeIdentifier": "t_rational_0_by_1",
@@ -511,7 +438,7 @@
                           },
                           "value": "0"
                         },
-                        "src": "1039:14:82",
+                        "src": "998:13:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -525,21 +452,21 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 11607,
+                      "id": 2200,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        17888,
-                        17889
+                        10903,
+                        10904
                       ],
-                      "referencedDeclaration": 17888,
-                      "src": "1031:7:82",
+                      "referencedDeclaration": 10903,
+                      "src": "990:7:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 11611,
+                    "id": 2204,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -547,78 +474,121 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1031:23:82",
+                    "src": "990:22:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 11612,
+                  "id": 2205,
                   "nodeType": "ExpressionStatement",
-                  "src": "1031:23:82"
+                  "src": "990:22:21"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 11615,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        "id": 2209,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "id": 2207,
+                          "name": "initialRate",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2195,
+                          "src": "1031:11:21",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": ">",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "id": 2208,
+                          "name": "finalRate",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2197,
+                          "src": "1045:9:21",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "src": "1031:23:21",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "id": 2206,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        10903,
+                        10904
+                      ],
+                      "referencedDeclaration": 10903,
+                      "src": "1023:7:21",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
+                        "typeString": "function (bool) pure"
+                      }
+                    },
+                    "id": 2210,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1023:32:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2211,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1023:32:21"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2214,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 11613,
-                      "name": "initialRate",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 11592,
-                      "src": "1061:11:82",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_uint256",
-                        "typeString": "uint256"
-                      }
-                    },
-                    "nodeType": "Assignment",
-                    "operator": "=",
-                    "rightHandSide": {
-                      "argumentTypes": null,
-                      "id": 11614,
+                      "id": 2212,
                       "name": "_initialRate",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 11596,
-                      "src": "1075:12:82",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_uint256",
-                        "typeString": "uint256"
-                      }
-                    },
-                    "src": "1061:26:82",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "id": 11616,
-                  "nodeType": "ExpressionStatement",
-                  "src": "1061:26:82"
-                },
-                {
-                  "expression": {
-                    "argumentTypes": null,
-                    "id": 11619,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": false,
-                    "lValueRequested": false,
-                    "leftHandSide": {
-                      "argumentTypes": null,
-                      "id": 11617,
-                      "name": "finalRate",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 11594,
-                      "src": "1094:9:82",
+                      "referencedDeclaration": 2191,
+                      "src": "1066:12:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -628,48 +598,94 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 11618,
-                      "name": "_finalRate",
+                      "id": 2213,
+                      "name": "initialRate",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 11598,
-                      "src": "1106:10:82",
+                      "referencedDeclaration": 2195,
+                      "src": "1081:11:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "1094:22:82",
+                    "src": "1066:26:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "id": 11620,
+                  "id": 2215,
                   "nodeType": "ExpressionStatement",
-                  "src": "1094:22:82"
+                  "src": "1066:26:21"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2218,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 2216,
+                      "name": "_finalRate",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2193,
+                      "src": "1103:10:21",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 2217,
+                      "name": "finalRate",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2197,
+                      "src": "1116:9:21",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "1103:22:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 2219,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1103:22:21"
                 }
               ]
             },
-            "documentation": "@dev Constructor, takes intial and final rates of tokens received per wei contributed.\r\n@param _initialRate Number of tokens a buyer gets per wei at the start of the crowdsale\r\n@param _finalRate Number of tokens a buyer gets per wei at the end of the crowdsale\r",
-            "id": 11622,
+            "documentation": "@dev Constructor, takes initial and final rates of tokens received per wei contributed.\r\n@param initialRate Number of tokens a buyer gets per wei at the start of the crowdsale\r\n@param finalRate Number of tokens a buyer gets per wei at the end of the crowdsale\r",
+            "id": 2221,
             "implemented": true,
             "isConstructor": true,
             "isDeclaredConst": false,
             "modifiers": [],
-            "name": "IncreasingPriceCrowdsale",
+            "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11599,
+              "id": 2198,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11596,
-                  "name": "_initialRate",
+                  "id": 2195,
+                  "name": "initialRate",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11622,
-                  "src": "933:20:82",
+                  "scope": 2221,
+                  "src": "932:19:21",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -677,10 +693,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 11595,
+                    "id": 2194,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "933:7:82",
+                    "src": "932:7:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -691,11 +707,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 11598,
-                  "name": "_finalRate",
+                  "id": 2197,
+                  "name": "finalRate",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11622,
-                  "src": "955:18:82",
+                  "scope": 2221,
+                  "src": "953:17:21",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -703,10 +719,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 11597,
+                    "id": 2196,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "955:7:82",
+                    "src": "953:7:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -716,39 +732,384 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "932:42:82"
+              "src": "931:40:21"
             },
             "payable": false,
             "returnParameters": {
-              "id": 11600,
+              "id": 2199,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "982:0:82"
+              "src": "979:0:21"
             },
-            "scope": 11679,
-            "src": "899:223:82",
+            "scope": 2314,
+            "src": "919:214:21",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 11659,
+              "id": 2229,
               "nodeType": "Block",
-              "src": "1410:235:82",
+              "src": "1341:27:21",
               "statements": [
                 {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "id": 2226,
+                      "name": "revert",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        10905,
+                        10906
+                      ],
+                      "referencedDeclaration": 10905,
+                      "src": "1352:6:21",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_revert_pure$__$returns$__$",
+                        "typeString": "function () pure"
+                      }
+                    },
+                    "id": 2227,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1352:8:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2228,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1352:8:21"
+                }
+              ]
+            },
+            "documentation": "The base rate function is overridden to revert, since this crowdsale doens't use it, and\r\nall calls to it are a mistake.\r",
+            "id": 2230,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "rate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2222,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1308:2:21"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2225,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2224,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2230,
+                  "src": "1332:7:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2223,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1332:7:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1331:9:21"
+            },
+            "scope": 2314,
+            "src": "1295:73:21",
+            "stateMutability": "view",
+            "superFunction": 1621,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2237,
+              "nodeType": "Block",
+              "src": "1498:38:21",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2235,
+                    "name": "_initialRate",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 2191,
+                    "src": "1516:12:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 2234,
+                  "id": 2236,
+                  "nodeType": "Return",
+                  "src": "1509:19:21"
+                }
+              ]
+            },
+            "documentation": "@return the initial rate of the crowdsale.\r",
+            "id": 2238,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "initialRate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2231,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1465:2:21"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2234,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2233,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2238,
+                  "src": "1489:7:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2232,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1489:7:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1488:9:21"
+            },
+            "scope": 2314,
+            "src": "1445:91:21",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2245,
+              "nodeType": "Block",
+              "src": "1662:36:21",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2243,
+                    "name": "_finalRate",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 2193,
+                    "src": "1680:10:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 2242,
+                  "id": 2244,
+                  "nodeType": "Return",
+                  "src": "1673:17:21"
+                }
+              ]
+            },
+            "documentation": "@return the final rate of the crowdsale.\r",
+            "id": 2246,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "finalRate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2239,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1629:2:21"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2242,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2241,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2246,
+                  "src": "1653:7:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2240,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1653:7:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1652:9:21"
+            },
+            "scope": 2314,
+            "src": "1611:87:21",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2294,
+              "nodeType": "Block",
+              "src": "1996:399:21",
+              "statements": [
+                {
+                  "condition": {
+                    "argumentTypes": null,
+                    "id": 2253,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "nodeType": "UnaryOperation",
+                    "operator": "!",
+                    "prefix": true,
+                    "src": "2011:9:21",
+                    "subExpression": {
+                      "argumentTypes": null,
+                      "arguments": [],
+                      "expression": {
+                        "argumentTypes": [],
+                        "id": 2251,
+                        "name": "isOpen",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2609,
+                        "src": "2012:6:21",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_function_internal_view$__$returns$_t_bool_$",
+                          "typeString": "function () view returns (bool)"
+                        }
+                      },
+                      "id": 2252,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "functionCall",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "2012:8:21",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "falseBody": null,
+                  "id": 2257,
+                  "nodeType": "IfStatement",
+                  "src": "2007:50:21",
+                  "trueBody": {
+                    "id": 2256,
+                    "nodeType": "Block",
+                    "src": "2022:35:21",
+                    "statements": [
+                      {
+                        "expression": {
+                          "argumentTypes": null,
+                          "hexValue": "30",
+                          "id": 2254,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "number",
+                          "lValueRequested": false,
+                          "nodeType": "Literal",
+                          "src": "2044:1:21",
+                          "subdenomination": null,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_rational_0_by_1",
+                            "typeString": "int_const 0"
+                          },
+                          "value": "0"
+                        },
+                        "functionReturnParameters": 2250,
+                        "id": 2255,
+                        "nodeType": "Return",
+                        "src": "2037:8:21"
+                      }
+                    ]
+                  }
+                },
+                {
                   "assignments": [
-                    11628
+                    2259
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 11628,
+                      "id": 2259,
                       "name": "elapsedTime",
                       "nodeType": "VariableDeclaration",
-                      "scope": 11660,
-                      "src": "1417:19:82",
+                      "scope": 2295,
+                      "src": "2132:19:21",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -756,10 +1117,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 11627,
+                        "id": 2258,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1417:7:82",
+                        "src": "2132:7:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -769,18 +1130,35 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 11633,
+                  "id": 2266,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 11631,
-                        "name": "openingTime",
-                        "nodeType": "Identifier",
-                        "overloadedDeclarations": [],
-                        "referencedDeclaration": 11899,
-                        "src": "1447:11:82",
+                        "arguments": [],
+                        "expression": {
+                          "argumentTypes": [],
+                          "id": 2263,
+                          "name": "openingTime",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2585,
+                          "src": "2174:11:21",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_view$__$returns$_t_uint256_$",
+                            "typeString": "function () view returns (uint256)"
+                          }
+                        },
+                        "id": 2264,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "2174:13:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -796,32 +1174,48 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 11629,
-                        "name": "now",
-                        "nodeType": "Identifier",
-                        "overloadedDeclarations": [],
-                        "referencedDeclaration": 17887,
-                        "src": "1439:3:82",
+                        "expression": {
+                          "argumentTypes": null,
+                          "id": 2260,
+                          "name": "block",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 10890,
+                          "src": "2154:5:21",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_magic_block",
+                            "typeString": "block"
+                          }
+                        },
+                        "id": 2261,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "timestamp",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": null,
+                        "src": "2154:15:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         }
                       },
-                      "id": 11630,
+                      "id": 2262,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "sub",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 12603,
-                      "src": "1439:7:82",
+                      "referencedDeclaration": 4221,
+                      "src": "2154:19:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
                         "typeString": "function (uint256,uint256) pure returns (uint256)"
                       }
                     },
-                    "id": 11632,
+                    "id": 2265,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -829,27 +1223,27 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1439:20:82",
+                    "src": "2154:34:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1417:42:82"
+                  "src": "2132:56:21"
                 },
                 {
                   "assignments": [
-                    11635
+                    2268
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 11635,
+                      "id": 2268,
                       "name": "timeRange",
                       "nodeType": "VariableDeclaration",
-                      "scope": 11660,
-                      "src": "1466:17:82",
+                      "scope": 2295,
+                      "src": "2199:17:21",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -857,10 +1251,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 11634,
+                        "id": 2267,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1466:7:82",
+                        "src": "2199:7:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -870,18 +1264,35 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 11640,
+                  "id": 2275,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 11638,
-                        "name": "openingTime",
-                        "nodeType": "Identifier",
-                        "overloadedDeclarations": [],
-                        "referencedDeclaration": 11899,
-                        "src": "1502:11:82",
+                        "arguments": [],
+                        "expression": {
+                          "argumentTypes": [],
+                          "id": 2272,
+                          "name": "openingTime",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2585,
+                          "src": "2237:11:21",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_view$__$returns$_t_uint256_$",
+                            "typeString": "function () view returns (uint256)"
+                          }
+                        },
+                        "id": 2273,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "2237:13:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -897,32 +1308,49 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 11636,
-                        "name": "closingTime",
-                        "nodeType": "Identifier",
-                        "overloadedDeclarations": [],
-                        "referencedDeclaration": 11901,
-                        "src": "1486:11:82",
+                        "arguments": [],
+                        "expression": {
+                          "argumentTypes": [],
+                          "id": 2269,
+                          "name": "closingTime",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2593,
+                          "src": "2219:11:21",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_view$__$returns$_t_uint256_$",
+                            "typeString": "function () view returns (uint256)"
+                          }
+                        },
+                        "id": 2270,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "2219:13:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         }
                       },
-                      "id": 11637,
+                      "id": 2271,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "sub",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 12603,
-                      "src": "1486:15:82",
+                      "referencedDeclaration": 4221,
+                      "src": "2219:17:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
                         "typeString": "function (uint256,uint256) pure returns (uint256)"
                       }
                     },
-                    "id": 11639,
+                    "id": 2274,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -930,27 +1358,27 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1486:28:82",
+                    "src": "2219:32:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1466:48:82"
+                  "src": "2199:52:21"
                 },
                 {
                   "assignments": [
-                    11642
+                    2277
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 11642,
+                      "id": 2277,
                       "name": "rateRange",
                       "nodeType": "VariableDeclaration",
-                      "scope": 11660,
-                      "src": "1521:17:82",
+                      "scope": 2295,
+                      "src": "2262:17:21",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -958,10 +1386,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 11641,
+                        "id": 2276,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1521:7:82",
+                        "src": "2262:7:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -971,18 +1399,18 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 11647,
+                  "id": 2282,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 11645,
-                        "name": "finalRate",
+                        "id": 2280,
+                        "name": "_finalRate",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11594,
-                        "src": "1557:9:82",
+                        "referencedDeclaration": 2193,
+                        "src": "2299:10:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -998,32 +1426,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 11643,
-                        "name": "initialRate",
+                        "id": 2278,
+                        "name": "_initialRate",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11592,
-                        "src": "1541:11:82",
+                        "referencedDeclaration": 2191,
+                        "src": "2282:12:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         }
                       },
-                      "id": 11644,
+                      "id": 2279,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "sub",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 12603,
-                      "src": "1541:15:82",
+                      "referencedDeclaration": 4221,
+                      "src": "2282:16:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
                         "typeString": "function (uint256,uint256) pure returns (uint256)"
                       }
                     },
-                    "id": 11646,
+                    "id": 2281,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1031,14 +1459,14 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1541:26:82",
+                    "src": "2282:28:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1521:46:82"
+                  "src": "2262:48:21"
                 },
                 {
                   "expression": {
@@ -1049,12 +1477,12 @@
                         "arguments": [
                           {
                             "argumentTypes": null,
-                            "id": 11655,
+                            "id": 2290,
                             "name": "timeRange",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 11635,
-                            "src": "1628:9:82",
+                            "referencedDeclaration": 2268,
+                            "src": "2376:9:21",
                             "typeDescriptions": {
                               "typeIdentifier": "t_uint256",
                               "typeString": "uint256"
@@ -1073,12 +1501,12 @@
                             "arguments": [
                               {
                                 "argumentTypes": null,
-                                "id": 11652,
+                                "id": 2287,
                                 "name": "rateRange",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 11642,
-                                "src": "1613:9:82",
+                                "referencedDeclaration": 2277,
+                                "src": "2361:9:21",
                                 "typeDescriptions": {
                                   "typeIdentifier": "t_uint256",
                                   "typeString": "uint256"
@@ -1094,32 +1522,32 @@
                               ],
                               "expression": {
                                 "argumentTypes": null,
-                                "id": 11650,
+                                "id": 2285,
                                 "name": "elapsedTime",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 11628,
-                                "src": "1597:11:82",
+                                "referencedDeclaration": 2259,
+                                "src": "2345:11:21",
                                 "typeDescriptions": {
                                   "typeIdentifier": "t_uint256",
                                   "typeString": "uint256"
                                 }
                               },
-                              "id": 11651,
+                              "id": 2286,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": false,
                               "lValueRequested": false,
                               "memberName": "mul",
                               "nodeType": "MemberAccess",
-                              "referencedDeclaration": 12565,
-                              "src": "1597:15:82",
+                              "referencedDeclaration": 4090,
+                              "src": "2345:15:21",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
                                 "typeString": "function (uint256,uint256) pure returns (uint256)"
                               }
                             },
-                            "id": 11653,
+                            "id": 2288,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
@@ -1127,27 +1555,27 @@
                             "lValueRequested": false,
                             "names": [],
                             "nodeType": "FunctionCall",
-                            "src": "1597:26:82",
+                            "src": "2345:26:21",
                             "typeDescriptions": {
                               "typeIdentifier": "t_uint256",
                               "typeString": "uint256"
                             }
                           },
-                          "id": 11654,
+                          "id": 2289,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "div",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 12583,
-                          "src": "1597:30:82",
+                          "referencedDeclaration": 4160,
+                          "src": "2345:30:21",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
                             "typeString": "function (uint256,uint256) pure returns (uint256)"
                           }
                         },
-                        "id": 11656,
+                        "id": 2291,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1155,7 +1583,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "1597:41:82",
+                        "src": "2345:41:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -1171,32 +1599,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 11648,
-                        "name": "initialRate",
+                        "id": 2283,
+                        "name": "_initialRate",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11592,
-                        "src": "1581:11:82",
+                        "referencedDeclaration": 2191,
+                        "src": "2328:12:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         }
                       },
-                      "id": 11649,
+                      "id": 2284,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "sub",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 12603,
-                      "src": "1581:15:82",
+                      "referencedDeclaration": 4221,
+                      "src": "2328:16:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
                         "typeString": "function (uint256,uint256) pure returns (uint256)"
                       }
                     },
-                    "id": 11657,
+                    "id": 2292,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1204,21 +1632,21 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1581:58:82",
+                    "src": "2328:59:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "functionReturnParameters": 11626,
-                  "id": 11658,
+                  "functionReturnParameters": 2250,
+                  "id": 2293,
                   "nodeType": "Return",
-                  "src": "1574:65:82"
+                  "src": "2321:66:21"
                 }
               ]
             },
-            "documentation": "@dev Returns the rate of tokens per wei at the present time. \r\nNote that, as price _increases_ with time, the rate _decreases_. \r\n@return The number of tokens a buyer gets per wei at a given time\r",
-            "id": 11660,
+            "documentation": "@dev Returns the rate of tokens per wei at the present time.\r\nNote that, as price _increases_ with time, the rate _decreases_.\r\n@return The number of tokens a buyer gets per wei at a given time\r",
+            "id": 2295,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -1226,23 +1654,23 @@
             "name": "getCurrentRate",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11623,
+              "id": 2247,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1377:2:82"
+              "src": "1963:2:21"
             },
             "payable": false,
             "returnParameters": {
-              "id": 11626,
+              "id": 2250,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11625,
+                  "id": 2249,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11660,
-                  "src": "1401:7:82",
+                  "scope": 2295,
+                  "src": "1987:7:21",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1250,10 +1678,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 11624,
+                    "id": 2248,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1401:7:82",
+                    "src": "1987:7:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1263,32 +1691,32 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1400:9:82"
+              "src": "1986:9:21"
             },
-            "scope": 11679,
-            "src": "1354:291:82",
+            "scope": 2314,
+            "src": "1940:455:21",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 11677,
+              "id": 2312,
               "nodeType": "Block",
-              "src": "1956:92:82",
+              "src": "2716:101:21",
               "statements": [
                 {
                   "assignments": [
-                    11668
+                    2303
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 11668,
+                      "id": 2303,
                       "name": "currentRate",
                       "nodeType": "VariableDeclaration",
-                      "scope": 11678,
-                      "src": "1963:19:82",
+                      "scope": 2313,
+                      "src": "2727:19:21",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -1296,10 +1724,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 11667,
+                        "id": 2302,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1963:7:82",
+                        "src": "2727:7:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -1309,24 +1737,24 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 11671,
+                  "id": 2306,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [],
                     "expression": {
                       "argumentTypes": [],
-                      "id": 11669,
+                      "id": 2304,
                       "name": "getCurrentRate",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 11660,
-                      "src": "1985:14:82",
+                      "referencedDeclaration": 2295,
+                      "src": "2749:14:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$__$returns$_t_uint256_$",
                         "typeString": "function () view returns (uint256)"
                       }
                     },
-                    "id": 11670,
+                    "id": 2305,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1334,14 +1762,14 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1985:16:82",
+                    "src": "2749:16:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1963:38:82"
+                  "src": "2727:38:21"
                 },
                 {
                   "expression": {
@@ -1349,12 +1777,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 11674,
-                        "name": "_weiAmount",
+                        "id": 2309,
+                        "name": "weiAmount",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11662,
-                        "src": "2031:10:82",
+                        "referencedDeclaration": 2297,
+                        "src": "2799:9:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -1370,32 +1798,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 11672,
+                        "id": 2307,
                         "name": "currentRate",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11668,
-                        "src": "2015:11:82",
+                        "referencedDeclaration": 2303,
+                        "src": "2783:11:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         }
                       },
-                      "id": 11673,
+                      "id": 2308,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "mul",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 12565,
-                      "src": "2015:15:82",
+                      "referencedDeclaration": 4090,
+                      "src": "2783:15:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
                         "typeString": "function (uint256,uint256) pure returns (uint256)"
                       }
                     },
-                    "id": 11675,
+                    "id": 2310,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1403,21 +1831,21 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "2015:27:82",
+                    "src": "2783:26:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "functionReturnParameters": 11666,
-                  "id": 11676,
+                  "functionReturnParameters": 2301,
+                  "id": 2311,
                   "nodeType": "Return",
-                  "src": "2008:34:82"
+                  "src": "2776:33:21"
                 }
               ]
             },
-            "documentation": "@dev Overrides parent method taking into account variable rate.\r\n@param _weiAmount The value in wei to be converted into tokens\r\n@return The number of tokens _weiAmount wei will buy at present time\r",
-            "id": 11678,
+            "documentation": "@dev Overrides parent method taking into account variable rate.\r\n@param weiAmount The value in wei to be converted into tokens\r\n@return The number of tokens _weiAmount wei will buy at present time\r",
+            "id": 2313,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -1425,16 +1853,16 @@
             "name": "_getTokenAmount",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11663,
+              "id": 2298,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11662,
-                  "name": "_weiAmount",
+                  "id": 2297,
+                  "name": "weiAmount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11678,
-                  "src": "1904:18:82",
+                  "scope": 2313,
+                  "src": "2665:17:21",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1442,10 +1870,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 11661,
+                    "id": 2296,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1904:7:82",
+                    "src": "2665:7:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1455,20 +1883,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1903:20:82"
+              "src": "2664:19:21"
             },
             "payable": false,
             "returnParameters": {
-              "id": 11666,
+              "id": 2301,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11665,
+                  "id": 2300,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11678,
-                  "src": "1947:7:82",
+                  "scope": 2313,
+                  "src": "2707:7:21",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1476,10 +1904,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 11664,
+                    "id": 2299,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1947:7:82",
+                    "src": "2707:7:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1489,61 +1917,61 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1946:9:82"
+              "src": "2706:9:21"
             },
-            "scope": 11679,
-            "src": "1879:169:82",
+            "scope": 2314,
+            "src": "2640:177:21",
             "stateMutability": "view",
-            "superFunction": 11092,
+            "superFunction": 1765,
             "visibility": "internal"
           }
         ],
-        "scope": 11680,
-        "src": "456:1597:82"
+        "scope": 2315,
+        "src": "455:2365:21"
       }
     ],
-    "src": "0:2055:82"
+    "src": "0:2822:21"
   },
   "legacyAST": {
-    "absolutePath": "/D/trees/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/crowdsale/price/IncreasingPriceCrowdsale.sol",
+    "absolutePath": "/D/dev/tokenmint/contracts/open-zeppelin-contracts/crowdsale/price/IncreasingPriceCrowdsale.sol",
     "exportedSymbols": {
       "IncreasingPriceCrowdsale": [
-        11679
+        2314
       ]
     },
-    "id": 11680,
+    "id": 2315,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 11583,
+        "id": 2182,
         "literals": [
           "solidity",
           "^",
           "0.4",
-          ".18"
+          ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:82"
+        "src": "0:24:21"
       },
       {
-        "absolutePath": "/D/trees/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/crowdsale/validation/TimedCrowdsale.sol",
+        "absolutePath": "/D/dev/tokenmint/contracts/open-zeppelin-contracts/crowdsale/validation/TimedCrowdsale.sol",
         "file": "../validation/TimedCrowdsale.sol",
-        "id": 11584,
+        "id": 2183,
         "nodeType": "ImportDirective",
-        "scope": 11680,
-        "sourceUnit": 11972,
-        "src": "28:42:82",
+        "scope": 2315,
+        "sourceUnit": 2639,
+        "src": "28:42:21",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "absolutePath": "/D/trees/tokenmint/contracts/tokenmarketnet-contracts/contracts/zeppelin/contracts/math/SafeMath.sol",
+        "absolutePath": "/D/dev/tokenmint/contracts/open-zeppelin-contracts/math/SafeMath.sol",
         "file": "../../math/SafeMath.sol",
-        "id": 11585,
+        "id": 2184,
         "nodeType": "ImportDirective",
-        "scope": 11680,
-        "sourceUnit": 12629,
-        "src": "72:33:82",
+        "scope": 2315,
+        "sourceUnit": 4343,
+        "src": "72:33:21",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -1553,58 +1981,60 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 11586,
+              "id": 2185,
               "name": "TimedCrowdsale",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 11971,
-              "src": "493:14:82",
+              "referencedDeclaration": 2638,
+              "src": "492:14:21",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_TimedCrowdsale_$11971",
+                "typeIdentifier": "t_contract$_TimedCrowdsale_$2638",
                 "typeString": "contract TimedCrowdsale"
               }
             },
-            "id": 11587,
+            "id": 2186,
             "nodeType": "InheritanceSpecifier",
-            "src": "493:14:82"
+            "src": "492:14:21"
           }
         ],
         "contractDependencies": [
-          11104,
-          11971
+          1777,
+          2638,
+          10186
         ],
         "contractKind": "contract",
-        "documentation": "@title IncreasingPriceCrowdsale\r\n@dev Extension of Crowdsale contract that increases the price of tokens linearly in time. \r\nNote that what should be provided to the constructor is the initial and final _rates_, that is,\r\nthe amount of tokens per wei contributed. Thus, the initial rate must be greater than the final rate.\r",
+        "documentation": "@title IncreasingPriceCrowdsale\r\n@dev Extension of Crowdsale contract that increases the price of tokens linearly in time.\r\nNote that what should be provided to the constructor is the initial and final _rates_, that is,\r\nthe amount of tokens per wei contributed. Thus, the initial rate must be greater than the final rate.\r",
         "fullyImplemented": false,
-        "id": 11679,
+        "id": 2314,
         "linearizedBaseContracts": [
-          11679,
-          11971,
-          11104
+          2314,
+          2638,
+          1777,
+          10186
         ],
         "name": "IncreasingPriceCrowdsale",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "id": 11590,
+            "id": 2189,
             "libraryName": {
               "contractScope": null,
-              "id": 11588,
+              "id": 2187,
               "name": "SafeMath",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 12628,
-              "src": "519:8:82",
+              "referencedDeclaration": 4342,
+              "src": "520:8:21",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_SafeMath_$12628",
+                "typeIdentifier": "t_contract$_SafeMath_$4342",
                 "typeString": "library SafeMath"
               }
             },
             "nodeType": "UsingForDirective",
-            "src": "513:27:82",
+            "src": "514:27:21",
             "typeName": {
-              "id": 11589,
+              "id": 2188,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "532:7:82",
+              "src": "533:7:21",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -1613,11 +2043,11 @@
           },
           {
             "constant": false,
-            "id": 11592,
-            "name": "initialRate",
+            "id": 2191,
+            "name": "_initialRate",
             "nodeType": "VariableDeclaration",
-            "scope": 11679,
-            "src": "546:26:82",
+            "scope": 2314,
+            "src": "549:28:21",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1625,25 +2055,25 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 11591,
+              "id": 2190,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "546:7:82",
+              "src": "549:7:21",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
               }
             },
             "value": null,
-            "visibility": "public"
+            "visibility": "private"
           },
           {
             "constant": false,
-            "id": 11594,
-            "name": "finalRate",
+            "id": 2193,
+            "name": "_finalRate",
             "nodeType": "VariableDeclaration",
-            "scope": 11679,
-            "src": "577:24:82",
+            "scope": 2314,
+            "src": "584:26:21",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1651,23 +2081,23 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 11593,
+              "id": 2192,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
-              "src": "577:7:82",
+              "src": "584:7:21",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
               }
             },
             "value": null,
-            "visibility": "public"
+            "visibility": "private"
           },
           {
             "body": {
-              "id": 11621,
+              "id": 2220,
               "nodeType": "Block",
-              "src": "982:140:82",
+              "src": "979:154:21",
               "statements": [
                 {
                   "expression": {
@@ -1679,108 +2109,19 @@
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         },
-                        "id": 11604,
+                        "id": 2203,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
                           "argumentTypes": null,
-                          "id": 11602,
-                          "name": "_initialRate",
+                          "id": 2201,
+                          "name": "finalRate",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 11596,
-                          "src": "997:12:82",
-                          "typeDescriptions": {
-                            "typeIdentifier": "t_uint256",
-                            "typeString": "uint256"
-                          }
-                        },
-                        "nodeType": "BinaryOperation",
-                        "operator": ">=",
-                        "rightExpression": {
-                          "argumentTypes": null,
-                          "id": 11603,
-                          "name": "_finalRate",
-                          "nodeType": "Identifier",
-                          "overloadedDeclarations": [],
-                          "referencedDeclaration": 11598,
-                          "src": "1013:10:82",
-                          "typeDescriptions": {
-                            "typeIdentifier": "t_uint256",
-                            "typeString": "uint256"
-                          }
-                        },
-                        "src": "997:26:82",
-                        "typeDescriptions": {
-                          "typeIdentifier": "t_bool",
-                          "typeString": "bool"
-                        }
-                      }
-                    ],
-                    "expression": {
-                      "argumentTypes": [
-                        {
-                          "typeIdentifier": "t_bool",
-                          "typeString": "bool"
-                        }
-                      ],
-                      "id": 11601,
-                      "name": "require",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [
-                        17888,
-                        17889
-                      ],
-                      "referencedDeclaration": 17888,
-                      "src": "989:7:82",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
-                        "typeString": "function (bool) pure"
-                      }
-                    },
-                    "id": 11605,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": false,
-                    "kind": "functionCall",
-                    "lValueRequested": false,
-                    "names": [],
-                    "nodeType": "FunctionCall",
-                    "src": "989:35:82",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_tuple$__$",
-                      "typeString": "tuple()"
-                    }
-                  },
-                  "id": 11606,
-                  "nodeType": "ExpressionStatement",
-                  "src": "989:35:82"
-                },
-                {
-                  "expression": {
-                    "argumentTypes": null,
-                    "arguments": [
-                      {
-                        "argumentTypes": null,
-                        "commonType": {
-                          "typeIdentifier": "t_uint256",
-                          "typeString": "uint256"
-                        },
-                        "id": 11610,
-                        "isConstant": false,
-                        "isLValue": false,
-                        "isPure": false,
-                        "lValueRequested": false,
-                        "leftExpression": {
-                          "argumentTypes": null,
-                          "id": 11608,
-                          "name": "_finalRate",
-                          "nodeType": "Identifier",
-                          "overloadedDeclarations": [],
-                          "referencedDeclaration": 11598,
-                          "src": "1039:10:82",
+                          "referencedDeclaration": 2197,
+                          "src": "998:9:21",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint256",
                             "typeString": "uint256"
@@ -1791,14 +2132,14 @@
                         "rightExpression": {
                           "argumentTypes": null,
                           "hexValue": "30",
-                          "id": 11609,
+                          "id": 2202,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "kind": "number",
                           "lValueRequested": false,
                           "nodeType": "Literal",
-                          "src": "1052:1:82",
+                          "src": "1010:1:21",
                           "subdenomination": null,
                           "typeDescriptions": {
                             "typeIdentifier": "t_rational_0_by_1",
@@ -1806,7 +2147,7 @@
                           },
                           "value": "0"
                         },
-                        "src": "1039:14:82",
+                        "src": "998:13:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -1820,21 +2161,21 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 11607,
+                      "id": 2200,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        17888,
-                        17889
+                        10903,
+                        10904
                       ],
-                      "referencedDeclaration": 17888,
-                      "src": "1031:7:82",
+                      "referencedDeclaration": 10903,
+                      "src": "990:7:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 11611,
+                    "id": 2204,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1842,78 +2183,121 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1031:23:82",
+                    "src": "990:22:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 11612,
+                  "id": 2205,
                   "nodeType": "ExpressionStatement",
-                  "src": "1031:23:82"
+                  "src": "990:22:21"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 11615,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        },
+                        "id": 2209,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "id": 2207,
+                          "name": "initialRate",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2195,
+                          "src": "1031:11:21",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": ">",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "id": 2208,
+                          "name": "finalRate",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2197,
+                          "src": "1045:9:21",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "src": "1031:23:21",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "id": 2206,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        10903,
+                        10904
+                      ],
+                      "referencedDeclaration": 10903,
+                      "src": "1023:7:21",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
+                        "typeString": "function (bool) pure"
+                      }
+                    },
+                    "id": 2210,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1023:32:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2211,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1023:32:21"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2214,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 11613,
-                      "name": "initialRate",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 11592,
-                      "src": "1061:11:82",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_uint256",
-                        "typeString": "uint256"
-                      }
-                    },
-                    "nodeType": "Assignment",
-                    "operator": "=",
-                    "rightHandSide": {
-                      "argumentTypes": null,
-                      "id": 11614,
+                      "id": 2212,
                       "name": "_initialRate",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 11596,
-                      "src": "1075:12:82",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_uint256",
-                        "typeString": "uint256"
-                      }
-                    },
-                    "src": "1061:26:82",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
-                    }
-                  },
-                  "id": 11616,
-                  "nodeType": "ExpressionStatement",
-                  "src": "1061:26:82"
-                },
-                {
-                  "expression": {
-                    "argumentTypes": null,
-                    "id": 11619,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": false,
-                    "lValueRequested": false,
-                    "leftHandSide": {
-                      "argumentTypes": null,
-                      "id": 11617,
-                      "name": "finalRate",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 11594,
-                      "src": "1094:9:82",
+                      "referencedDeclaration": 2191,
+                      "src": "1066:12:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
@@ -1923,48 +2307,94 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 11618,
-                      "name": "_finalRate",
+                      "id": 2213,
+                      "name": "initialRate",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 11598,
-                      "src": "1106:10:82",
+                      "referencedDeclaration": 2195,
+                      "src": "1081:11:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "src": "1094:22:82",
+                    "src": "1066:26:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "id": 11620,
+                  "id": 2215,
                   "nodeType": "ExpressionStatement",
-                  "src": "1094:22:82"
+                  "src": "1066:26:21"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2218,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 2216,
+                      "name": "_finalRate",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2193,
+                      "src": "1103:10:21",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 2217,
+                      "name": "finalRate",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2197,
+                      "src": "1116:9:21",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "1103:22:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 2219,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1103:22:21"
                 }
               ]
             },
-            "documentation": "@dev Constructor, takes intial and final rates of tokens received per wei contributed.\r\n@param _initialRate Number of tokens a buyer gets per wei at the start of the crowdsale\r\n@param _finalRate Number of tokens a buyer gets per wei at the end of the crowdsale\r",
-            "id": 11622,
+            "documentation": "@dev Constructor, takes initial and final rates of tokens received per wei contributed.\r\n@param initialRate Number of tokens a buyer gets per wei at the start of the crowdsale\r\n@param finalRate Number of tokens a buyer gets per wei at the end of the crowdsale\r",
+            "id": 2221,
             "implemented": true,
             "isConstructor": true,
             "isDeclaredConst": false,
             "modifiers": [],
-            "name": "IncreasingPriceCrowdsale",
+            "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11599,
+              "id": 2198,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11596,
-                  "name": "_initialRate",
+                  "id": 2195,
+                  "name": "initialRate",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11622,
-                  "src": "933:20:82",
+                  "scope": 2221,
+                  "src": "932:19:21",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1972,10 +2402,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 11595,
+                    "id": 2194,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "933:7:82",
+                    "src": "932:7:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1986,11 +2416,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 11598,
-                  "name": "_finalRate",
+                  "id": 2197,
+                  "name": "finalRate",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11622,
-                  "src": "955:18:82",
+                  "scope": 2221,
+                  "src": "953:17:21",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1998,10 +2428,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 11597,
+                    "id": 2196,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "955:7:82",
+                    "src": "953:7:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -2011,39 +2441,384 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "932:42:82"
+              "src": "931:40:21"
             },
             "payable": false,
             "returnParameters": {
-              "id": 11600,
+              "id": 2199,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "982:0:82"
+              "src": "979:0:21"
             },
-            "scope": 11679,
-            "src": "899:223:82",
+            "scope": 2314,
+            "src": "919:214:21",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 11659,
+              "id": 2229,
               "nodeType": "Block",
-              "src": "1410:235:82",
+              "src": "1341:27:21",
               "statements": [
                 {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "id": 2226,
+                      "name": "revert",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        10905,
+                        10906
+                      ],
+                      "referencedDeclaration": 10905,
+                      "src": "1352:6:21",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_revert_pure$__$returns$__$",
+                        "typeString": "function () pure"
+                      }
+                    },
+                    "id": 2227,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1352:8:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2228,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1352:8:21"
+                }
+              ]
+            },
+            "documentation": "The base rate function is overridden to revert, since this crowdsale doens't use it, and\r\nall calls to it are a mistake.\r",
+            "id": 2230,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "rate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2222,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1308:2:21"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2225,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2224,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2230,
+                  "src": "1332:7:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2223,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1332:7:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1331:9:21"
+            },
+            "scope": 2314,
+            "src": "1295:73:21",
+            "stateMutability": "view",
+            "superFunction": 1621,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2237,
+              "nodeType": "Block",
+              "src": "1498:38:21",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2235,
+                    "name": "_initialRate",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 2191,
+                    "src": "1516:12:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 2234,
+                  "id": 2236,
+                  "nodeType": "Return",
+                  "src": "1509:19:21"
+                }
+              ]
+            },
+            "documentation": "@return the initial rate of the crowdsale.\r",
+            "id": 2238,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "initialRate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2231,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1465:2:21"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2234,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2233,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2238,
+                  "src": "1489:7:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2232,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1489:7:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1488:9:21"
+            },
+            "scope": 2314,
+            "src": "1445:91:21",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2245,
+              "nodeType": "Block",
+              "src": "1662:36:21",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2243,
+                    "name": "_finalRate",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 2193,
+                    "src": "1680:10:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 2242,
+                  "id": 2244,
+                  "nodeType": "Return",
+                  "src": "1673:17:21"
+                }
+              ]
+            },
+            "documentation": "@return the final rate of the crowdsale.\r",
+            "id": 2246,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": true,
+            "modifiers": [],
+            "name": "finalRate",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2239,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1629:2:21"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2242,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2241,
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2246,
+                  "src": "1653:7:21",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2240,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1653:7:21",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1652:9:21"
+            },
+            "scope": 2314,
+            "src": "1611:87:21",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2294,
+              "nodeType": "Block",
+              "src": "1996:399:21",
+              "statements": [
+                {
+                  "condition": {
+                    "argumentTypes": null,
+                    "id": 2253,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "nodeType": "UnaryOperation",
+                    "operator": "!",
+                    "prefix": true,
+                    "src": "2011:9:21",
+                    "subExpression": {
+                      "argumentTypes": null,
+                      "arguments": [],
+                      "expression": {
+                        "argumentTypes": [],
+                        "id": 2251,
+                        "name": "isOpen",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2609,
+                        "src": "2012:6:21",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_function_internal_view$__$returns$_t_bool_$",
+                          "typeString": "function () view returns (bool)"
+                        }
+                      },
+                      "id": 2252,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "functionCall",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "2012:8:21",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "falseBody": null,
+                  "id": 2257,
+                  "nodeType": "IfStatement",
+                  "src": "2007:50:21",
+                  "trueBody": {
+                    "id": 2256,
+                    "nodeType": "Block",
+                    "src": "2022:35:21",
+                    "statements": [
+                      {
+                        "expression": {
+                          "argumentTypes": null,
+                          "hexValue": "30",
+                          "id": 2254,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "number",
+                          "lValueRequested": false,
+                          "nodeType": "Literal",
+                          "src": "2044:1:21",
+                          "subdenomination": null,
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_rational_0_by_1",
+                            "typeString": "int_const 0"
+                          },
+                          "value": "0"
+                        },
+                        "functionReturnParameters": 2250,
+                        "id": 2255,
+                        "nodeType": "Return",
+                        "src": "2037:8:21"
+                      }
+                    ]
+                  }
+                },
+                {
                   "assignments": [
-                    11628
+                    2259
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 11628,
+                      "id": 2259,
                       "name": "elapsedTime",
                       "nodeType": "VariableDeclaration",
-                      "scope": 11660,
-                      "src": "1417:19:82",
+                      "scope": 2295,
+                      "src": "2132:19:21",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -2051,10 +2826,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 11627,
+                        "id": 2258,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1417:7:82",
+                        "src": "2132:7:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -2064,18 +2839,35 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 11633,
+                  "id": 2266,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 11631,
-                        "name": "openingTime",
-                        "nodeType": "Identifier",
-                        "overloadedDeclarations": [],
-                        "referencedDeclaration": 11899,
-                        "src": "1447:11:82",
+                        "arguments": [],
+                        "expression": {
+                          "argumentTypes": [],
+                          "id": 2263,
+                          "name": "openingTime",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2585,
+                          "src": "2174:11:21",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_view$__$returns$_t_uint256_$",
+                            "typeString": "function () view returns (uint256)"
+                          }
+                        },
+                        "id": 2264,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "2174:13:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -2091,32 +2883,48 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 11629,
-                        "name": "now",
-                        "nodeType": "Identifier",
-                        "overloadedDeclarations": [],
-                        "referencedDeclaration": 17887,
-                        "src": "1439:3:82",
+                        "expression": {
+                          "argumentTypes": null,
+                          "id": 2260,
+                          "name": "block",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 10890,
+                          "src": "2154:5:21",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_magic_block",
+                            "typeString": "block"
+                          }
+                        },
+                        "id": 2261,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "timestamp",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": null,
+                        "src": "2154:15:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         }
                       },
-                      "id": 11630,
+                      "id": 2262,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "sub",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 12603,
-                      "src": "1439:7:82",
+                      "referencedDeclaration": 4221,
+                      "src": "2154:19:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
                         "typeString": "function (uint256,uint256) pure returns (uint256)"
                       }
                     },
-                    "id": 11632,
+                    "id": 2265,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2124,27 +2932,27 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1439:20:82",
+                    "src": "2154:34:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1417:42:82"
+                  "src": "2132:56:21"
                 },
                 {
                   "assignments": [
-                    11635
+                    2268
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 11635,
+                      "id": 2268,
                       "name": "timeRange",
                       "nodeType": "VariableDeclaration",
-                      "scope": 11660,
-                      "src": "1466:17:82",
+                      "scope": 2295,
+                      "src": "2199:17:21",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -2152,10 +2960,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 11634,
+                        "id": 2267,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1466:7:82",
+                        "src": "2199:7:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -2165,18 +2973,35 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 11640,
+                  "id": 2275,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 11638,
-                        "name": "openingTime",
-                        "nodeType": "Identifier",
-                        "overloadedDeclarations": [],
-                        "referencedDeclaration": 11899,
-                        "src": "1502:11:82",
+                        "arguments": [],
+                        "expression": {
+                          "argumentTypes": [],
+                          "id": 2272,
+                          "name": "openingTime",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2585,
+                          "src": "2237:11:21",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_view$__$returns$_t_uint256_$",
+                            "typeString": "function () view returns (uint256)"
+                          }
+                        },
+                        "id": 2273,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "2237:13:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -2192,32 +3017,49 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 11636,
-                        "name": "closingTime",
-                        "nodeType": "Identifier",
-                        "overloadedDeclarations": [],
-                        "referencedDeclaration": 11901,
-                        "src": "1486:11:82",
+                        "arguments": [],
+                        "expression": {
+                          "argumentTypes": [],
+                          "id": 2269,
+                          "name": "closingTime",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2593,
+                          "src": "2219:11:21",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_view$__$returns$_t_uint256_$",
+                            "typeString": "function () view returns (uint256)"
+                          }
+                        },
+                        "id": 2270,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "2219:13:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         }
                       },
-                      "id": 11637,
+                      "id": 2271,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "sub",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 12603,
-                      "src": "1486:15:82",
+                      "referencedDeclaration": 4221,
+                      "src": "2219:17:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
                         "typeString": "function (uint256,uint256) pure returns (uint256)"
                       }
                     },
-                    "id": 11639,
+                    "id": 2274,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2225,27 +3067,27 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1486:28:82",
+                    "src": "2219:32:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1466:48:82"
+                  "src": "2199:52:21"
                 },
                 {
                   "assignments": [
-                    11642
+                    2277
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 11642,
+                      "id": 2277,
                       "name": "rateRange",
                       "nodeType": "VariableDeclaration",
-                      "scope": 11660,
-                      "src": "1521:17:82",
+                      "scope": 2295,
+                      "src": "2262:17:21",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -2253,10 +3095,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 11641,
+                        "id": 2276,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1521:7:82",
+                        "src": "2262:7:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -2266,18 +3108,18 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 11647,
+                  "id": 2282,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 11645,
-                        "name": "finalRate",
+                        "id": 2280,
+                        "name": "_finalRate",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11594,
-                        "src": "1557:9:82",
+                        "referencedDeclaration": 2193,
+                        "src": "2299:10:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -2293,32 +3135,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 11643,
-                        "name": "initialRate",
+                        "id": 2278,
+                        "name": "_initialRate",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11592,
-                        "src": "1541:11:82",
+                        "referencedDeclaration": 2191,
+                        "src": "2282:12:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         }
                       },
-                      "id": 11644,
+                      "id": 2279,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "sub",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 12603,
-                      "src": "1541:15:82",
+                      "referencedDeclaration": 4221,
+                      "src": "2282:16:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
                         "typeString": "function (uint256,uint256) pure returns (uint256)"
                       }
                     },
-                    "id": 11646,
+                    "id": 2281,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2326,14 +3168,14 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1541:26:82",
+                    "src": "2282:28:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1521:46:82"
+                  "src": "2262:48:21"
                 },
                 {
                   "expression": {
@@ -2344,12 +3186,12 @@
                         "arguments": [
                           {
                             "argumentTypes": null,
-                            "id": 11655,
+                            "id": 2290,
                             "name": "timeRange",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 11635,
-                            "src": "1628:9:82",
+                            "referencedDeclaration": 2268,
+                            "src": "2376:9:21",
                             "typeDescriptions": {
                               "typeIdentifier": "t_uint256",
                               "typeString": "uint256"
@@ -2368,12 +3210,12 @@
                             "arguments": [
                               {
                                 "argumentTypes": null,
-                                "id": 11652,
+                                "id": 2287,
                                 "name": "rateRange",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 11642,
-                                "src": "1613:9:82",
+                                "referencedDeclaration": 2277,
+                                "src": "2361:9:21",
                                 "typeDescriptions": {
                                   "typeIdentifier": "t_uint256",
                                   "typeString": "uint256"
@@ -2389,32 +3231,32 @@
                               ],
                               "expression": {
                                 "argumentTypes": null,
-                                "id": 11650,
+                                "id": 2285,
                                 "name": "elapsedTime",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 11628,
-                                "src": "1597:11:82",
+                                "referencedDeclaration": 2259,
+                                "src": "2345:11:21",
                                 "typeDescriptions": {
                                   "typeIdentifier": "t_uint256",
                                   "typeString": "uint256"
                                 }
                               },
-                              "id": 11651,
+                              "id": 2286,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": false,
                               "lValueRequested": false,
                               "memberName": "mul",
                               "nodeType": "MemberAccess",
-                              "referencedDeclaration": 12565,
-                              "src": "1597:15:82",
+                              "referencedDeclaration": 4090,
+                              "src": "2345:15:21",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
                                 "typeString": "function (uint256,uint256) pure returns (uint256)"
                               }
                             },
-                            "id": 11653,
+                            "id": 2288,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
@@ -2422,27 +3264,27 @@
                             "lValueRequested": false,
                             "names": [],
                             "nodeType": "FunctionCall",
-                            "src": "1597:26:82",
+                            "src": "2345:26:21",
                             "typeDescriptions": {
                               "typeIdentifier": "t_uint256",
                               "typeString": "uint256"
                             }
                           },
-                          "id": 11654,
+                          "id": 2289,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "div",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 12583,
-                          "src": "1597:30:82",
+                          "referencedDeclaration": 4160,
+                          "src": "2345:30:21",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
                             "typeString": "function (uint256,uint256) pure returns (uint256)"
                           }
                         },
-                        "id": 11656,
+                        "id": 2291,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -2450,7 +3292,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "1597:41:82",
+                        "src": "2345:41:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -2466,32 +3308,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 11648,
-                        "name": "initialRate",
+                        "id": 2283,
+                        "name": "_initialRate",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11592,
-                        "src": "1581:11:82",
+                        "referencedDeclaration": 2191,
+                        "src": "2328:12:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         }
                       },
-                      "id": 11649,
+                      "id": 2284,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "sub",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 12603,
-                      "src": "1581:15:82",
+                      "referencedDeclaration": 4221,
+                      "src": "2328:16:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
                         "typeString": "function (uint256,uint256) pure returns (uint256)"
                       }
                     },
-                    "id": 11657,
+                    "id": 2292,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2499,21 +3341,21 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1581:58:82",
+                    "src": "2328:59:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "functionReturnParameters": 11626,
-                  "id": 11658,
+                  "functionReturnParameters": 2250,
+                  "id": 2293,
                   "nodeType": "Return",
-                  "src": "1574:65:82"
+                  "src": "2321:66:21"
                 }
               ]
             },
-            "documentation": "@dev Returns the rate of tokens per wei at the present time. \r\nNote that, as price _increases_ with time, the rate _decreases_. \r\n@return The number of tokens a buyer gets per wei at a given time\r",
-            "id": 11660,
+            "documentation": "@dev Returns the rate of tokens per wei at the present time.\r\nNote that, as price _increases_ with time, the rate _decreases_.\r\n@return The number of tokens a buyer gets per wei at a given time\r",
+            "id": 2295,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -2521,23 +3363,23 @@
             "name": "getCurrentRate",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11623,
+              "id": 2247,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1377:2:82"
+              "src": "1963:2:21"
             },
             "payable": false,
             "returnParameters": {
-              "id": 11626,
+              "id": 2250,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11625,
+                  "id": 2249,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11660,
-                  "src": "1401:7:82",
+                  "scope": 2295,
+                  "src": "1987:7:21",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2545,10 +3387,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 11624,
+                    "id": 2248,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1401:7:82",
+                    "src": "1987:7:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -2558,32 +3400,32 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1400:9:82"
+              "src": "1986:9:21"
             },
-            "scope": 11679,
-            "src": "1354:291:82",
+            "scope": 2314,
+            "src": "1940:455:21",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 11677,
+              "id": 2312,
               "nodeType": "Block",
-              "src": "1956:92:82",
+              "src": "2716:101:21",
               "statements": [
                 {
                   "assignments": [
-                    11668
+                    2303
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 11668,
+                      "id": 2303,
                       "name": "currentRate",
                       "nodeType": "VariableDeclaration",
-                      "scope": 11678,
-                      "src": "1963:19:82",
+                      "scope": 2313,
+                      "src": "2727:19:21",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -2591,10 +3433,10 @@
                         "typeString": "uint256"
                       },
                       "typeName": {
-                        "id": 11667,
+                        "id": 2302,
                         "name": "uint256",
                         "nodeType": "ElementaryTypeName",
-                        "src": "1963:7:82",
+                        "src": "2727:7:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -2604,24 +3446,24 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 11671,
+                  "id": 2306,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [],
                     "expression": {
                       "argumentTypes": [],
-                      "id": 11669,
+                      "id": 2304,
                       "name": "getCurrentRate",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 11660,
-                      "src": "1985:14:82",
+                      "referencedDeclaration": 2295,
+                      "src": "2749:14:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$__$returns$_t_uint256_$",
                         "typeString": "function () view returns (uint256)"
                       }
                     },
-                    "id": 11670,
+                    "id": 2305,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2629,14 +3471,14 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1985:16:82",
+                    "src": "2749:16:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1963:38:82"
+                  "src": "2727:38:21"
                 },
                 {
                   "expression": {
@@ -2644,12 +3486,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 11674,
-                        "name": "_weiAmount",
+                        "id": 2309,
+                        "name": "weiAmount",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11662,
-                        "src": "2031:10:82",
+                        "referencedDeclaration": 2297,
+                        "src": "2799:9:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
@@ -2665,32 +3507,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 11672,
+                        "id": 2307,
                         "name": "currentRate",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11668,
-                        "src": "2015:11:82",
+                        "referencedDeclaration": 2303,
+                        "src": "2783:11:21",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         }
                       },
-                      "id": 11673,
+                      "id": 2308,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "mul",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 12565,
-                      "src": "2015:15:82",
+                      "referencedDeclaration": 4090,
+                      "src": "2783:15:21",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
                         "typeString": "function (uint256,uint256) pure returns (uint256)"
                       }
                     },
-                    "id": 11675,
+                    "id": 2310,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2698,21 +3540,21 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "2015:27:82",
+                    "src": "2783:26:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "functionReturnParameters": 11666,
-                  "id": 11676,
+                  "functionReturnParameters": 2301,
+                  "id": 2311,
                   "nodeType": "Return",
-                  "src": "2008:34:82"
+                  "src": "2776:33:21"
                 }
               ]
             },
-            "documentation": "@dev Overrides parent method taking into account variable rate.\r\n@param _weiAmount The value in wei to be converted into tokens\r\n@return The number of tokens _weiAmount wei will buy at present time\r",
-            "id": 11678,
+            "documentation": "@dev Overrides parent method taking into account variable rate.\r\n@param weiAmount The value in wei to be converted into tokens\r\n@return The number of tokens _weiAmount wei will buy at present time\r",
+            "id": 2313,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": true,
@@ -2720,16 +3562,16 @@
             "name": "_getTokenAmount",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11663,
+              "id": 2298,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11662,
-                  "name": "_weiAmount",
+                  "id": 2297,
+                  "name": "weiAmount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11678,
-                  "src": "1904:18:82",
+                  "scope": 2313,
+                  "src": "2665:17:21",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2737,10 +3579,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 11661,
+                    "id": 2296,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1904:7:82",
+                    "src": "2665:7:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -2750,20 +3592,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1903:20:82"
+              "src": "2664:19:21"
             },
             "payable": false,
             "returnParameters": {
-              "id": 11666,
+              "id": 2301,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11665,
+                  "id": 2300,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11678,
-                  "src": "1947:7:82",
+                  "scope": 2313,
+                  "src": "2707:7:21",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2771,10 +3613,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 11664,
+                    "id": 2299,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1947:7:82",
+                    "src": "2707:7:21",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -2784,20 +3626,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1946:9:82"
+              "src": "2706:9:21"
             },
-            "scope": 11679,
-            "src": "1879:169:82",
+            "scope": 2314,
+            "src": "2640:177:21",
             "stateMutability": "view",
-            "superFunction": 11092,
+            "superFunction": 1765,
             "visibility": "internal"
           }
         ],
-        "scope": 11680,
-        "src": "456:1597:82"
+        "scope": 2315,
+        "src": "455:2365:21"
       }
     ],
-    "src": "0:2055:82"
+    "src": "0:2822:21"
   },
   "compiler": {
     "name": "solc",
@@ -2805,5 +3647,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-12-10T14:03:30.303Z"
+  "updatedAt": "2018-12-28T13:58:04.596Z"
 }
