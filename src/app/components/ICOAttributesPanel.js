@@ -194,7 +194,7 @@ export class ICOAttributesPanel extends React.Component {
                   className="ico_text_field"
                   margin="normal"
                   variant="outlined"
-                  type="date"
+                  type="datetime-local"
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -229,7 +229,7 @@ export class ICOAttributesPanel extends React.Component {
                   className="ico_text_field"
                   margin="normal"
                   variant="outlined"
-                  type="date"
+                  type="datetime-local"
                   InputLabelProps={{
                     shrink: true,
                   }}

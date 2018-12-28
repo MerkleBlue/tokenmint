@@ -206,7 +206,7 @@ describe('test InputValidator', () => {
 
   ////////// date tests
   it ('is valid date format - valid date', () => {
-    expect(InputValidator.isDateFormatValid("2018-02-02")).to.be.true;
+    expect(InputValidator.isDateFormatValid("2018-02-02T17:00")).to.be.true;
   });
 
   it ('is valid date format - invalid date', () => {
@@ -215,14 +215,14 @@ describe('test InputValidator', () => {
 
   it ('is date in past - valid date', () => {
     const date = new Date();
-    const strDate = date.toISOString().split('T')[0];
+    const strDate = date.toISOString();
     expect(InputValidator.isDateInPast(strDate)).to.be.false;
   });
 
   it ('is date in past - invalid date', () => {
     let date = new Date();
     date.setDate(date.getDate() - 1);
-    const strDate = date.toISOString().split('T')[0];
+    const strDate = date.toISOString();
     expect(InputValidator.isDateInPast(strDate)).to.be.true;
   });
 
@@ -233,28 +233,28 @@ describe('test InputValidator', () => {
   it('is date valid - date in past', () => {
     let date = new Date();
     date.setDate(date.getDate() - 1);
-    const strDate = date.toISOString().split('T')[0];
+    const strDate = date.toISOString();
     expect(InputValidator.isDateValid(strDate)).to.be.false;
   });
 
   it('is date valid - date in future', () => {
     let date = new Date();
     date.setDate(date.getDate() + 1);
-    const strDate = date.toISOString().split('T')[0];
+    const strDate = date.toISOString();
     expect(InputValidator.isDateValid(strDate)).to.be.true;
   });
 
   it('is opening time before closing time - invalid opening time', () => {
     let date = new Date();
     date.setDate(date.getDate() + 1);
-    const strClosingTime = date.toISOString().split('T')[0];
+    const strClosingTime = date.toISOString();
     expect(InputValidator.isOpeningTimeBeforeClosingTime("foo", strClosingTime)).to.be.true;
   });
 
   it('is opening time before closing time - invalid closing time', () => {
     let date = new Date();
     date.setDate(date.getDate() + 1);
-    const strOpeningTime = date.toISOString().split('T')[0];
+    const strOpeningTime = date.toISOString();
     expect(InputValidator.isOpeningTimeBeforeClosingTime(strOpeningTime, "foo")).to.be.true;
   });
 
@@ -263,15 +263,15 @@ describe('test InputValidator', () => {
     let closingDate = new Date();
     openingDate.setDate(openingDate.getDate() + 2);
     closingDate.setDate(closingDate.getDate() + 1);
-    const strOpeningTime = openingDate.toISOString().split('T')[0];
-    const strClosingTime = closingDate.toISOString().split('T')[0];
+    const strOpeningTime = openingDate.toISOString();
+    const strClosingTime = closingDate.toISOString();
     expect(InputValidator.isOpeningTimeBeforeClosingTime(strOpeningTime, strClosingTime)).to.be.false;
   });
 
   it('is opening time before closing time - opening time same as closing time', () => {
     let date = new Date();
-    const strOpeningTime = date.toISOString().split('T')[0];
-    const strClosingTime = date.toISOString().split('T')[0];
+    const strOpeningTime = date.toISOString();
+    const strClosingTime = date.toISOString();
     expect(InputValidator.isOpeningTimeBeforeClosingTime(strOpeningTime, strClosingTime)).to.be.false;
   });
 
@@ -280,8 +280,8 @@ describe('test InputValidator', () => {
     let closingDate = new Date();
     openingDate.setDate(openingDate.getDate() + 1);
     closingDate.setDate(closingDate.getDate() + 2);
-    const strOpeningTime = openingDate.toISOString().split('T')[0];
-    const strClosingTime = closingDate.toISOString().split('T')[0];
+    const strOpeningTime = openingDate.toISOString();
+    const strClosingTime = closingDate.toISOString();
     expect(InputValidator.isOpeningTimeBeforeClosingTime(strOpeningTime, strClosingTime)).to.be.true;
   });
 });

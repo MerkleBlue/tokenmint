@@ -76,7 +76,6 @@ export default class InputValidator {
   static isDateInPast(strDate) {
     const date = new Date(strDate);
     let now = new Date();
-    now.setHours(0,0,0,0);
     return (date < now);
   }
 
