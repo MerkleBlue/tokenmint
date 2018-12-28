@@ -18,6 +18,9 @@ import payingAccountHasInsufficientFunds from './payingAccountHasInsufficientFun
 import isMobileDevice from './isMobileDeviceReducer';
 import walletNeedsToBeUnlocked from './walletNeedsToBeUnlockedReducer';
 import payingAccount from './payingAccountReducer';
+import icoCap from './icoCapReducer';
+import icoRate from './icoRateReducer';
+import icoWallet from './icoWalletReducer';
 
 const rootReducer = combineReducers({
   tokenName: tokenName,
@@ -38,7 +41,10 @@ const rootReducer = combineReducers({
   payingAccountHasInsufficientFunds: payingAccountHasInsufficientFunds,
   isMobileDevice: isMobileDevice,
   walletNeedsToBeUnlocked: walletNeedsToBeUnlocked,
-  payingAccount: payingAccount
+  payingAccount: payingAccount,
+  icoCap: icoCap,
+  icoRate: icoRate,
+  icoWallet: icoWallet
 });
 
 export default rootReducer;

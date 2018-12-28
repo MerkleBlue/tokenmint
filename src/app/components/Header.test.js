@@ -23,8 +23,8 @@ describe("<Header /> tests", () => {
     mount.cleanUp();
   });
 
-  it("renders Header desktop device", () => {
-    const wrapper = mount(<Header isMobileDevice={false} />);
+  it("renders Header desktop device - token", () => {
+    const wrapper = mount(<Header isMobileDevice={false} isIco={false} />);
     expect(wrapper.find("a").length).to.eq(1);
     expect(wrapper.find("a").props().href).to.eq("../");
     expect(wrapper.find("img").length).to.eq(2);
@@ -35,6 +35,20 @@ describe("<Header /> tests", () => {
     expect(wrapper.find("Typography").props().variant).to.eq("h5");
     expect(wrapper.find("Typography").props().gutterBottom).to.be.true;
     expect(wrapper.find("Typography").props().children).to.eq("Your own Token powered by");
+  });
+
+  it("renders Header desktop device - ICO", () => {
+    const wrapper = mount(<Header isMobileDevice={false} isIco />);
+    expect(wrapper.find("a").length).to.eq(1);
+    expect(wrapper.find("a").props().href).to.eq("../");
+    expect(wrapper.find("img").length).to.eq(2);
+    expect(wrapper.find("img").at(0).props().src).to.exist;
+    expect(wrapper.find("img").at(1).props().src).to.exist;
+    expect(wrapper.find("Typography").length).to.eq(1);
+    expect(wrapper.find("Typography").props().color).to.eq("textSecondary");
+    expect(wrapper.find("Typography").props().variant).to.eq("h5");
+    expect(wrapper.find("Typography").props().gutterBottom).to.be.true;
+    expect(wrapper.find("Typography").props().children).to.eq("Your own ICO powered by");
   });
 
   it("renders Header mobile device", () => {

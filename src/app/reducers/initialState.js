@@ -19,5 +19,8 @@ export default {
   payingAccountHasInsufficientFunds: false,
   isMobileDevice: false,
   walletNeedsToBeUnlocked: false,
-  payingAccount: ""
+  payingAccount: "",
+  icoCap: "",
+  icoRate: "",
+  icoWallet: ""
 };

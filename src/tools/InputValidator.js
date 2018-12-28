@@ -39,14 +39,30 @@ export default class InputValidator {
     return n !== Infinity && String(n) === totalSupply && n > 0 && n <= 1000000000000000;
   }
 
-  static isTokenOwnerValid(tokenOwner) {
-    if (tokenOwner === "") {
+  static isEthereumAddress(address) {
+    if (address === "") {
       return true;
     }
-    if (!tokenOwner.startsWith("0x")) {
+    if (!address.startsWith("0x")) {
       return false;
     }
-    return web3.utils.isAddress(tokenOwner);
+    return web3.utils.isAddress(address);
+  }
+
+  static isIcoCapValid(icoCap) {
+    if (icoCap === "") {
+      return true;
+    }
+    let n = Math.floor(Number(icoCap));
+    return n !== Infinity && String(n) === icoCap && n > 0 && n <= 1000000000000000;
+  }
+
+  static isIcoRateValid(icoRate) {
+    if (icoRate === "") {
+      return true;
+    }
+    let n = Math.floor(Number(icoRate));
+    return n !== Infinity && String(n) === icoRate && n > 0 && n <= 1000000000000000;
   }
 
   static isInputValid(tokenName, tokenSymbol, decimals, totalSupply, tokenOwner) {
@@ -54,7 +70,7 @@ export default class InputValidator {
       this.isTokenSymbolValid(tokenSymbol) && tokenSymbol !== "" &&
       this.isDecimalsValid(decimals) && decimals !== "" &&
       this.isTotalSupplyValid(totalSupply) && totalSupply !== "" &&
-      this.isTokenOwnerValid(tokenOwner) && tokenOwner !== "";
+      this.isEthereumAddress(tokenOwner) && tokenOwner !== "";
   }
 
   static areTokenAttributesValid(tokenName, tokenSymbol, decimals, totalSupply) {
