@@ -59,8 +59,8 @@ export class ICOAttributesPanel extends React.Component {
       }
     });
 
-    let icoOpeningTimeDescription = "ICO opening time.";
-    let icoClosingTimeDescription = "ICO closing time.";
+    let icoOpeningTimeDescription = "ICO opening time. The crowdsale start date.";
+    let icoClosingTimeDescription = "ICO closing time. The crowdsale end date";
 
     if(!InputValidator.isOpeningTimeBeforeClosingTime(this.props.icoOpeningTime, this.props.icoClosingTime)) {
       icoOpeningTimeDescription = "ICO opening time must be set before ICO closing time!";
@@ -71,7 +71,7 @@ export class ICOAttributesPanel extends React.Component {
       if (!InputValidator.isDateFormatValid(this.props.icoOpeningTime)) {
         icoOpeningTimeDescription = "Invalid date format!";
       } else if (InputValidator.isDateInPast(this.props.icoOpeningTime)) {
-        icoOpeningTimeDescription = "ICO opening time must be set in the future!";
+        icoOpeningTimeDescription = "ICO opening time cannot be set in the past!";
       }
     }
 
@@ -79,7 +79,7 @@ export class ICOAttributesPanel extends React.Component {
       if (!InputValidator.isDateFormatValid(this.props.icoClosingTime)) {
         icoClosingTimeDescription = "Invalid date format!";
       } else if (InputValidator.isDateInPast(this.props.icoClosingTime)) {
-        icoClosingTimeDescription = "ICO closing time must be set in the future!";
+        icoClosingTimeDescription = "ICO opening time cannot be set in the past!";
       }
     }
 
