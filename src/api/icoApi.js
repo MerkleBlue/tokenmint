@@ -3,15 +3,11 @@ import Web3 from 'web3';
 import { BigNumber } from 'bignumber.js';
 
 // contracts
-//import SafeMathLibJSON from '../contracts/SafeMathLib.json';
-//import FlatPricingJSON from '../contracts/FlatPricing.json';
-//import CrowdsaleTokenJSON from '../contracts/CrowdsaleToken.json';
-//import AllocatedCrowdsaleJSON from '../contracts/AllocatedCrowdsale.json';
-//import DefaultFinalizeAgentJSON from '../contracts/DefaultFinalizeAgent.json';
 import ERC20TokenJSON from '../contracts/TokenMintERC20Token.json';
 import CrowdsaleJSON from '../contracts/Crowdsale.json';
 import AllowanceCrowdsaleImplJSON from '../contracts/AllowanceCrowdsaleImpl.json';
-import TimedCappedAllowanceCrowdsaleJSON from '../contracts/TimedCappedAllowanceCrowdsale.json';
+import TCACrowdsaleJSON from '../contracts/TCACrowdsale.json';
+import CARPDCrowdsaleJSON from '../contracts/CARPDCrowdsale.json';
 
 
 const feeInUsd = 29.99;
@@ -216,7 +212,7 @@ export function deployCrowdsale(owner, tokenArgs, crowdsaleArgs) {
           });
         }).catch((e) => {
           console.log(e)
-          reject(new Error("Could not deploy CrowdsaleToken contract."));
+          reject(new Error("Could not deploy TokenMintERC20Token contract."));
           return;
         });
       } else {
@@ -249,7 +245,7 @@ export function deployAllowanceCrowdsale(owner, tokenArgs, crowdsaleArgs) {
           });
         }).catch((e) => {
           console.log(e)
-          reject(new Error("Could not deploy CrowdsaleToken contract."));
+          reject(new Error("Could not deploy TokenMintERC20Token contract."));
           return;
         });
       } else {
@@ -264,13 +260,13 @@ export function deployAllowanceCrowdsale(owner, tokenArgs, crowdsaleArgs) {
   });
 }
 
-export function deployTimedCappedAllowanceCrowdsale(owner, tokenArgs, crowdsaleArgs) {
+export function deployTCACrowdsale(owner, tokenArgs, crowdsaleArgs) {
   return new Promise((accept, reject) => {
     checkTokenOwnerFunds(owner).then(hasFunds => {
       if (hasFunds) {
         deployCrowdsaleToken(owner, ...tokenArgs).then(tokenReceipt => {
           crowdsaleArgs[4] = tokenReceipt.contractAddress;
-          instantiateContract(TimedCappedAllowanceCrowdsaleJSON, crowdsaleArgs, owner, 0).then(crowdsaleReceipt => {
+          instantiateContract(TCACrowdsaleJSON, crowdsaleArgs, owner, 0).then(crowdsaleReceipt => {
             accept({
               tokenReceipt: tokenReceipt,
               crowdsaleReceipt: crowdsaleReceipt,
@@ -278,12 +274,46 @@ export function deployTimedCappedAllowanceCrowdsale(owner, tokenArgs, crowdsaleA
             return;
           }).catch((e) => {
             console.log(e)
-            reject(new Error("Could not deploy TimedCappedAllowanceCrowdsaleJSON contract."));
+            reject(new Error("Could not deploy TCACrowdsale contract."));
             return;
           });
         }).catch((e) => {
           console.log(e)
-          reject(new Error("Could not deploy CrowdsaleToken contract."));
+          reject(new Error("Could not deploy TokenMintERC20Token contract."));
+          return;
+        });
+      } else {
+        reject(new Error("Account: " + tokenArgs[0] + " doesn't have enough funds to pay for service."));
+        return;
+      }
+    }).catch((e) => {
+      console.log(e)
+      reject(new Error("Could not check token owner ETH funds."));
+      return;
+    });
+  });
+}
+
+export function deployCARPDCrowdsale(owner, tokenArgs, crowdsaleArgs) {
+  return new Promise((accept, reject) => {
+    checkTokenOwnerFunds(owner).then(hasFunds => {
+      if (hasFunds) {
+        deployCrowdsaleToken(owner, ...tokenArgs).then(tokenReceipt => {
+          crowdsaleArgs[4] = tokenReceipt.contractAddress;
+          instantiateContract(CARPDCrowdsaleJSON, crowdsaleArgs, owner, 0).then(crowdsaleReceipt => {
+            accept({
+              tokenReceipt: tokenReceipt,
+              crowdsaleReceipt: crowdsaleReceipt,
+            });
+            return;
+          }).catch((e) => {
+            console.log(e)
+            reject(new Error("Could not deploy CARPDCrowdsale contract."));
+            return;
+          });
+        }).catch((e) => {
+          console.log(e)
+          reject(new Error("Could not deploy TokenMintERC20Token contract."));
           return;
         });
       } else {

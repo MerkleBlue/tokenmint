@@ -1,11 +1,11 @@
 pragma solidity ^0.4.24;
 
 import "../open-zeppelin-contracts/token/ERC20/IERC20.sol";
-import "../open-zeppelin-contracts/crowdsale/validation/TimedCrowdsale.sol";
 import "../open-zeppelin-contracts/crowdsale/validation/CappedCrowdsale.sol";
 import "../open-zeppelin-contracts/crowdsale/emission/AllowanceCrowdsale.sol";
+import "../open-zeppelin-contracts/crowdsale/distribution/RefundablePostDeliveryCrowdsale.sol";
 
-contract TimedCappedAllowanceCrowdsale is TimedCrowdsale, CappedCrowdsale, AllowanceCrowdsale {
+contract CARPDCrowdsale is CappedCrowdsale, AllowanceCrowdsale, RefundablePostDeliveryCrowdsale {
     constructor (
         uint256 openingTime,
         uint256 closingTime,
@@ -13,14 +13,14 @@ contract TimedCappedAllowanceCrowdsale is TimedCrowdsale, CappedCrowdsale, Allow
         address wallet,
         IERC20 token,
         uint256 cap,
-        //uint256 goal,
+        uint256 goal,
         address tokenWallet
     )
         public
         Crowdsale(rate, wallet, token)
-        TimedCrowdsale(openingTime, closingTime)
-        //RefundableCrowdsale(goal)
         CappedCrowdsale(cap)
         AllowanceCrowdsale(tokenWallet)
+        TimedCrowdsale(openingTime, closingTime)
+        RefundableCrowdsale(goal)
     {}
 }
