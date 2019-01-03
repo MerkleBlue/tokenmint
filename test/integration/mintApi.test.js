@@ -44,7 +44,7 @@ describe('TokenMint mintApi integration tests', function () {
 
   it('Get fee', (done) => {
     mintApi.getFee().then(fee => {
-      expect(fee).to.be.greaterThan(0.2);
+      expect(fee).to.be.greaterThan(0.01);
       done();
     });
   });
