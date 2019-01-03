@@ -65,6 +65,14 @@ export default class InputValidator {
     return n !== Infinity && String(n) === icoRate && n > 0 && n <= 1000000000000000;
   }
 
+  static isIcoGoalValid(icoGoal) {
+    if (icoGoal === "") {
+      return true;
+    }
+    let n = Math.floor(Number(icoGoal));
+    return n !== Infinity && String(n) === icoGoal && n > 0 && n <= 1000000000000000;
+  }
+
   static isDateFormatValid(date) {
     const timestamp = Date.parse(date);
     if(isNaN(timestamp)) {

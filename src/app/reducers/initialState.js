@@ -24,5 +24,6 @@ export default {
   icoRate: "",
   icoWallet: "",
   icoOpeningTime: "",
-  icoClosingTime: ""
+  icoClosingTime: "",
+  icoGoal: ""
 };
