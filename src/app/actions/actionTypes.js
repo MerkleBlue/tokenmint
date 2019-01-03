@@ -25,3 +25,5 @@ export const SET_ICO_RATE = "SET_ICO_RATE";
 export const SET_ICO_WALLET = "SET_ICO_WALLET";
 export const SET_OPENING_TIME = "SET_OPENING_TIME";
 export const SET_CLOSING_TIME = "SET_CLOSING_TIME";
+export const SET_ICO_GOAL = "SET_ICO_GOAL";
+

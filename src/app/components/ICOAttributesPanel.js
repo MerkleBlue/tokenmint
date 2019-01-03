@@ -16,6 +16,7 @@ import * as icoCapActions from '../actions/icoCapActions';
 import * as icoRateActions from '../actions/icoRateActions';
 import * as icoWalletActions from '../actions/icoWalletActions';
 import * as icoOpenCloseTimeActions from '../actions/icoOpenCloseTimeActions';
+import * as icoGoalActions from '../actions/icoGoalActions';
 import './css/ICOAttributesPanel.css';
 
 export class ICOAttributesPanel extends React.Component {
@@ -27,6 +28,7 @@ export class ICOAttributesPanel extends React.Component {
     this.handleWalletChange = this.handleWalletChange.bind(this);
     this.handleOpeningTimeChange = this.handleOpeningTimeChange.bind(this);
     this.handleClosingTimeChange = this.handleClosingTimeChange.bind(this);
+    this.handleGoalChange = this.handleGoalChange.bind(this);
   }
 
   handleCapChange(e) {
@@ -47,6 +49,10 @@ export class ICOAttributesPanel extends React.Component {
 
   handleClosingTimeChange(e) {
     this.props.icoOpenCloseTimeActions.setClosingTime(e.target.value);
+  }
+
+  handleGoalChange(e) {
+    this.props.icoGoalActions.setIcoGoal(e.target.value);
   }
 
   render() {
@@ -122,6 +128,35 @@ export class ICOAttributesPanel extends React.Component {
                   className={InputValidator.isIcoCapValid(this.props.icoCap) ? "typography_ico_info" : "typography_ico_info_error"}
                 >
                   ICO cap in ETH.
+                </Typography>
+              </MuiThemeProvider>
+            </Grid>
+          </Grid>
+          <Grid container spacing={8}>
+            <Grid item xs={12} md={6}>
+              <MuiThemeProvider theme={theme}>
+                <TextField
+                  required
+                  id="outlined-required"
+                  label="Goal"
+                  className="ico_text_field"
+                  margin="normal"
+                  variant="outlined"
+                  inputProps={{ maxLength: 25 }}
+                  value={this.props.icoGoal}
+                  error={!InputValidator.isIcoGoalValid(this.props.icoGoal)}
+                  onChange={this.handleGoalChange}
+                />
+              </MuiThemeProvider>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <MuiThemeProvider theme={theme}>
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className={InputValidator.isIcoGoalValid(this.props.icoGoal) ? "typography_ico_info" : "typography_ico_info_error"}
+                >
+                  ICO goal in ETH.
                 </Typography>
               </MuiThemeProvider>
             </Grid>
@@ -262,10 +297,12 @@ export class ICOAttributesPanel extends React.Component {
 
 ICOAttributesPanel.propTypes = {
   icoCapActions: PropTypes.object.isRequired,
+  icoGoalActions: PropTypes.object.isRequired,
   icoRateActions: PropTypes.object.isRequired,
   icoWalletActions: PropTypes.object.isRequired,
   icoOpenCloseTimeActions: PropTypes.object.isRequired,
   icoCap: PropTypes.string.isRequired,
+  icoGoal: PropTypes.string.isRequired,
   icoRate: PropTypes.string.isRequired,
   icoWallet: PropTypes.string.isRequired,
   icoOpeningTime: PropTypes.string.isRequired,
@@ -275,6 +312,7 @@ ICOAttributesPanel.propTypes = {
 function mapStateToProps(state) {
   return {
     icoCap: state.icoCap,
+    icoGoal: state.icoGoal,
     icoRate: state.icoRate,
     icoWallet: state.icoWallet,
     icoOpeningTime: state.icoOpeningTime,
@@ -285,6 +323,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     icoCapActions: bindActionCreators(icoCapActions, dispatch),
+    icoGoalActions: bindActionCreators(icoGoalActions, dispatch),
     icoRateActions: bindActionCreators(icoRateActions, dispatch),
     icoWalletActions: bindActionCreators(icoWalletActions, dispatch),
     icoOpenCloseTimeActions: bindActionCreators(icoOpenCloseTimeActions, dispatch)

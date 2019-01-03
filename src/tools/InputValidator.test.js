@@ -215,6 +215,7 @@ describe('test InputValidator', () => {
 
   it ('is date in past - valid date', () => {
     const date = new Date();
+    date.setDate(date.getDate() + 1);
     const strDate = date.toISOString();
     expect(InputValidator.isDateInPast(strDate)).to.be.false;
   });
