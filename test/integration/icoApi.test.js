@@ -21,12 +21,6 @@ let startTime = Math.round((new Date().getTime() + 2000) / 1000); // 2 seconds i
 let endTime = Math.round((new Date().getTime() + 6000) / 1000); // 6 seconds in future
 let tokenArgs = ["Token name", "SYM", 18, 1000, tokenMintAccount, icoMaker];
 
-/*let dates = {
-  yesterday: new Date(new Date().setDate(new Date().getDate() - 1)),
-  tommorow: new Date(new Date().setDate(new Date().getDate() + 1)),
-  tommorowUnixTimeStamp: Math.round(tommorow.getTime() / 1000)
-}*/
-
 describe('TokenMint icoApi integration tests', function () {
   this.timeout(120000);
 
@@ -343,6 +337,161 @@ describe('TokenMint icoApi integration tests', function () {
               });
             }).catch(e => {
               done(new Error(e));
+            });
+          }).catch(e => {
+            done(new Error(e));
+          });
+        });
+      }).catch((e) => {
+        done(new Error(e));
+      });
+    }).catch(e => {
+      done(new Error(e));
+    });
+  });
+
+  it('CARPDCrowdsale (Capped) - cap() function', (done) => {
+    let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('0.2', 'ether'), web3.utils.toWei('0.1', 'ether'), icoMaker];
+    icoApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs).then(receipts => {
+
+      // call buyTokens function of Crowdsale contract
+      let contractInstance = new web3.eth.Contract(CARPDCrowdsaleJSON.abi, receipts.crowdsaleReceipt.contractAddress);
+      contractInstance.methods.cap().call().then(cap => {
+        expect(cap).to.be.eq(web3.utils.toWei('0.2', 'ether'));
+        done();
+      });
+    }).catch(e => {
+      done(new Error(e));
+    });
+  });
+
+  it('CARPDCrowdsale (Capped) - capReached() function', (done) => {
+    let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('0.1', 'ether'), web3.utils.toWei('0.01', 'ether'), icoMaker];
+    icoApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs).then(receipts => {
+
+      // approve all tokens to crowdsale contract
+      let tokenInstance = new web3.eth.Contract(TokenMintERC20TokenJSON.abi, receipts.tokenReceipt.contractAddress);
+      tokenInstance.methods.approve(receipts.crowdsaleReceipt.contractAddress, new BigNumber(tokenArgs[3] * 10 ** tokenArgs[2]).toString()).send({ from: icoMaker }).then(receipt => {
+
+        // wait two seconds before first investment
+        let delay = ms => new Promise((resolve) => setTimeout(resolve, ms));
+        delay(2000).then(() => {
+          // invest less than a cap
+          let contractInstance = new web3.eth.Contract(CARPDCrowdsaleJSON.abi, receipts.crowdsaleReceipt.contractAddress);
+          contractInstance.methods.buyTokens(investor1).send({ from: investor1, gas: 4712388, value: web3.utils.toWei('0.099999999', 'ether') }).then(() => {
+
+            // should not reach cap 0.099999 < 0.1
+            contractInstance.methods.capReached().call().then(capReached => {
+              expect(capReached).to.be.eq(false);
+
+              // invest just a little bit to reach cap (to be equal to cap)
+              contractInstance.methods.buyTokens(investor2).send({ from: investor2, gas: 4712388, value: web3.utils.toWei('0.000000001', 'ether') }).then(() => {
+
+                // should reach cap 0.1 == 0.1
+                contractInstance.methods.capReached().call().then(capReached => {
+                  expect(capReached).to.be.eq(true);
+                  done();
+                });
+              });
+            }).catch(e => {
+              done(new Error(e));
+            });
+          }).catch(e => {
+            done(new Error(e));
+          });
+        });
+      }).catch((e) => {
+        done(new Error(e));
+      });
+    }).catch(e => {
+      done(new Error(e));
+    });
+  });
+
+  it('CARPDCrowdsale (Capped) - invest when cap reached', (done) => {
+    let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('0.1', 'ether'), web3.utils.toWei('0.01', 'ether'), icoMaker];
+    icoApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs).then(receipts => {
+
+      // approve all tokens to crowdsale contract
+      let tokenInstance = new web3.eth.Contract(TokenMintERC20TokenJSON.abi, receipts.tokenReceipt.contractAddress);
+      tokenInstance.methods.approve(receipts.crowdsaleReceipt.contractAddress, new BigNumber(tokenArgs[3] * 10 ** tokenArgs[2]).toString()).send({ from: icoMaker }).then(receipt => {
+
+        // wait two seconds before first investment
+        let delay = ms => new Promise((resolve) => setTimeout(resolve, ms));
+        delay(2000).then(() => {
+          // invest and reach cap
+          let contractInstance = new web3.eth.Contract(CARPDCrowdsaleJSON.abi, receipts.crowdsaleReceipt.contractAddress);
+          contractInstance.methods.buyTokens(investor3).send({ from: investor3, gas: 4712388, value: web3.utils.toWei('0.1', 'ether') }).then(() => {
+
+            // invest just a little bit more, should reject
+            contractInstance.methods.buyTokens(investor2).send({ from: investor2, gas: 4712388, value: web3.utils.toWei('0.000000001', 'ether') }).then(() => {
+              done(new Error('Cap reached, but crowdsale still active'));
+            }).catch(e => {
+              expect(true).to.be.eq(true);
+              done();
+            });
+          }).catch(e => {
+            done(new Error(e));
+          });
+        });
+      }).catch((e) => {
+        done(new Error(e));
+      });
+    }).catch(e => {
+      done(new Error(e));
+    });
+  });
+
+  it('CARPDCrowdsale (Allowance) - tokenWallet() function', (done) => {
+    let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('0.1', 'ether'), web3.utils.toWei('0.1', 'ether'), icoMaker];
+    icoApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs).then(receipts => {
+      expect(receipts.tokenReceipt.status).to.be.eq(true);
+      expect(receipts.crowdsaleReceipt.status).to.be.eq(true);
+
+      // call buyTokens function of Crowdsale contract
+      let contractInstance = new web3.eth.Contract(CARPDCrowdsaleJSON.abi, receipts.crowdsaleReceipt.contractAddress);
+      contractInstance.methods.tokenWallet().call().then(walletAddress => {
+        expect(walletAddress).to.be.eq(icoMaker);
+        done();
+      }).catch(e => {
+        done(new Error(e));
+      });
+    }).catch(e => {
+      done(new Error(e));
+    });
+  });
+
+  it('CARPDCrowdsale (Allowance) - remainingTokens() function', (done) => {
+    let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('0.1', 'ether'), web3.utils.toWei('0.1', 'ether'), icoMaker];
+    icoApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs).then(receipts => {
+      expect(receipts.tokenReceipt.status).to.be.eq(true);
+      expect(receipts.crowdsaleReceipt.status).to.be.eq(true);
+
+      // approve all tokens to crowdsale contract
+      let tokenInstance = new web3.eth.Contract(TokenMintERC20TokenJSON.abi, receipts.tokenReceipt.contractAddress);
+      tokenInstance.methods.approve(receipts.crowdsaleReceipt.contractAddress, new BigNumber(tokenArgs[3] * 10 ** tokenArgs[2]).toString()).send({ from: icoMaker }).then(receipt => {
+        expect(receipt.status).to.be.eq(true);
+
+        // wait two seconds before first investment
+        let delay = ms => new Promise((resolve) => setTimeout(resolve, ms));
+        delay(2000).then(() => {
+
+          // check remaining tokens before investments
+          let contractInstance = new web3.eth.Contract(CARPDCrowdsaleJSON.abi, receipts.crowdsaleReceipt.contractAddress);
+          contractInstance.methods.remainingTokens().call().then(remainingTokens => {
+            expect(remainingTokens).to.be.eq(new BigNumber(tokenArgs[3] * 10 ** tokenArgs[2]).toString());
+
+            // buy half the tokens
+            contractInstance.methods.buyTokens(investor1).send({ from: investor1, gas: 4712388, value: web3.utils.toWei('0.05', 'ether') }).then(receipt => {
+
+              // check remaining tokens after investment
+              // NOTE: since it's post delivery, remaining tokens is the same,
+              // so this function doesn't make sense much
+              let contractInstance = new web3.eth.Contract(CARPDCrowdsaleJSON.abi, receipts.crowdsaleReceipt.contractAddress);
+              contractInstance.methods.remainingTokens().call().then(remainingTokens => {
+                expect(remainingTokens).to.be.eq(new BigNumber(tokenArgs[3] * 10 ** tokenArgs[2]).toString());
+                done();
+              });
             });
           }).catch(e => {
             done(new Error(e));
