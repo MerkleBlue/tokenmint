@@ -272,8 +272,7 @@ describe('test InputValidator', () => {
   it('is opening time before closing time - opening time same as closing time', () => {
     let date = new Date();
     const strOpeningTime = date.toISOString();
-    const strClosingTime = date.toISOString();
-    expect(InputValidator.isOpeningTimeBeforeClosingTime(strOpeningTime, strClosingTime)).to.be.false;
+    expect(InputValidator.isOpeningTimeBeforeClosingTime(strOpeningTime, strOpeningTime)).to.be.false;
   });
 
   it('is opening time before closing time - opening time before closing time', () => {
