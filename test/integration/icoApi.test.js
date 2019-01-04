@@ -56,28 +56,6 @@ describe('TokenMint icoApi integration tests', function () {
     });
   });
 
-  it('Deploy Crowdsale contract', (done) => {
-    let crowdsaleArgs = [500, icoMaker];
-    icoApi.deployCrowdsale(icoMaker, tokenArgs, crowdsaleArgs).then(receipts => {
-      expect(receipts.tokenReceipt.status).to.be.eq(true);
-      expect(receipts.crowdsaleReceipt.status).to.be.eq(true);
-      done();
-    }).catch(e => {
-      done(new Error(e));
-    });
-  });
-
-  it('Deploy AllowanceCrowdsale contract', (done) => {
-    let crowdsaleArgs = [500, icoMaker];
-    icoApi.deployAllowanceCrowdsale(icoMaker, tokenArgs, crowdsaleArgs).then(receipts => {
-      expect(receipts.tokenReceipt.status).to.be.eq(true);
-      expect(receipts.crowdsaleReceipt.status).to.be.eq(true);
-      done();
-    }).catch(e => {
-      done(new Error(e));
-    });
-  });
-
   it('Deploy TCACrowdsale contract', (done) => {
     let crowdsaleArgs = [startTime, endTime, 500, icoMaker, null, web3.utils.toWei('1', 'ether'), icoMaker];
     icoApi.deployTCACrowdsale(icoMaker, tokenArgs, crowdsaleArgs).then(receipts => {
@@ -95,126 +73,6 @@ describe('TokenMint icoApi integration tests', function () {
       expect(receipts.tokenReceipt.status).to.be.eq(true);
       expect(receipts.crowdsaleReceipt.status).to.be.eq(true);
       done();
-    }).catch(e => {
-      done(new Error(e));
-    });
-  });
-
-  it('Crowdsale invest - using buyTokens', (done) => {
-    let crowdsaleArgs = [1000, icoMaker];
-    icoApi.deployCrowdsale(icoMaker, tokenArgs, crowdsaleArgs).then(receipts => {
-      expect(receipts.tokenReceipt.status).to.be.eq(true);
-      expect(receipts.crowdsaleReceipt.status).to.be.eq(true);
-
-      // transfer all tokens to crowdsale contract
-      let tokenInstance = new web3.eth.Contract(TokenMintERC20TokenJSON.abi, receipts.tokenReceipt.contractAddress);
-      tokenInstance.methods.transfer(receipts.crowdsaleReceipt.contractAddress, new BigNumber(tokenArgs[3] * 10 ** tokenArgs[2]).toString()).send({ from: icoMaker }).then(success => {
-        // call buyTokens function of Crowdsale contract
-        let crowdsaleInstance = new web3.eth.Contract(CrowdsaleJSON.abi, receipts.crowdsaleReceipt.contractAddress);
-        crowdsaleInstance.methods.buyTokens(investor1).send({ from: investor1, gas: 4712388, value: web3.utils.toWei('0.02', 'ether') }).then(r => {
-          // check token balance after investment
-          icoApi.getTokenBalance(tokenInstance, investor1).then(actualTokenBalance => {
-            expect(parseInt(actualTokenBalance)).to.be.eq(20);
-            done();
-          }).catch(e => {
-            done(new Error(e));
-          });
-        }).catch(e => {
-          done(new Error(e));
-        });
-      }).catch((e) => {
-        done(new Error(e));
-      });
-    }).catch(e => {
-      done(new Error(e));
-    });
-  });
-
-  it('Crowdsale invest - using sendTransaction', (done) => {
-    let crowdsaleArgs = [1000, icoMaker];
-    icoApi.deployCrowdsale(icoMaker, tokenArgs, crowdsaleArgs).then(receipts => {
-      expect(receipts.tokenReceipt.status).to.be.eq(true);
-      expect(receipts.crowdsaleReceipt.status).to.be.eq(true);
-
-      // transfer all tokens to crowdsale contract
-      let tokenInstance = new web3.eth.Contract(TokenMintERC20TokenJSON.abi, receipts.tokenReceipt.contractAddress);
-      tokenInstance.methods.transfer(receipts.crowdsaleReceipt.contractAddress, new BigNumber(tokenArgs[3] * 10 ** tokenArgs[2]).toString()).send({ from: icoMaker }).then(success => {
-        // buy tokens by sending money to Crowdsale contract address (regular value tx)
-        web3.eth.sendTransaction({ from: investor1, to: receipts.crowdsaleReceipt.contractAddress, gas: 4712388, value: web3.utils.toWei('0.03', 'ether') }).then(r => {
-          // check token balance after investment
-          icoApi.getTokenBalance(tokenInstance, investor1).then(actualTokenBalance => {
-            expect(parseInt(actualTokenBalance)).to.be.eq(30);
-            done();
-          }).catch(e => {
-            done(new Error(e));
-          });
-        }).catch(e => {
-          done(new Error(e));
-        });
-      }).catch((e) => {
-        done(new Error(e));
-      });
-    }).catch(e => {
-      done(new Error(e));
-    });
-  });
-
-  it('AllowanceCrowdsaleImpl invest - using buyTokens', (done) => {
-    let crowdsaleArgs = [1000, icoMaker];
-    icoApi.deployAllowanceCrowdsale(icoMaker, tokenArgs, crowdsaleArgs).then(receipts => {
-      expect(receipts.tokenReceipt.status).to.be.eq(true);
-      expect(receipts.crowdsaleReceipt.status).to.be.eq(true);
-
-      // approve all tokens to crowdsale contract
-      let tokenInstance = new web3.eth.Contract(TokenMintERC20TokenJSON.abi, receipts.tokenReceipt.contractAddress);
-      tokenInstance.methods.approve(receipts.crowdsaleReceipt.contractAddress, new BigNumber(tokenArgs[3] * 10 ** tokenArgs[2]).toString()).send({ from: icoMaker }).then(success => {
-        // call buyTokens function of Crowdsale contract
-        let crowdsaleInstance = new web3.eth.Contract(AllowanceCrowdsaleImplJSON.abi, receipts.crowdsaleReceipt.contractAddress);
-        crowdsaleInstance.methods.buyTokens(investor1).send({ from: investor1, gas: 4712388, value: web3.utils.toWei('0.02', 'ether') }).then(r => {
-          // check token balance after investment
-          icoApi.getTokenBalance(tokenInstance, investor1).then(actualTokenBalance => {
-            expect(parseInt(actualTokenBalance)).to.be.eq(20);
-            done();
-          }).catch(e => {
-            done(new Error(e));
-          });
-        }).catch(e => {
-          done(new Error(e));
-        });
-      }).catch((e) => {
-        done(new Error(e));
-      });
-    }).catch(e => {
-      done(new Error(e));
-    });
-  });
-
-  it('AllowanceCrowdsaleImpl invest - using sendTransaction', (done) => {
-    let crowdsaleArgs = [1000, icoMaker];
-    icoApi.deployAllowanceCrowdsale(icoMaker, tokenArgs, crowdsaleArgs).then(receipts => {
-      expect(receipts.tokenReceipt.status).to.be.eq(true);
-      expect(receipts.crowdsaleReceipt.status).to.be.eq(true);
-
-      // approve all tokens to crowdsale contract
-      let tokenInstance = new web3.eth.Contract(TokenMintERC20TokenJSON.abi, receipts.tokenReceipt.contractAddress);
-      tokenInstance.methods.approve(receipts.crowdsaleReceipt.contractAddress, new BigNumber(tokenArgs[3] * 10 ** tokenArgs[2]).toString()).send({ from: icoMaker }).then(success => {
-        // send tokens directly to Crowdsale contract address
-        web3.eth.sendTransaction({ from: investor1, to: receipts.crowdsaleReceipt.contractAddress, gas: 4712388, value: web3.utils.toWei('0.02', 'ether') }).then(receipt => {
-          expect(receipt.status).to.be.eq(true);
-
-          // check token balance after investment
-          icoApi.getTokenBalance(tokenInstance, investor1).then(actualTokenBalance => {
-            expect(parseInt(actualTokenBalance)).to.be.eq(20);
-            done();
-          }).catch(e => {
-            done(new Error(e));
-          });
-        }).catch(e => {
-          done(new Error(e));
-        });
-      }).catch((e) => {
-        done(new Error(e));
-      });
     }).catch(e => {
       done(new Error(e));
     });
@@ -680,7 +538,7 @@ describe('TokenMint icoApi integration tests', function () {
     });
   });
 
-  it('CARPDCrowdsale (Capped) - invest when cap reached', (done) => {
+  it('CARPDCrowdsale (Capped) - buyTokens() when cap reached', (done) => {
     let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('0.1', 'ether'), web3.utils.toWei('0.01', 'ether'), icoMaker];
     icoApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs).then(receipts => {
 
