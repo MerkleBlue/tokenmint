@@ -307,12 +307,10 @@ export function deployCARPDCrowdsale(owner, tokenArgs, crowdsaleArgs) {
             });
             return;
           }).catch((e) => {
-            console.log(e)
             reject(new Error("Could not deploy CARPDCrowdsale contract."));
             return;
           });
         }).catch((e) => {
-          console.log(e)
           reject(new Error("Could not deploy TokenMintERC20Token contract."));
           return;
         });
@@ -321,7 +319,6 @@ export function deployCARPDCrowdsale(owner, tokenArgs, crowdsaleArgs) {
         return;
       }
     }).catch((e) => {
-      console.log(e)
       reject(new Error("Could not check token owner ETH funds."));
       return;
     });
