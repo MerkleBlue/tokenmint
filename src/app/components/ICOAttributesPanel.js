@@ -85,7 +85,7 @@ export class ICOAttributesPanel extends React.Component {
       if (!InputValidator.isDateFormatValid(this.props.icoClosingTime)) {
         icoClosingTimeDescription = "Invalid date format!";
       } else if (InputValidator.isDateInPast(this.props.icoClosingTime)) {
-        icoClosingTimeDescription = "ICO opening time cannot be set in the past!";
+        icoClosingTimeDescription = "ICO closing time cannot be set in the past!";
       }
     }
 
