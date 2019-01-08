@@ -612,7 +612,7 @@ describe('TokenMint icoApi integration tests', function () {
 
               // check remaining tokens after investment
               // NOTE: since it's post delivery, remaining tokens is the same,
-              // so this function doesn't make sense much
+              // so this function doesn't make much sense
               crowdsaleInstance.methods.remainingTokens().call().then(remainingTokens => {
                 expect(remainingTokens).to.be.eq(new BigNumber(tokenArgs[3] * 10 ** tokenArgs[2]).toString());
                 done();
@@ -945,6 +945,50 @@ describe('TokenMint icoApi integration tests', function () {
     });
   });
 
+  it('CARPDCrowdsale (Finalizable) - buyTokens() when finalized', (done) => {
+    let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('0.01', 'ether'), web3.utils.toWei('0.003', 'ether'), icoMaker];
+    mintApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(receipts => {
+
+      // approve all tokens to crowdsale contract
+      let tokenInstance = new web3.eth.Contract(TokenMintERC20TokenJSON.abi, receipts.tokenReceipt.contractAddress);
+      tokenInstance.methods.approve(receipts.crowdsaleReceipt.contractAddress, new BigNumber(tokenArgs[3] * 10 ** tokenArgs[2]).toString()).send({ from: icoMaker }).then(receipt => {
+
+        // wait 3 seconds before first investment
+        let delay = ms => new Promise((resolve) => setTimeout(resolve, ms));
+        delay(3000).then(() => {
+          // call buyTokens function of Crowdsale contract, invest more than the goal
+          let crowdsaleInstance = new web3.eth.Contract(CARPDCrowdsaleJSON.abi, receipts.crowdsaleReceipt.contractAddress);
+          crowdsaleInstance.methods.buyTokens(investor1).send({ from: investor1, gas: 4712388, value: web3.utils.toWei('0.004', 'ether') }).then(() => {
+
+            // wait 6 seconds so that crowdsale is closed (timed crowdsale)
+            let delay = ms => new Promise((resolve) => setTimeout(resolve, ms));
+            delay(6000).then(() => {
+              // finalize sale after goal is reached, anyone can call
+              crowdsaleInstance.methods.finalize().send({ from: investor1 }).then(() => {
+
+                // buy tokens after finalized
+                crowdsaleInstance.methods.buyTokens(investor1).send({ from: investor1, gas: 4712388, value: web3.utils.toWei('0.004', 'ether') }).then(() => {
+                  done(new Error('Buy tokens successfully called after finalize.'));
+                }).catch(e => {
+                  expect(true).to.be.eq(true);
+                  done();
+                });
+              }).catch(e => {
+                done(new Error(e));
+              });
+            }).catch(e => {
+              done(new Error(e));
+            });
+          }).catch(e => {
+            done(new Error(e));
+          });
+        });
+      });
+    }).catch(e => {
+      done(new Error(e));
+    });
+  });
+
   it('CARPDCrowdsale (PostDelivery) - withdrawTokens() when not closed', (done) => {
     let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('0.01', 'ether'), web3.utils.toWei('0.003', 'ether'), icoMaker];
     mintApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(receipts => {
@@ -1171,4 +1215,129 @@ describe('TokenMint icoApi integration tests', function () {
       done(new Error(e));
     });
   });
+
+  it('CARPDCrowdsale (Timed) - buyTokens() before open', (done) => {
+    let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('0.01', 'ether'), web3.utils.toWei('0.003', 'ether'), icoMaker];
+    mintApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(receipts => {
+
+      // approve all tokens to crowdsale contract
+      let tokenInstance = new web3.eth.Contract(TokenMintERC20TokenJSON.abi, receipts.tokenReceipt.contractAddress);
+      tokenInstance.methods.approve(receipts.crowdsaleReceipt.contractAddress, new BigNumber(tokenArgs[3] * 10 ** tokenArgs[2]).toString()).send({ from: icoMaker }).then(receipt => {
+
+        // call buyTokens function before opening time
+        let crowdsaleInstance = new web3.eth.Contract(CARPDCrowdsaleJSON.abi, receipts.crowdsaleReceipt.contractAddress);
+        crowdsaleInstance.methods.buyTokens(investor1).send({ from: investor1, gas: 4712388, value: web3.utils.toWei('0.004', 'ether') }).then(() => {
+          done(new Error('Buy tokens successfully called before opening time.'));
+        }).catch(e => {
+          expect(true).to.be.eq(true);
+          done();
+        });
+      });
+    }).catch(e => {
+      done(new Error(e));
+    });
+  });
+
+  it('CARPDCrowdsale (Timed) - buyTokens() after close', (done) => {
+    let crowdsaleArgs = [startTime, startTime + 1, 1000, icoMaker, null, web3.utils.toWei('0.01', 'ether'), web3.utils.toWei('0.003', 'ether'), icoMaker];
+    mintApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(receipts => {
+
+      // approve all tokens to crowdsale contract
+      let tokenInstance = new web3.eth.Contract(TokenMintERC20TokenJSON.abi, receipts.tokenReceipt.contractAddress);
+      tokenInstance.methods.approve(receipts.crowdsaleReceipt.contractAddress, new BigNumber(tokenArgs[3] * 10 ** tokenArgs[2]).toString()).send({ from: icoMaker }).then(receipt => {
+
+        // wait a few seconds so that crowdsale is closed (timed crowdsale)
+        let delay = ms => new Promise((resolve) => setTimeout(resolve, ms));
+        delay(5000).then(() => {
+          // call buyTokens function after crowdsale is closed
+          let crowdsaleInstance = new web3.eth.Contract(CARPDCrowdsaleJSON.abi, receipts.crowdsaleReceipt.contractAddress);
+          crowdsaleInstance.methods.buyTokens(investor1).send({ from: investor1, gas: 4712388, value: web3.utils.toWei('0.004', 'ether') }).then(() => {
+            done(new Error('Buy tokens successfully called after closing time.'));
+          }).catch(e => {
+            expect(true).to.be.eq(true);
+            done();
+          });
+        });
+      }).catch((e) => {
+        done(new Error(e));
+      });
+    }).catch(e => {
+      done(new Error(e));
+    });
+  });
+
+  // BUG: Allowance crowdsale has a bug. When icoMaker approves 500 tokens for crowdsale,
+  // and investor1 buys 501, he can't withdraw it. Also, balance shows 501.
+  // Expected: revert when buyTokens called with more value than remaining in allowance
+  // for crowdsale.
+  /*it('CARPDCrowdsale (Allowance) - buyTokens() when allowance exceeded', (done) => {
+    let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('1', 'ether'), web3.utils.toWei('0.1', 'ether'), icoMaker];
+    mintApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(receipts => {
+
+      // approve half the tokens to crowdsale contract
+      let tokenInstance = new web3.eth.Contract(TokenMintERC20TokenJSON.abi, receipts.tokenReceipt.contractAddress);
+      tokenInstance.methods.approve(receipts.crowdsaleReceipt.contractAddress, new BigNumber((tokenArgs[3] / 2) * 10 ** tokenArgs[2]).toString()).send({ from: icoMaker }).then(receipt => {
+        expect(receipt.status).to.be.eq(true);
+
+        // wait 3 seconds before first investment
+        let delay = ms => new Promise((resolve) => setTimeout(resolve, ms));
+        delay(3000).then(() => {
+
+          // case1: buy more than half, should reject
+          //let crowdsaleInstance = new web3.eth.Contract(CARPDCrowdsaleJSON.abi, receipts.crowdsaleReceipt.contractAddress);
+          //crowdsaleInstance.methods.buyTokens(investor2).send({ from: investor2, gas: 4712388, value: web3.utils.toWei('0.6', 'ether') }).then(() => {
+          //  done(new Error('Cap reached, but crowdsale still active'));
+          //}).catch(e => {
+          //  expect(true).to.be.eq(true);
+          //  done();
+          //});
+
+          let crowdsaleInstance = new web3.eth.Contract(CARPDCrowdsaleJSON.abi, receipts.crowdsaleReceipt.contractAddress);
+          crowdsaleInstance.methods.buyTokens(investor1).send({ from: investor1, gas: 4712388, value: web3.utils.toWei('0.501', 'ether') }).then(() => {
+
+            // wait 6 seconds so that crowdsale is closed (timed crowdsale)
+            let delay = ms => new Promise((resolve) => setTimeout(resolve, ms));
+            delay(6000).then(() => {
+              // finalize sale after goal is reached, anyone can call
+              crowdsaleInstance.methods.finalize().send({ from: investor1 }).then(receipt => {
+                expect(receipt.status).to.be.eq(true);
+
+                // case2: check balance, bigger than allowance
+                //crowdsaleInstance.methods.balanceOf(investor1).call().then(balanceOf => {
+                //  // console.log(balanceOf);
+                //  expect(balanceOf).to.be.lessThan(new BigNumber((tokenArgs[3] / 2) * 10 ** tokenArgs[2]).toString());
+                //  done();
+                //}).catch(e => {
+                //  done(new Error(e));
+                //});
+
+
+                // case 3: withdraw reverts, leaving investors without tokens
+                //crowdsaleInstance.methods.withdrawTokens(investor1).send({ from: investor1 }).then(receipt => {
+                //  expect(receipt.status).to.be.eq(true);
+                //
+                //  // check token balance after investment, should be 200 after finalization and withdrawal
+                //  mintApi.getTokenBalance(tokenInstance, investor1).then(actualTokenBalance => {
+                //    expect(parseInt(actualTokenBalance)).to.be.eq(600);
+                //    done();
+                //  });
+                //}).catch(e => {
+                //  done(new Error(e));
+                //});
+              }).catch(e => {
+                done(new Error(e));
+              });
+            });
+          }).catch(e => {
+            expect(true).to.be.eq(true);
+            done();
+          });
+        });
+      }).catch((e) => {
+        done(new Error(e));
+      });
+    }).catch(e => {
+      done(new Error(e));
+    });
+  });*/
 });
