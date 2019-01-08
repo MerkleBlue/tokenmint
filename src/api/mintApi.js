@@ -187,8 +187,8 @@ export function checkAccountFunds(account) {
 
 export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenType, tokenOwner, serviceFee, payingAccount) {
   return new Promise((accept, reject) => {
-    checkAccountFunds(tokenOwner).then(hasFunds => {
-      if (hasFunds) {
+    getEthBalance(tokenOwner).then(accountBalance => {
+      if (accountBalance - serviceFee - 0.02 > 0) {
         let tokenContract = tokenType === "erc20" ? ERC20TokenJSON : ERC223TokenJSON;
         instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner, serviceFee, payingAccount).then(txHash => {
           // getEthBalance(tokenOwner).then(balance => {
