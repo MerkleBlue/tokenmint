@@ -48,7 +48,7 @@ export class ICOFooter extends React.Component {
           className="btn btn-common-mint wow fadeInUp"
           data-wow-duration="1000ms"
           data-wow-delay="400ms"
-          onClick={this.handleTokenCreation}
+          onClick={this.handleICOCreation}
         >
           <FontAwesomeIcon className="fa_coins" icon={faCoins} />
           Create ICO
