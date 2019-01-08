@@ -8,9 +8,9 @@ import './css/TokenInfo.css';
 import TokenName from './TokenName'; //eslint-disable-line import/no-named-as-default
 import TokenSymbol from './TokenSymbol'; //eslint-disable-line import/no-named-as-default
 import TokenDecimals from './TokenDecimals'; //eslint-disable-line import/no-named-as-default
-import TokenSupply from './TokenSupply'; //eslint-disable-line import/no-named-as-default
+import TokenRate from './TokenRate'; //eslint-disable-line import/no-named-as-default
 
-export class TokenInfo extends React.Component {
+export class ICOTokenAttributesPanel extends React.Component {
 
   render() {
     return (
@@ -30,11 +30,11 @@ export class TokenInfo extends React.Component {
           <TokenName />
           <TokenSymbol />
           <TokenDecimals />
-          <TokenSupply />
+          <TokenRate />
         </CardContent>
       </Card>
     );
   }
 }
 
-export default TokenInfo;
+export default ICOTokenAttributesPanel;

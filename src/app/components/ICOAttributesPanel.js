@@ -13,7 +13,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import * as icoCapActions from '../actions/icoCapActions';
-import * as icoRateActions from '../actions/icoRateActions';
 import * as icoWalletActions from '../actions/icoWalletActions';
 import * as icoOpenCloseTimeActions from '../actions/icoOpenCloseTimeActions';
 import * as icoGoalActions from '../actions/icoGoalActions';
@@ -24,7 +23,6 @@ export class ICOAttributesPanel extends React.Component {
   constructor(props) {
     super(props);
     this.handleCapChange = this.handleCapChange.bind(this);
-    this.handleRateChange = this.handleRateChange.bind(this);
     this.handleWalletChange = this.handleWalletChange.bind(this);
     this.handleOpeningTimeChange = this.handleOpeningTimeChange.bind(this);
     this.handleClosingTimeChange = this.handleClosingTimeChange.bind(this);
@@ -33,10 +31,6 @@ export class ICOAttributesPanel extends React.Component {
 
   handleCapChange(e) {
     this.props.icoCapActions.setIcoCap(e.target.value);
-  }
-
-  handleRateChange(e) {
-    this.props.icoRateActions.setIcoRate(e.target.value);
   }
 
   handleWalletChange(e) {
@@ -68,7 +62,7 @@ export class ICOAttributesPanel extends React.Component {
     let icoOpeningTimeDescription = "ICO opening time. The crowdsale start date.";
     let icoClosingTimeDescription = "ICO closing time. The crowdsale end date";
 
-    if(!InputValidator.isOpeningTimeBeforeClosingTime(this.props.icoOpeningTime, this.props.icoClosingTime)) {
+    if (!InputValidator.isOpeningTimeBeforeClosingTime(this.props.icoOpeningTime, this.props.icoClosingTime)) {
       icoOpeningTimeDescription = "ICO opening time must be set before ICO closing time!";
       icoClosingTimeDescription = "ICO closing time must be set after ICO opening time!";
     }
@@ -121,15 +115,13 @@ export class ICOAttributesPanel extends React.Component {
               </MuiThemeProvider>
             </Grid>
             <Grid item xs={12} md={6}>
-              <MuiThemeProvider theme={theme}>
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className={InputValidator.isIcoCapValid(this.props.icoCap) ? "typography_ico_info" : "typography_ico_info_error"}
-                >
-                  ICO cap in ETH.
+              <Typography
+                align="left"
+                variant="body1"
+                className={InputValidator.isIcoCapValid(this.props.icoCap) ? "typography_ico_info" : "typography_ico_info_error"}
+              >
+                ICO cap in ETH.
                 </Typography>
-              </MuiThemeProvider>
             </Grid>
           </Grid>
           <Grid container spacing={8}>
@@ -150,44 +142,13 @@ export class ICOAttributesPanel extends React.Component {
               </MuiThemeProvider>
             </Grid>
             <Grid item xs={12} md={6}>
-              <MuiThemeProvider theme={theme}>
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className={InputValidator.isIcoGoalValid(this.props.icoGoal) ? "typography_ico_info" : "typography_ico_info_error"}
-                >
-                  ICO goal in ETH.
+              <Typography
+                align="left"
+                variant="body1"
+                className={InputValidator.isIcoGoalValid(this.props.icoGoal) ? "typography_ico_info" : "typography_ico_info_error"}
+              >
+                ICO goal in ETH.
                 </Typography>
-              </MuiThemeProvider>
-            </Grid>
-          </Grid>
-          <Grid container spacing={8}>
-            <Grid item xs={12} md={6}>
-              <MuiThemeProvider theme={theme}>
-                <TextField
-                  required
-                  id="outlined-required"
-                  label="Rate"
-                  className="ico_text_field"
-                  margin="normal"
-                  variant="outlined"
-                  inputProps={{ maxLength: 25 }}
-                  value={this.props.icoRate}
-                  error={!InputValidator.isIcoRateValid(this.props.icoRate)}
-                  onChange={this.handleRateChange}
-                />
-              </MuiThemeProvider>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <MuiThemeProvider theme={theme}>
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className={InputValidator.isIcoRateValid(this.props.icoRate) ? "typography_ico_info" : "typography_ico_info_error"}
-                >
-                  ICO rate.
-                </Typography>
-              </MuiThemeProvider>
             </Grid>
           </Grid>
           <Grid container spacing={8}>
@@ -208,15 +169,13 @@ export class ICOAttributesPanel extends React.Component {
               </MuiThemeProvider>
             </Grid>
             <Grid item xs={12} md={6}>
-              <MuiThemeProvider theme={theme}>
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className={InputValidator.isEthereumAddress(this.props.icoWallet) ? "typography_ico_info" : "typography_ico_info_error"}
-                >
-                  ICO wallet.
+              <Typography
+                align="left"
+                variant="body1"
+                className={InputValidator.isEthereumAddress(this.props.icoWallet) ? "typography_ico_info" : "typography_ico_info_error"}
+              >
+                ICO wallet.
                 </Typography>
-              </MuiThemeProvider>
             </Grid>
           </Grid>
           <Grid container spacing={8}>
@@ -241,17 +200,15 @@ export class ICOAttributesPanel extends React.Component {
               </MuiThemeProvider>
             </Grid>
             <Grid item xs={12} md={6}>
-              <MuiThemeProvider theme={theme}>
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className={(InputValidator.isDateValid(this.props.icoOpeningTime) &&
-                    InputValidator.isOpeningTimeBeforeClosingTime(this.props.icoOpeningTime, this.props.icoClosingTime)) ?
-                    "typography_ico_info" : "typography_ico_info_error"}
-                >
-                  {icoOpeningTimeDescription}
-                </Typography>
-              </MuiThemeProvider>
+              <Typography
+                align="left"
+                variant="body1"
+                className={(InputValidator.isDateValid(this.props.icoOpeningTime) &&
+                  InputValidator.isOpeningTimeBeforeClosingTime(this.props.icoOpeningTime, this.props.icoClosingTime)) ?
+                  "typography_ico_info" : "typography_ico_info_error"}
+              >
+                {icoOpeningTimeDescription}
+              </Typography>
             </Grid>
           </Grid>
           <Grid container spacing={8}>
@@ -276,17 +233,15 @@ export class ICOAttributesPanel extends React.Component {
               </MuiThemeProvider>
             </Grid>
             <Grid item xs={12} md={6}>
-              <MuiThemeProvider theme={theme}>
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className={(InputValidator.isDateValid(this.props.icoClosingTime) &&
-                    InputValidator.isOpeningTimeBeforeClosingTime(this.props.icoOpeningTime, this.props.icoClosingTime)) ?
-                    "typography_ico_info" : "typography_ico_info_error"}
-                >
-                  {icoClosingTimeDescription}
-                </Typography>
-              </MuiThemeProvider>
+              <Typography
+                align="left"
+                variant="body1"
+                className={(InputValidator.isDateValid(this.props.icoClosingTime) &&
+                  InputValidator.isOpeningTimeBeforeClosingTime(this.props.icoOpeningTime, this.props.icoClosingTime)) ?
+                  "typography_ico_info" : "typography_ico_info_error"}
+              >
+                {icoClosingTimeDescription}
+              </Typography>
             </Grid>
           </Grid>
         </CardContent>
@@ -298,12 +253,10 @@ export class ICOAttributesPanel extends React.Component {
 ICOAttributesPanel.propTypes = {
   icoCapActions: PropTypes.object.isRequired,
   icoGoalActions: PropTypes.object.isRequired,
-  icoRateActions: PropTypes.object.isRequired,
   icoWalletActions: PropTypes.object.isRequired,
   icoOpenCloseTimeActions: PropTypes.object.isRequired,
   icoCap: PropTypes.string.isRequired,
   icoGoal: PropTypes.string.isRequired,
-  icoRate: PropTypes.string.isRequired,
   icoWallet: PropTypes.string.isRequired,
   icoOpeningTime: PropTypes.string.isRequired,
   icoClosingTime: PropTypes.string.isRequired
@@ -313,7 +266,6 @@ function mapStateToProps(state) {
   return {
     icoCap: state.icoCap,
     icoGoal: state.icoGoal,
-    icoRate: state.icoRate,
     icoWallet: state.icoWallet,
     icoOpeningTime: state.icoOpeningTime,
     icoClosingTime: state.icoClosingTime
@@ -324,7 +276,6 @@ function mapDispatchToProps(dispatch) {
   return {
     icoCapActions: bindActionCreators(icoCapActions, dispatch),
     icoGoalActions: bindActionCreators(icoGoalActions, dispatch),
-    icoRateActions: bindActionCreators(icoRateActions, dispatch),
     icoWalletActions: bindActionCreators(icoWalletActions, dispatch),
     icoOpenCloseTimeActions: bindActionCreators(icoOpenCloseTimeActions, dispatch)
   };

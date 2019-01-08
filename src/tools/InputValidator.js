@@ -75,7 +75,7 @@ export default class InputValidator {
 
   static isDateFormatValid(date) {
     const timestamp = Date.parse(date);
-    if(isNaN(timestamp)) {
+    if (isNaN(timestamp)) {
       return false;
     }
     return true;
@@ -91,11 +91,11 @@ export default class InputValidator {
     if (date === "") {
       return true;
     }
-    if(date !== "") {
-      if(!this.isDateFormatValid(date)) {
+    if (date !== "") {
+      if (!this.isDateFormatValid(date)) {
         return false;
       }
-      if(this.isDateInPast(date)) {
+      if (this.isDateInPast(date)) {
         return false;
       }
     }
@@ -129,6 +129,29 @@ export default class InputValidator {
 
   static isTokenSymbolUnique(tokenSymbol) {
     return (cc.symbols().find(symbol => symbol === tokenSymbol) === undefined);
+  }
+
+  static areICOAttributesValid(
+    tokenName,
+    tokenSymbol,
+    decimals,
+    rate,
+    cap,
+    goal,
+    wallet,
+    openingTime,
+    closingTime
+  ) {
+    return this.isTokenNameValid(tokenName) && tokenName !== "" &&
+    this.isTokenSymbolValid(tokenSymbol) && tokenSymbol !== "" &&
+    this.isDecimalsValid(decimals) && decimals !== "" &&
+    this.isIcoRateValid(rate) && rate !== "" &&
+    this.isIcoCapValid(cap) && cap !== "" &&
+    this.isIcoGoalValid(goal) && goal !== "" &&
+    this.isEthereumAddress(wallet) && wallet !== "" &&
+    this.isDateValid(openingTime) && openingTime !== "" &&
+    this.isDateValid(closingTime) && closingTime !== "" &&
+    this.isOpeningTimeBeforeClosingTime(openingTime, closingTime);
   }
 }
 
