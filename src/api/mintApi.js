@@ -7,6 +7,8 @@ import Web3 from 'web3';
 import { BigNumber } from 'bignumber.js';
 
 const feeInUsd = 29.99;
+const TCACrowdsaleServiceFeeUSD = 0;
+const CARPDCrowdsaleServiceFeeUSD = 0;
 let tokenMintAccount = "0x6603cb70464ca51481d4edBb3B927F66F53F4f42";
 let web3;
 
@@ -35,6 +37,18 @@ export function initWeb3() {
     }
     accept(walletNeedsToBeUnlocked);
     return;
+  });
+}
+
+export function getNetwork() {
+  return new Promise((accept, reject) => {
+    web3.eth.net.getNetworkType().then(networkType => {
+      accept(networkType);
+      return;
+    }).catch((e) => {
+      reject(e);
+      return;
+    });
   });
 }
 
@@ -104,6 +118,29 @@ export function getTokenBalance(contractInstance, account) {
   });
 }
 
+export function checkAccountFunds(account) {
+  return new Promise((accept, reject) => {
+    getFee().then(fee => {
+      getEthBalance(account).then(balance => {
+        // TODO: 0.01 ETH is just an estimation of gas costs for deploying a contract and paying a fee
+        //accept(balance - fee - 0.01 > 0);
+        accept({
+          accountBalance: parseFloat(balance),
+          serviceFee: fee
+        });
+        return;
+      }).catch((e) => {
+        reject(e);
+        return;
+      });
+    }).catch((e) => {
+      reject(e);
+      return;
+    });
+  });
+}
+
+
 function instantiateContract(tokenContract, name, symbol, decimals, totalSupply, tokenOwnerAccount, feeInETH, payingAccount) {
   return new Promise((accept, reject) => {
     // used for converting big number to string without scientific notation
@@ -128,80 +165,12 @@ function instantiateContract(tokenContract, name, symbol, decimals, totalSupply,
   });
 }
 
-export function getNetwork() {
-  return new Promise((accept, reject) => {
-    web3.eth.net.getNetworkType().then(networkType => {
-      accept(networkType);
-      return;
-    }).catch((e) => {
-      reject(e);
-      return;
-    });
-  });
-}
-
-// NOTE: mining fees are estimated in a wallet based on gasPrice. This function can corectly
-// estimate mining fees if gas price is set here.
-function estimateMiningFee(tokenContract, name, symbol, decimals, totalSupply, tokenOwner) {
-  return new Promise((accept, reject) => {
-    // create new contract instance using web3, not truffle contract
-    let myContract = new web3.eth.Contract(tokenContract.abi, {
-      from: tokenOwner,
-      //gasPrice: '1000000000',  // default gas price in wei
-      data: tokenContract.bytecode
-    });
-
-    // estimate gas
-    myContract.deploy({
-      data: tokenContract.bytecode,
-      arguments: [name, symbol, decimals, totalSupply /** 10**decimals*/, tokenOwner]
-    }).estimateGas(function (err, gas) {
-      //console.log("Estimated mining fee: " + gas * 1000000000 / 10 ** 18);
-      accept(gas * 1000000000 / 10 ** 18);
-      return;
-    });
-  });
-}
-
-export function checkAccountFunds(account) {
-  return new Promise((accept, reject) => {
-    getFee().then(fee => {
-      getEthBalance(account).then(balance => {
-        // TODO: 0.01 ETH is just an estimation of gas costs for deploying a contract and paying a fee
-        //accept(balance - fee - 0.01 > 0);
-        accept({
-          accountBalance: parseFloat(balance),
-          serviceFee: fee
-        });
-        return;
-      }).catch((e) => {
-        reject(e);
-        return;
-      });
-    }).catch((e) => {
-      reject(e);
-      return;
-    });
-  });
-}
-
 export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenType, tokenOwner, serviceFee, payingAccount) {
   return new Promise((accept, reject) => {
     getEthBalance(tokenOwner).then(accountBalance => {
       if (accountBalance - serviceFee - 0.02 > 0) {
         let tokenContract = tokenType === "erc20" ? ERC20TokenJSON : ERC223TokenJSON;
         instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner, serviceFee, payingAccount).then(txHash => {
-          // getEthBalance(tokenOwner).then(balance => {
-          //   console.log("Customer ETH balance: " + balance);
-          // });
-
-          // getTokenBalance(contractInstance, tokenOwner).then(balance => {
-          //   console.log("Customer " + tokenSymbol + " balance: " + balance);
-          // });
-
-          // getEthBalance(tokenMintAccount).then(balance => {
-          //   console.log("TokenMint ETH balance: " + balance);
-          // });
           accept(txHash);
           return;
         }).catch((e) => {
@@ -219,7 +188,7 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
   });
 }
 
-function instantiateCrowdsaleContracts(contractJSON, constructorArguments, contractCreator, feeInETH) {
+function instantiateCrowdsaleContracts(contractJSON, constructorArguments, contractCreator, serviceFeeETH) {
   return new Promise((accept, reject) => {
     let myContract = new web3.eth.Contract(contractJSON.abi, {
       from: contractCreator,
@@ -232,7 +201,7 @@ function instantiateCrowdsaleContracts(contractJSON, constructorArguments, contr
       from: contractCreator,
       gas: 6721975, // was 4712388 // max gas willing to pay, should not exceed block gas limit
       //gasPrice: '1',
-      value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
+      value: web3.utils.toWei(serviceFeeETH.toFixed(8).toString(), 'ether')
     }).on('error', (error) => {
       reject(error);
       return;
@@ -246,13 +215,13 @@ function instantiateCrowdsaleContracts(contractJSON, constructorArguments, contr
 }
 
 // initial supply is in full tokens, not weis, (1000 tokens with 18 decimals would make initialSupply = 1000)
-export function deployCrowdsaleToken(contractCreator, name, symbol, decimals, initialSupply, feeReceiver, tokenOwner) {
+export function deployCrowdsaleToken(contractCreator, name, symbol, decimals, initialSupply, feeReceiver, tokenOwner, serviceFeeETH) {
   return new Promise((accept, reject) => {
-    checkAccountFunds(contractCreator).then(hasFunds => {
-      if (hasFunds) {
+    getEthBalance(tokenOwner).then(accountBalance => {
+      if (accountBalance - serviceFeeETH - 0.02 > 0) {
         // used for converting big number to string without scientific notation
         BigNumber.config({ EXPONENTIAL_AT: 100 });
-        instantiateCrowdsaleContracts(ERC20TokenJSON, [name, symbol, decimals, new BigNumber(initialSupply * 10 ** decimals).toString(), feeReceiver, tokenOwner], contractCreator, 0).then(receipt => {
+        instantiateCrowdsaleContracts(ERC20TokenJSON, [name, symbol, decimals, new BigNumber(initialSupply * 10 ** decimals).toString(), feeReceiver, tokenOwner], contractCreator, serviceFeeETH).then(receipt => {
           accept(receipt);
           return;
         }).catch((e) => {
@@ -261,7 +230,7 @@ export function deployCrowdsaleToken(contractCreator, name, symbol, decimals, in
           return;
         });
       } else {
-        reject(new Error("Account: " + contractCreator + " doesn't have enough funds to pay for service."));
+        reject(new Error("Account: " + contractCreator + " doesn't have enough funds to pay for crowdsale token deployment service."));
         return;
       }
     }).catch((e) => {
@@ -271,13 +240,13 @@ export function deployCrowdsaleToken(contractCreator, name, symbol, decimals, in
   });
 }
 
-export function deployTCACrowdsale(owner, tokenArgs, crowdsaleArgs) {
+export function deployTCACrowdsale(owner, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH) {
   return new Promise((accept, reject) => {
-    checkAccountFunds(owner).then(hasFunds => {
-      if (hasFunds) {
-        deployCrowdsaleToken(owner, ...tokenArgs).then(tokenReceipt => {
+    getEthBalance(owner).then(accountBalanceETH => {
+      if (accountBalanceETH - tokenServiceFeeETH - crowdsaleServiceFeeETH - 0.02 > 0) {
+        deployCrowdsaleToken(owner, ...tokenArgs, tokenServiceFeeETH).then(tokenReceipt => {
           crowdsaleArgs[4] = tokenReceipt.contractAddress;
-          instantiateCrowdsaleContracts(TCACrowdsaleJSON, crowdsaleArgs, owner, 0).then(crowdsaleReceipt => {
+          instantiateCrowdsaleContracts(TCACrowdsaleJSON, crowdsaleArgs, owner, crowdsaleServiceFeeETH).then(crowdsaleReceipt => {
             accept({
               tokenReceipt: tokenReceipt,
               crowdsaleReceipt: crowdsaleReceipt,
@@ -294,7 +263,7 @@ export function deployTCACrowdsale(owner, tokenArgs, crowdsaleArgs) {
           return;
         });
       } else {
-        reject(new Error("Account: " + tokenArgs[0] + " doesn't have enough funds to pay for service."));
+        reject(new Error("Account: " + tokenArgs[0] + " doesn't have enough funds to pay for TCACrowdsale deployment service."));
         return;
       }
     }).catch((e) => {
@@ -305,13 +274,13 @@ export function deployTCACrowdsale(owner, tokenArgs, crowdsaleArgs) {
   });
 }
 
-export function deployCARPDCrowdsale(owner, tokenArgs, crowdsaleArgs) {
+export function deployCARPDCrowdsale(owner, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH) {
   return new Promise((accept, reject) => {
-    checkAccountFunds(owner).then(hasFunds => {
-      if (hasFunds) {
-        deployCrowdsaleToken(owner, ...tokenArgs).then(tokenReceipt => {
+    getEthBalance(owner).then(accountBalanceETH => {
+      if (accountBalanceETH - tokenServiceFeeETH - crowdsaleServiceFeeETH - 0.02 > 0) {
+        deployCrowdsaleToken(owner, ...tokenArgs, tokenServiceFeeETH).then(tokenReceipt => {
           crowdsaleArgs[4] = tokenReceipt.contractAddress;
-          instantiateCrowdsaleContracts(CARPDCrowdsaleJSON, crowdsaleArgs, owner, 0).then(crowdsaleReceipt => {
+          instantiateCrowdsaleContracts(CARPDCrowdsaleJSON, crowdsaleArgs, owner, crowdsaleServiceFeeETH).then(crowdsaleReceipt => {
             accept({
               tokenReceipt: tokenReceipt,
               crowdsaleReceipt: crowdsaleReceipt,
@@ -326,7 +295,7 @@ export function deployCARPDCrowdsale(owner, tokenArgs, crowdsaleArgs) {
           return;
         });
       } else {
-        reject(new Error("Account: " + tokenArgs[0] + " doesn't have enough funds to pay for service."));
+        reject(new Error("Account: " + tokenArgs[0] + " doesn't have enough funds to pay for CARPDCrowdsale deployment service."));
         return;
       }
     }).catch((e) => {
