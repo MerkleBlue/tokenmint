@@ -215,7 +215,7 @@ function instantiateCrowdsaleContracts(contractJSON, constructorArguments, contr
 }
 
 // initial supply is in full tokens, not weis, (1000 tokens with 18 decimals would make initialSupply = 1000)
-export function deployCrowdsaleToken(contractCreator, name, symbol, decimals, initialSupply, feeReceiver, tokenOwner, serviceFeeETH) {
+function deployCrowdsaleToken(contractCreator, name, symbol, decimals, initialSupply, feeReceiver, tokenOwner, serviceFeeETH) {
   return new Promise((accept, reject) => {
     getEthBalance(tokenOwner).then(accountBalance => {
       if (accountBalance - serviceFeeETH - 0.02 > 0) {
