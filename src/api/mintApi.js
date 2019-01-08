@@ -1,6 +1,8 @@
 import cc from 'cryptocompare';
 import ERC20TokenJSON from '../contracts/TokenMintERC20Token.json';
 import ERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
+import TCACrowdsaleJSON from '../contracts/TCACrowdsale.json';
+import CARPDCrowdsaleJSON from '../contracts/CARPDCrowdsale.json';
 import Web3 from 'web3';
 import { BigNumber } from 'bignumber.js';
 
@@ -208,6 +210,123 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
         });
       } else {
         reject(new Error("Account: " + tokenOwner + " doesn't have enough funds to pay for service."));
+        return;
+      }
+    }).catch((e) => {
+      reject(new Error("Could not check token owner ETH funds."));
+      return;
+    });
+  });
+}
+
+function instantiateCrowdsaleContracts(contractJSON, constructorArguments, contractCreator, feeInETH) {
+  return new Promise((accept, reject) => {
+    let myContract = new web3.eth.Contract(contractJSON.abi, {
+      from: contractCreator,
+      //gasPrice: '1000'
+    });
+    myContract.deploy({
+      data: contractJSON.bytecode,
+      arguments: [...constructorArguments],
+    }).send({
+      from: contractCreator,
+      gas: 6721975, // was 4712388 // max gas willing to pay, should not exceed block gas limit
+      //gasPrice: '1',
+      value: web3.utils.toWei(feeInETH.toFixed(8).toString(), 'ether')
+    }).on('error', (error) => {
+      reject(error);
+      return;
+    }).on('transactionHash', (txHash) => {
+      web3.eth.getTransactionReceipt(txHash).then(receipt => {
+        accept(receipt);
+        return;
+      });
+    });
+  });
+}
+
+// initial supply is in full tokens, not weis, (1000 tokens with 18 decimals would make initialSupply = 1000)
+export function deployCrowdsaleToken(contractCreator, name, symbol, decimals, initialSupply, feeReceiver, tokenOwner) {
+  return new Promise((accept, reject) => {
+    checkAccountFunds(contractCreator).then(hasFunds => {
+      if (hasFunds) {
+        // used for converting big number to string without scientific notation
+        BigNumber.config({ EXPONENTIAL_AT: 100 });
+        instantiateCrowdsaleContracts(ERC20TokenJSON, [name, symbol, decimals, new BigNumber(initialSupply * 10 ** decimals).toString(), feeReceiver, tokenOwner], contractCreator, 0).then(receipt => {
+          accept(receipt);
+          return;
+        }).catch((e) => {
+          console.log(e)
+          reject(new Error("Could not create TokenMintERC20Token contract."));
+          return;
+        });
+      } else {
+        reject(new Error("Account: " + contractCreator + " doesn't have enough funds to pay for service."));
+        return;
+      }
+    }).catch((e) => {
+      reject(new Error("Could not check token owner ETH funds."));
+      return;
+    });
+  });
+}
+
+export function deployTCACrowdsale(owner, tokenArgs, crowdsaleArgs) {
+  return new Promise((accept, reject) => {
+    checkAccountFunds(owner).then(hasFunds => {
+      if (hasFunds) {
+        deployCrowdsaleToken(owner, ...tokenArgs).then(tokenReceipt => {
+          crowdsaleArgs[4] = tokenReceipt.contractAddress;
+          instantiateCrowdsaleContracts(TCACrowdsaleJSON, crowdsaleArgs, owner, 0).then(crowdsaleReceipt => {
+            accept({
+              tokenReceipt: tokenReceipt,
+              crowdsaleReceipt: crowdsaleReceipt,
+            });
+            return;
+          }).catch((e) => {
+            console.log(e)
+            reject(new Error("Could not deploy TCACrowdsale contract."));
+            return;
+          });
+        }).catch((e) => {
+          console.log(e)
+          reject(new Error("Could not deploy TokenMintERC20Token contract."));
+          return;
+        });
+      } else {
+        reject(new Error("Account: " + tokenArgs[0] + " doesn't have enough funds to pay for service."));
+        return;
+      }
+    }).catch((e) => {
+      console.log(e)
+      reject(new Error("Could not check token owner ETH funds."));
+      return;
+    });
+  });
+}
+
+export function deployCARPDCrowdsale(owner, tokenArgs, crowdsaleArgs) {
+  return new Promise((accept, reject) => {
+    checkAccountFunds(owner).then(hasFunds => {
+      if (hasFunds) {
+        deployCrowdsaleToken(owner, ...tokenArgs).then(tokenReceipt => {
+          crowdsaleArgs[4] = tokenReceipt.contractAddress;
+          instantiateCrowdsaleContracts(CARPDCrowdsaleJSON, crowdsaleArgs, owner, 0).then(crowdsaleReceipt => {
+            accept({
+              tokenReceipt: tokenReceipt,
+              crowdsaleReceipt: crowdsaleReceipt,
+            });
+            return;
+          }).catch((e) => {
+            reject(new Error("Could not deploy CARPDCrowdsale contract."));
+            return;
+          });
+        }).catch((e) => {
+          reject(new Error("Could not deploy TokenMintERC20Token contract."));
+          return;
+        });
+      } else {
+        reject(new Error("Account: " + tokenArgs[0] + " doesn't have enough funds to pay for service."));
         return;
       }
     }).catch((e) => {

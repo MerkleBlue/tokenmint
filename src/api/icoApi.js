@@ -4,8 +4,6 @@ import { BigNumber } from 'bignumber.js';
 
 // contracts
 import ERC20TokenJSON from '../contracts/TokenMintERC20Token.json';
-import CrowdsaleJSON from '../contracts/Crowdsale.json';
-import AllowanceCrowdsaleImplJSON from '../contracts/AllowanceCrowdsaleImpl.json';
 import TCACrowdsaleJSON from '../contracts/TCACrowdsale.json';
 import CARPDCrowdsaleJSON from '../contracts/CARPDCrowdsale.json';
 
@@ -142,7 +140,7 @@ export function checkTokenOwnerFunds(tokenOwner) {
   });
 }
 
-function instantiateContract(contractJSON, constructorArguments, contractCreator, feeInETH) {
+function instantiateCrowdsaleContracts(contractJSON, constructorArguments, contractCreator, feeInETH) {
   return new Promise((accept, reject) => {
     let myContract = new web3.eth.Contract(contractJSON.abi, {
       from: contractCreator,
@@ -175,7 +173,7 @@ export function deployCrowdsaleToken(contractCreator, name, symbol, decimals, in
       if (hasFunds) {
         // used for converting big number to string without scientific notation
         BigNumber.config({ EXPONENTIAL_AT: 100 });
-        instantiateContract(ERC20TokenJSON, [name, symbol, decimals, new BigNumber(initialSupply * 10 ** decimals).toString(), feeReceiver, tokenOwner], contractCreator, 0).then(receipt => {
+        instantiateCrowdsaleContracts(ERC20TokenJSON, [name, symbol, decimals, new BigNumber(initialSupply * 10 ** decimals).toString(), feeReceiver, tokenOwner], contractCreator, 0).then(receipt => {
           accept(receipt);
           return;
         }).catch((e) => {
@@ -200,7 +198,7 @@ export function deployTCACrowdsale(owner, tokenArgs, crowdsaleArgs) {
       if (hasFunds) {
         deployCrowdsaleToken(owner, ...tokenArgs).then(tokenReceipt => {
           crowdsaleArgs[4] = tokenReceipt.contractAddress;
-          instantiateContract(TCACrowdsaleJSON, crowdsaleArgs, owner, 0).then(crowdsaleReceipt => {
+          instantiateCrowdsaleContracts(TCACrowdsaleJSON, crowdsaleArgs, owner, 0).then(crowdsaleReceipt => {
             accept({
               tokenReceipt: tokenReceipt,
               crowdsaleReceipt: crowdsaleReceipt,
@@ -234,7 +232,7 @@ export function deployCARPDCrowdsale(owner, tokenArgs, crowdsaleArgs) {
       if (hasFunds) {
         deployCrowdsaleToken(owner, ...tokenArgs).then(tokenReceipt => {
           crowdsaleArgs[4] = tokenReceipt.contractAddress;
-          instantiateContract(CARPDCrowdsaleJSON, crowdsaleArgs, owner, 0).then(crowdsaleReceipt => {
+          instantiateCrowdsaleContracts(CARPDCrowdsaleJSON, crowdsaleArgs, owner, 0).then(crowdsaleReceipt => {
             accept({
               tokenReceipt: tokenReceipt,
               crowdsaleReceipt: crowdsaleReceipt,
