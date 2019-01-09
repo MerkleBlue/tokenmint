@@ -20,7 +20,7 @@ contract TCACrowdsale is TimedCrowdsale, CappedCrowdsale, AllowanceCrowdsale {
     * @param closingTime Crowdsale closing time
     * @param rate How many smallest token units a buyer gets per wei
     * @param fundRaisingAddress Address where raised funds will be transfered if crowdsale is successful
-    * @param tokenContractAddress Token being sold, already deployed
+    * @param tokenContractAddress IERC20 contract address of the token being sold, already deployed
     * @param cap Cap on funds raised (maximum, hard cap)
     * @param tokenHolderAddress Address holding the tokens, must approve allowance to the crowdsale contract
     * @param feeReceiverAddress Address that receives fees for contract deployment

@@ -1,16 +1,15 @@
 pragma solidity ^0.4.24;
 
-import '../../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
+import '../../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol';
 
 /**
- * @title TokenMintERC20Token
+ * @title TokenMintERC20MintableToken
  * @author TokenMint.io
- *
- * @dev Standard ERC20 token with optional functions implemented.
+ * @dev Mintable ERC20 token with optional functions implemented.
  * For full specification of ERC-20 standard see:
  * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md
  */
-contract TokenMintERC20Token is ERC20 {
+contract TokenMintERC20MintableToken is ERC20Mintable {
 
     string public name;
     string public symbol;

@@ -1,8 +1,10 @@
 import cc from 'cryptocompare';
-import ERC20TokenJSON from '../contracts/TokenMintERC20Token.json';
-import ERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
+import TokenMintERC20TokenJSON from '../contracts/TokenMintERC20Token.json';
+import TokenMintERC223TokenJSON from '../contracts/TokenMintERC223Token.json';
+import TokenMintERC20MintableTokenJSON from '../contracts/TokenMintERC20MintableToken.json';
 import TCACrowdsaleJSON from '../contracts/TCACrowdsale.json';
 import CARPDCrowdsaleJSON from '../contracts/CARPDCrowdsale.json';
+import CMRPDCrowdsaleJSON from '../contracts/CMRPDCrowdsale.json';
 import Web3 from 'web3';
 import { BigNumber } from 'bignumber.js';
 
@@ -169,7 +171,7 @@ export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenT
   return new Promise((accept, reject) => {
     getEthBalance(tokenOwner).then(accountBalance => {
       if (accountBalance - serviceFee - 0.02 > 0) {
-        let tokenContract = tokenType === "erc20" ? ERC20TokenJSON : ERC223TokenJSON;
+        let tokenContract = tokenType === "erc20" ? TokenMintERC20TokenJSON : TokenMintERC223TokenJSON;
         instantiateContract(tokenContract, tokenName, tokenSymbol, decimals, totalSupply, tokenOwner, serviceFee, payingAccount).then(txHash => {
           accept(txHash);
           return;
@@ -215,18 +217,18 @@ function instantiateCrowdsaleContracts(contractJSON, constructorArguments, contr
 }
 
 // initial supply is in full tokens, not weis, (1000 tokens with 18 decimals would make initialSupply = 1000)
-function deployCrowdsaleToken(contractCreator, name, symbol, decimals, initialSupply, feeReceiver, tokenOwner, serviceFeeETH) {
+function deployCrowdsaleToken(contractJSON, contractCreator, name, symbol, decimals, initialSupply, feeReceiver, tokenOwner, serviceFeeETH) {
   return new Promise((accept, reject) => {
     getEthBalance(tokenOwner).then(accountBalance => {
       if (accountBalance - serviceFeeETH - 0.02 > 0) {
         // used for converting big number to string without scientific notation
         BigNumber.config({ EXPONENTIAL_AT: 100 });
-        instantiateCrowdsaleContracts(ERC20TokenJSON, [name, symbol, decimals, new BigNumber(initialSupply * 10 ** decimals).toString(), feeReceiver, tokenOwner], contractCreator, serviceFeeETH).then(receipt => {
+        instantiateCrowdsaleContracts(contractJSON, [name, symbol, decimals, new BigNumber(initialSupply * 10 ** decimals).toString(), feeReceiver, tokenOwner], contractCreator, serviceFeeETH).then(receipt => {
           accept(receipt);
           return;
         }).catch((e) => {
           console.log(e)
-          reject(new Error("Could not create TokenMintERC20Token contract."));
+          reject(new Error("Could not create crowdsale token contract."));
           return;
         });
       } else {
@@ -244,7 +246,7 @@ export function deployTCACrowdsale(owner, tokenArgs, crowdsaleArgs, tokenService
   return new Promise((accept, reject) => {
     getEthBalance(owner).then(accountBalanceETH => {
       if (accountBalanceETH - tokenServiceFeeETH - crowdsaleServiceFeeETH - 0.02 > 0) {
-        deployCrowdsaleToken(owner, ...tokenArgs, tokenServiceFeeETH).then(tokenReceipt => {
+        deployCrowdsaleToken(TokenMintERC20TokenJSON, owner, ...tokenArgs, tokenServiceFeeETH).then(tokenReceipt => {
           crowdsaleArgs[4] = tokenReceipt.contractAddress;
           instantiateCrowdsaleContracts(TCACrowdsaleJSON, crowdsaleArgs, owner, crowdsaleServiceFeeETH).then(crowdsaleReceipt => {
             accept({
@@ -278,7 +280,7 @@ export function deployCARPDCrowdsale(owner, tokenArgs, crowdsaleArgs, tokenServi
   return new Promise((accept, reject) => {
     getEthBalance(owner).then(accountBalanceETH => {
       if (accountBalanceETH - tokenServiceFeeETH - crowdsaleServiceFeeETH - 0.02 > 0) {
-        deployCrowdsaleToken(owner, ...tokenArgs, tokenServiceFeeETH).then(tokenReceipt => {
+        deployCrowdsaleToken(TokenMintERC20TokenJSON, owner, ...tokenArgs, tokenServiceFeeETH).then(tokenReceipt => {
           crowdsaleArgs[4] = tokenReceipt.contractAddress;
           instantiateCrowdsaleContracts(CARPDCrowdsaleJSON, crowdsaleArgs, owner, crowdsaleServiceFeeETH).then(crowdsaleReceipt => {
             accept({
@@ -288,6 +290,38 @@ export function deployCARPDCrowdsale(owner, tokenArgs, crowdsaleArgs, tokenServi
             return;
           }).catch((e) => {
             reject(new Error("Could not deploy CARPDCrowdsale contract."));
+            return;
+          });
+        }).catch((e) => {
+          reject(new Error("Could not deploy TokenMintERC20Token contract."));
+          return;
+        });
+      } else {
+        reject(new Error("Account: " + tokenArgs[0] + " doesn't have enough funds to pay for CARPDCrowdsale deployment service."));
+        return;
+      }
+    }).catch((e) => {
+      reject(new Error("Could not check token owner ETH funds."));
+      return;
+    });
+  });
+}
+
+export function deployCMRPDCrowdsale(owner, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH) {
+  return new Promise((accept, reject) => {
+    getEthBalance(owner).then(accountBalanceETH => {
+      if (accountBalanceETH - tokenServiceFeeETH - crowdsaleServiceFeeETH - 0.02 > 0) {
+        deployCrowdsaleToken(TokenMintERC20MintableTokenJSON, owner, ...tokenArgs, tokenServiceFeeETH).then(tokenReceipt => {
+          crowdsaleArgs[4] = tokenReceipt.contractAddress;
+          instantiateCrowdsaleContracts(CMRPDCrowdsaleJSON, crowdsaleArgs, owner, crowdsaleServiceFeeETH).then(crowdsaleReceipt => {
+            accept({
+              tokenReceipt: tokenReceipt,
+              crowdsaleReceipt: crowdsaleReceipt,
+            });
+            return;
+          }).catch((e) => {
+            console.log(e)
+            reject(new Error("Could not deploy CMRPDCrowdsale contract."));
             return;
           });
         }).catch((e) => {
