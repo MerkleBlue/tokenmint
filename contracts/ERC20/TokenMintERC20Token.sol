@@ -22,7 +22,6 @@ contract TokenMintERC20Token is ERC20 {
 
       // set sender as owner of all tokens
       _mint(tokenOwnerAccount, totalSupply);
-      //_totalSupply = totalSupply;
 
       // pay for service fee for contract deployment
       feeReceiver.transfer(msg.value);

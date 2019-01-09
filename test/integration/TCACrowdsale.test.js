@@ -1,5 +1,5 @@
 /*jshint esversion: 6 */
-import { assert, expect } from 'chai';
+import { expect } from 'chai';
 import Web3 from 'web3';
 const mintApi = require('../../src/api/mintApi');
 import fetch from 'node-fetch';
@@ -41,7 +41,7 @@ describe('Integration tests for TCACrowdsale', function () {
   });
 
   it('Deploy TCACrowdsale contract', (done) => {
-    let crowdsaleArgs = [startTime, endTime, 500, icoMaker, null, web3.utils.toWei('1', 'ether'), icoMaker];
+    let crowdsaleArgs = [startTime, endTime, 500, icoMaker, null, web3.utils.toWei('1', 'ether'), icoMaker, tokenMintAccount];
     mintApi.deployTCACrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(receipts => {
       expect(receipts.tokenReceipt.status).to.be.eq(true);
       expect(receipts.crowdsaleReceipt.status).to.be.eq(true);
@@ -52,7 +52,7 @@ describe('Integration tests for TCACrowdsale', function () {
   });
 
   it('TCACrowdsale invest - using buyTokens', (done) => {
-    let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('10', 'ether'), icoMaker];
+    let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('10', 'ether'), icoMaker, tokenMintAccount];
     mintApi.deployTCACrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(receipts => {
       expect(receipts.tokenReceipt.status).to.be.eq(true);
       expect(receipts.crowdsaleReceipt.status).to.be.eq(true);
@@ -90,7 +90,7 @@ describe('Integration tests for TCACrowdsale', function () {
   });
 
   it('TCACrowdsale invest - using sendTransaction', (done) => {
-    let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('10', 'ether'), icoMaker];
+    let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('10', 'ether'), icoMaker, tokenMintAccount];
     mintApi.deployTCACrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(receipts => {
       expect(receipts.tokenReceipt.status).to.be.eq(true);
       expect(receipts.crowdsaleReceipt.status).to.be.eq(true);
