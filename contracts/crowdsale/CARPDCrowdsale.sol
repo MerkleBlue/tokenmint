@@ -46,6 +46,10 @@ contract CARPDCrowdsale is CappedCrowdsale, AllowanceCrowdsale, RefundablePostDe
         TimedCrowdsale(openingTime, closingTime)
         RefundableCrowdsale(goal)
     {
+      // As goal needs to be met for a successful crowdsale
+      // the value needs to less or equal than a cap which is limit for accepted funds
+      require(goal <= cap);
+
       // pay the service fee for contract deployment
       feeReceiverAddress.transfer(msg.value);
     }
