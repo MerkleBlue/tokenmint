@@ -16,7 +16,7 @@ let tokenArgs = ["Token name", "SYM", 18, 1000, tokenMintAccount, icoMaker];
 let tokenServiceFeeETH = 0;
 let crowdsaleServiceFeeETH = 0;
 
-describe('Integration tests for CARPDCrowdsale', function () {
+describe('CARPDCrowdsale integration tests', function () {
   this.timeout(30000);
 
   before((beforeDone) => {
@@ -114,7 +114,7 @@ describe('Integration tests for CARPDCrowdsale', function () {
     });
   });
 
-  it('CARPDCrowdsale contructor - invalid token wallet', (done) => {
+  it('CARPDCrowdsale contructor - invalid token fundRaisingAddress', (done) => {
     let crowdsaleArgs = [startTime, endTime, 0, icoMaker, null, web3.utils.toWei('0.01', 'ether'), web3.utils.toWei('0.003', 'ether'), 0x0, tokenMintAccount];
     mintApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
       done(new Error('CARPDCrowdsale deployed with invalid token wallet (0x0).'));
@@ -239,7 +239,7 @@ describe('Integration tests for CARPDCrowdsale', function () {
                   crowdsaleInstance.methods.withdrawTokens(investor1).send({ from: investor1 }).then(receipt => {
                     expect(receipt.status).to.be.eq(true);
 
-                    // check token balance after investment, should be 200 after finalization and withdrawal
+                    // check token balance after investment
                     mintApi.getTokenBalance(tokenInstance, investor1).then(actualTokenBalance => {
                       expect(parseInt(actualTokenBalance)).to.be.eq(4);
                       done();
@@ -356,7 +356,7 @@ describe('Integration tests for CARPDCrowdsale', function () {
                   crowdsaleInstance.methods.withdrawTokens(investor1).send({ from: investor1 }).then(receipt => {
                     expect(receipt.status).to.be.eq(true);
 
-                    // check token balance after investment, should be 200 after finalization and withdrawal
+                    // check token balance after investment
                     mintApi.getTokenBalance(tokenInstance, investor1).then(actualTokenBalance => {
                       expect(parseInt(actualTokenBalance)).to.be.eq(4);
                       done();
@@ -1217,7 +1217,7 @@ describe('Integration tests for CARPDCrowdsale', function () {
                 //crowdsaleInstance.methods.withdrawTokens(investor1).send({ from: investor1 }).then(receipt => {
                 //  expect(receipt.status).to.be.eq(true);
                 //
-                //  // check token balance after investment, should be 200 after finalization and withdrawal
+                //  // check token balance after investment
                 //  mintApi.getTokenBalance(tokenInstance, investor1).then(actualTokenBalance => {
                 //    expect(parseInt(actualTokenBalance)).to.be.eq(600);
                 //    done();

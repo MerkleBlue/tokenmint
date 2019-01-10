@@ -17,7 +17,7 @@ let token = {
   totalSupply: 1000000
 }
 
-describe('TokenMint mintApi integration tests', function () {
+describe('mintApi integration tests', function () {
   this.timeout(120000);
 
   before((beforeDone) => {

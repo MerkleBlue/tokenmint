@@ -17,7 +17,7 @@ let tokenArgs = ["Token name", "SYM", 18, 1000, tokenMintAccount, icoMaker];
 let tokenServiceFeeETH = 0;
 let crowdsaleServiceFeeETH = 0;
 
-describe('Integration tests for TCACrowdsale', function () {
+describe('TCACrowdsale integration tests', function () {
   this.timeout(30000);
 
   before((beforeDone) => {

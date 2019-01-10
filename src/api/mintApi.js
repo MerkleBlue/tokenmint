@@ -227,7 +227,7 @@ function deployCrowdsaleToken(contractJSON, contractCreator, name, symbol, decim
           accept(receipt);
           return;
         }).catch((e) => {
-          console.log(e)
+          console.log(e);
           reject(new Error("Could not create crowdsale token contract."));
           return;
         });
@@ -254,13 +254,11 @@ export function deployTCACrowdsale(owner, tokenArgs, crowdsaleArgs, tokenService
               crowdsaleReceipt: crowdsaleReceipt,
             });
             return;
-          }).catch((e) => {
-            console.log(e)
+          }).catch(() => {
             reject(new Error("Could not deploy TCACrowdsale contract."));
             return;
           });
-        }).catch((e) => {
-          console.log(e)
+        }).catch(() => {
           reject(new Error("Could not deploy TokenMintERC20Token contract."));
           return;
         });
@@ -319,17 +317,16 @@ export function deployCMRPDCrowdsale(owner, tokenArgs, crowdsaleArgs, tokenServi
               crowdsaleReceipt: crowdsaleReceipt,
             });
             return;
-          }).catch((e) => {
-            console.log(e)
+          }).catch(() => {
             reject(new Error("Could not deploy CMRPDCrowdsale contract."));
             return;
           });
-        }).catch((e) => {
-          reject(new Error("Could not deploy TokenMintERC20Token contract."));
+        }).catch(() => {
+          reject(new Error("Could not deploy TokenMintERC20MintableToken contract."));
           return;
         });
       } else {
-        reject(new Error("Account: " + tokenArgs[0] + " doesn't have enough funds to pay for CARPDCrowdsale deployment service."));
+        reject(new Error("Account: " + tokenArgs[0] + " doesn't have enough funds to pay for CMRPDCrowdsale deployment service."));
         return;
       }
     }).catch((e) => {
