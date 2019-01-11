@@ -58,7 +58,6 @@ describe('CMRPDCrowdsale integration tests', function () {
     mintApi.deployCMRPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
       done(new Error('CMRPDCrowdsale deployed with invalid opening time.'));
     }).catch(() => {
-      expect(true).to.be.eq(true);
       done();
     });
   });
@@ -69,7 +68,6 @@ describe('CMRPDCrowdsale integration tests', function () {
     mintApi.deployCMRPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
       done(new Error('CMRPDCrowdsale deployed with invalid closing time.'));
     }).catch(() => {
-      expect(true).to.be.eq(true);
       done();
     });
   });
@@ -79,7 +77,6 @@ describe('CMRPDCrowdsale integration tests', function () {
     mintApi.deployCMRPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
       done(new Error('CMRPDCrowdsale deployed with invalid rate (0).'));
     }).catch(() => {
-      expect(true).to.be.eq(true);
       done();
     });
   });
@@ -87,9 +84,8 @@ describe('CMRPDCrowdsale integration tests', function () {
   it('CMRPDCrowdsale contructor - invalid fundRaisingAddress', (done) => {
     let crowdsaleArgs = [startTime, endTime, 0, 0x0, null, web3.utils.toWei('0.01', 'ether'), web3.utils.toWei('0.003', 'ether'), tokenMintAccount];
     mintApi.deployCMRPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
-      done(new Error('CMRPDCrowdsale deployed with invalid wallet (0x0).'));
+      done(new Error('CMRPDCrowdsale deployed with invalid fundRaisingAddress (0x0).'));
     }).catch(() => {
-      expect(true).to.be.eq(true);
       done();
     });
   });
@@ -99,7 +95,6 @@ describe('CMRPDCrowdsale integration tests', function () {
     mintApi.deployCMRPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
       done(new Error('CMRPDCrowdsale deployed with invalid cap (0).'));
     }).catch(() => {
-      expect(true).to.be.eq(true);
       done();
     });
   });
@@ -109,7 +104,16 @@ describe('CMRPDCrowdsale integration tests', function () {
     mintApi.deployCMRPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
       done(new Error('CMRPDCrowdsale deployed with invalid goal (0).'));
     }).catch(() => {
-      expect(true).to.be.eq(true);
+      done();
+    });
+  });
+
+
+  it('CMRPDCrowdsale contructor - goal bigger than cap', (done) => {
+    let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('0.01', 'ether'), web3.utils.toWei('0.011', 'ether'), tokenMintAccount];
+    mintApi.deployCMRPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
+      done(new Error('CMRPDCrowdsale deployed with goal bigger than cap.'));
+    }).catch(() => {
       done();
     });
   });

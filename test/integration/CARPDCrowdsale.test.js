@@ -79,17 +79,15 @@ describe('CARPDCrowdsale integration tests', function () {
     mintApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
       done(new Error('CARPDCrowdsale deployed with invalid rate (0).'));
     }).catch(() => {
-      expect(true).to.be.eq(true);
       done();
     });
   });
 
-  it('CARPDCrowdsale contructor - invalid wallet', (done) => {
+  it('CARPDCrowdsale contructor - invalid fundRaisingAddress', (done) => {
     let crowdsaleArgs = [startTime, endTime, 0, 0x0, null, web3.utils.toWei('0.01', 'ether'), web3.utils.toWei('0.003', 'ether'), icoMaker, tokenMintAccount];
     mintApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
-      done(new Error('CARPDCrowdsale deployed with invalid wallet (0x0).'));
+      done(new Error('CARPDCrowdsale deployed with invalid fundRaisingAddress (0x0).'));
     }).catch(() => {
-      expect(true).to.be.eq(true);
       done();
     });
   });
@@ -99,7 +97,6 @@ describe('CARPDCrowdsale integration tests', function () {
     mintApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
       done(new Error('CARPDCrowdsale deployed with invalid cap (0).'));
     }).catch(() => {
-      expect(true).to.be.eq(true);
       done();
     });
   });
@@ -109,17 +106,24 @@ describe('CARPDCrowdsale integration tests', function () {
     mintApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
       done(new Error('CARPDCrowdsale deployed with invalid goal (0).'));
     }).catch(() => {
-      expect(true).to.be.eq(true);
       done();
     });
   });
 
-  it('CARPDCrowdsale contructor - invalid token fundRaisingAddress', (done) => {
+  it('CARPDCrowdsale contructor - invalid tokenHolderAddress', (done) => {
     let crowdsaleArgs = [startTime, endTime, 0, icoMaker, null, web3.utils.toWei('0.01', 'ether'), web3.utils.toWei('0.003', 'ether'), 0x0, tokenMintAccount];
     mintApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
-      done(new Error('CARPDCrowdsale deployed with invalid token wallet (0x0).'));
+      done(new Error('CARPDCrowdsale deployed with invalid tokenHolderAddress (0x0).'));
     }).catch(() => {
-      expect(true).to.be.eq(true);
+      done();
+    });
+  });
+
+  it('CARPDCrowdsale contructor - goal bigger than cap', (done) => {
+    let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('0.01', 'ether'), web3.utils.toWei('0.011', 'ether'), icoMaker, tokenMintAccount];
+    mintApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
+      done(new Error('CARPDCrowdsale deployed with goal bigger than cap.'));
+    }).catch(() => {
       done();
     });
   });
