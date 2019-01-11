@@ -167,6 +167,19 @@ function instantiateContract(tokenContract, name, symbol, decimals, totalSupply,
   });
 }
 
+/**
+ * Deploys TokenMintERC20Token or TokenMintERC223Token contract.
+ *
+ * @param {string}   tokenName                token name
+ * @param {string}   tokenSymbol              token symbol, 3-4 chars
+ * @param {Number}   decimals                 number of decimals token will have, 18 is common
+ * @param {Number}   totalSupply              total supply of tokens (in full tokens). tokenOwner will own totalSupply after deployment.
+ * @param {string}   tokenType                token type, if "erc20" deploys TokenMintERC20Token, otherwise TokenMintERC223Token contract
+ * @param {string}   tokenOwner               address that is initial token owner
+ * @param {Number}   serviceFee               service fee in ETH for contract deployment
+ * @param {string}   payingAccount            address used for deployments, pays mining and service fees
+ * @return {string}                           contract deployment transaction hash
+ */
 export function mintTokens(tokenName, tokenSymbol, decimals, totalSupply, tokenType, tokenOwner, serviceFee, payingAccount) {
   return new Promise((accept, reject) => {
     getEthBalance(tokenOwner).then(accountBalance => {
@@ -242,6 +255,17 @@ function deployCrowdsaleToken(contractJSON, contractCreator, name, symbol, decim
   });
 }
 
+/**
+ * Deploys TCACrowdsale contracts. First it deploys TokenMintERC20Token,
+ * and then TCACrowdsale.
+ *
+ * @param {string}   owner                    address used for deployments, contract creator
+ * @param {Object[]} tokenArgs                array containing arguments for TokenMintERC20Token deployment
+ * @param {Object[]} crowdsaleArgs            array containing arguments for TCACrowdsale deployment
+ * @param {Number}   tokenServiceFeeETH       service fee in ETH for TokenMintERC20Token deployment
+ * @param {Number}   crowdsaleServiceFeeETH   service fee in ETH for TCACrowdsale deployment
+ * @return {Object}                           object containing token and crowdsale receipts
+ */
 export function deployTCACrowdsale(owner, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH) {
   return new Promise((accept, reject) => {
     getEthBalance(owner).then(accountBalanceETH => {
@@ -274,6 +298,17 @@ export function deployTCACrowdsale(owner, tokenArgs, crowdsaleArgs, tokenService
   });
 }
 
+/**
+ * Deploys CARPDCrowdsale contracts. First it deploys TokenMintERC20Token,
+ * and then CARPDCrowdsale.
+ *
+ * @param {string}   owner                    address used for deployments, contract creator
+ * @param {Object[]} tokenArgs                array containing arguments for TokenMintERC20Token deployment
+ * @param {Object[]} crowdsaleArgs            array containing arguments for CARPDCrowdsale deployment
+ * @param {Number}   tokenServiceFeeETH       service fee in ETH for TokenMintERC20Token deployment
+ * @param {Number}   crowdsaleServiceFeeETH   service fee in ETH for CARPDCrowdsale deployment
+ * @return {Object}                           object containing token and crowdsale receipts
+ */
 export function deployCARPDCrowdsale(owner, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH) {
   return new Promise((accept, reject) => {
     getEthBalance(owner).then(accountBalanceETH => {
@@ -305,6 +340,17 @@ export function deployCARPDCrowdsale(owner, tokenArgs, crowdsaleArgs, tokenServi
   });
 }
 
+/**
+ * Deploys CMRPDCrowdsale contracts. First it deploys TokenMintERC20MintableToken,
+ * and then CMRPDCrowdsale.
+ *
+ * @param {string}   owner                    address used for deployments, contract creator
+ * @param {Object[]} tokenArgs                array containing arguments for TokenMintERC20MintableToken deployment
+ * @param {Object[]} crowdsaleArgs            array containing arguments for CMRPDCrowdsale deployment
+ * @param {Number}   tokenServiceFeeETH       service fee in ETH for TokenMintERC20MintableToken deployment
+ * @param {Number}   crowdsaleServiceFeeETH   service fee in ETH for CMRPDCrowdsale deployment
+ * @return {Object}                           object containing token and crowdsale receipts
+ */
 export function deployCMRPDCrowdsale(owner, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH) {
   return new Promise((accept, reject) => {
     getEthBalance(owner).then(accountBalanceETH => {
