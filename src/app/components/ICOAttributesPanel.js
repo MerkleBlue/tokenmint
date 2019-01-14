@@ -103,33 +103,6 @@ export class ICOAttributesPanel extends React.Component {
                 <TextField
                   required
                   id="outlined-required"
-                  label="Cap"
-                  className="ico_text_field"
-                  margin="normal"
-                  variant="outlined"
-                  inputProps={{ maxLength: 25 }}
-                  value={this.props.icoCap}
-                  error={!InputValidator.isIcoCapValid(this.props.icoCap)}
-                  onChange={this.handleCapChange}
-                />
-              </MuiThemeProvider>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Typography
-                align="left"
-                variant="body1"
-                className={InputValidator.isIcoCapValid(this.props.icoCap) ? "typography_ico_info" : "typography_ico_info_error"}
-              >
-                ICO cap in ETH.
-                </Typography>
-            </Grid>
-          </Grid>
-          <Grid container spacing={8}>
-            <Grid item xs={12} md={6}>
-              <MuiThemeProvider theme={theme}>
-                <TextField
-                  required
-                  id="outlined-required"
                   label="Goal"
                   className="ico_text_field"
                   margin="normal"
@@ -147,8 +120,36 @@ export class ICOAttributesPanel extends React.Component {
                 variant="body1"
                 className={InputValidator.isIcoGoalValid(this.props.icoGoal) ? "typography_ico_info" : "typography_ico_info_error"}
               >
-                ICO goal in ETH.
-                </Typography>
+                ICO goal in ETH. If the goal is reached within the ICO time-span, the ICO is considered successful.
+                Otherwise, the funds will be returned to the investors.
+              </Typography>
+            </Grid>
+          </Grid>
+          <Grid container spacing={8}>
+            <Grid item xs={12} md={6}>
+              <MuiThemeProvider theme={theme}>
+                <TextField
+                  required
+                  id="outlined-required"
+                  label="Cap"
+                  className="ico_text_field"
+                  margin="normal"
+                  variant="outlined"
+                  inputProps={{ maxLength: 25 }}
+                  value={this.props.icoCap}
+                  error={!InputValidator.isIcoCapValid(this.props.icoCap)}
+                  onChange={this.handleCapChange}
+                />
+              </MuiThemeProvider>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Typography
+                align="left"
+                variant="body1"
+                className={InputValidator.isIcoCapValid(this.props.icoCap) ? "typography_ico_info" : "typography_ico_info_error"}
+              >
+                ICO cap in ETH. If the cap is reached, the ICO gets immediately finalized.
+              </Typography>
             </Grid>
           </Grid>
           <Grid container spacing={8}>
@@ -174,8 +175,8 @@ export class ICOAttributesPanel extends React.Component {
                 variant="body1"
                 className={InputValidator.isEthereumAddress(this.props.icoWallet) ? "typography_ico_info" : "typography_ico_info_error"}
               >
-                ICO wallet.
-                </Typography>
+                ICO wallet. The address where investor funds will be stored.
+              </Typography>
             </Grid>
           </Grid>
           <Grid container spacing={8}>
