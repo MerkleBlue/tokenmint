@@ -11,6 +11,7 @@ import ErrorPanel from './app/components/ErrorPanel'; //eslint-disable-line impo
 import LoadingPanel from './app/components/LoadingPanel'; //eslint-disable-line import/no-named-as-default
 import SuccessMessagePanel from './app/components/SuccessMessagePanel'; //eslint-disable-line import/no-named-as-default
 import ConfirmationPanel from './app/components/ConfirmationPanel'; //eslint-disable-line import/no-named-as-default
+import ICOInfoPanel from './app/components/ICOInfoPanel'; //eslint-disable-line import/no-named-as-default
 import './App.css';
 import FullStory from 'react-fullstory';
 import { connect } from 'react-redux';
@@ -95,6 +96,7 @@ class IcoApp extends React.Component {
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
+          <ICOInfoPanel />
           <ICOTokenAttributesPanel />
           <ICOAttributesPanel />
           <ICOFooter />
