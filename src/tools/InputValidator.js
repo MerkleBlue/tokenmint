@@ -131,6 +131,18 @@ export default class InputValidator {
     return (cc.symbols().find(symbol => symbol === tokenSymbol) === undefined);
   }
 
+  static isGoalHigherThanCap(goal, cap) {
+    if (goal === "" || cap === "") {
+      return true;
+    }
+    if (goal !== "" && cap !== "") {
+      const nGoal = Math.floor(Number(goal));
+      const nCap = Math.floor(Number(cap));
+      return nGoal >= nCap;
+    }
+    return true;
+  }
+
   static areICOAttributesValid(
     tokenName,
     tokenSymbol,
@@ -151,7 +163,8 @@ export default class InputValidator {
     this.isEthereumAddress(wallet) && wallet !== "" &&
     this.isDateValid(openingTime) && openingTime !== "" &&
     this.isDateValid(closingTime) && closingTime !== "" &&
-    this.isOpeningTimeBeforeClosingTime(openingTime, closingTime);
+    this.isOpeningTimeBeforeClosingTime(openingTime, closingTime) &&
+    this.isGoalHigherThanCap(goal, cap);
   }
 }
 

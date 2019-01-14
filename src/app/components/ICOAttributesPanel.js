@@ -27,6 +27,8 @@ export class ICOAttributesPanel extends React.Component {
     this.handleOpeningTimeChange = this.handleOpeningTimeChange.bind(this);
     this.handleClosingTimeChange = this.handleClosingTimeChange.bind(this);
     this.handleGoalChange = this.handleGoalChange.bind(this);
+    this.isGoalValid = this.isGoalValid.bind(this);
+    this.isCapValid = this.isCapValid.bind(this);
   }
 
   handleCapChange(e) {
@@ -47,6 +49,14 @@ export class ICOAttributesPanel extends React.Component {
 
   handleGoalChange(e) {
     this.props.icoGoalActions.setIcoGoal(e.target.value);
+  }
+
+  isGoalValid() {
+    return InputValidator.isIcoGoalValid(this.props.icoGoal) && InputValidator.isGoalHigherThanCap(this.props.icoGoal, this.props.icoCap);
+  }
+
+  isCapValid() {
+    return InputValidator.isIcoCapValid(this.props.icoCap) && InputValidator.isGoalHigherThanCap(this.props.icoGoal, this.props.icoCap);
   }
 
   render() {
@@ -83,6 +93,14 @@ export class ICOAttributesPanel extends React.Component {
       }
     }
 
+    let icoGoalDescription = "ICO goal in ETH. If the goal is reached within the ICO time-span, the ICO is considered successful. " +
+      "Otherwise, the funds will be returned to the investors.";
+    let icoCapDescription = "ICO cap in ETH. If the cap is reached, the ICO gets immediately finalized.";
+    if (!InputValidator.isGoalHigherThanCap(this.props.icoGoal, this.props.icoCap)) {
+      icoGoalDescription = "Goal must be higher or equal to cap.";
+      icoCapDescription = "Cap must be lower or equal to goal";
+    }
+
     return (
       <Card className="card">
         <CardHeader
@@ -109,7 +127,7 @@ export class ICOAttributesPanel extends React.Component {
                   variant="outlined"
                   inputProps={{ maxLength: 25 }}
                   value={this.props.icoGoal}
-                  error={!InputValidator.isIcoGoalValid(this.props.icoGoal)}
+                  error={!this.isGoalValid()}
                   onChange={this.handleGoalChange}
                 />
               </MuiThemeProvider>
@@ -118,10 +136,9 @@ export class ICOAttributesPanel extends React.Component {
               <Typography
                 align="left"
                 variant="body1"
-                className={InputValidator.isIcoGoalValid(this.props.icoGoal) ? "typography_ico_info" : "typography_ico_info_error"}
+                className={this.isGoalValid() ? "typography_ico_info" : "typography_ico_info_error"}
               >
-                ICO goal in ETH. If the goal is reached within the ICO time-span, the ICO is considered successful.
-                Otherwise, the funds will be returned to the investors.
+                {icoGoalDescription}
               </Typography>
             </Grid>
           </Grid>
@@ -137,7 +154,7 @@ export class ICOAttributesPanel extends React.Component {
                   variant="outlined"
                   inputProps={{ maxLength: 25 }}
                   value={this.props.icoCap}
-                  error={!InputValidator.isIcoCapValid(this.props.icoCap)}
+                  error={!this.isCapValid()}
                   onChange={this.handleCapChange}
                 />
               </MuiThemeProvider>
@@ -146,9 +163,9 @@ export class ICOAttributesPanel extends React.Component {
               <Typography
                 align="left"
                 variant="body1"
-                className={InputValidator.isIcoCapValid(this.props.icoCap) ? "typography_ico_info" : "typography_ico_info_error"}
+                className={this.isCapValid() ? "typography_ico_info" : "typography_ico_info_error"}
               >
-                ICO cap in ETH. If the cap is reached, the ICO gets immediately finalized.
+                {icoCapDescription}
               </Typography>
             </Grid>
           </Grid>
