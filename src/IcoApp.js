@@ -69,7 +69,7 @@ class IcoApp extends React.Component {
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          <LoadingPanel />
+          <LoadingPanel isIco />
         </CSSTransitionGroup>
       );
     } else if (this.props.icoAppState === appStates.MINING_CONFIRMED) {
