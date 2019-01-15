@@ -105,6 +105,9 @@ export default class InputValidator {
   // function only evaluates dates if they are both valid. Otherwise it returns true
   static isOpeningTimeBeforeClosingTime(strOpeningDate, strClosingDate) {
     if (this.isDateValid(strOpeningDate) && this.isDateValid(strClosingDate)) {
+      if (strOpeningDate === "" || strClosingDate === "") {
+        return true;
+      }
       const openingDate = new Date(strOpeningDate);
       const closingDate = new Date(strClosingDate);
       return (openingDate < closingDate);
@@ -131,14 +134,14 @@ export default class InputValidator {
     return (cc.symbols().find(symbol => symbol === tokenSymbol) === undefined);
   }
 
-  static isGoalHigherThanCap(goal, cap) {
+  static isCapHigherThanGoal(goal, cap) {
     if (goal === "" || cap === "") {
       return true;
     }
     if (goal !== "" && cap !== "") {
       const nGoal = Math.floor(Number(goal));
       const nCap = Math.floor(Number(cap));
-      return nGoal >= nCap;
+      return nCap >= nGoal;
     }
     return true;
   }

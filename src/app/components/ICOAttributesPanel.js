@@ -52,11 +52,11 @@ export class ICOAttributesPanel extends React.Component {
   }
 
   isGoalValid() {
-    return InputValidator.isIcoGoalValid(this.props.icoGoal) && InputValidator.isGoalHigherThanCap(this.props.icoGoal, this.props.icoCap);
+    return InputValidator.isIcoGoalValid(this.props.icoGoal) && InputValidator.isCapHigherThanGoal(this.props.icoGoal, this.props.icoCap);
   }
 
   isCapValid() {
-    return InputValidator.isIcoCapValid(this.props.icoCap) && InputValidator.isGoalHigherThanCap(this.props.icoGoal, this.props.icoCap);
+    return InputValidator.isIcoCapValid(this.props.icoCap) && InputValidator.isCapHigherThanGoal(this.props.icoGoal, this.props.icoCap);
   }
 
   render() {
@@ -96,9 +96,9 @@ export class ICOAttributesPanel extends React.Component {
     let icoGoalDescription = "ICO goal in ETH. If the goal is reached within the ICO time-span, the ICO is considered successful. " +
       "Otherwise, the funds will be returned to the investors.";
     let icoCapDescription = "ICO cap in ETH. If the cap is reached, the ICO gets immediately finalized.";
-    if (!InputValidator.isGoalHigherThanCap(this.props.icoGoal, this.props.icoCap)) {
-      icoGoalDescription = "Goal must be higher or equal to cap.";
-      icoCapDescription = "Cap must be lower or equal to goal";
+    if (!InputValidator.isCapHigherThanGoal(this.props.icoGoal, this.props.icoCap)) {
+      icoGoalDescription = "Goal must be lower or equal to cap.";
+      icoCapDescription = "Cap must be higher or equal to goal";
     }
 
     return (

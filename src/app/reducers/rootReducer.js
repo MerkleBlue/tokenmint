@@ -7,6 +7,7 @@ import tokenType from './tokenTypeReducer';
 import totalSupply from './totalSupplyReducer';
 import accounts from './accountsReducer';
 import appState from './appStateReducer';
+import icoAppState from './icoAppStateReducer';
 import checkingPayingAccountFunds from './checkingPayingAccountFundsReducer';
 import payingAccountBalance from './payingAccountBalanceReducer';
 import loadingAccounts from './loadingAccountsReducer';
@@ -50,7 +51,8 @@ const rootReducer = combineReducers({
   icoWallet: icoWallet,
   icoOpeningTime: icoOpeningTime,
   icoClosingTime: icoClosingTime,
-  icoGoal: icoGoal
+  icoGoal: icoGoal,
+  icoAppState: icoAppState
 });
 
 export default rootReducer;

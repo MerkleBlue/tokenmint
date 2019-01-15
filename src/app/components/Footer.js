@@ -5,11 +5,12 @@ import PropTypes from 'prop-types';
 import InputValidator from '../../tools/InputValidator';
 import { bindActionCreators } from 'redux';
 import * as appStateActions from '../actions/appStateActions';
+import * as accountsActions from '../actions/accountsActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoins } from '@fortawesome/free-solid-svg-icons';
 import appStates from '../reducers/appStates';
 import { Tooltip } from '@material-ui/core';
-import { NO_NETWORK } from '../../api/mintApi';
+import { setServiceFeeInUsd, serviceTypeEnum, NO_NETWORK } from '../../api/mintApi';
 
 export class Footer extends React.Component {
 
@@ -29,9 +30,11 @@ export class Footer extends React.Component {
   }
 
   handleTokenCreation(e) {
+    setServiceFeeInUsd(serviceTypeEnum.MINT_TOKENS);
     if (this.props.network === NO_NETWORK) {
       this.props.appStateActions.setAppState(appStates.INSTALL_WALLET);
     } else {
+      this.props.accountsActions.loadAllAccounts();
       this.props.appStateActions.setAppState(appStates.HANDLE_PAYMENT);
     }
   }
@@ -76,6 +79,7 @@ export class Footer extends React.Component {
 
 Footer.propTypes = {
   appStateActions: PropTypes.object.isRequired,
+  accountsActions: PropTypes.object.isRequired,
   tokenName: PropTypes.string.isRequired,
   tokenSymbol: PropTypes.string.isRequired,
   decimals: PropTypes.string.isRequired,
@@ -97,7 +101,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    appStateActions: bindActionCreators(appStateActions, dispatch)
+    appStateActions: bindActionCreators(appStateActions, dispatch),
+    accountsActions: bindActionCreators(accountsActions, dispatch)
   };
 }
 
