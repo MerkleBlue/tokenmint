@@ -8,7 +8,6 @@ import {
 import './css/HandlePaymentPanel.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import * as createTokensActions from '../actions/createTokensActions';
 import * as appStateActions from '../actions/appStateActions';
 import { bindActionCreators } from 'redux';
 import initialState from '../reducers/initialState';
@@ -179,7 +178,6 @@ HandlePaymentPanel.propTypes = {
   totalSupply: PropTypes.string.isRequired,
   tokenType: PropTypes.string.isRequired,
   tokenOwner: PropTypes.string.isRequired,
-  createTokensActions: PropTypes.object.isRequired,
   appStateActions: PropTypes.object.isRequired
 };
 
@@ -206,7 +204,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    createTokensActions: bindActionCreators(createTokensActions, dispatch),
     appStateActions: bindActionCreators(appStateActions, dispatch)
   };
 }

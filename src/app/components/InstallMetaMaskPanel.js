@@ -61,13 +61,17 @@ export class InstallMetaMaskPanel extends React.Component {
   }
 
   handleBack(e) {
-    this.props.appStateActions.setAppState(appStates.INIT);
+    if (this.props.isIco) {
+      this.props.appStateActions.setIcoAppState(appStates.INIT);
+    } else {
+      this.props.appStateActions.setAppState(appStates.INIT);
+    }
   }
 
   handleNext(e) {
     mintApi.initWeb3().then(walletNeedsToBeUnlocked => {
       this.props.walletActions.setWalletNeedsToBeUnlocked(walletNeedsToBeUnlocked);
-      this.props.networkActions.executeNetworkCheckWithStateTransition();
+      this.props.networkActions.executeNetworkCheckWithStateTransition(this.props.isIco);
       this.props.accountsActions.loadAllAccounts();
     });
     this.setState({ isModalOpen: true });
@@ -197,6 +201,7 @@ export class InstallMetaMaskPanel extends React.Component {
 }
 
 InstallMetaMaskPanel.propTypes = {
+  isIco: PropTypes.bool.isRequired,
   isMobileDevice: PropTypes.bool.isRequired,
   appStateActions: PropTypes.object.isRequired,
   accountsActions: PropTypes.object.isRequired,

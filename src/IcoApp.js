@@ -28,24 +28,24 @@ class IcoApp extends React.Component {
 
   render() {
     let content;
-    if (this.props.appState === appStates.INSTALL_WALLET) {
+    if (this.props.icoAppState === appStates.INSTALL_WALLET) {
       content = !this.props.isMobileDevice ?
         (
           <CSSTransitionGroup
             transitionName="example"
             transitionEnterTimeout={500}
             transitionLeaveTimeout={300}>
-            <InstallMetaMaskPanel />
+            <InstallMetaMaskPanel isIco />
           </CSSTransitionGroup>
         ) : (
           <CSSTransitionGroup
             transitionName="example"
             transitionEnterTimeout={500}
             transitionLeaveTimeout={300}>
-            <InstallCoinbasePanel />
+            <InstallCoinbasePanel isIco />
           </CSSTransitionGroup>
         );
-    } else if (this.props.appState === appStates.PENDING_CONFIRMATION) {
+    } else if (this.props.icoAppState === appStates.PENDING_CONFIRMATION) {
       content = (
         <CSSTransitionGroup
           transitionName="example"
@@ -54,7 +54,7 @@ class IcoApp extends React.Component {
           <ConfirmationPanel />
         </CSSTransitionGroup>
       );
-    } else if (this.props.appState === appStates.MINING_FAILED) {
+    } else if (this.props.icoAppState === appStates.MINING_FAILED) {
       content = (
         <CSSTransitionGroup
           transitionName="example"
@@ -63,7 +63,7 @@ class IcoApp extends React.Component {
           <ErrorPanel />
         </CSSTransitionGroup>
       );
-    } else if (this.props.appState === appStates.MINING_IN_PROGRESS) {
+    } else if (this.props.icoAppState === appStates.MINING_IN_PROGRESS) {
       content = (
         <CSSTransitionGroup
           transitionName="example"
@@ -72,7 +72,7 @@ class IcoApp extends React.Component {
           <LoadingPanel />
         </CSSTransitionGroup>
       );
-    } else if (this.props.appState === appStates.MINING_CONFIRMED) {
+    } else if (this.props.icoAppState === appStates.MINING_CONFIRMED) {
       content = (
         <CSSTransitionGroup
           transitionName="example"
@@ -81,7 +81,7 @@ class IcoApp extends React.Component {
           <SuccessMessagePanel />
         </CSSTransitionGroup>
       );
-    } else if (this.props.appState === appStates.HANDLE_PAYMENT) {
+    } else if (this.props.icoAppState === appStates.HANDLE_PAYMENT) {
       content = (
         <CSSTransitionGroup
           transitionName="example"
@@ -118,7 +118,7 @@ class IcoApp extends React.Component {
 }
 
 IcoApp.propTypes = {
-  appState: PropTypes.number.isRequired,
+  icoAppState: PropTypes.number.isRequired,
   network: PropTypes.string.isRequired,
   checkingNetwork: PropTypes.bool.isRequired,
   isMobileDevice: PropTypes.bool.isRequired
@@ -126,7 +126,7 @@ IcoApp.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    appState: state.appState,
+    icoAppState: state.icoAppState,
     network: state.network,
     checkingNetwork: state.checkingNetwork,
     isMobileDevice: state.isMobileDevice

@@ -8,11 +8,39 @@ import CMRPDCrowdsaleJSON from '../contracts/CMRPDCrowdsale.json';
 import Web3 from 'web3';
 import { BigNumber } from 'bignumber.js';
 
-const feeInUsd = 29.99;
+let feeInUsd = 29.99;
+const mintTokensFeeUSD = 29.99;
 const TCACrowdsaleServiceFeeUSD = 0;
 const CARPDCrowdsaleServiceFeeUSD = 0;
+const CMRPDCrowdsaleServiceFeeUSD = 499.99;
 let tokenMintAccount = "0x6603cb70464ca51481d4edBb3B927F66F53F4f42";
 let web3;
+
+export const serviceTypeEnum = {
+  MINT_TOKENS: 1,
+  TCA_CROWDSALE: 2,
+  CARPD_CROWDSALE: 3,
+  CMRPD_CROWDSALE: 4
+}
+
+export function setServiceFeeInUsd(serviceType) {
+  switch (serviceType) {
+    case serviceTypeEnum.MINT_TOKENS:
+      feeInUsd = mintTokensFeeUSD;
+      break;
+    case serviceTypeEnum.TCA_CROWDSALE:
+      feeInUsd = TCACrowdsaleServiceFeeUSD;
+      break;
+    case serviceTypeEnum.CARPD_CROWDSALE:
+      feeInUsd = CARPDCrowdsaleServiceFeeUSD;
+      break;
+    case serviceTypeEnum.CMRPD_CROWDSALE:
+      feeInUsd = CMRPDCrowdsaleServiceFeeUSD;
+      break;
+    default:
+      feeInUsd = mintTokensFeeUSD;
+  }
+}
 
 export const NO_NETWORK = "NO_NETWORK";
 

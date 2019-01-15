@@ -7,6 +7,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import { JSDOM } from 'jsdom';
 import sinon from 'sinon';
 import initialState from '../reducers/initialState';
+import { loadAllAccounts } from '../actions/accountsActions';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -25,7 +26,8 @@ describe("<Footer /> tests", () => {
     decimals,
     totalSupply,
     tokenType,
-    setAppState = () => { }
+    setAppState = () => { },
+    loadAllAccounts = () => { }
   ) {
     const props = {
       tokenName: tokenName,
@@ -34,6 +36,7 @@ describe("<Footer /> tests", () => {
       totalSupply: totalSupply,
       tokenType: tokenType,
       appStateActions: { setAppState: setAppState },
+      accountsActions: { loadAllAccounts: loadAllAccounts }
     };
     return mount(<Footer {...props} />);
   }

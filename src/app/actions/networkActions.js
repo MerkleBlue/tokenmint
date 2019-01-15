@@ -1,6 +1,6 @@
 import * as types from './actionTypes';
 import { getNetwork, NO_NETWORK } from '../../api/mintApi';
-import { setAppState } from './appStateActions';
+import { setAppState, setIcoAppState } from './appStateActions';
 import appStates from '../reducers/appStates';
 
 export function getNetworkType() {
@@ -16,12 +16,16 @@ export function getNetworkType() {
   };
 }
 
-export function executeNetworkCheckWithStateTransition() {
+export function executeNetworkCheckWithStateTransition(isICO) {
   return (dispatch) => {
     dispatch(setCheckingNetwork(true));
     return getNetwork().then(network => {
       dispatch(setNetwork(network));
-      dispatch(setAppState(appStates.HANDLE_PAYMENT));
+      if (isICO) {
+        dispatch(setIcoAppState(appStates.HANDLE_PAYMENT));
+      } else {
+        dispatch(setAppState(appStates.HANDLE_PAYMENT));
+      }
       dispatch(setCheckingNetwork(false));
     }).catch(() => {
       dispatch(setNetwork(NO_NETWORK));

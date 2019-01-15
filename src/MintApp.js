@@ -33,14 +33,14 @@ class MintApp extends Component {
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          <InstallMetaMaskPanel />
+          <InstallMetaMaskPanel isIco={false} />
         </CSSTransitionGroup>
       ) : (
         <CSSTransitionGroup
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          <InstallCoinbasePanel />
+          <InstallCoinbasePanel isIco={false} />
         </CSSTransitionGroup>
       );
     } else if (this.props.appState === appStates.PENDING_CONFIRMATION) {

@@ -7,9 +7,11 @@ import { bindActionCreators } from 'redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoins } from '@fortawesome/free-solid-svg-icons';
 import * as appStateActions from '../actions/appStateActions';
+import * as accountsActions from '../actions/accountsActions';
+import * as serviceFeeActions from '../actions/serviceFeeActions';
 import appStates from '../reducers/appStates';
 import { Tooltip } from '@material-ui/core';
-import { NO_NETWORK } from '../../api/mintApi';
+import { setServiceFeeInUsd, serviceTypeEnum, NO_NETWORK } from '../../api/mintApi';
 
 export class ICOFooter extends React.Component {
 
@@ -34,10 +36,12 @@ export class ICOFooter extends React.Component {
   }
 
   handleICOCreation(e) {
+    setServiceFeeInUsd(serviceTypeEnum.CMRPD_CROWDSALE);
     if (this.props.network === NO_NETWORK) {
-      this.props.appStateActions.setAppState(appStates.INSTALL_WALLET);
+      this.props.appStateActions.setIcoAppState(appStates.INSTALL_WALLET);
     } else {
-      this.props.appStateActions.setAppState(appStates.HANDLE_PAYMENT);
+      this.props.accountsActions.loadAllAccounts();
+      this.props.appStateActions.setIcoAppState(appStates.HANDLE_PAYMENT);
     }
   }
 
@@ -81,6 +85,8 @@ export class ICOFooter extends React.Component {
 
 ICOFooter.propTypes = {
   appStateActions: PropTypes.object.isRequired,
+  accountsActions: PropTypes.object.isRequired,
+  serviceFeeActions: PropTypes.object.isRequired,
   tokenName: PropTypes.string.isRequired,
   tokenSymbol: PropTypes.string.isRequired,
   decimals: PropTypes.string.isRequired,
@@ -112,7 +118,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    appStateActions: bindActionCreators(appStateActions, dispatch)
+    appStateActions: bindActionCreators(appStateActions, dispatch),
+    accountsActions: bindActionCreators(accountsActions, dispatch),
+    serviceFeeActions: bindActionCreators(serviceFeeActions, dispatch)
   };
 }
 

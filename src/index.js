@@ -6,7 +6,6 @@ import MintApp from './MintApp';
 import IcoApp from './IcoApp';
 import registerServiceWorker from './registerServiceWorker';
 import configureStore from './app/store/configureStore';
-import { loadAllAccounts } from './app/actions/accountsActions';
 import ReactGA from 'react-ga';
 import { getNetworkType } from './app/actions/networkActions';
 import * as deviceDetector from './tools/deviceDetector';
@@ -22,7 +21,6 @@ window.addEventListener('load', function () {
   mintApi.initWeb3().then(walletNeedsToBeUnlocked => {
     store.dispatch(setWalletNeedsToBeUnlocked(walletNeedsToBeUnlocked));
     store.dispatch(getNetworkType());
-    store.dispatch(loadAllAccounts());
     store.dispatch(setIsMobileDevice(deviceDetector.isMobileDevice()));
   });
 });
