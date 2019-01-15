@@ -167,7 +167,7 @@ export default class InputValidator {
     this.isDateValid(openingTime) && openingTime !== "" &&
     this.isDateValid(closingTime) && closingTime !== "" &&
     this.isOpeningTimeBeforeClosingTime(openingTime, closingTime) &&
-    this.isGoalHigherThanCap(goal, cap);
+    this.isCapHigherThanGoal(goal, cap);
   }
 }
 

@@ -49,7 +49,11 @@ export class InstallCoinbasePanel extends React.Component {
   }
 
   handleBack(e) {
-    this.props.appStateActions.setAppState(appStates.INIT);
+    if (this.props.isIco) {
+      this.props.appStateActions.setIcoAppState(appStates.INIT);
+    } else {
+      this.props.appStateActions.setAppState(appStates.INIT);
+    }
   }
 
   handleNext(e) {
