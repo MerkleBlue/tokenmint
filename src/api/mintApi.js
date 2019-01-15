@@ -21,7 +21,7 @@ export const serviceTypeEnum = {
   TCA_CROWDSALE: 2,
   CARPD_CROWDSALE: 3,
   CMRPD_CROWDSALE: 4
-}
+};
 
 export function setServiceFeeInUsd(serviceType) {
   switch (serviceType) {
@@ -319,7 +319,7 @@ export function deployTCACrowdsale(owner, tokenArgs, crowdsaleArgs, tokenService
         return;
       }
     }).catch((e) => {
-      console.log(e)
+      console.log(e);
       reject(new Error("Could not check token owner ETH funds."));
       return;
     });
