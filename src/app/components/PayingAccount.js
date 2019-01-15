@@ -127,13 +127,15 @@ export class PayingAccount extends React.Component {
         </Typography>
       );
     } else {
+      const descriptionText = this.props.isIco ? "This account pays for ICO contracts deployment service." :
+        "This account pays for token creation service.";
       description = (
         <Typography
           align="left"
           variant="body1"
           className={error ? "typography_payment_error" : "typography_payment"}
         >
-          This account pays for token creation service.
+          {descriptionText}
         </Typography>
       );
     }
@@ -169,6 +171,7 @@ export class PayingAccount extends React.Component {
 }
 
 PayingAccount.propTypes = {
+  isIco: PropTypes.bool.isRequired,
   payingAccount: PropTypes.string.isRequired,
   accounts: PropTypes.array.isRequired,
   loadingAccounts: PropTypes.bool.isRequired,

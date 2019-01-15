@@ -87,7 +87,7 @@ class IcoApp extends React.Component {
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          <HandlePaymentPanel />
+          <HandlePaymentPanel isIco />
         </CSSTransitionGroup>
       );
     } else {

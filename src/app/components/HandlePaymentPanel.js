@@ -61,7 +61,11 @@ export class HandlePaymentPanel extends React.Component {
   }
 
   handleBack(e) {
-    this.props.appStateActions.setAppState(appStates.INIT);
+    if (this.props.isIco) {
+      this.props.appStateActions.setIcoAppState(appStates.INIT);
+    } else {
+      this.props.appStateActions.setAppState(appStates.INIT);
+    }
   }
 
   isNextButtonEnabled() {
@@ -79,7 +83,11 @@ export class HandlePaymentPanel extends React.Component {
   }
 
   handleNextClick(e) {
-    this.props.appStateActions.setAppState(appStates.PENDING_CONFIRMATION);
+    if (this.props.isIco) {
+      this.props.appStateActions.setIcoAppState(appStates.PENDING_CONFIRMATION);
+    } else {
+      this.props.appStateActions.setAppState(appStates.PENDING_CONFIRMATION);
+    }
   }
 
   render() {
@@ -111,8 +119,8 @@ export class HandlePaymentPanel extends React.Component {
     } else {
       content = (
         <div>
-          <PayingAccount />
-          <TokenOwner />
+          <PayingAccount isIco={this.props.isIco} />
+          {!this.props.isIco && <TokenOwner />}
         </div>
       );
     }
@@ -162,6 +170,7 @@ export class HandlePaymentPanel extends React.Component {
 }
 
 HandlePaymentPanel.propTypes = {
+  isIco: PropTypes.bool.isRequired,
   accounts: PropTypes.array.isRequired,
   payingAccountHasInsufficientFunds: PropTypes.bool.isRequired,
   payingAccountBalance: PropTypes.number.isRequired,

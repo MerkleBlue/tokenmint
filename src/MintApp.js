@@ -85,7 +85,7 @@ class MintApp extends Component {
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          <HandlePaymentPanel />
+          <HandlePaymentPanel isIco={false} />
         </CSSTransitionGroup>
       );
     } else {
