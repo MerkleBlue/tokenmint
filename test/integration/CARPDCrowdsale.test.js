@@ -58,7 +58,6 @@ describe('CARPDCrowdsale integration tests', function () {
     mintApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
       done(new Error('CARPDCrowdsale deployed with invalid opening time.'));
     }).catch(() => {
-      expect(true).to.be.eq(true);
       done();
     });
   });
@@ -69,7 +68,6 @@ describe('CARPDCrowdsale integration tests', function () {
     mintApi.deployCARPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
       done(new Error('CARPDCrowdsale deployed with invalid closing time.'));
     }).catch(() => {
-      expect(true).to.be.eq(true);
       done();
     });
   });
@@ -296,8 +294,7 @@ describe('CARPDCrowdsale integration tests', function () {
           let crowdsaleInstance = new web3.eth.Contract(CARPDCrowdsaleJSON.abi, receipts.crowdsaleReceipt.contractAddress);
           crowdsaleInstance.methods.buyTokens('0x0000000000000000000000000000000000000000').send({ from: investor1, gas: 4712388, value: web3.utils.toWei('0.004', 'ether') }).then(() => {
             done(new Error('Buy tokens successfully executed when beneficiary address is invalid.'));
-          }).catch(e => {
-            expect(true).to.be.eq(true);
+          }).catch(() => {
             done();
           });
         });
@@ -324,8 +321,7 @@ describe('CARPDCrowdsale integration tests', function () {
           let crowdsaleInstance = new web3.eth.Contract(CARPDCrowdsaleJSON.abi, receipts.crowdsaleReceipt.contractAddress);
           crowdsaleInstance.methods.buyTokens(investor1).send({ from: investor1, gas: 4712388, value: web3.utils.toWei('0', 'ether') }).then(() => {
             done(new Error('Buy tokens successfully executed when beneficiary address is invalid.'));
-          }).catch(e => {
-            expect(true).to.be.eq(true);
+          }).catch(() => {
             done();
           });
         });
@@ -483,8 +479,7 @@ describe('CARPDCrowdsale integration tests', function () {
             // invest just a little bit more, should reject
             crowdsaleInstance.methods.buyTokens(investor2).send({ from: investor2, gas: 4712388, value: web3.utils.toWei('0.000000001', 'ether') }).then(() => {
               done(new Error('Cap reached, but crowdsale still active'));
-            }).catch(e => {
-              expect(true).to.be.eq(true);
+            }).catch(() => {
               done();
             });
           }).catch(e => {
@@ -691,8 +686,7 @@ describe('CARPDCrowdsale integration tests', function () {
             // try to claim refund while crowdsale not finalized
             crowdsaleInstance.methods.claimRefund(investor1).send({ from: investor1 }).then(receipt => {
               done(new Error('Refund successfully claimed when crowdsale not finalized.'));
-            }).catch(e => {
-              expect(true).to.be.eq(true);
+            }).catch(() => {
               done();
             });
           }).catch(e => {
@@ -729,8 +723,7 @@ describe('CARPDCrowdsale integration tests', function () {
                 // try to claim refund while crowdsale not finalized
                 crowdsaleInstance.methods.claimRefund(investor1).send({ from: investor1 }).then(() => {
                   done(new Error('Refund successfully claimed when crowdsale finalized and goal reached.'));
-                }).catch(e => {
-                  expect(true).to.be.eq(true);
+                }).catch(() => {
                   done();
                 });
               }).catch(e => {
@@ -820,8 +813,7 @@ describe('CARPDCrowdsale integration tests', function () {
                 // finalize sale after already finalized
                 crowdsaleInstance.methods.finalize().send({ from: investor1 }).then(() => {
                   done(new Error('Finalize successfully called on already finalized crowdsale.'));
-                }).catch(e => {
-                  expect(true).to.be.eq(true);
+                }).catch(() => {
                   done();
                 });
               }).catch(e => {
@@ -858,8 +850,7 @@ describe('CARPDCrowdsale integration tests', function () {
             // finalize when not closed (before end time)
             crowdsaleInstance.methods.finalize().send({ from: investor1 }).then(() => {
               done(new Error('Finalize successfully called on open crowdsale (not yet closed).'));
-            }).catch(e => {
-              expect(true).to.be.eq(true);
+            }).catch(() => {
               done();
             });
           }).catch(e => {
@@ -896,8 +887,7 @@ describe('CARPDCrowdsale integration tests', function () {
                 // buy tokens after finalized
                 crowdsaleInstance.methods.buyTokens(investor1).send({ from: investor1, gas: 4712388, value: web3.utils.toWei('0.004', 'ether') }).then(() => {
                   done(new Error('Buy tokens successfully called after finalize.'));
-                }).catch(e => {
-                  expect(true).to.be.eq(true);
+                }).catch(() => {
                   done();
                 });
               }).catch(e => {
@@ -934,8 +924,7 @@ describe('CARPDCrowdsale integration tests', function () {
             // withdraw tokens on open crowdsale (not yet closed)
             crowdsaleInstance.methods.withdrawTokens(investor1).send({ from: investor1 }).then(receipt => {
               done(new Error('Withdraw tokens successfully called on open crowdsale (not yet closed).'));
-            }).catch(e => {
-              expect(true).to.be.eq(true);
+            }).catch(() => {
               done();
             });
           }).catch(e => {
@@ -971,8 +960,7 @@ describe('CARPDCrowdsale integration tests', function () {
               // withdraw tokens when balance is 0 (investor who did not participate)
               crowdsaleInstance.methods.withdrawTokens(investor2).send({ from: investor2 }).then(receipt => {
                 done(new Error('Withdraw tokens successfully called for non-participating investor.'));
-              }).catch(e => {
-                expect(true).to.be.eq(true);
+              }).catch(() => {
                 done();
               });
             });
@@ -1155,8 +1143,7 @@ describe('CARPDCrowdsale integration tests', function () {
         let crowdsaleInstance = new web3.eth.Contract(CARPDCrowdsaleJSON.abi, receipts.crowdsaleReceipt.contractAddress);
         crowdsaleInstance.methods.buyTokens(investor1).send({ from: investor1, gas: 4712388, value: web3.utils.toWei('0.004', 'ether') }).then(() => {
           done(new Error('Buy tokens successfully called before opening time.'));
-        }).catch(e => {
-          expect(true).to.be.eq(true);
+        }).catch(() => {
           done();
         });
       });
@@ -1180,8 +1167,7 @@ describe('CARPDCrowdsale integration tests', function () {
           let crowdsaleInstance = new web3.eth.Contract(CARPDCrowdsaleJSON.abi, receipts.crowdsaleReceipt.contractAddress);
           crowdsaleInstance.methods.buyTokens(investor1).send({ from: investor1, gas: 4712388, value: web3.utils.toWei('0.004', 'ether') }).then(() => {
             done(new Error('Buy tokens successfully called after closing time.'));
-          }).catch(e => {
-            expect(true).to.be.eq(true);
+          }).catch(() => {
             done();
           });
         });
@@ -1214,8 +1200,7 @@ describe('CARPDCrowdsale integration tests', function () {
           //let crowdsaleInstance = new web3.eth.Contract(CARPDCrowdsaleJSON.abi, receipts.crowdsaleReceipt.contractAddress);
           //crowdsaleInstance.methods.buyTokens(investor2).send({ from: investor2, gas: 4712388, value: web3.utils.toWei('0.6', 'ether') }).then(() => {
           //  done(new Error('Cap reached, but crowdsale still active'));
-          //}).catch(e => {
-          //  expect(true).to.be.eq(true);
+          //}).catch(() => {
           //  done();
           //});
 
@@ -1255,8 +1240,7 @@ describe('CARPDCrowdsale integration tests', function () {
                 done(new Error(e));
               });
             });
-          }).catch(e => {
-            expect(true).to.be.eq(true);
+          }).catch(() => {
             done();
           });
         });
