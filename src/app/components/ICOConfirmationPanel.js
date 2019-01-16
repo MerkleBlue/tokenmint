@@ -18,6 +18,7 @@ import InputValidator from '../../tools/InputValidator';
 import ReactGA from 'react-ga';
 import appStates from '../reducers/appStates';
 import initialState from '../reducers/initialState';
+import moment from 'moment';
 
 export class ICOConfirmationPanel extends React.Component {
 
@@ -71,7 +72,8 @@ export class ICOConfirmationPanel extends React.Component {
       Number(this.props.icoGoal),
       ""
     ];
-    const tokenServiceFeeETH = Math.floor(Number(this.props.serviceFee)/17);
+    // TODO: this is a hack. Consider changing in the future
+    const tokenServiceFeeETH = Number(this.props.serviceFee)/17;
     const crowdsaleServiceFeeETH = Number(this.props.serviceFee) - tokenServiceFeeETH;
     this.props.launchICOActions.launchICO(owner, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH);
   }
@@ -272,7 +274,7 @@ export class ICOConfirmationPanel extends React.Component {
                   variant="body1"
                   className="typography_right"
                 >
-                  {this.props.icoOpeningTime}
+                  {moment(this.props.icoOpeningTime).format('MMMM Do YYYY, h:mm:ss a')}
                 </Typography>
               </Grid>
             </Grid>
@@ -292,7 +294,7 @@ export class ICOConfirmationPanel extends React.Component {
                   variant="body1"
                   className="typography_right"
                 >
-                  {this.props.icoClosingTime}
+                  {moment(this.props.icoClosingTime).format('MMMM Do YYYY, h:mm:ss a')}
                 </Typography>
               </Grid>
             </Grid>
