@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faCheck } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import * as appStateActions from '../actions/appStateActions';
-import * as createTokensActions from '../actions/createTokensActions';
+import * as launchICOActions from '../actions/launchICOActions';
 import InputValidator from '../../tools/InputValidator';
 import ReactGA from 'react-ga';
 import appStates from '../reducers/appStates';
@@ -35,12 +35,16 @@ export class ICOConfirmationPanel extends React.Component {
   }
 
   isConfirmationEnabled() {
-    return InputValidator.isInputValid(
+    return InputValidator.areICOAttributesValid(
       this.props.tokenName,
       this.props.tokenSymbol,
       this.props.decimals,
-      this.props.totalSupply,
-      this.props.tokenOwner
+      this.props.icoRate,
+      this.props.icoCap,
+      this.props.icoGoal,
+      this.props.icoWallet,
+      this.props.icoOpeningTime,
+      this.props.icoClosingTime
     ) && this.props.payingAccount !== initialState.payingAccount;
   }
 
@@ -49,16 +53,27 @@ export class ICOConfirmationPanel extends React.Component {
   }
 
   handleConfirm(e) {
-    this.props.createTokensActions.createTokens(
+    const owner = this.props.payingAccount;
+    const tokenArgs = [
       this.props.tokenName,
       this.props.tokenSymbol,
       this.props.decimals,
-      this.props.totalSupply,
-      this.props.tokenType,
-      this.props.tokenOwner,
-      this.props.serviceFee,
+      0,
       this.props.payingAccount
-    );
+    ];
+    const crowdsaleArgs = [
+      Math.round((new Date(this.props.icoOpeningTime).getTime()) / 1000),
+      Math.round((new Date(this.props.icoClosingTime).getTime()) / 1000),
+      Number(this.props.icoRate),
+      this.props.icoWallet,
+      "",
+      Number(this.props.icoCap),
+      Number(this.props.icoGoal),
+      ""
+    ];
+    const tokenServiceFeeETH = Math.floor(Number(this.props.serviceFee)/17);
+    const crowdsaleServiceFeeETH = Number(this.props.serviceFee) - tokenServiceFeeETH;
+    this.props.launchICOActions.launchICO(owner, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH);
   }
 
   render() {
@@ -101,26 +116,6 @@ export class ICOConfirmationPanel extends React.Component {
               root: "card_content"
             }}
           >
-            <Grid className="grid_container" container spacing={8}>
-              <Grid item xs={12} md={6}>
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className="typography_left"
-                >
-                  Token Type:
-                </Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className="typography_right"
-                >
-                  {this.props.tokenType}
-                </Typography>
-              </Grid>
-            </Grid>
             <Grid className="grid_container" container spacing={8}>
               <Grid item xs={12} md={6}>
                 <Typography
@@ -188,7 +183,7 @@ export class ICOConfirmationPanel extends React.Component {
                   variant="body1"
                   className="typography_left"
                 >
-                  Total Supply:
+                  Token rate:
               </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
@@ -197,7 +192,107 @@ export class ICOConfirmationPanel extends React.Component {
                   variant="body1"
                   className="typography_right"
                 >
-                  {this.props.totalSupply}
+                  {this.props.icoRate} ETH
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid className="grid_container" container spacing={8}>
+              <Grid item xs={12} md={6}>
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className="typography_left"
+                >
+                  ICO goal:
+              </Typography>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className="typography_right"
+                >
+                  {this.props.icoGoal} ETH
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid className="grid_container" container spacing={8}>
+              <Grid item xs={12} md={6}>
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className="typography_left"
+                >
+                  ICO cap:
+              </Typography>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className="typography_right"
+                >
+                  {this.props.icoCap} ETH
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid className="grid_container" container spacing={8}>
+              <Grid item xs={12} md={6}>
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className="typography_left"
+                >
+                  ICO wallet:
+              </Typography>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className="typography_right"
+                >
+                  {this.props.icoWallet}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid className="grid_container" container spacing={8}>
+              <Grid item xs={12} md={6}>
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className="typography_left"
+                >
+                  ICO opening time:
+              </Typography>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className="typography_right"
+                >
+                  {this.props.icoOpeningTime}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid className="grid_container" container spacing={8}>
+              <Grid item xs={12} md={6}>
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className="typography_left"
+                >
+                  ICO closing time:
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Typography
+                  align="left"
+                  variant="body1"
+                  className="typography_right"
+                >
+                  {this.props.icoClosingTime}
                 </Typography>
               </Grid>
             </Grid>
@@ -219,27 +314,6 @@ export class ICOConfirmationPanel extends React.Component {
                   gutterBottom
                 >
                   {this.props.payingAccount}
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid className="grid_container" container spacing={8}>
-              <Grid item xs={12} md={6}>
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className="typography_left"
-                >
-                  Token Owner:
-                </Typography>
-              </Grid>
-              <Grid item xs={12} md={6} className="grid_cell">
-                <Typography
-                  align="left"
-                  variant="body1"
-                  className="typography_right"
-                  gutterBottom
-                >
-                  {this.props.tokenOwner}
                 </Typography>
               </Grid>
             </Grid>
@@ -291,13 +365,16 @@ export class ICOConfirmationPanel extends React.Component {
 
 ICOConfirmationPanel.propTypes = {
   appStateActions: PropTypes.object.isRequired,
-  createTokensActions: PropTypes.object.isRequired,
+  launchICOActions: PropTypes.object.isRequired,
   tokenName: PropTypes.string.isRequired,
   tokenSymbol: PropTypes.string.isRequired,
   decimals: PropTypes.string.isRequired,
-  totalSupply: PropTypes.string.isRequired,
-  tokenType: PropTypes.string.isRequired,
-  tokenOwner: PropTypes.string.isRequired,
+  icoRate: PropTypes.string.isRequired,
+  icoGoal: PropTypes.string.isRequired,
+  icoCap: PropTypes.string.isRequired,
+  icoWallet: PropTypes.string.isRequired,
+  icoOpeningTime: PropTypes.string.isRequired,
+  icoClosingTime: PropTypes.string.isRequired,
   payingAccount: PropTypes.string.isRequired,
   isMobileDevice: PropTypes.bool.isRequired,
   serviceFee: PropTypes.number.isRequired
@@ -308,9 +385,12 @@ function mapStateToProps(state) {
     tokenName: state.tokenName,
     tokenSymbol: state.tokenSymbol,
     decimals: state.decimals,
-    totalSupply: state.totalSupply,
-    tokenType: state.tokenType,
-    tokenOwner: state.tokenOwner,
+    icoRate: state.icoRate,
+    icoGoal: state.icoGoal,
+    icoCap: state.icoCap,
+    icoWallet: state.icoWallet,
+    icoOpeningTime: state.icoOpeningTime,
+    icoClosingTime: state.icoClosingTime,
     payingAccount: state.payingAccount,
     isMobileDevice: state.isMobileDevice,
     serviceFee: state.serviceFee
@@ -320,7 +400,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     appStateActions: bindActionCreators(appStateActions, dispatch),
-    createTokensActions: bindActionCreators(createTokensActions, dispatch)
+    launchICOActions: bindActionCreators(launchICOActions, dispatch)
   };
 }
 

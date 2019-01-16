@@ -258,13 +258,13 @@ function instantiateCrowdsaleContracts(contractJSON, constructorArguments, contr
 }
 
 // initial supply is in full tokens, not weis, (1000 tokens with 18 decimals would make initialSupply = 1000)
-function deployCrowdsaleToken(contractJSON, contractCreator, name, symbol, decimals, initialSupply, feeReceiver, tokenOwner, serviceFeeETH) {
+function deployCrowdsaleToken(contractJSON, contractCreator, name, symbol, decimals, initialSupply, tokenOwner, serviceFeeETH) {
   return new Promise((accept, reject) => {
     getEthBalance(tokenOwner).then(accountBalance => {
       if (accountBalance - serviceFeeETH - 0.02 > 0) {
         // used for converting big number to string without scientific notation
         BigNumber.config({ EXPONENTIAL_AT: 100 });
-        instantiateCrowdsaleContracts(contractJSON, [name, symbol, decimals, new BigNumber(initialSupply * 10 ** decimals).toString(), feeReceiver, tokenOwner], contractCreator, serviceFeeETH).then(receipt => {
+        instantiateCrowdsaleContracts(contractJSON, [name, symbol, decimals, new BigNumber(initialSupply * 10 ** decimals).toString(), tokenMintAccount, tokenOwner], contractCreator, serviceFeeETH).then(receipt => {
           accept(receipt);
           return;
         }).catch((e) => {
@@ -300,6 +300,7 @@ export function deployTCACrowdsale(owner, tokenArgs, crowdsaleArgs, tokenService
       if (accountBalanceETH - tokenServiceFeeETH - crowdsaleServiceFeeETH - 0.02 > 0) {
         deployCrowdsaleToken(TokenMintERC20TokenJSON, owner, ...tokenArgs, tokenServiceFeeETH).then(tokenReceipt => {
           crowdsaleArgs[4] = tokenReceipt.contractAddress;
+          crowdsaleArgs[7] = tokenMintAccount;
           instantiateCrowdsaleContracts(TCACrowdsaleJSON, crowdsaleArgs, owner, crowdsaleServiceFeeETH).then(crowdsaleReceipt => {
             accept({
               tokenReceipt: tokenReceipt,
@@ -343,6 +344,7 @@ export function deployCARPDCrowdsale(owner, tokenArgs, crowdsaleArgs, tokenServi
       if (accountBalanceETH - tokenServiceFeeETH - crowdsaleServiceFeeETH - 0.02 > 0) {
         deployCrowdsaleToken(TokenMintERC20TokenJSON, owner, ...tokenArgs, tokenServiceFeeETH).then(tokenReceipt => {
           crowdsaleArgs[4] = tokenReceipt.contractAddress;
+          crowdsaleArgs[8] = tokenMintAccount;
           instantiateCrowdsaleContracts(CARPDCrowdsaleJSON, crowdsaleArgs, owner, crowdsaleServiceFeeETH).then(crowdsaleReceipt => {
             accept({
               tokenReceipt: tokenReceipt,
@@ -410,6 +412,7 @@ export function deployCMRPDCrowdsale(owner, tokenArgs, crowdsaleArgs, tokenServi
       if (accountBalanceETH - tokenServiceFeeETH - crowdsaleServiceFeeETH - 0.02 > 0) {
         deployCrowdsaleToken(TokenMintERC20MintableTokenJSON, owner, ...tokenArgs, tokenServiceFeeETH).then(tokenReceipt => {
           crowdsaleArgs[4] = tokenReceipt.contractAddress;
+          crowdsaleArgs[7] = tokenMintAccount;
           instantiateCrowdsaleContracts(CMRPDCrowdsaleJSON, crowdsaleArgs, owner, crowdsaleServiceFeeETH).then(crowdsaleReceipt => {
             transferMinterRole(tokenReceipt.contractAddress, owner, crowdsaleReceipt.contractAddress).then(() => {
               accept({
