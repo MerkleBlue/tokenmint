@@ -57,7 +57,7 @@ export class TokenRate extends React.Component {
             variant="body1"
             className={InputValidator.isIcoRateValid(this.props.icoRate) ? "typography_ico_info" : "typography_ico_info_error"}
           >
-            ICO rate.
+            Token rate. The price in ETH at which the tokens will be sold.
           </Typography>
         </Grid>
       </Grid>

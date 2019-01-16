@@ -192,7 +192,10 @@ export class ICOAttributesPanel extends React.Component {
                 variant="body1"
                 className={InputValidator.isEthereumAddress(this.props.icoWallet) ? "typography_ico_info" : "typography_ico_info_error"}
               >
-                ICO wallet. The address where investor funds will be stored.
+                {InputValidator.isEthereumAddress(this.props.icoWallet) ?
+                  "ICO wallet.The address where investor funds will be stored!" :
+                  "Not an Ethereum address."
+                }
               </Typography>
             </Grid>
           </Grid>

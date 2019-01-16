@@ -36,7 +36,7 @@ export class ICOInfoPanel extends React.Component {
               align="left"
               variant="subtitle1"
             >
-              TokenMint ICO launcher deploys <strong>Capped-Minted-Refundable</strong> crowdsale!
+              TokenMint ICO launcher deploys <strong>Flat rate-Capped-Minted-Refundable</strong> crowdsale!
             </Typography>
             <Typography
               align="left"
