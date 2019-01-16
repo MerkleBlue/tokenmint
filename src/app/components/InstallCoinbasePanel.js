@@ -169,6 +169,12 @@ InstallCoinbasePanel.propTypes = {
   walletActions: PropTypes.object.isRequired
 };
 
+function mapStateToProps(state, ownProps) {
+  return {
+    isIco: ownProps.isIco
+  };
+}
+
 function mapDispatchToProps(dispatch) {
   return {
     appStateActions: bindActionCreators(appStateActions, dispatch),
@@ -178,5 +184,5 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(null, mapDispatchToProps)(InstallCoinbasePanel);
+export default connect(mapStateToProps, mapDispatchToProps)(InstallCoinbasePanel);
 

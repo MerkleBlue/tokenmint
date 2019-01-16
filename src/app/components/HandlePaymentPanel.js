@@ -224,7 +224,7 @@ HandlePaymentPanel.propTypes = {
   appStateActions: PropTypes.object.isRequired
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
     accounts: state.accounts,
     payingAccount: state.payingAccount,
@@ -247,7 +247,8 @@ function mapStateToProps(state) {
     icoGoal: state.icoGoal,
     icoWallet: state.icoWallet,
     icoOpeningTime: state.icoOpeningTime,
-    icoClosingTime: state.icoClosingTime
+    icoClosingTime: state.icoClosingTime,
+    isIco: ownProps.isIco
   };
 }
 
