@@ -10,7 +10,7 @@ import HandlePaymentPanel from './app/components/HandlePaymentPanel'; //eslint-d
 import ErrorPanel from './app/components/ErrorPanel'; //eslint-disable-line import/no-named-as-default
 import LoadingPanel from './app/components/LoadingPanel'; //eslint-disable-line import/no-named-as-default
 import SuccessMessagePanel from './app/components/SuccessMessagePanel'; //eslint-disable-line import/no-named-as-default
-import ConfirmationPanel from './app/components/ConfirmationPanel'; //eslint-disable-line import/no-named-as-default
+import ICOConfirmationPanel from './app/components/ICOConfirmationPanel'; //eslint-disable-line import/no-named-as-default
 import ICOInfoPanel from './app/components/ICOInfoPanel'; //eslint-disable-line import/no-named-as-default
 import './App.css';
 import FullStory from 'react-fullstory';
@@ -51,7 +51,7 @@ class IcoApp extends React.Component {
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          <ConfirmationPanel />
+          <ICOConfirmationPanel />
         </CSSTransitionGroup>
       );
     } else if (this.props.icoAppState === appStates.MINING_FAILED) {
@@ -69,7 +69,7 @@ class IcoApp extends React.Component {
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          <LoadingPanel />
+          <LoadingPanel isIco />
         </CSSTransitionGroup>
       );
     } else if (this.props.icoAppState === appStates.MINING_CONFIRMED) {
@@ -87,7 +87,7 @@ class IcoApp extends React.Component {
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          <HandlePaymentPanel />
+          <HandlePaymentPanel isIco />
         </CSSTransitionGroup>
       );
     } else {

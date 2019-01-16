@@ -2,7 +2,6 @@ import React from 'react';
 import './css/LoadingPanel.css';
 import { Typography, Card, CardHeader, CardContent, LinearProgress } from '@material-ui/core';
 import ReactGA from 'react-ga';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
@@ -20,6 +19,9 @@ export class LoadingPanel extends React.Component {
         useNextVariants: true,
       }
     });
+
+    const infoMessage = this.props.isIco ? "Please set the mining fee and confirm transactions necessary for ICO contracts deployment." :
+      "Please set the mining fee and confirm token creation in your wallet.";
 
     return (
       <div>
@@ -47,7 +49,7 @@ export class LoadingPanel extends React.Component {
                 align="center"
                 variant="subtitle1"
               >
-                Please set the mining fee and confirm token creation in your wallet.
+                {infoMessage}
               </Typography>
             </MuiThemeProvider>
           </CardContent>
@@ -66,13 +68,8 @@ export class LoadingPanel extends React.Component {
 }
 
 LoadingPanel.propTypes = {
-  tokenOwner: PropTypes.string.isRequired
+  isIco: PropTypes.bool.isRequired
 };
 
-function mapStateToProps(state) {
-  return {
-    tokenOwner: state.tokenOwner
-  };
-}
 
-export default connect(mapStateToProps)(LoadingPanel);
+export default LoadingPanel;

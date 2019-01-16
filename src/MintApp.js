@@ -67,7 +67,7 @@ class MintApp extends Component {
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          <LoadingPanel />
+          <LoadingPanel isIco={false} />
         </CSSTransitionGroup>
       );
     } else if (this.props.appState === appStates.MINING_CONFIRMED) {
@@ -85,7 +85,7 @@ class MintApp extends Component {
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          <HandlePaymentPanel />
+          <HandlePaymentPanel isIco={false} />
         </CSSTransitionGroup>
       );
     } else {
