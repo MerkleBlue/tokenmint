@@ -2,10 +2,10 @@ const { assertRevert } = require('../helpers/assertRevert');
 const TokenContract = artifacts.require('TokenMintERC223Token');
 
 contract('TokenMintERC223Token', function ([_, owner, recipient, anotherAccount]) {
-  const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+  const TOKENMINT_ADDRESS = "0x6603cb70464ca51481d4edBb3B927F66F53F4f42";
 
   beforeEach(async function () {
-    this.token = await TokenContract.new("My Test Token", "SYM", 18, 100, ZERO_ADDRESS, { from: owner });
+    this.token = await TokenContract.new("My Test Token", "SYM", 18, 100, TOKENMINT_ADDRESS, owner, { from: owner });
   });
 
   describe('token name', function () {
