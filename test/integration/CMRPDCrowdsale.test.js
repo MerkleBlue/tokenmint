@@ -51,7 +51,7 @@ describe('CMRPDCrowdsale integration tests', function () {
     });
   });
 
-  it('CMRPDCrowdsale contructor - invalid opening time', (done) => {
+  it('CMRPDCrowdsale constructor - invalid opening time', (done) => {
     let openingTime = Math.round((new Date().getTime() - 10000) / 1000); // 10 seconds in the past
     let crowdsaleArgs = [openingTime, endTime, 1000, icoMaker, null, web3.utils.toWei('0.01', 'ether'), web3.utils.toWei('0.003', 'ether'), null];
     mintApi.deployCMRPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
@@ -61,7 +61,7 @@ describe('CMRPDCrowdsale integration tests', function () {
     });
   });
 
-  it('CMRPDCrowdsale contructor - invalid closing time', (done) => {
+  it('CMRPDCrowdsale constructor - invalid closing time', (done) => {
     let closingTime = startTime;
     let crowdsaleArgs = [startTime, closingTime, 1000, icoMaker, null, web3.utils.toWei('0.01', 'ether'), web3.utils.toWei('0.003', 'ether'), null];
     mintApi.deployCMRPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
@@ -71,7 +71,7 @@ describe('CMRPDCrowdsale integration tests', function () {
     });
   });
 
-  it('CMRPDCrowdsale contructor - invalid rate', (done) => {
+  it('CMRPDCrowdsale constructor - invalid rate', (done) => {
     let crowdsaleArgs = [startTime, endTime, 0, icoMaker, null, web3.utils.toWei('0.01', 'ether'), web3.utils.toWei('0.003', 'ether'), null];
     mintApi.deployCMRPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
       done(new Error('CMRPDCrowdsale deployed with invalid rate (0).'));
@@ -80,7 +80,7 @@ describe('CMRPDCrowdsale integration tests', function () {
     });
   });
 
-  it('CMRPDCrowdsale contructor - invalid fundRaisingAddress', (done) => {
+  it('CMRPDCrowdsale constructor - invalid fundRaisingAddress', (done) => {
     let crowdsaleArgs = [startTime, endTime, 0, 0x0, null, web3.utils.toWei('0.01', 'ether'), web3.utils.toWei('0.003', 'ether'), null];
     mintApi.deployCMRPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
       done(new Error('CMRPDCrowdsale deployed with invalid fundRaisingAddress (0x0).'));
@@ -89,7 +89,7 @@ describe('CMRPDCrowdsale integration tests', function () {
     });
   });
 
-  it('CMRPDCrowdsale contructor - invalid cap', (done) => {
+  it('CMRPDCrowdsale constructor - invalid cap', (done) => {
     let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('0', 'ether'), web3.utils.toWei('0.003', 'ether'), null];
     mintApi.deployCMRPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
       done(new Error('CMRPDCrowdsale deployed with invalid cap (0).'));
@@ -98,7 +98,7 @@ describe('CMRPDCrowdsale integration tests', function () {
     });
   });
 
-  it('CMRPDCrowdsale contructor - invalid goal', (done) => {
+  it('CMRPDCrowdsale constructor - invalid goal', (done) => {
     let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('0.01', 'ether'), web3.utils.toWei('0', 'ether'), null];
     mintApi.deployCMRPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
       done(new Error('CMRPDCrowdsale deployed with invalid goal (0).'));
@@ -108,7 +108,7 @@ describe('CMRPDCrowdsale integration tests', function () {
   });
 
 
-  it('CMRPDCrowdsale contructor - goal bigger than cap', (done) => {
+  it('CMRPDCrowdsale constructor - goal bigger than cap', (done) => {
     let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('0.01', 'ether'), web3.utils.toWei('0.011', 'ether'), null];
     mintApi.deployCMRPDCrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(() => {
       done(new Error('CMRPDCrowdsale deployed with goal bigger than cap.'));
