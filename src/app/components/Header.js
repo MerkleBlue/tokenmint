@@ -52,9 +52,10 @@ Header.propTypes = {
   isIco: PropTypes.bool.isRequired,
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
-    isMobileDevice: state.isMobileDevice
+    isMobileDevice: state.isMobileDevice,
+    isIco: ownProps.isIco
   };
 }
 

@@ -9,11 +9,10 @@ import TCACrowdsaleJSON from '../../src/contracts/TCACrowdsale.json';
 
 
 let web3, accounts;
-let tokenMintAccount = "0x6603cb70464ca51481d4edBb3B927F66F53F4f42";
 let icoMaker, investor1;
 let startTime = Math.round((new Date().getTime() + 2000) / 1000); // 2 seconds in future
 let endTime = Math.round((new Date().getTime() + 6000) / 1000); // 6 seconds in future
-let tokenArgs = ["Token name", "SYM", 18, 1000, tokenMintAccount, icoMaker];
+let tokenArgs = ["Token name", "SYM", 18, 1000, icoMaker];
 let tokenServiceFeeETH = 0;
 let crowdsaleServiceFeeETH = 0;
 
@@ -28,7 +27,7 @@ describe('TCACrowdsale integration tests', function () {
       accounts = allAccounts;
       icoMaker = accounts[0];
       investor1 = accounts[1];
-      tokenArgs[5] = icoMaker
+      tokenArgs[4] = icoMaker;
       beforeDone();
     });
   });
@@ -41,7 +40,7 @@ describe('TCACrowdsale integration tests', function () {
   });
 
   it('Deploy TCACrowdsale contract', (done) => {
-    let crowdsaleArgs = [startTime, endTime, 500, icoMaker, null, web3.utils.toWei('1', 'ether'), icoMaker, tokenMintAccount];
+    let crowdsaleArgs = [startTime, endTime, 500, icoMaker, null, web3.utils.toWei('1', 'ether'), icoMaker, null];
     mintApi.deployTCACrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(receipts => {
       expect(receipts.tokenReceipt.status).to.be.eq(true);
       expect(receipts.crowdsaleReceipt.status).to.be.eq(true);
@@ -52,7 +51,7 @@ describe('TCACrowdsale integration tests', function () {
   });
 
   it('TCACrowdsale invest - using buyTokens', (done) => {
-    let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('10', 'ether'), icoMaker, tokenMintAccount];
+    let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('10', 'ether'), icoMaker, null];
     mintApi.deployTCACrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(receipts => {
       expect(receipts.tokenReceipt.status).to.be.eq(true);
       expect(receipts.crowdsaleReceipt.status).to.be.eq(true);
@@ -90,7 +89,7 @@ describe('TCACrowdsale integration tests', function () {
   });
 
   it('TCACrowdsale invest - using sendTransaction', (done) => {
-    let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('10', 'ether'), icoMaker, tokenMintAccount];
+    let crowdsaleArgs = [startTime, endTime, 1000, icoMaker, null, web3.utils.toWei('10', 'ether'), icoMaker, null];
     mintApi.deployTCACrowdsale(icoMaker, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(receipts => {
       expect(receipts.tokenReceipt.status).to.be.eq(true);
       expect(receipts.crowdsaleReceipt.status).to.be.eq(true);

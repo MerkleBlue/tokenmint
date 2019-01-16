@@ -58,7 +58,7 @@ class MintApp extends Component {
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          <ErrorPanel />
+          <ErrorPanel isIco={false} />
         </CSSTransitionGroup>
       );
     } else if (this.props.appState === appStates.MINING_IN_PROGRESS) {

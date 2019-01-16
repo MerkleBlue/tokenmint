@@ -9,7 +9,7 @@ import InstallCoinbasePanel from './app/components/InstallCoinbasePanel'; //esli
 import HandlePaymentPanel from './app/components/HandlePaymentPanel'; //eslint-disable-line import/no-named-as-default
 import ErrorPanel from './app/components/ErrorPanel'; //eslint-disable-line import/no-named-as-default
 import LoadingPanel from './app/components/LoadingPanel'; //eslint-disable-line import/no-named-as-default
-import SuccessMessagePanel from './app/components/SuccessMessagePanel'; //eslint-disable-line import/no-named-as-default
+import ICOSuccessMessagePanel from './app/components/ICOSuccessMessagePanel'; //eslint-disable-line import/no-named-as-default
 import ICOConfirmationPanel from './app/components/ICOConfirmationPanel'; //eslint-disable-line import/no-named-as-default
 import ICOInfoPanel from './app/components/ICOInfoPanel'; //eslint-disable-line import/no-named-as-default
 import './App.css';
@@ -60,7 +60,7 @@ class IcoApp extends React.Component {
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          <ErrorPanel />
+          <ErrorPanel isIco />
         </CSSTransitionGroup>
       );
     } else if (this.props.icoAppState === appStates.MINING_IN_PROGRESS) {
@@ -78,7 +78,7 @@ class IcoApp extends React.Component {
           transitionName="example"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-          <SuccessMessagePanel />
+          <ICOSuccessMessagePanel />
         </CSSTransitionGroup>
       );
     } else if (this.props.icoAppState === appStates.HANDLE_PAYMENT) {

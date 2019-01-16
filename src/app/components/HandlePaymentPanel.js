@@ -27,6 +27,8 @@ export class HandlePaymentPanel extends React.Component {
     super(props);
     this.handleNextClick = this.handleNextClick.bind(this);
     this.isNextButtonEnabled = this.isNextButtonEnabled.bind(this);
+    this.isNextButtonEnabledMintTokens = this.isNextButtonEnabledMintTokens.bind(this);
+    this.isNextButtonEnabledICO = this.isNextButtonEnabledICO.bind(this);
     this.handleBack = this.handleBack.bind(this);
   }
 
@@ -68,7 +70,7 @@ export class HandlePaymentPanel extends React.Component {
     }
   }
 
-  isNextButtonEnabled() {
+  isNextButtonEnabledMintTokens() {
     return InputValidator.isInputValid(
       this.props.tokenName,
       this.props.tokenSymbol,
@@ -80,6 +82,32 @@ export class HandlePaymentPanel extends React.Component {
       && !this.props.loadingAccounts
       && !this.props.checkingPayingAccountFunds
       && (!this.props.walletNeedsToBeUnlocked || this.props.accounts.length > 0);
+  }
+
+  isNextButtonEnabledICO() {
+    return InputValidator.areICOAttributesValid(
+      this.props.tokenName,
+      this.props.tokenSymbol,
+      this.props.decimals,
+      this.props.icoRate,
+      this.props.icoCap,
+      this.props.icoGoal,
+      this.props.icoWallet,
+      this.props.icoOpeningTime,
+      this.props.icoClosingTime
+    ) && this.props.payingAccount !== initialState.payingAccount
+      && !this.props.payingAccountHasInsufficientFunds
+      && !this.props.loadingAccounts
+      && !this.props.checkingPayingAccountFunds
+      && (!this.props.walletNeedsToBeUnlocked || this.props.accounts.length > 0);
+  }
+
+  isNextButtonEnabled() {
+    if (this.props.isIco) {
+      return this.isNextButtonEnabledICO();
+    } else {
+      return this.isNextButtonEnabledMintTokens();
+    }
   }
 
   handleNextClick(e) {
@@ -187,10 +215,16 @@ HandlePaymentPanel.propTypes = {
   totalSupply: PropTypes.string.isRequired,
   tokenType: PropTypes.string.isRequired,
   tokenOwner: PropTypes.string.isRequired,
+  icoRate: PropTypes.string.isRequired,
+  icoCap: PropTypes.string.isRequired,
+  icoGoal: PropTypes.string.isRequired,
+  icoWallet: PropTypes.string.isRequired,
+  icoOpeningTime: PropTypes.string.isRequired,
+  icoClosingTime: PropTypes.string.isRequired,
   appStateActions: PropTypes.object.isRequired
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
     accounts: state.accounts,
     payingAccount: state.payingAccount,
@@ -208,6 +242,13 @@ function mapStateToProps(state) {
     checkingPayingAccountFunds: state.checkingPayingAccountFunds,
     payingAccountHasInsufficientFunds: state.payingAccountHasInsufficientFunds,
     payingAccountBalance: state.payingAccountBalance,
+    icoRate: state.icoRate,
+    icoCap: state.icoCap,
+    icoGoal: state.icoGoal,
+    icoWallet: state.icoWallet,
+    icoOpeningTime: state.icoOpeningTime,
+    icoClosingTime: state.icoClosingTime,
+    isIco: ownProps.isIco
   };
 }
 
