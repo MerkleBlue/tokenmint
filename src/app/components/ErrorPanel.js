@@ -18,6 +18,12 @@ import * as infoMessageActions from '../actions/infoMessageActions';
 import * as accountsActions from '../actions/accountsActions';
 import * as serviceFeeActions from '../actions/serviceFeeActions';
 import * as networkActions from '../actions/networkActions';
+import * as icoRateActions from '../actions/icoRateActions';
+import * as icoGoalActions from '../actions/icoGoalActions';
+import * as icoCapActions from '../actions/icoCapActions';
+import * as icoWalletActions from '../actions/icoWalletActions';
+import * as icoOpenCloseTimeActions from '../actions/icoOpenCloseTimeActions';
+import * as payingAccountActions from '../actions/payingAccountActions';
 import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -36,21 +42,30 @@ export class ErrorPanel extends React.Component {
   }
 
   handleBackClick(e) {
+    this.props.tokenNameActions.setTokenName(initialState.tokenName);
+    this.props.tokenSymbolActions.setTokenSymbol(initialState.tokenSymbol);
+    this.props.decimalsActions.setDecimals(initialState.decimals);
+    this.props.payingAccountFundsActions.setCheckingPayingAccountFunds(initialState.checkingPayingAccountFunds);
+    this.props.payingAccountFundsActions.setPayingAccountHasInsufficientFunds(initialState.payingAccountHasInsufficientFunds);
+    this.props.payingAccountFundsActions.setPayingAccountBalance(initialState.payingAccountBalance);
+    this.props.infoMessageActions.setInfoMessage(initialState.infoMessage);
+    this.props.serviceFeeActions.setServiceFee(initialState.serviceFee);
+    this.props.payingAccountActions.setPayingAccount(initialState.payingAccount);
     if (this.props.isIco) {
+      this.props.icoRateActions.setIcoRate(initialState.icoRate);
+      this.props.icoGoalActions.setIcoGoal(initialState.icoGoal);
+      this.props.icoCapActions.setIcoCap(initialState.icoCap);
+      this.props.icoWalletActions.setIcoWallet(initialState.icoWallet);
+      this.props.icoOpenCloseTimeActions.setOpeningTime(initialState.icoOpeningTime);
+      this.props.icoOpenCloseTimeActions.setClosingTime(initialState.icoClosingTime);
+      this.props.accountsActions.loadAllAccounts();
+      this.props.networkActions.getNetworkType();
       this.props.appStateActions.setIcoAppState(initialState.appState);
     } else {
-      this.props.decimalsActions.setDecimals(initialState.decimals);
-      this.props.tokenNameActions.setTokenName(initialState.tokenName);
-      this.props.tokenSymbolActions.setTokenSymbol(initialState.tokenSymbol);
       this.props.totalSupplyActions.setTotalSupply(initialState.totalSupply);
       this.props.tokenTypeActions.setTokenType(initialState.tokenType);
       this.props.tokenOwnerActions.setTokenOwner(initialState.tokenOwner);
-      this.props.payingAccountFundsActions.setCheckingPayingAccountFunds(initialState.checkingPayingAccountFunds);
-      this.props.payingAccountFundsActions.setPayingAccountHasInsufficientFunds(initialState.payingAccountHasInsufficientFunds);
-      this.props.payingAccountFundsActions.setPayingAccountBalance(initialState.payingAccountBalance);
-      this.props.infoMessageActions.setInfoMessage(initialState.infoMessage);
       this.props.accountsActions.loadAllAccounts();
-      this.props.serviceFeeActions.setServiceFee(initialState.serviceFee);
       this.props.networkActions.getNetworkType();
       this.props.appStateActions.setAppState(initialState.appState);
     }
@@ -123,13 +138,20 @@ ErrorPanel.propTypes = {
   infoMessageActions: PropTypes.object.isRequired,
   accountsActions: PropTypes.object.isRequired,
   serviceFeeActions: PropTypes.object.isRequired,
-  networkActions: PropTypes.object.isRequired
+  networkActions: PropTypes.object.isRequired,
+  icoRateActions: PropTypes.object.isRequired,
+  icoGoalActions: PropTypes.object.isRequired,
+  icoCapActions: PropTypes.object.isRequired,
+  icoWalletActions: PropTypes.object.isRequired,
+  icoOpenCloseTimeActions: PropTypes.object.isRequired,
+  payingAccountActions: PropTypes.object.isRequired
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
     infoMessage: state.infoMessage,
-    isMobileDevice: state.isMobileDevice
+    isMobileDevice: state.isMobileDevice,
+    isIco: ownProps.isIco
   };
 }
 
@@ -146,7 +168,13 @@ function mapDispatchToProps(dispatch) {
     infoMessageActions: bindActionCreators(infoMessageActions, dispatch),
     accountsActions: bindActionCreators(accountsActions, dispatch),
     serviceFeeActions: bindActionCreators(serviceFeeActions, dispatch),
-    networkActions: bindActionCreators(networkActions, dispatch)
+    networkActions: bindActionCreators(networkActions, dispatch),
+    icoRateActions: bindActionCreators(icoRateActions, dispatch),
+    icoGoalActions: bindActionCreators(icoGoalActions, dispatch),
+    icoCapActions: bindActionCreators(icoCapActions, dispatch),
+    icoWalletActions: bindActionCreators(icoWalletActions, dispatch),
+    icoOpenCloseTimeActions: bindActionCreators(icoOpenCloseTimeActions, dispatch),
+    payingAccountActions: bindActionCreators(payingAccountActions, dispatch)
   };
 }
 
