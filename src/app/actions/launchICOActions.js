@@ -7,9 +7,9 @@ export function launchICO(owner, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, c
   return (dispatch) => {
     dispatch(setIcoAppState(appStates.MINING_IN_PROGRESS));
     return deployCMRPDCrowdsale(owner, tokenArgs, crowdsaleArgs, tokenServiceFeeETH, crowdsaleServiceFeeETH).then(result => {
-      //dispatch(setInfoMessage(txHash));
-      console.log(result.tokenReceipt);
-      console.log(result.crowdsaleReceipt);
+      dispatch(setInfoMessage(result.crowdsaleReceipt.transactionHash));
+      // console.log(result.tokenReceipt);
+      // console.log(result.crowdsaleReceipt);
       dispatch(setIcoAppState(appStates.MINING_CONFIRMED));
     }).catch(e => {
       dispatch(setInfoMessage(e.message));

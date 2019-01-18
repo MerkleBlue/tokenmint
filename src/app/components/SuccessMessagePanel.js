@@ -175,7 +175,7 @@ export class SuccessMessagePanel extends React.Component {
                 variant="body1"
                 className="typography_success_info_message"
               >
-                If you need help verifying the token, please contact us at <i>merkleblue@gmail.com</i>
+                If you need help verifying the token, please contact us at <a href="mailto:merkleblue@gmail.com">merkleblue@gmail.com</a>
               </Typography>
               <Typography
                 align="center"

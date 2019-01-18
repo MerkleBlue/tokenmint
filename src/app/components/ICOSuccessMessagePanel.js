@@ -125,8 +125,126 @@ export class ICOSuccessMessagePanel extends React.Component {
                 variant="h6"
                 className="typography_success_info_message"
               >
-                Bravo majstore.
+                Your transaction has been successfully submitted to Ethereum network.
+          </Typography>
+              <Typography
+                align="center"
+                variant="body1"
+                className="typography_success_info_message"
+              >
+                Your ICO contract creation transaction hash is:
+          </Typography>
+              <Typography
+                align="center"
+                variant="body1"
+                className="typography_success_info_message"
+                classes={{
+                  root: "typography_success_info_message_root"
+                }}
+              >
+                <a href={transactionLink} rel="noopener noreferrer" target="_blank">
+                  {this.props.infoMessage}
+                </a>
+                <Tooltip title="Copy to clipboard">
+                  <FontAwesomeIcon className="fa_clipboard" icon={faClipboard} onClick={this.handleCopyToClipboard} />
+                </Tooltip>
               </Typography>
+              <Typography
+                align="center"
+                variant="body1"
+                className="typography_success_info_message"
+              >
+                Once the mining is finished, you can check your new assets on <a href={etherscanLink} rel="noopener noreferrer" target="_blank">etherscan</a>
+              </Typography>
+              <Typography
+                align="center"
+                variant="body1"
+                className="typography_success_info_message"
+              >
+                If you need help verifying the token, please contact us at <a href="mailto:merkleblue@gmail.com">merkleblue@gmail.com</a>
+              </Typography>
+              <Typography
+                align="center"
+                variant="body1"
+                className="typography_success_info_message"
+              >
+                Share with the world:
+          </Typography>
+              <div className="share_div" >
+                <TwitterShareButton
+                  className="button_share"
+                  url={shareUrl}
+                  title={twitterTitle}
+                  via="MerkleBlue"
+                >
+                  <TwitterIcon
+                    size={32}
+                    round
+                  />
+                </TwitterShareButton>
+              </div>
+              <div className="share_div" >
+                <TelegramShareButton
+                  className="button_share"
+                  url={shareUrl}
+                  title={telegramTitle}
+                >
+                  <TelegramIcon
+                    size={32}
+                    round
+                  />
+                </TelegramShareButton>
+              </div>
+              <div className="share_div" >
+                <RedditShareButton
+                  className="button_share"
+                  url={shareUrl}
+                  title={redditTitle}
+                >
+                  <RedditIcon
+                    size={32}
+                    round
+                  />
+                </RedditShareButton>
+              </div>
+              <div className="share_div" >
+                <WhatsappShareButton
+                  className="button_share"
+                  url={shareUrl}
+                  title={whatsappTitle}
+                >
+                  <WhatsappIcon
+                    size={32}
+                    round
+                  />
+                </WhatsappShareButton>
+              </div>
+              <div className="share_div" >
+                <LinkedinShareButton
+                  className="button_share"
+                  url={shareUrl}
+                  title={linkedinTitle}
+                  description={linkedinDescription}
+                >
+                  <LinkedinIcon
+                    size={32}
+                    round
+                  />
+                </LinkedinShareButton>
+              </div>
+              <div className="share_div" >
+                <EmailShareButton
+                  className="button_share"
+                  url={shareUrl}
+                  subject={emailSubject}
+                  body={emailBody}
+                >
+                  <EmailIcon
+                    size={32}
+                    round
+                  />
+                </EmailShareButton>
+              </div>
             </MuiThemeProvider>
           </CardContent>
         </Card>
