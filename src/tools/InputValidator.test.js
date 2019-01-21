@@ -128,13 +128,13 @@ describe('test InputValidator', () => {
     expect(InputValidator.isDecimalsValid('-1')).to.be.false;
   });
   it ('is invalid decimals - value too high', () => {
-    expect(InputValidator.isDecimalsValid('51')).to.be.false;
+    expect(InputValidator.isDecimalsValid('19')).to.be.false;
   });
   it ('is valid decimals - minimum value', () => {
     expect(InputValidator.isDecimalsValid('0')).to.be.true;
   });
   it ('is valid decimals - maximum value', () => {
-    expect(InputValidator.isDecimalsValid('50')).to.be.true;
+    expect(InputValidator.isDecimalsValid('18')).to.be.true;
   });
   it ('is valid decimals - empty string', () => {
     expect(InputValidator.isDecimalsValid('')).to.be.true;

@@ -61,7 +61,7 @@ export class TokenDecimals extends React.Component {
             variant="body1"
             className={InputValidator.isDecimalsValid(this.props.decimals) ? "typography_token_info" : "typography_token_info_error"}
           >
-            Defines the number of decimals for the token. 0-50 numerals are accepted. 18 is common practice.
+            Defines the number of decimals for the token. 0-18 numerals are accepted. 18 is common practice.
           </Typography>
         </Grid>
       </Grid>

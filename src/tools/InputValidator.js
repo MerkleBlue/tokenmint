@@ -28,7 +28,7 @@ export default class InputValidator {
       return true;
     }
     let n = Math.floor(Number(decimals));
-    return n !== Infinity && String(n) === decimals && n >= 0 && n <= 50;
+    return n !== Infinity && String(n) === decimals && n >= 0 && n <= 18;
   }
 
   static isTotalSupplyValid(totalSupply) {
@@ -49,28 +49,30 @@ export default class InputValidator {
     return web3.utils.isAddress(address);
   }
 
+  static isPositiveFloatValue(value) {
+    return !/^\s*$/.test(value) && !isNaN(value) && parseFloat(value) > 0;
+  }
+
   static isIcoCapValid(icoCap) {
     if (icoCap === "") {
       return true;
     }
-    let n = Math.floor(Number(icoCap));
-    return n !== Infinity && String(n) === icoCap && n > 0 && n <= 1000000000000000;
+    return this.isPositiveFloatValue(icoCap);
   }
 
   static isIcoRateValid(icoRate) {
     if (icoRate === "") {
       return true;
     }
-    let n = Math.floor(Number(icoRate));
-    return n !== Infinity && String(n) === icoRate && n > 0 && n <= 1000000000000000;
+    return this.isPositiveFloatValue(icoRate);
+
   }
 
   static isIcoGoalValid(icoGoal) {
     if (icoGoal === "") {
       return true;
     }
-    let n = Math.floor(Number(icoGoal));
-    return n !== Infinity && String(n) === icoGoal && n > 0 && n <= 1000000000000000;
+    return this.isPositiveFloatValue(icoGoal);
   }
 
   static isDateFormatValid(date) {
@@ -138,9 +140,9 @@ export default class InputValidator {
     if (goal === "" || cap === "") {
       return true;
     }
-    if (goal !== "" && cap !== "") {
-      const nGoal = Math.floor(Number(goal));
-      const nCap = Math.floor(Number(cap));
+    if (this.isIcoGoalValid(goal) && this.isIcoCapValid(cap)) {
+      const nGoal = parseFloat(goal);
+      const nCap = parseFloat(cap);
       return nCap >= nGoal;
     }
     return true;
