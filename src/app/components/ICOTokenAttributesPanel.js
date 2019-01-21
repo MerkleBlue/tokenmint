@@ -29,7 +29,6 @@ export class ICOTokenAttributesPanel extends React.Component {
         >
           <TokenName />
           <TokenSymbol />
-          <TokenDecimals />
           <TokenRate />
         </CardContent>
       </Card>

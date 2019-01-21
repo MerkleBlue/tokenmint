@@ -211,7 +211,7 @@ export class ICOSuccessMessagePanel extends React.Component {
                 variant="body1"
                 className="typography_success_info_message"
               >
-                At the rate of <strong>{this.props.icoRate} ETH</strong> per token
+                At the price of <strong>{1/this.props.icoRate} ETH</strong> per token
               </Typography>
               <Typography
                 align="center"

@@ -49,30 +49,28 @@ export default class InputValidator {
     return web3.utils.isAddress(address);
   }
 
-  static isPositiveFloatValue(value) {
-    return !/^\s*$/.test(value) && !isNaN(value) && parseFloat(value) > 0;
-  }
-
   static isIcoCapValid(icoCap) {
     if (icoCap === "") {
       return true;
     }
-    return this.isPositiveFloatValue(icoCap);
+    let n = Math.floor(Number(icoCap));
+    return n !== Infinity && String(n) === icoCap && n > 0 && n <= 1000000000000000;
   }
 
   static isIcoRateValid(icoRate) {
     if (icoRate === "") {
       return true;
     }
-    return this.isPositiveFloatValue(icoRate);
-
+    let n = Math.floor(Number(icoRate));
+    return n !== Infinity && String(n) === icoRate && n > 0 && n <= 1000000000000000;
   }
 
   static isIcoGoalValid(icoGoal) {
     if (icoGoal === "") {
       return true;
     }
-    return this.isPositiveFloatValue(icoGoal);
+    let n = Math.floor(Number(icoGoal));
+    return n !== Infinity && String(n) === icoGoal && n > 0 && n <= 1000000000000000;
   }
 
   static isDateFormatValid(date) {
@@ -141,8 +139,8 @@ export default class InputValidator {
       return true;
     }
     if (this.isIcoGoalValid(goal) && this.isIcoCapValid(cap)) {
-      const nGoal = parseFloat(goal);
-      const nCap = parseFloat(cap);
+      const nGoal = Number(goal);
+      const nCap = Number(cap);
       return nCap >= nGoal;
     }
     return true;

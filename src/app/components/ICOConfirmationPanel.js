@@ -19,6 +19,7 @@ import ReactGA from 'react-ga';
 import appStates from '../reducers/appStates';
 import initialState from '../reducers/initialState';
 import moment from 'moment';
+import web3 from 'web3';
 
 export class ICOConfirmationPanel extends React.Component {
 
@@ -58,18 +59,18 @@ export class ICOConfirmationPanel extends React.Component {
     const tokenArgs = [
       this.props.tokenName,
       this.props.tokenSymbol,
-      this.props.decimals,
+      18,
       0,
       this.props.payingAccount
     ];
     const crowdsaleArgs = [
       Math.round((new Date(this.props.icoOpeningTime).getTime()) / 1000),
       Math.round((new Date(this.props.icoClosingTime).getTime()) / 1000),
-      parseFloat(this.props.icoRate) * 10 ** (18-Number(this.props.decimals)),
+      Number(this.props.icoRate),
       this.props.icoWallet,
       "",
-      parseFloat(this.props.icoCap),
-      parseFloat(this.props.icoGoal),
+      web3.utils.toWei(this.props.icoCap),
+      web3.utils.toWei(this.props.icoGoal),
       ""
     ];
     // TODO: this is a hack. Consider changing in the future
@@ -194,7 +195,7 @@ export class ICOConfirmationPanel extends React.Component {
                   variant="body1"
                   className="typography_right"
                 >
-                  {this.props.icoRate} ETH
+                  {this.props.icoRate} tokens per ETH
                 </Typography>
               </Grid>
             </Grid>
