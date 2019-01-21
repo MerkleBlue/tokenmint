@@ -25,6 +25,12 @@ import * as infoMessageActions from '../actions/infoMessageActions';
 import * as accountsActions from '../actions/accountsActions';
 import * as serviceFeeActions from '../actions/serviceFeeActions';
 import * as networkActions from '../actions/networkActions';
+import * as icoRateActions from '../actions/icoRateActions';
+import * as icoGoalActions from '../actions/icoGoalActions';
+import * as icoCapActions from '../actions/icoCapActions';
+import * as icoWalletActions from '../actions/icoWalletActions';
+import * as icoOpenCloseTimeActions from '../actions/icoOpenCloseTimeActions';
+import * as receiptActions from '../actions/receiptActions';
 import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
 import {
@@ -48,7 +54,8 @@ export class ICOSuccessMessagePanel extends React.Component {
   constructor(props) {
     super(props);
     this.handleBackClick = this.handleBackClick.bind(this);
-    this.handleCopyToClipboard = this.handleCopyToClipboard.bind(this);
+    this.handleCopyTxToClipboard = this.handleCopyTxToClipboard.bind(this);
+    this.handleCopyWalletToClipboard = this.handleCopyWalletToClipboard.bind(this);
   }
 
   componentDidMount() {
@@ -58,13 +65,44 @@ export class ICOSuccessMessagePanel extends React.Component {
   }
 
   handleBackClick(e) {
+    this.props.tokenNameActions.setTokenName(initialState.tokenName);
+    this.props.tokenSymbolActions.setTokenSymbol(initialState.tokenSymbol);
+    this.props.decimalsActions.setDecimals(initialState.decimals);
+    this.props.payingAccountFundsActions.setCheckingPayingAccountFunds(initialState.checkingPayingAccountFunds);
+    this.props.payingAccountFundsActions.setPayingAccountHasInsufficientFunds(initialState.payingAccountHasInsufficientFunds);
+    this.props.payingAccountFundsActions.setPayingAccountBalance(initialState.payingAccountBalance);
+    this.props.infoMessageActions.setInfoMessage(initialState.infoMessage);
+    this.props.serviceFeeActions.setServiceFee(initialState.serviceFee);
+    this.props.payingAccountActions.setPayingAccount(initialState.payingAccount);
+    this.props.icoRateActions.setIcoRate(initialState.icoRate);
+    this.props.icoGoalActions.setIcoGoal(initialState.icoGoal);
+    this.props.icoCapActions.setIcoCap(initialState.icoCap);
+    this.props.icoWalletActions.setIcoWallet(initialState.icoWallet);
+    this.props.icoOpenCloseTimeActions.setOpeningTime(initialState.icoOpeningTime);
+    this.props.icoOpenCloseTimeActions.setClosingTime(initialState.icoClosingTime);
+    this.props.receiptActions.setTokenReceipt(initialState.tokenReceipt);
+    this.props.receiptActions.setCrowdsaleReceipt(initialState.crowdsaleReceipt);
+    this.props.accountsActions.loadAllAccounts();
+    this.props.networkActions.getNetworkType();
     this.props.appStateActions.setIcoAppState(initialState.appState);
   }
 
   // a hack that creates an element outside the screen and uses it to copy its content to clipboard
-  handleCopyToClipboard(e) {
+  handleCopyTxToClipboard(e) {
     const el = document.createElement('textarea');
-    el.value = this.props.infoMessage;
+    el.value = this.props.crowdsaleReceipt.transactionHash;
+    el.setAttribute('readonly', '');
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+  }
+
+  handleCopyWalletToClipboard(e) {
+    const el = document.createElement('textarea');
+    el.value = this.props.icoWallet;
     el.setAttribute('readonly', '');
     el.style.position = 'absolute';
     el.style.left = '-9999px';
@@ -81,24 +119,24 @@ export class ICOSuccessMessagePanel extends React.Component {
       }
     });
 
-    let etherscanLink;
     let transactionLink;
+    let walletLink;
     const shareUrl = "https://tokenmint.io";
-    const twitterTitle = "Just created my own [" + this.props.tokenSymbol + "] Ethereum token using ";
-    const telegramTitle = "Just created my own [" + this.props.tokenSymbol + "] Ethereum token!";
-    const redditTitle = "Just created my own [" + this.props.tokenSymbol + "] Ethereum token!";
-    const whatsappTitle = "Just created my own [" + this.props.tokenSymbol + "] Ethereum token!";
-    const linkedinTitle = "Just created my own [" + this.props.tokenSymbol + "] Ethereum token!";
-    const linkedinDescription = "You can create your own custom erc20 and erc223 tokens using TokenMint.";
-    const emailSubject = "create your own custom Ethereum tokens";
-    const emailBody = "I just created my own [" + this.props.tokenSymbol + "] Ethereum token, using TokenMint platform.";
+    const twitterTitle = "Just created my own ICO using ";
+    const telegramTitle = "Just created my own ICO!";
+    const redditTitle = "Just created my own ICO!";
+    const whatsappTitle = "Just created my own ICO!";
+    const linkedinTitle = "Just created my own ICO!";
+    const linkedinDescription = "You can create your own ICO using TokenMint.";
+    const emailSubject = "create your own custom ICO";
+    const emailBody = "I just created my own ICO, using TokenMint platform.";
 
     if (this.props.network === "ropsten") {
-      etherscanLink = "https://ropsten.etherscan.io/address/" + this.props.tokenOwner;
-      transactionLink = "https://ropsten.etherscan.io/tx/" + this.props.infoMessage;
+      transactionLink = "https://ropsten.etherscan.io/tx/" + this.props.crowdsaleReceipt.transactionHash;
+      walletLink = "http://ropsten.etherscan.io/address/" + this.props.icoWallet;
     } else {
-      etherscanLink = "https://etherscan.io/address/" + this.props.tokenOwner;
-      transactionLink = "https://etherscan.io/tx/" + this.props.infoMessage;
+      transactionLink = "https://etherscan.io/tx/" + this.props.crowdsaleReceipt.transactionHash;
+      walletLink = "http://etherscan.io/address/" + this.props.icoWallet;
     }
 
     const cardHeaderTitle = this.props.isMobileDevice ? "Success!" : "Thank You For Using TokenMint!";
@@ -126,14 +164,14 @@ export class ICOSuccessMessagePanel extends React.Component {
                 className="typography_success_info_message"
               >
                 Your transaction has been successfully submitted to Ethereum network.
-          </Typography>
+              </Typography>
               <Typography
                 align="center"
                 variant="body1"
                 className="typography_success_info_message"
               >
                 Your ICO contract creation transaction hash is:
-          </Typography>
+              </Typography>
               <Typography
                 align="center"
                 variant="body1"
@@ -143,10 +181,10 @@ export class ICOSuccessMessagePanel extends React.Component {
                 }}
               >
                 <a href={transactionLink} rel="noopener noreferrer" target="_blank">
-                  {this.props.infoMessage}
+                  {this.props.crowdsaleReceipt.transactionHash}
                 </a>
                 <Tooltip title="Copy to clipboard">
-                  <FontAwesomeIcon className="fa_clipboard" icon={faClipboard} onClick={this.handleCopyToClipboard} />
+                  <FontAwesomeIcon className="fa_clipboard" icon={faClipboard} onClick={this.handleCopyTxToClipboard} />
                 </Tooltip>
               </Typography>
               <Typography
@@ -154,14 +192,33 @@ export class ICOSuccessMessagePanel extends React.Component {
                 variant="body1"
                 className="typography_success_info_message"
               >
-                Once the mining is finished, you can check your new assets on <a href={etherscanLink} rel="noopener noreferrer" target="_blank">etherscan</a>
+                Once the crowdsale starts, you will sell your tokens by receiving payments on following address:
               </Typography>
               <Typography
                 align="center"
                 variant="body1"
                 className="typography_success_info_message"
               >
-                If you need help verifying the token, please contact us at <a href="mailto:merkleblue@gmail.com">merkleblue@gmail.com</a>
+                <a href={walletLink} rel="noopener noreferrer" target="_blank">
+                  <strong>{this.props.icoWallet}</strong>
+                </a>
+                <Tooltip title="Copy to clipboard">
+                  <FontAwesomeIcon className="fa_clipboard" icon={faClipboard} onClick={this.handleCopyWalletToClipboard} />
+                </Tooltip>
+              </Typography>
+              <Typography
+                align="center"
+                variant="body1"
+                className="typography_success_info_message"
+              >
+                At the rate of <strong>{this.props.icoRate} ETH</strong> per token
+              </Typography>
+              <Typography
+                align="center"
+                variant="body1"
+                className="typography_success_info_message"
+              >
+                If you need help verifying the crowdsale, please contact us at <a href="mailto:merkleblue@gmail.com">merkleblue@gmail.com</a>
               </Typography>
               <Typography
                 align="center"
@@ -169,7 +226,7 @@ export class ICOSuccessMessagePanel extends React.Component {
                 className="typography_success_info_message"
               >
                 Share with the world:
-          </Typography>
+              </Typography>
               <div className="share_div" >
                 <TwitterShareButton
                   className="button_share"
@@ -256,7 +313,7 @@ export class ICOSuccessMessagePanel extends React.Component {
             onClick={this.handleBackClick}
           >
             <FontAwesomeIcon className="fa_coins" icon={faCoins} />
-            Create More Tokens
+            Create New ICO
           </span>
         </form>
       </div>
@@ -265,10 +322,12 @@ export class ICOSuccessMessagePanel extends React.Component {
 }
 
 ICOSuccessMessagePanel.propTypes = {
+  icoWallet: PropTypes.string.isRequired,
+  icoRate: PropTypes.string.isRequired,
   isMobileDevice: PropTypes.bool.isRequired,
   network: PropTypes.string.isRequired,
   tokenSymbol: PropTypes.string.isRequired,
-  infoMessage: PropTypes.string.isRequired,
+  crowdsaleReceipt: PropTypes.object.isRequired,
   tokenOwner: PropTypes.string.isRequired,
   decimalsActions: PropTypes.object.isRequired,
   tokenNameActions: PropTypes.object.isRequired,
@@ -282,16 +341,24 @@ ICOSuccessMessagePanel.propTypes = {
   infoMessageActions: PropTypes.object.isRequired,
   accountsActions: PropTypes.object.isRequired,
   serviceFeeActions: PropTypes.object.isRequired,
-  networkActions: PropTypes.object.isRequired
+  networkActions: PropTypes.object.isRequired,
+  icoRateActions: PropTypes.object.isRequired,
+  icoGoalActions: PropTypes.object.isRequired,
+  icoCapActions: PropTypes.object.isRequired,
+  icoWalletActions: PropTypes.object.isRequired,
+  icoOpenCloseTimeActions: PropTypes.object.isRequired,
+  receiptActions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
     tokenSymbol: state.tokenSymbol,
-    infoMessage: state.infoMessage,
+    crowdsaleReceipt: state.crowdsaleReceipt,
     tokenOwner: state.tokenOwner,
     network: state.network,
-    isMobileDevice: state.isMobileDevice
+    isMobileDevice: state.isMobileDevice,
+    icoWallet: state.icoWallet,
+    icoRate: state.icoRate
   };
 }
 
@@ -309,7 +376,13 @@ function mapDispatchToProps(dispatch) {
     infoMessageActions: bindActionCreators(infoMessageActions, dispatch),
     accountsActions: bindActionCreators(accountsActions, dispatch),
     serviceFeeActions: bindActionCreators(serviceFeeActions, dispatch),
-    networkActions: bindActionCreators(networkActions, dispatch)
+    networkActions: bindActionCreators(networkActions, dispatch),
+    icoRateActions: bindActionCreators(icoRateActions, dispatch),
+    icoGoalActions: bindActionCreators(icoGoalActions, dispatch),
+    icoCapActions: bindActionCreators(icoCapActions, dispatch),
+    icoWalletActions: bindActionCreators(icoWalletActions, dispatch),
+    icoOpenCloseTimeActions: bindActionCreators(icoOpenCloseTimeActions, dispatch),
+    receiptActions: bindActionCreators(receiptActions, dispatch)
   };
 }
 
