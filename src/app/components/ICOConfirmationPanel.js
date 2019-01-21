@@ -65,7 +65,7 @@ export class ICOConfirmationPanel extends React.Component {
     const crowdsaleArgs = [
       Math.round((new Date(this.props.icoOpeningTime).getTime()) / 1000),
       Math.round((new Date(this.props.icoClosingTime).getTime()) / 1000),
-      parseFloat(this.props.icoRate) * Math.pow(10, 18-this.props.decimals),
+      parseFloat(this.props.icoRate) * 10 ** (18-Number(this.props.decimals)),
       this.props.icoWallet,
       "",
       parseFloat(this.props.icoCap),
