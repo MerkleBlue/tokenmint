@@ -25,6 +25,8 @@ import icoWallet from './icoWalletReducer';
 import icoOpeningTime from './icoOpeningTimeReducer';
 import icoClosingTime from './icoClosingTimeReducer';
 import icoGoal from './icoGoalReducer';
+import tokenReceipt from './tokenReceiptReducer';
+import crowdsaleReceipt from './crowdsaleReceiptReducer';
 
 const rootReducer = combineReducers({
   tokenName: tokenName,
@@ -52,7 +54,9 @@ const rootReducer = combineReducers({
   icoOpeningTime: icoOpeningTime,
   icoClosingTime: icoClosingTime,
   icoGoal: icoGoal,
-  icoAppState: icoAppState
+  icoAppState: icoAppState,
+  tokenReceipt: tokenReceipt,
+  crowdsaleReceipt: crowdsaleReceipt
 });
 
 export default rootReducer;

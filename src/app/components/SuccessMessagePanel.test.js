@@ -96,7 +96,7 @@ describe("<SuccessMessagePanel /> tests", () => {
     expect(wrapper.find("Typography").length).to.eq(7);
     expect(wrapper.find("Typography").at(1).props().variant).to.eq("h6");
     expect(wrapper.find("Typography").at(2).props().variant).to.eq("body1");
-    expect(wrapper.find("a").length).to.eq(2);
+    expect(wrapper.find("a").length).to.eq(3);
     expect(wrapper.find("a").at(0).props().href).to.eq("https://etherscan.io/tx/" + infoMessage);
     expect(wrapper.find("a").at(1).props().href).to.eq("https://etherscan.io/address/" + tokenOwner);
     expect(wrapper.find("span").length).to.eq(2);
@@ -125,7 +125,7 @@ describe("<SuccessMessagePanel /> tests", () => {
     expect(wrapper.find("Typography").length).to.eq(7);
     expect(wrapper.find("Typography").at(1).props().variant).to.eq("h6");
     expect(wrapper.find("Typography").at(2).props().variant).to.eq("body1");
-    expect(wrapper.find("a").length).to.eq(2);
+    expect(wrapper.find("a").length).to.eq(3);
     expect(wrapper.find("a").at(0).props().href).to.eq("https://ropsten.etherscan.io/tx/" + infoMessage);
     expect(wrapper.find("a").at(1).props().href).to.eq("https://ropsten.etherscan.io/address/" + tokenOwner);
     expect(wrapper.find("span").length).to.eq(2);

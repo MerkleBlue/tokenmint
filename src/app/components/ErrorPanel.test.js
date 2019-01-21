@@ -39,7 +39,9 @@ describe("<ErrorPanel /> tests", () => {
     setIcoWallet = () => { },
     setOpeningTime = () => { },
     setClosingTime = () => { },
-    setPayingAccount = () => { }
+    setPayingAccount = () => { },
+    setTokenReceipt = () => { },
+    setCrowdsaleReceipt = () => {}
   ) {
     const props = {
       infoMessage: infoMessage,
@@ -72,7 +74,11 @@ describe("<ErrorPanel /> tests", () => {
         setOpeningTime: setOpeningTime,
         setClosingTime: setClosingTime
       },
-      payingAccountActions: { setPayingAccount: setPayingAccount }
+      payingAccountActions: { setPayingAccount: setPayingAccount },
+      receiptActions: {
+        setTokenReceipt: setTokenReceipt,
+        setCrowdsaleReceipt: setCrowdsaleReceipt
+      }
     };
     return mount(<ErrorPanel {...props} />);
   }
@@ -136,6 +142,8 @@ describe("<ErrorPanel /> tests", () => {
     const setOpeningTime = sinon.spy();
     const setClosingTime = sinon.spy();
     const setPayingAccount = sinon.spy();
+    const setTokenReceipt = sinon.spy();
+    const setCrowdsaleReceipt = sinon.spy();
     const wrapper = setup(
       infoMessage,
       false,
@@ -161,7 +169,9 @@ describe("<ErrorPanel /> tests", () => {
       setIcoWallet,
       setOpeningTime,
       setClosingTime,
-      setPayingAccount
+      setPayingAccount,
+      setTokenReceipt,
+      setCrowdsaleReceipt
     );
     wrapper.find("span").at(1).simulate("click");
     expect(setDecimals.calledOnce).to.be.true;
@@ -187,6 +197,8 @@ describe("<ErrorPanel /> tests", () => {
     expect(setOpeningTime.calledOnce).to.be.false;
     expect(setClosingTime.calledOnce).to.be.false;
     expect(setIcoAppState.calledOnce).to.be.false;
+    expect(setTokenReceipt.calledOnce).to.be.false;
+    expect(setCrowdsaleReceipt.calledOnce).to.be.false;
   });
 
   it("simulates click on back button - ICO mode", () => {
@@ -212,6 +224,8 @@ describe("<ErrorPanel /> tests", () => {
     const setOpeningTime = sinon.spy();
     const setClosingTime = sinon.spy();
     const setPayingAccount = sinon.spy();
+    const setTokenReceipt = sinon.spy();
+    const setCrowdsaleReceipt = sinon.spy();
     const wrapper = setup(
       infoMessage,
       false,
@@ -237,7 +251,9 @@ describe("<ErrorPanel /> tests", () => {
       setIcoWallet,
       setOpeningTime,
       setClosingTime,
-      setPayingAccount
+      setPayingAccount,
+      setTokenReceipt,
+      setCrowdsaleReceipt
     );
     wrapper.find("span").at(1).simulate("click");
     expect(setDecimals.calledOnce).to.be.true;
@@ -258,6 +274,8 @@ describe("<ErrorPanel /> tests", () => {
     expect(setClosingTime.calledOnce).to.be.true;
     expect(setIcoAppState.calledOnce).to.be.true;
     expect(setTokenSymbol.calledOnce).to.be.true;
+    expect(setTokenReceipt.calledOnce).to.be.true;
+    expect(setCrowdsaleReceipt.calledOnce).to.be.true;
 
     expect(setAppState.calledOnce).to.be.false;
     expect(setTokenOwner.calledOnce).to.be.false;

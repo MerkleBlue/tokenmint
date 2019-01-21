@@ -24,6 +24,7 @@ import * as icoCapActions from '../actions/icoCapActions';
 import * as icoWalletActions from '../actions/icoWalletActions';
 import * as icoOpenCloseTimeActions from '../actions/icoOpenCloseTimeActions';
 import * as payingAccountActions from '../actions/payingAccountActions';
+import * as receiptActions from '../actions/receiptActions';
 import initialState from '../reducers/initialState';
 import ReactGA from 'react-ga';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -58,6 +59,8 @@ export class ErrorPanel extends React.Component {
       this.props.icoWalletActions.setIcoWallet(initialState.icoWallet);
       this.props.icoOpenCloseTimeActions.setOpeningTime(initialState.icoOpeningTime);
       this.props.icoOpenCloseTimeActions.setClosingTime(initialState.icoClosingTime);
+      this.props.receiptActions.setTokenReceipt(initialState.tokenReceipt);
+      this.props.receiptActions.setCrowdsaleReceipt(initialState.crowdsaleReceipt);
       this.props.accountsActions.loadAllAccounts();
       this.props.networkActions.getNetworkType();
       this.props.appStateActions.setIcoAppState(initialState.appState);
@@ -144,7 +147,8 @@ ErrorPanel.propTypes = {
   icoCapActions: PropTypes.object.isRequired,
   icoWalletActions: PropTypes.object.isRequired,
   icoOpenCloseTimeActions: PropTypes.object.isRequired,
-  payingAccountActions: PropTypes.object.isRequired
+  payingAccountActions: PropTypes.object.isRequired,
+  receiptActions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
@@ -174,7 +178,8 @@ function mapDispatchToProps(dispatch) {
     icoCapActions: bindActionCreators(icoCapActions, dispatch),
     icoWalletActions: bindActionCreators(icoWalletActions, dispatch),
     icoOpenCloseTimeActions: bindActionCreators(icoOpenCloseTimeActions, dispatch),
-    payingAccountActions: bindActionCreators(payingAccountActions, dispatch)
+    payingAccountActions: bindActionCreators(payingAccountActions, dispatch),
+    receiptActions: bindActionCreators(receiptActions, dispatch)
   };
 }
 

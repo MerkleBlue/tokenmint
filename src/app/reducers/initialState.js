@@ -25,5 +25,7 @@ export default {
   icoWallet: "",
   icoOpeningTime: "",
   icoClosingTime: "",
-  icoGoal: ""
+  icoGoal: "",
+  tokenReceipt: {},
+  crowdsaleReceipt: {}
 };
