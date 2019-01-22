@@ -12,7 +12,7 @@ let feeInUsd = 29.99;
 const mintTokensFeeUSD = 29.99;
 const TCACrowdsaleServiceFeeUSD = 0;
 const CARPDCrowdsaleServiceFeeUSD = 0;
-const CMRPDCrowdsaleServiceFeeUSD = 0;//499.99;
+const CMRPDCrowdsaleServiceFeeUSD = 499.99;// - mintTokensFeeUSD;
 let tokenMintAccount = "0x6603cb70464ca51481d4edBb3B927F66F53F4f42";
 let web3;
 
