@@ -31,5 +31,4 @@ export function setPayingAccountBalance(payingAccountBalance) {
 
 export function setPayingAccountHasInsufficientFunds(payingAccountHasInsufficientFunds) {
   return { type: types.SET_PAYING_ACCOUNT_HAS_INSUFFICIENT_FUNDS, payingAccountHasInsufficientFunds: payingAccountHasInsufficientFunds };
-
 }
