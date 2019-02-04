@@ -19,6 +19,7 @@ contract TokenMintERC223Token is ERC223Token {
 
     // set tokenOwnerAddress as owner of all tokens
     balances[tokenOwnerAddress] = totalSupply;
+    emit Transfer(address(0), tokenOwnerAddress, totalSupply);
     emit Transfer(address(0), tokenOwnerAddress, totalSupply, "");
 
     // pay the service fee for contract deployment
